@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: mj-rfq-backend
+    runtime: node
+    plan: free
+    rootDir: mj-rfq-backend
+    buildCommand: echo "no build step needed"
+    startCommand: node server.js
+    envVars:
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ALLOWED_ORIGIN
+        value: "*"
+    healthCheckPath: /health

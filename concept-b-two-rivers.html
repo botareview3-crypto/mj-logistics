@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MJ — Parts &amp; Precious Minerals Trade Route</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F3F3;
+    --paper-2:#e5e5e5;
+    --ink:#000000;
+    --ink-soft:#4c5760;
+    --line:#c7ccd0;
+    --gold:#AB330B;
+    --gold-deep:#8c2a09;
+    --blue:#2F4553;
+    --blue-light:#6b8494;
+    --blue-soft:#e2e7ea;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3,.disp{font-family:'Space Grotesk', sans-serif; letter-spacing:-0.01em; color:var(--ink);}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:0.14em;
+    font-size:11.5px; color:var(--blue);
+  }
+  :focus-visible{outline:2px solid var(--blue); outline-offset:3px;}
+
+  header{position:sticky; top:0; z-index:50; background:rgba(245,246,242,0.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:19px;}
+  .brand .mark{width:32px; height:32px; background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border-radius:50%;}
+  .navlinks{display:flex; gap:32px; font-family:'Space Grotesk',sans-serif; font-size:14px; color:var(--ink-soft); padding:0;}
+  .navlinks li{list-style:none;}
+  .navlinks a:hover{color:var(--blue);}
+  .navlinks .has-drop{position:relative;}
+  .navlinks .drop-btn{
+    background:none; border:none; font:inherit; color:inherit; cursor:pointer;
+    display:flex; align-items:center; gap:6px; padding:0;
+  }
+  .navlinks .drop-btn:hover, .navlinks .has-drop:focus-within .drop-btn{color:var(--blue);}
+  .navlinks .drop-btn .caret{width:8px; height:8px; border-right:1px solid currentColor; border-bottom:1px solid currentColor; transform:rotate(45deg) translateY(-2px); transition:transform .2s;}
+  .navlinks .has-drop.open .drop-btn .caret, .navlinks .has-drop:focus-within .drop-btn .caret{transform:rotate(-135deg) translateY(2px);}
+  .dropmenu{
+    position:absolute; top:calc(100% + 18px); left:50%; transform:translateX(-50%);
+    background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    min-width:220px; padding:8px; opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .16s ease; box-shadow:0 12px 28px rgba(27,29,28,0.08);
+  }
+  .navlinks .has-drop.open .dropmenu,
+  .navlinks .has-drop:hover .dropmenu,
+  .navlinks .has-drop:focus-within .dropmenu{
+    opacity:1; visibility:visible; pointer-events:auto;
+  }
+  .dropmenu a{
+    display:flex; flex-direction:column; gap:2px; padding:10px 14px; font-size:13.5px; color:var(--ink-soft);
+    border-radius:6px;
+  }
+  .dropmenu a:hover{color:var(--ink); background:var(--paper-2);}
+  .dropmenu a small{font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--blue);}
+  .navcta{display:flex; align-items:center; gap:18px;}
+  .signin{font-family:'Space Grotesk',sans-serif; font-size:13px; color:var(--ink-soft);}
+  .btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px;
+    padding:11px 22px; border-radius:999px; border:1px solid var(--ink); color:var(--ink);
+    transition:background .2s, color .2s;
+  }
+  .btn:hover{background:var(--ink); color:var(--paper);}
+  .btn.solid{background:var(--ink); color:var(--paper);}
+  .btn.solid:hover{background:var(--gold-deep); border-color:var(--gold-deep);}
+  @media (max-width:900px){ .navlinks{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{padding:52px 0 0; position:relative;}
+  .hero-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:center;}
+  .hero h1{font-size:clamp(38px,5.5vw,64px); line-height:1.05; font-weight:600; max-width:520px;}
+  .hero h1 .hl{color:var(--gold-deep);}
+  .hero p.lede{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); max-width:420px; margin-top:16px; line-height:1.65;}
+  .hero-actions{display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;}
+
+  /* route map signature */
+  .routebox{position:relative;}
+  .routebox svg{width:100%; height:auto;}
+  .route-line{stroke-dasharray:6 7; animation:dash 26s linear infinite;}
+  @keyframes dash{ to{ stroke-dashoffset:-260; } }
+  .node-pulse{animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+  .strip{background:var(--ink); color:var(--paper); padding:16px 0; margin-top:44px;}
+  .strip .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:18px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.04em;}
+  .strip b{color:var(--gold); font-weight:500;}
+  .strip i{color:var(--blue-light); font-style:normal;}
+
+  section.block{padding:56px 0;}
+  section.block.tint{background:var(--paper-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .section-head{max-width:580px; margin-bottom:32px;}
+  .section-head h2{font-size:clamp(24px,2.8vw,32px); margin-top:10px; font-weight:600;}
+  .section-head p{font-family:'IBM Plex Mono',monospace; color:var(--ink-soft); font-size:13px; margin-top:10px; line-height:1.6;}
+
+  /* ---------- service cards ---------- */
+  .scards{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .scard{
+    display:flex; flex-direction:column; background:var(--paper); border:1px solid var(--line);
+    border-radius:10px; overflow:hidden; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .scard:hover{transform:translateY(-3px); box-shadow:0 14px 28px rgba(0,0,0,0.08); border-color:var(--ink);}
+  .scard-media{
+    aspect-ratio:16/10; display:flex; align-items:center; justify-content:center;
+    background:var(--paper-2);
+  }
+  .scard-media svg{width:64px; height:64px;}
+  .scard-media.parts{color:var(--blue); background:var(--blue-soft);}
+  .scard-media.gold{color:var(--gold-deep); background:#f2e2da;}
+  .scard-media.diamond{color:var(--blue); background:var(--blue-soft);}
+  .scard-body{padding:22px 22px 24px;}
+  .scard-body .badge{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    padding:3px 9px; border-radius:999px; background:var(--paper-2); color:var(--ink-soft); margin-bottom:10px;
+  }
+  .scard-body h3{font-size:19px; font-weight:600;}
+  .scard-desc{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); margin-top:8px; line-height:1.6;}
+  .scard-body .go{display:inline-block; margin-top:14px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px; border-bottom:1px solid var(--ink); color:var(--ink);}
+  @media (max-width:900px){ .scards{grid-template-columns:1fr;} }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  .scards .reveal:nth-child(2){transition-delay:.08s;}
+  .scards .reveal:nth-child(3){transition-delay:.16s;}
+  .process .reveal:nth-child(2){transition-delay:.08s;}
+  .process .reveal:nth-child(3){transition-delay:.16s;}
+  .trustgrid .reveal:nth-child(2){transition-delay:.06s;}
+  .trustgrid .reveal:nth-child(3){transition-delay:.12s;}
+  .trustgrid .reveal:nth-child(4){transition-delay:.18s;}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+  /* ---------- process ---------- */
+  .process{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .pstep{background:var(--paper); padding:24px 24px;}
+  .pstep .pn{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--blue); letter-spacing:.08em;}
+  .pstep h3{font-size:18px; margin-top:8px; font-weight:600;}
+  .pstep p{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); margin-top:8px; line-height:1.6;}
+  @media (max-width:820px){ .process{grid-template-columns:1fr;} }
+
+  /* ---------- trust ---------- */
+  .trustgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .tcard{background:var(--paper); padding:20px 18px;}
+  .tcard h4{font-size:16px; font-weight:600;}
+  .tcard p{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); margin-top:6px; line-height:1.55;}
+  @media (max-width:900px){ .trustgrid{grid-template-columns:1fr 1fr;} }
+
+  .ctaband{background:var(--ink); color:var(--paper); padding:48px 0; text-align:center;}
+  .ctaband h2{font-size:clamp(23px,3vw,32px); max-width:600px; margin:0 auto; color:var(--paper); font-weight:600;}
+  .ctaband p{font-family:'IBM Plex Mono',monospace; color:#9aa0a5; margin-top:10px; font-size:12.5px;}
+  .ctaband .hero-actions{justify-content:center; margin-top:20px;}
+  .ctaband .btn{border-color:var(--paper); color:var(--paper);}
+  .ctaband .btn:hover{background:var(--paper); color:var(--ink);}
+  .ctaband .btn.solid{background:var(--gold); color:var(--paper); border-color:var(--gold);}
+  .ctaband .btn.solid:hover{background:var(--paper);}
+
+  footer{padding:40px 0 24px; border-top:1px solid var(--line);}
+  .fgrid{display:grid; grid-template-columns:1.3fr repeat(3,1fr); gap:30px; padding-bottom:28px; border-bottom:1px solid var(--line);}
+  .fgrid h5{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px;}
+  .fgrid ul{list-style:none; display:flex; flex-direction:column; gap:7px;}
+  .fgrid ul a{font-family:'Space Grotesk',sans-serif; color:var(--ink-soft); font-size:13px;}
+  .fgrid ul a:hover{color:var(--blue);}
+  .fbottom{display:flex; justify-content:space-between; padding-top:16px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); flex-wrap:wrap; gap:10px;}
+
+  /* ---------- RFQ modal ---------- */
+  .rfq-overlay{
+    position:fixed; inset:0; background:rgba(20,22,20,0.5); display:none;
+    align-items:flex-start; justify-content:center; padding:48px 16px; z-index:200; overflow-y:auto;
+  }
+  .rfq-overlay.open{display:flex;}
+  .rfq-modal{
+    background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    width:100%; max-width:560px; padding:32px; position:relative; box-shadow:0 24px 60px rgba(0,0,0,0.25);
+  }
+  .rfq-modal h2{font-size:22px; font-weight:600;}
+  .rfq-modal .sub{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); margin-top:6px; line-height:1.6;}
+  .rfq-close{
+    position:absolute; top:18px; right:18px; width:32px; height:32px; border-radius:50%; border:1px solid var(--line);
+    background:var(--paper); cursor:pointer; font-size:16px; line-height:1; color:var(--ink-soft);
+  }
+  .rfq-close:hover{background:var(--paper-2); color:var(--ink);}
+  .rfq-form{margin-top:22px; display:grid; gap:14px;}
+  .rfq-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:520px){ .rfq-row{grid-template-columns:1fr;} }
+  .rfq-field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;
+  }
+  .rfq-field .req{color:var(--gold-deep);}
+  .rfq-field input, .rfq-field select, .rfq-field textarea{
+    width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:8px; background:#fff;
+    font-family:'Space Grotesk',sans-serif; font-size:14px; color:var(--ink);
+  }
+  .rfq-field textarea{resize:vertical; min-height:84px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;}
+  .rfq-field input:focus, .rfq-field select:focus, .rfq-field textarea:focus{outline:2px solid var(--blue); outline-offset:1px;}
+  .rfq-hp{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;}
+  .rfq-actions{display:flex; align-items:center; gap:14px; margin-top:4px;}
+  .rfq-status{font-family:'IBM Plex Mono',monospace; font-size:12px; min-height:16px;}
+  .rfq-status.error{color:#a33;}
+  .rfq-status.success{color:#2f7a3d;}
+  .rfq-submit:disabled{opacity:.6; cursor:not-allowed;}
+  .rfq-success{display:none; text-align:center; padding:20px 0;}
+  .rfq-success.show{display:block;}
+  .rfq-success h3{font-size:19px; margin-bottom:8px;}
+  .rfq-success p{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); max-width:380px; margin:0 auto;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="brand"><span class="mark">MJ</span> MJ Logistics</div>
+      <ul class="navlinks">
+        <li><a href="#">Home</a></li>
+        <li class="has-drop">
+          <button class="drop-btn" aria-expanded="false" aria-haspopup="true">Services <span class="caret"></span></button>
+          <div class="dropmenu">
+            <a href="#service-parts">Auto Car Spare Parts</a>
+            <a href="#service-gold">Gold Mining</a>
+            <a href="#service-diamond">Diamond Mining</a>
+          </div>
+        </li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+      <div class="navcta">
+        <a href="#" class="signin">Sign in</a>
+        <button type="button" class="btn solid" data-open-rfq>Post an RFQ</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>From the mines <span class="hl">to the world.</span></h1>
+      <div class="hero-actions">
+        <a href="#route" class="btn solid">See the route</a>
+        <a href="#" class="btn">Become a supplier</a>
+      </div>
+    </div>
+    <div class="routebox" aria-hidden="true">
+      <svg viewBox="0 0 480 380" fill="none">
+        <path d="M110 60 C 140 120, 90 180, 150 230 C 200 270, 210 300, 240 330" stroke="#c7ccd0" stroke-width="1.4"/>
+        <path class="route-line" d="M110 60 C 140 120, 90 180, 150 230 C 200 270, 210 300, 240 330" stroke="#AB330B" stroke-width="1.6"/>
+        <path class="route-line" d="M240 330 C 300 320, 360 300, 420 250" stroke="#2F4553" stroke-width="1.6" style="animation-delay:-6s"/>
+        <path d="M240 330 C 300 320, 360 300, 420 250" stroke="#c7ccd0" stroke-width="1.4"/>
+
+        <circle class="node-pulse" cx="110" cy="60" r="6" fill="#AB330B"/>
+        <text x="122" y="58" font-family="IBM Plex Mono" font-size="11" fill="#4c5760">Interior mines</text>
+        <text x="122" y="72" font-family="IBM Plex Mono" font-size="9.5" fill="#AB330B">Au · rough ♦</text>
+
+        <circle class="node-pulse" cx="240" cy="330" r="7" fill="#000000" style="animation-delay:-1s"/>
+        <text x="252" y="328" font-family="IBM Plex Mono" font-size="11" fill="#4c5760">Monrovia port</text>
+        <text x="252" y="342" font-family="IBM Plex Mono" font-size="9.5" fill="#000000">verification desk</text>
+
+        <circle class="node-pulse" cx="420" cy="250" r="6" fill="#2F4553" style="animation-delay:-2s"/>
+        <text x="388" y="235" font-family="IBM Plex Mono" font-size="11" fill="#4c5760">Global buyers</text>
+        <text x="388" y="272" font-family="IBM Plex Mono" font-size="9.5" fill="#2F4553">41 countries</text>
+
+        <circle cx="150" cy="230" r="3.5" fill="#c7ccd0"/>
+        <text x="160" y="234" font-family="IBM Plex Mono" font-size="9" fill="#4c5760">parts hub</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="wrap">
+      <span>Supplier network <b>41 countries</b></span>
+      <span>Parts catalog <b>2,400+ SKUs</b></span>
+      <span>Gold lots <i>0.995+ fineness</i></span>
+      <span>Diamonds <i>Kimberley-documented</i></span>
+      <span>Every trade <b>escrow-held</b></span>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="route">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Two commodities, one route</p>
+      <h2>What moves along the trade route</h2>
+      <p>Same verification desk, same escrow terms — the spec sheet just changes shape.</p>
+    </div>
+    <div class="scards">
+      <a class="scard reveal" id="service-parts" href="auto-car-spare-parts.html">
+        <div class="scard-media parts">
+          <svg viewBox="0 0 120 120" fill="none">
+            <circle cx="60" cy="60" r="20" stroke="currentColor" stroke-width="2"/>
+            <circle cx="60" cy="60" r="7" stroke="currentColor" stroke-width="2"/>
+            <path stroke="currentColor" stroke-width="2" d="M60 34v-8M60 94v-8M86 60h8M26 60h8M78.4 41.6l5.6-5.6M36 84l5.6-5.6M78.4 78.4l5.6 5.6M36 36l5.6 5.6"/>
+          </svg>
+        </div>
+        <div class="scard-body">
+          <p class="badge">Parts hub</p>
+          <h3>Auto Car Spare Parts</h3>
+          <p class="scard-desc">Wholesale auto parts matched to your vehicle spec, sourced from factory-verified suppliers.</p>
+          <span class="go">View Auto Car Spare Parts →</span>
+        </div>
+      </a>
+      <a class="scard reveal" id="service-gold" href="gold-mining.html">
+        <div class="scard-media gold">
+          <svg viewBox="0 0 120 120" fill="none">
+            <rect x="30" y="66" width="60" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+            <rect x="35" y="48" width="50" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+            <rect x="40" y="30" width="40" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+            <text x="60" y="41" font-family="IBM Plex Mono" font-size="9" fill="currentColor" text-anchor="middle">Au</text>
+          </svg>
+        </div>
+        <div class="scard-body">
+          <p class="badge">Interior mines</p>
+          <h3>Gold Mining</h3>
+          <p class="scard-desc">Doré and refined gold lots sourced from vetted mining operations, assayed before listing.</p>
+          <span class="go">View Gold Mining →</span>
+        </div>
+      </a>
+      <a class="scard reveal" id="service-diamond" href="diamond-mining.html">
+        <div class="scard-media diamond">
+          <svg viewBox="0 0 120 120" fill="none">
+            <path stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M40 42h40l14 16L60 92 26 58z"/>
+            <path stroke="currentColor" stroke-width="1.4" d="M40 42l20 16 20-16M26 58h68M46 58L60 92M74 58L60 92"/>
+          </svg>
+        </div>
+        <div class="scard-body">
+          <p class="badge">Interior mines</p>
+          <h3>Diamond Mining</h3>
+          <p class="scard-desc">Rough and polished parcels documented against origin at the point of extraction.</p>
+          <span class="go">View Diamond Mining →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="block tint" id="about">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-bottom:0;">
+      <p class="eyebrow">About MJ Logistics</p>
+      <h2>The same verification desk, three stops along the route</h2>
+      <p>MJ Logistics began as a wholesale auto parts marketplace based in Monrovia, matching buyers to factory-verified suppliers. That same escrow-backed verification desk now covers gold and diamond sourcing — one route, one standard of proof, across every trade.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block tint" id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">How a trade moves</p>
+      <h2>Three steps, whether it's a crate or a parcel</h2>
+    </div>
+    <div class="process">
+      <div class="pstep reveal">
+        <p class="pn">01 — POST</p>
+        <h3>Post an RFQ</h3>
+        <p>Specify the part and fitment, or the metal, purity and volume. Verified suppliers see it within the hour.</p>
+      </div>
+      <div class="pstep reveal">
+        <p class="pn">02 — BID</p>
+        <h3>Suppliers bid your spec</h3>
+        <p>Compare price, lead time and verification tier side by side — no blind sourcing.</p>
+      </div>
+      <div class="pstep reveal">
+        <p class="pn">03 — CLEAR</p>
+        <h3>Funds clear through escrow</h3>
+        <p>Payment releases once the shipment or parcel is confirmed against the documented spec.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="trust">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Verification</p>
+      <h2>What "verified" means here</h2>
+      <p>Every supplier on either side of the route clears the same desk before a listing goes live.</p>
+    </div>
+    <div class="trustgrid">
+      <div class="tcard reveal"><h4>Identity</h4><p>Business registration and beneficial ownership confirmed before onboarding.</p></div>
+      <div class="tcard reveal"><h4>Origin</h4><p>Mineral lots carry documented origin and handling history through export.</p></div>
+      <div class="tcard reveal"><h4>Escrow</h4><p>Payment is held, not routed, until the buyer confirms the shipment.</p></div>
+      <div class="tcard reveal"><h4>Compliance</h4><p>Kimberley Process and customs paperwork prepared alongside every mineral trade.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="ctaband reveal" id="contact">
+  <div class="wrap">
+    <h2>Sourcing parts, gold, or diamonds — the desk is the same.</h2>
+    <p>Post a request and hear back from verified suppliers within the day.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn solid" data-open-rfq>Post an RFQ</a>
+      <a href="#" class="btn">Talk to the trade desk</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <div class="brand" style="margin-bottom:14px;"><span class="mark">MJ</span> MJ Logistics</div>
+        <p style="font-family:'IBM Plex Mono',monospace; color:var(--ink-soft); font-size:12.5px; max-width:260px;">Verified sourcing for industrial parts and precious minerals. Monrovia, Montserrado, Liberia.</p>
+      </div>
+      <div>
+        <h5>Marketplace</h5>
+        <ul><li><a href="#">Parts catalog</a></li><li><a href="#">Mineral RFQs</a></li><li><a href="#" data-open-rfq>Post an RFQ</a></li></ul>
+      </div>
+      <div>
+        <h5>Suppliers</h5>
+        <ul><li><a href="#">Supplier dashboard</a></li><li><a href="#">Become verified</a></li><li><a href="#">Vendor guidelines</a></li></ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul><li><a href="#">About</a></li><li><a href="#">Trust &amp; verification</a></li><li><a href="#">Contact</a></li></ul>
+      </div>
+    </div>
+    <div class="fbottom">
+      <span>© 2026 MJ Logistics Enterprise. All rights reserved.</span>
+      <span>Monrovia, Montserrado, Liberia</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.has-drop .drop-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      var item = btn.closest('.has-drop');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.has-drop.open').forEach(function(o){ o.classList.remove('open'); o.querySelector('.drop-btn').setAttribute('aria-expanded','false'); });
+      if(!isOpen){ item.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.has-drop')){
+      document.querySelectorAll('.has-drop.open').forEach(function(o){ o.classList.remove('open'); o.querySelector('.drop-btn').setAttribute('aria-expanded','false'); });
+    }
+  });
+
+  if('IntersectionObserver' in window){
+    var revealItems = document.querySelectorAll('.reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealItems.forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in-view'); });
+  }
+</script>
+<!-- RFQ modal -->
+<div class="rfq-overlay" id="rfq-overlay" aria-hidden="true">
+  <div class="rfq-modal" role="dialog" aria-modal="true" aria-labelledby="rfq-title">
+    <button type="button" class="rfq-close" id="rfq-close" aria-label="Close">✕</button>
+
+    <div id="rfq-form-view">
+      <h2 id="rfq-title">Post an RFQ</h2>
+      <p class="sub">Tell us what you need. Verified suppliers on the route see it within the hour.</p>
+
+      <form class="rfq-form" id="rfq-form" novalidate>
+        <!-- honeypot: left visually hidden, real users never fill this in -->
+        <div class="rfq-hp" aria-hidden="true">
+          <label for="rfq-website">Website</label>
+          <input type="text" id="rfq-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="rfq-field">
+          <label for="rfq-commodity">Commodity <span class="req">*</span></label>
+          <select id="rfq-commodity" name="commodity" required>
+            <option value="" disabled selected>Select one</option>
+            <option value="parts">Auto car spare parts</option>
+            <option value="gold">Gold</option>
+            <option value="diamond">Diamond</option>
+          </select>
+        </div>
+
+        <div class="rfq-row">
+          <div class="rfq-field">
+            <label for="rfq-company">Company <span class="req">*</span></label>
+            <input type="text" id="rfq-company" name="company" required maxlength="200">
+          </div>
+          <div class="rfq-field">
+            <label for="rfq-contact">Contact name <span class="req">*</span></label>
+            <input type="text" id="rfq-contact" name="contactName" required maxlength="200">
+          </div>
+        </div>
+
+        <div class="rfq-row">
+          <div class="rfq-field">
+            <label for="rfq-email">Email <span class="req">*</span></label>
+            <input type="email" id="rfq-email" name="email" required maxlength="200">
+          </div>
+          <div class="rfq-field">
+            <label for="rfq-phone">Phone</label>
+            <input type="tel" id="rfq-phone" name="phone" maxlength="50">
+          </div>
+        </div>
+
+        <div class="rfq-row">
+          <div class="rfq-field">
+            <label for="rfq-quantity">Quantity / volume</label>
+            <input type="text" id="rfq-quantity" name="quantity" maxlength="200" placeholder="e.g. 200 units, 5kg">
+          </div>
+          <div class="rfq-field">
+            <label for="rfq-price">Target price</label>
+            <input type="text" id="rfq-price" name="targetPrice" maxlength="100" placeholder="Optional">
+          </div>
+        </div>
+
+        <div class="rfq-field">
+          <label for="rfq-spec">Spec / details <span class="req">*</span></label>
+          <textarea id="rfq-spec" name="spec" required maxlength="5000" placeholder="Part fitment, or metal/purity/volume, documentation needs, etc."></textarea>
+        </div>
+
+        <div class="rfq-field">
+          <label for="rfq-notes">Additional notes</label>
+          <textarea id="rfq-notes" name="notes" maxlength="3000" placeholder="Optional"></textarea>
+        </div>
+
+        <div class="rfq-actions">
+          <button type="submit" class="btn solid rfq-submit" id="rfq-submit">Submit RFQ</button>
+          <span class="rfq-status" id="rfq-status" role="status"></span>
+        </div>
+      </form>
+    </div>
+
+    <div class="rfq-success" id="rfq-success">
+      <h3>Request received.</h3>
+      <p>Your RFQ is in the verification queue. Suppliers on the route will start bidding, and we'll reach out at the email you provided.</p>
+      <div class="rfq-actions" style="justify-content:center; margin-top:20px;">
+        <button type="button" class="btn" id="rfq-success-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Point this at wherever the backend is deployed. Same-origin '/api/rfq'
+  // works once this page and the API share a domain; set an absolute URL
+  // (e.g. 'https://api.mjlogistics.com/api/rfq') if they don't.
+  var RFQ_API_URL = '/api/rfq';
+
+  var overlay = document.getElementById('rfq-overlay');
+  var closeBtn = document.getElementById('rfq-close');
+  var successCloseBtn = document.getElementById('rfq-success-close');
+  var form = document.getElementById('rfq-form');
+  var formView = document.getElementById('rfq-form-view');
+  var successView = document.getElementById('rfq-success');
+  var statusEl = document.getElementById('rfq-status');
+  var submitBtn = document.getElementById('rfq-submit');
+  var lastFocused = null;
+
+  function openModal(){
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    var firstField = document.getElementById('rfq-commodity');
+    if (firstField) firstField.focus();
+  }
+
+  function closeModal(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  function resetToForm(){
+    formView.style.display = '';
+    successView.classList.remove('show');
+    statusEl.textContent = '';
+    statusEl.className = 'rfq-status';
+  }
+
+  document.querySelectorAll('[data-open-rfq]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      resetToForm();
+      openModal();
+    });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  successCloseBtn.addEventListener('click', function(){ closeModal(); form.reset(); resetToForm(); });
+
+  overlay.addEventListener('click', function(e){
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    statusEl.textContent = '';
+    statusEl.className = 'rfq-status';
+
+    var payload = {
+      website: document.getElementById('rfq-website').value, // honeypot
+      commodity: document.getElementById('rfq-commodity').value,
+      company: document.getElementById('rfq-company').value,
+      contactName: document.getElementById('rfq-contact').value,
+      email: document.getElementById('rfq-email').value,
+      phone: document.getElementById('rfq-phone').value,
+      quantity: document.getElementById('rfq-quantity').value,
+      targetPrice: document.getElementById('rfq-price').value,
+      spec: document.getElementById('rfq-spec').value,
+      notes: document.getElementById('rfq-notes').value
+    };
+
+    if (!payload.commodity || !payload.company.trim() || !payload.contactName.trim() || !payload.email.trim() || !payload.spec.trim()) {
+      statusEl.textContent = 'Please fill in all required fields.';
+      statusEl.className = 'rfq-status error';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Submitting…';
+    statusEl.className = 'rfq-status';
+
+    fetch(RFQ_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(data){
+        if (!res.ok || data.ok === false) {
+          var msg = (data.errors && data.errors.join(', ')) || data.error || 'Something went wrong. Please try again.';
+          throw new Error(msg);
+        }
+        return data;
+      });
+    })
+    .then(function(){
+      formView.style.display = 'none';
+      successView.classList.add('show');
+    })
+    .catch(function(err){
+      statusEl.textContent = err.message || 'Could not submit — check your connection and try again.';
+      statusEl.className = 'rfq-status error';
+    })
+    .finally(function(){
+      submitBtn.disabled = false;
+    });
+  });
+})();
+</script>
+</body>
+</html>

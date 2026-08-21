@@ -1,0 +1,12 @@
+{
+  "name": "mj-rfq-backend",
+  "version": "1.0.0",
+  "description": "RFQ intake API + admin page for MJ Logistics",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
