@@ -75,6 +75,9 @@
   .rfq-table td{padding:12px 14px; border-bottom:1px solid var(--line); font-size:13.5px; vertical-align:top;}
   .rfq-table tr:last-child td{border-bottom:none;}
   .rfq-table tr.row-new{background:#fbf3ef;}
+  .rfq-table tbody tr.data-row{cursor:pointer;}
+  .rfq-table tbody tr.data-row:hover{background:var(--blue-soft);}
+  .rfq-table tbody tr.data-row.row-new:hover{background:#f3e2d8;}
 
   .badge{
     display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
@@ -306,10 +309,11 @@
 
     list.forEach((r) => {
       const tr = document.createElement('tr');
-      tr.className = r.status === 'new' ? 'row-new' : '';
+      tr.className = 'data-row' + (r.status === 'new' ? ' row-new' : '');
+      tr.dataset.rowToggle = r.id;
       const isOpen = state.expanded.has(r.id);
       tr.innerHTML = `
-        <td><button class="expand-btn" data-toggle="${r.id}">${isOpen ? '▾' : '▸'}</button></td>
+        <td><button class="expand-btn" data-toggle="${r.id}" aria-label="Toggle details">${isOpen ? '▾' : '▸'}</button></td>
         <td class="mono">${fmtDate(r.createdAt)}</td>
         <td>${commodityBadge(escapeHtml(r.commodity))}</td>
         <td>${escapeHtml(r.company)}</td>
@@ -344,15 +348,25 @@
     });
   }
 
+  function toggleExpand(id) {
+    if (state.expanded.has(id)) state.expanded.delete(id);
+    else state.expanded.add(id);
+    render();
+  }
+
   document.addEventListener('click', (e) => {
-    const toggleId = e.target.getAttribute && e.target.getAttribute('data-toggle');
-    if (toggleId) {
-      if (state.expanded.has(toggleId)) state.expanded.delete(toggleId);
-      else state.expanded.add(toggleId);
-      render();
-    }
+    // Delete button and status dropdown handle themselves — don't let a
+    // click on them bubble up into the row's expand toggle.
     const deleteId = e.target.getAttribute && e.target.getAttribute('data-delete');
-    if (deleteId) deleteRecord(deleteId);
+    if (deleteId) return deleteRecord(deleteId);
+    if (e.target.closest('select.status-select')) return;
+
+    const toggleId = e.target.getAttribute && e.target.getAttribute('data-toggle');
+    if (toggleId) return toggleExpand(toggleId);
+
+    // Whole row is clickable: anywhere else on a data row toggles it.
+    const row = e.target.closest('tr[data-row-toggle]');
+    if (row) toggleExpand(row.dataset.rowToggle);
   });
 
   document.addEventListener('change', (e) => {
