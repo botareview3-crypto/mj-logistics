@@ -1,6 +1,0 @@
-node_modules/
-.env
-*.log
-
-# Local RFQ data — never commit real submissions
-mj-rfq-backend/data/rfqs.json
