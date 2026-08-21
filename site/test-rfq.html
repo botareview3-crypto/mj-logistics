@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MJ Logistics — RFQ Test Page (mock)</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0b0b0c;
+    color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px;
+  }
+  h1 { font-size: 1.1rem; color: #9aa0a6; font-weight: 500; margin-bottom: 4px; }
+  p.sub { color: #6a6f75; font-size: 0.85rem; margin-top: 0; margin-bottom: 32px; }
+  button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button:hover:not(:disabled) { background: #1d4ed8; }
+  #result {
+    margin-top: 28px;
+    max-width: 480px;
+    width: 100%;
+    white-space: pre-wrap;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    padding: 16px;
+    border-radius: 8px;
+    display: none;
+  }
+  #result.ok { background: #0f2e1c; color: #7ee2a8; display: block; }
+  #result.err { background: #3a1414; color: #ff8b8b; display: block; }
+  code { color: #f2c94c; }
+</style>
+</head>
+<body>
+
+  <h1>RFQ backend test page <span style="color:#f2c94c">(mock — not the real site)</span></h1>
+  <p class="sub">Sends one dummy RFQ straight to <code>/api/rfq</code> to confirm the backend is wired up. Swap this file out once the real frontend button is ready.</p>
+
+  <button id="rfqBtn">Post an RFQ (test)</button>
+
+  <div id="result"></div>
+
+  <script>
+    // Point this at wherever the backend lives — same value goes in the real site.
+    const RFQ_API_URL = "https://mj-rfq-backend.onrender.com/api/rfq";
+
+    const btn = document.getElementById("rfqBtn");
+    const resultBox = document.getElementById("result");
+
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+      resultBox.className = "";
+      resultBox.style.display = "none";
+
+      const payload = {
+        commodity: "gold",
+        company: "Test Co (mock page)",
+        contactName: "Test User",
+        email: "test@example.com",
+        phone: "",
+        quantity: "1kg",
+        spec: "Sent from the test-rfq.html mock button",
+        targetPrice: "",
+        notes: "This is a test submission — safe to delete from /admin.",
+        website: "" // honeypot, must stay empty
+      };
+
+      try {
+        const res = await fetch(RFQ_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.ok && data.ok) {
+          resultBox.className = "ok";
+          resultBox.textContent = "✅ Success\n\nRFQ id: " + data.id +
+            "\n\nCheck /admin to see it show up.";
+        } else {
+          resultBox.className = "err";
+          resultBox.textContent = "❌ Server responded but rejected it:\n\n" +
+            JSON.stringify(data, null, 2);
+        }
+      } catch (e) {
+        resultBox.className = "err";
+        resultBox.textContent = "❌ Request failed:\n\n" + e.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Post an RFQ (test)";
+      }
+    });
+  </script>
+
+</body>
+</html>
