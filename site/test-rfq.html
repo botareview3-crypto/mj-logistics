@@ -3,83 +3,453 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MJ Logistics — RFQ Test Page (mock)</title>
+<title>MJ Logistics — RFQ Test Page</title>
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #0b0b0c;
-    color: #eaeaea;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 24px;
+  :root{
+    --bg:#0b0b0c;
+    --panel:#161618;
+    --panel-2:#1e1e21;
+    --line:#2b2b2f;
+    --ink:#eaeaea;
+    --ink-soft:#9aa0a6;
+    --ink-faint:#6a6f75;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --gold:#f2c94c;
+    --ok-bg:#0f2e1c;
+    --ok-ink:#7ee2a8;
+    --err-bg:#3a1414;
+    --err-ink:#ff8b8b;
+    --err-border:#7a2323;
+    --radius:10px;
   }
-  h1 { font-size: 1.1rem; color: #9aa0a6; font-weight: 500; margin-bottom: 4px; }
-  p.sub { color: #6a6f75; font-size: 0.85rem; margin-top: 0; margin-bottom: 32px; }
-  button {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    cursor: pointer;
+  *{box-sizing:border-box;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    margin:0;
+    padding:24px;
   }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
-  button:hover:not(:disabled) { background: #1d4ed8; }
-  #result {
-    margin-top: 28px;
-    max-width: 480px;
-    width: 100%;
-    white-space: pre-wrap;
-    font-family: ui-monospace, monospace;
-    font-size: 0.85rem;
-    padding: 16px;
-    border-radius: 8px;
-    display: none;
+  h1{font-size:1.15rem; color:var(--ink-soft); font-weight:500; margin:0 0 4px;}
+  p.sub{color:var(--ink-faint); font-size:0.85rem; margin:0 0 32px; max-width:480px; text-align:center; line-height:1.5;}
+  code{color:var(--gold); font-family:ui-monospace, monospace; font-size:0.9em;}
+
+  button{font-family:inherit;}
+  .primary-btn{
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:16px 32px;
+    font-size:1.05rem;
+    font-weight:500;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s ease;
   }
-  #result.ok { background: #0f2e1c; color: #7ee2a8; display: block; }
-  #result.err { background: #3a1414; color: #ff8b8b; display: block; }
-  code { color: #f2c94c; }
+  .primary-btn:hover{background:var(--accent-hover);}
+  .primary-btn:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+  #result{
+    margin-top:28px;
+    max-width:480px;
+    width:100%;
+    white-space:pre-wrap;
+    font-family:ui-monospace, monospace;
+    font-size:0.85rem;
+    padding:16px;
+    border-radius:8px;
+    display:none;
+  }
+  #result.ok{background:var(--ok-bg); color:var(--ok-ink); display:block;}
+  #result.err{background:var(--err-bg); color:var(--err-ink); display:block;}
+
+  /* ---------- Modal ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(2px);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:5vh 16px;
+    overflow-y:auto;
+    z-index:100;
+  }
+  .overlay.open{display:flex;}
+
+  .modal{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    width:100%;
+    max-width:560px;
+    padding:28px 28px 24px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    animation:modalIn .18s ease;
+  }
+  @keyframes modalIn{
+    from{opacity:0; transform:translateY(8px) scale(.98);}
+    to{opacity:1; transform:none;}
+  }
+
+  .modal-head{display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:4px;}
+  .modal h2{font-size:1.25rem; font-weight:600; margin:0;}
+  .modal .modal-sub{color:var(--ink-faint); font-size:0.82rem; margin:4px 0 20px;}
+  .close-btn{
+    background:none; border:none; color:var(--ink-soft);
+    font-size:1.4rem; line-height:1; cursor:pointer; padding:4px 8px;
+    border-radius:6px;
+  }
+  .close-btn:hover{color:var(--ink); background:var(--panel-2);}
+  .close-btn:focus-visible{outline:2px solid var(--gold);}
+
+  form{display:flex; flex-direction:column; gap:14px;}
+  .row{display:flex; gap:12px;}
+  .row > .field{flex:1; min-width:0;}
+  .field label{
+    display:block; font-size:0.78rem; color:var(--ink-soft);
+    margin-bottom:6px; font-weight:500;
+  }
+  .field label .req{color:var(--gold); margin-left:2px;}
+  .field label .opt{color:var(--ink-faint); font-weight:400; margin-left:4px;}
+
+  input, select, textarea{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:8px;
+    padding:10px 12px;
+    font-size:0.92rem;
+    font-family:inherit;
+  }
+  textarea{resize:vertical; min-height:64px;}
+  input:focus, select:focus, textarea:focus{
+    outline:none; border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(37,99,235,0.25);
+  }
+  .field.invalid input, .field.invalid select, .field.invalid textarea{
+    border-color:var(--err-border);
+  }
+  .field-error{
+    display:none;
+    color:var(--err-ink);
+    font-size:0.75rem;
+    margin-top:5px;
+  }
+  .field.invalid .field-error{display:block;}
+
+  /* honeypot — hidden from real users, still in the tab/DOM flow for bots */
+  .hp{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
+
+  .form-actions{
+    display:flex; align-items:center; gap:12px;
+    margin-top:6px;
+  }
+  .submit-btn{
+    background:var(--accent); color:white; border:none;
+    padding:12px 24px; border-radius:8px; font-size:0.95rem; font-weight:500;
+    cursor:pointer; display:flex; align-items:center; gap:8px;
+    transition:background .15s ease;
+  }
+  .submit-btn:hover:not(:disabled){background:var(--accent-hover);}
+  .submit-btn:disabled{opacity:0.6; cursor:not-allowed;}
+  .submit-btn:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+  .spinner{
+    width:14px; height:14px; border-radius:50%;
+    border:2px solid rgba(255,255,255,0.4); border-top-color:#fff;
+    animation:spin .7s linear infinite; display:none;
+  }
+  .submit-btn.loading .spinner{display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .form-error{
+    display:none;
+    background:var(--err-bg); color:var(--err-ink);
+    border:1px solid var(--err-border);
+    border-radius:8px; padding:10px 12px; font-size:0.82rem;
+  }
+  .form-error.show{display:block;}
+
+  /* success state */
+  .success-view{display:none; text-align:center; padding:12px 4px 4px;}
+  .success-view.show{display:block;}
+  .success-check{
+    width:48px; height:48px; border-radius:50%;
+    background:var(--ok-bg); color:var(--ok-ink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem; margin:0 auto 16px;
+  }
+  .success-view h3{margin:0 0 6px; font-size:1.1rem;}
+  .success-view p{color:var(--ink-soft); font-size:0.85rem; margin:0 0 22px; line-height:1.5;}
+  .success-view .id{color:var(--gold); font-family:ui-monospace, monospace; font-size:0.8rem;}
+  .success-actions{display:flex; gap:10px; justify-content:center;}
+  .ghost-btn{
+    background:transparent; border:1px solid var(--line); color:var(--ink);
+    padding:10px 18px; border-radius:8px; font-size:0.88rem; cursor:pointer;
+  }
+  .ghost-btn:hover{background:var(--panel-2);}
+
+  @media (max-width:480px){
+    .row{flex-direction:column;}
+    .modal{padding:22px 18px 18px;}
+  }
 </style>
 </head>
 <body>
 
-  <h1>RFQ backend test page <span style="color:#f2c94c">(mock — not the real site)</span></h1>
-  <p class="sub">Sends one dummy RFQ straight to <code>/api/rfq</code> to confirm the backend is wired up. Swap this file out once the real frontend button is ready.</p>
+  <h1>RFQ backend test page <span style="color:var(--gold)">(real form, mock context)</span></h1>
+  <p class="sub">Opens the actual RFQ form and posts it straight to <code>/api/rfq</code> — same payload shape and validation the real site will use. Not the marketing site itself, but the form logic here is production-real.</p>
 
-  <button id="rfqBtn">Post an RFQ (test)</button>
+  <button class="primary-btn" id="openBtn">Post an RFQ</button>
 
   <div id="result"></div>
+
+  <!-- ---------- Modal ---------- -->
+  <div class="overlay" id="overlay" role="presentation">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rfq-title">
+
+      <div class="modal-head">
+        <div>
+          <h2 id="rfq-title">Post an RFQ</h2>
+          <p class="modal-sub">Tell us what you're sourcing. We'll follow up by email.</p>
+        </div>
+        <button class="close-btn" id="closeBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="rfqForm" novalidate>
+
+        <div class="field" data-field="commodity">
+          <label for="commodity">Commodity<span class="req">*</span></label>
+          <select id="commodity" name="commodity" required>
+            <option value="" disabled selected>Select one…</option>
+            <option value="parts">Parts</option>
+            <option value="gold">Gold</option>
+            <option value="diamond">Diamond</option>
+          </select>
+          <div class="field-error">Please select a commodity.</div>
+        </div>
+
+        <div class="row">
+          <div class="field" data-field="company">
+            <label for="company">Company<span class="req">*</span></label>
+            <input id="company" name="company" type="text" maxlength="200" required autocomplete="organization">
+            <div class="field-error">Company is required.</div>
+          </div>
+          <div class="field" data-field="contactName">
+            <label for="contactName">Contact name<span class="req">*</span></label>
+            <input id="contactName" name="contactName" type="text" maxlength="200" required autocomplete="name">
+            <div class="field-error">Contact name is required.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field" data-field="email">
+            <label for="email">Email<span class="req">*</span></label>
+            <input id="email" name="email" type="email" maxlength="200" required autocomplete="email">
+            <div class="field-error">A valid email is required.</div>
+          </div>
+          <div class="field" data-field="phone">
+            <label for="phone">Phone<span class="opt">(optional)</span></label>
+            <input id="phone" name="phone" type="tel" maxlength="50" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field" data-field="quantity">
+            <label for="quantity">Quantity<span class="opt">(optional)</span></label>
+            <input id="quantity" name="quantity" type="text" maxlength="200" placeholder="e.g. 5kg, 200 units">
+          </div>
+          <div class="field" data-field="targetPrice">
+            <label for="targetPrice">Target price<span class="opt">(optional)</span></label>
+            <input id="targetPrice" name="targetPrice" type="text" maxlength="100" placeholder="e.g. $65/g">
+          </div>
+        </div>
+
+        <div class="field" data-field="spec">
+          <label for="spec">Spec / requirements<span class="req">*</span></label>
+          <textarea id="spec" name="spec" maxlength="5000" required placeholder="Grade, tolerances, certifications, packaging — whatever the supplier needs to quote accurately."></textarea>
+          <div class="field-error">Please describe the spec or requirements.</div>
+        </div>
+
+        <div class="field" data-field="notes">
+          <label for="notes">Notes<span class="opt">(optional)</span></label>
+          <textarea id="notes" name="notes" maxlength="3000" placeholder="Timeline, delivery location, anything else."></textarea>
+        </div>
+
+        <!-- Honeypot: real visitors never see or fill this. Must stay empty. -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-error" id="formError"></div>
+
+        <div class="form-actions">
+          <button class="submit-btn" id="submitBtn" type="submit">
+            <span class="spinner"></span>
+            <span class="btn-label">Submit RFQ</span>
+          </button>
+          <span style="color:var(--ink-faint); font-size:0.78rem;">Posts live to the RFQ backend.</span>
+        </div>
+      </form>
+
+      <!-- Success state, swapped in after a good submit -->
+      <div class="success-view" id="successView">
+        <div class="success-check">✓</div>
+        <h3>RFQ received</h3>
+        <p>It's in the queue for review.<br><span class="id" id="successId"></span></p>
+        <div class="success-actions">
+          <button class="ghost-btn" id="submitAnotherBtn" type="button">Submit another</button>
+          <button class="primary-btn" id="doneBtn" type="button" style="padding:10px 20px; font-size:0.88rem;">Done</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <script>
     // Point this at wherever the backend lives — same value goes in the real site.
     const RFQ_API_URL = "https://mj-rfq-backend.onrender.com/api/rfq";
 
-    const btn = document.getElementById("rfqBtn");
+    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const form = document.getElementById("rfqForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnLabel = submitBtn.querySelector(".btn-label");
+    const formError = document.getElementById("formError");
+    const successView = document.getElementById("successView");
+    const successId = document.getElementById("successId");
     const resultBox = document.getElementById("result");
 
-    btn.addEventListener("click", async () => {
-      btn.disabled = true;
-      btn.textContent = "Sending...";
-      resultBox.className = "";
-      resultBox.style.display = "none";
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const REQUIRED_FIELDS = ["commodity", "company", "contactName", "email", "spec"];
+
+    function openModal() {
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      resetForm();
+      setTimeout(() => document.getElementById("commodity").focus(), 30);
+      document.addEventListener("keydown", onKeydown);
+    }
+
+    function closeModal() {
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKeydown);
+    }
+
+    function onKeydown(e) {
+      if (e.key === "Escape") closeModal();
+    }
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+    document.getElementById("doneBtn").addEventListener("click", closeModal);
+    document.getElementById("submitAnotherBtn").addEventListener("click", resetForm);
+
+    function resetForm() {
+      form.reset();
+      form.style.display = "flex";
+      successView.classList.remove("show");
+      clearErrors();
+      submitBtn.disabled = false;
+      submitBtn.classList.remove("loading");
+      btnLabel.textContent = "Submit RFQ";
+    }
+
+    function clearErrors() {
+      formError.classList.remove("show");
+      formError.textContent = "";
+      form.querySelectorAll(".field.invalid").forEach((f) => f.classList.remove("invalid"));
+    }
+
+    function markInvalid(name, message) {
+      const field = form.querySelector(`[data-field="${name}"]`);
+      if (!field) return;
+      field.classList.add("invalid");
+      if (message) {
+        const err = field.querySelector(".field-error");
+        if (err) err.textContent = message;
+      }
+    }
+
+    function validate() {
+      clearErrors();
+      const data = Object.fromEntries(new FormData(form).entries());
+      let firstInvalid = null;
+      const problems = [];
+
+      if (!data.commodity) {
+        markInvalid("commodity");
+        problems.push("commodity");
+      }
+      if (!data.company || !data.company.trim()) {
+        markInvalid("company");
+        problems.push("company");
+      }
+      if (!data.contactName || !data.contactName.trim()) {
+        markInvalid("contactName");
+        problems.push("contactName");
+      }
+      if (!data.email || !EMAIL_RE.test(data.email.trim())) {
+        markInvalid("email");
+        problems.push("email");
+      }
+      if (!data.spec || !data.spec.trim()) {
+        markInvalid("spec");
+        problems.push("spec");
+      }
+
+      if (problems.length) {
+        firstInvalid = form.querySelector(".field.invalid input, .field.invalid select, .field.invalid textarea");
+        if (firstInvalid) firstInvalid.focus();
+        formError.textContent = "Please fix the highlighted fields.";
+        formError.classList.add("show");
+        return null;
+      }
+      return data;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Honeypot: if it's filled, silently pretend success (bots only).
+      const hp = document.getElementById("website").value.trim();
+
+      const data = validate();
+      if (!data) return;
 
       const payload = {
-        commodity: "gold",
-        company: "Test Co (mock page)",
-        contactName: "Test User",
-        email: "test@example.com",
-        phone: "",
-        quantity: "1kg",
-        spec: "Sent from the test-rfq.html mock button",
-        targetPrice: "",
-        notes: "This is a test submission — safe to delete from /admin.",
-        website: "" // honeypot, must stay empty
+        commodity: data.commodity,
+        company: data.company.trim(),
+        contactName: data.contactName.trim(),
+        email: data.email.trim(),
+        phone: (data.phone || "").trim(),
+        quantity: (data.quantity || "").trim(),
+        spec: data.spec.trim(),
+        targetPrice: (data.targetPrice || "").trim(),
+        notes: (data.notes || "").trim(),
+        website: hp
       };
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add("loading");
+      btnLabel.textContent = "Sending…";
+      clearErrors();
 
       try {
         const res = await fetch(RFQ_API_URL, {
@@ -87,23 +457,38 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        const data = await res.json();
 
-        if (res.ok && data.ok) {
-          resultBox.className = "ok";
-          resultBox.textContent = "✅ Success\n\nRFQ id: " + data.id +
-            "\n\nCheck /admin to see it show up.";
-        } else {
-          resultBox.className = "err";
-          resultBox.textContent = "❌ Server responded but rejected it:\n\n" +
-            JSON.stringify(data, null, 2);
+        let responseData;
+        try {
+          responseData = await res.json();
+        } catch {
+          responseData = null;
         }
-      } catch (e) {
-        resultBox.className = "err";
-        resultBox.textContent = "❌ Request failed:\n\n" + e.message;
+
+        if (res.ok && responseData && responseData.ok) {
+          form.style.display = "none";
+          successView.classList.add("show");
+          successId.textContent = "RFQ id: " + responseData.id;
+
+          resultBox.className = "ok";
+          resultBox.textContent = "✅ Success\n\nRFQ id: " + responseData.id + "\n\nCheck /admin to see it show up.";
+        } else if (res.status === 429) {
+          formError.textContent = "Too many submissions from this connection — try again in a few minutes.";
+          formError.classList.add("show");
+        } else if (responseData && Array.isArray(responseData.errors) && responseData.errors.length) {
+          formError.textContent = responseData.errors.join(" · ");
+          formError.classList.add("show");
+        } else {
+          formError.textContent = "The server rejected this submission. Please try again.";
+          formError.classList.add("show");
+        }
+      } catch (err) {
+        formError.textContent = "Request failed — check your connection and try again. (" + err.message + ")";
+        formError.classList.add("show");
       } finally {
-        btn.disabled = false;
-        btn.textContent = "Post an RFQ (test)";
+        submitBtn.disabled = false;
+        submitBtn.classList.remove("loading");
+        btnLabel.textContent = "Submit RFQ";
       }
     });
   </script>
