@@ -49,3 +49,5 @@ is for AI context, not for the human — see `README.md` for that.
   say otherwise.
 - User prefers being handed exact copy-pasteable commands/code with minimal
   narration when doing git/deploy operations.
+
+- User's browser downloads land in `C:\Users\HP\Downloads`; the local repo root is `C:\Users\HP\Desktop\mj-logistics`. When handing over a new/updated file, give the PowerShell command to copy it from Downloads into the right repo subfolder before git add/commit/push.
