@@ -59,13 +59,3 @@ is for AI context, not for the human — see `README.md` for that.
   narration when doing git/deploy operations.
 
 - User's browser downloads land in `C:\Users\HP\Downloads`; the local repo root is `C:\Users\HP\Desktop\mj-logistics`. When handing over a new/updated file, give the PowerShell command to copy it from Downloads into the right repo subfolder before git add/commit/push.
-- **Output filename rule:** when presenting an updated version of a file
-  the user will re-download (e.g. `admin.html`), don't reuse the exact
-  same output filename as the version handed over earlier in the
-  conversation/session — vary it (suffix, version tag, etc.) so it
-  doesn't silently overwrite the still-open previous download in the
-  user's `Downloads` folder before they've had a chance to compare or
-  recover it. This does not apply to this repo's own canonical, fixed-name
-  docs (`CLAUDE.md`, `AI_SESSION_LOG.md`, `README.md`) — those are meant
-  to always be replaced in place under their real name; the rule is about
-  disposable Downloads-folder copies of iterated deliverables.
