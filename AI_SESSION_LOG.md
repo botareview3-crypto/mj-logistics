@@ -45,12 +45,52 @@ the admin panel.
 easy to miss (user didn't notice it existed, thought Status dropdown was
 the relevant control). Data itself displays fine once expanded.
 
-**Follow-up change made this session:** in `mj-rfq-backend/public/admin.html`,
-made the entire table row clickable to expand/collapse the detail panel
-(phone/target price/spec/notes), not just the tiny ▸ button — click
-anywhere on a row except the status dropdown or Delete button. Added
-`.data-row` class + hover highlight, `data-row-toggle` attribute on each
-`<tr>`, and a `toggleExpand()` helper used by both the button and the
-row-level click handler. User needs to copy the updated `admin.html` into
-`mj-rfq-backend/public/admin.html` and redeploy (Render auto-deploys on
-git push, per existing convention in this repo).
+
+## 2026-08-21 — Admin UI spacing/modernization pass
+
+**Prompt:** User confirmed the row-click expand works, then asked for a
+general spacing/polish pass on `/admin` to feel more modern.
+
+**What I did — all in `mj-rfq-backend/public/admin.html`, CSS only
+(no markup structure or JS logic changes beyond class names already in
+place from the previous session):**
+- Added a small design-token layer: `--radius-sm/md/lg`, `--shadow-sm/md`,
+  `--ease`, plus a `--line-soft` for lighter internal dividers — kept the
+  existing brand palette (paper bg, ink, gold/terracotta, blue) as-is.
+- Toolbar and table now sit in raised white cards (`border-radius`,
+  `box-shadow`) instead of flat-on-paper; increased outer/section spacing
+  (`main` padding 24→32px top, toolbar margin 18→24px) for more breathing
+  room.
+- Table cell padding increased (12→16/18px), header letter-spacing
+  slightly wider, row hover uses a smooth 120ms transition.
+- `row-new` changed from a full pale-pink row fill to a 3px inset gold
+  left-edge accent bar — reads as "new" without fighting the hover state
+  or making rows feel like error/warning rows.
+- Status `<select>` restyled as a proper pill (custom SVG chevron,
+  rounded-full, no native arrow) instead of a plain browser dropdown.
+- Detail panel (expand row) given more generous padding, uppercase mono
+  micro-labels for Phone/Target price/Spec/Notes, wider grid gap.
+- Buttons/inputs got consistent focus rings (box-shadow glow instead of
+  hard outline) and a subtle press-scale on `:active`.
+- Header bar is now translucent + `backdrop-filter: blur` on scroll,
+  login card and empty-state got shadow/radius to match the new system.
+- Added a `@media (max-width:640px)` pass tightening padding and
+  collapsing the two-column detail grid to one column.
+- No HTML structure, IDs, or JS behavior changed — safe drop-in
+  replacement for the file from the previous session.
+
+**Next step for user:** copy `admin.html` into
+`mj-rfq-backend/public/admin.html`, commit, push; Render auto-deploys.
+
+## 2026-08-21 — Added output-filename rule
+
+**Prompt:** User asked for a standing rule: always name handed-over files
+differently from the previous one, so a new download doesn't silently
+overwrite the prior version sitting in their Downloads folder.
+
+**What I did:** Added a "Output filename rule" bullet under Working
+conventions in `CLAUDE.md`, scoped to disposable Downloads-folder copies
+of iterated deliverables (e.g. `admin.html`) — explicitly carved out this
+repo's own fixed-name docs (`CLAUDE.md`, `AI_SESSION_LOG.md`, `README.md`),
+which are meant to be replaced in place under their real name.
+
