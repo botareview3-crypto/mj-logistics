@@ -41,6 +41,14 @@ is for AI context, not for the human — see `README.md` for that.
 
 ## Working conventions established in this project
 
+- **Session log rule:** every session, before finishing up, add an entry
+  to `/AI_SESSION_LOG.md` (newest entry first) summarizing what the user
+  asked, what you actually did/found, and any open question left for next
+  time. This exists so a fresh conversation picking up this project can
+  read one file and know what just happened instead of the human having
+  to re-explain it. `CLAUDE.md` (this file) is for durable facts that
+  stay true; `AI_SESSION_LOG.md` is the session-by-session timeline —
+  don't merge the two.
 - Two-README split: `/README.md` = human status/overview,
   `/CLAUDE.md` (this file) = AI working context. Keep both updated when
   something structural changes — don't let them drift out of sync.
@@ -49,3 +57,15 @@ is for AI context, not for the human — see `README.md` for that.
   say otherwise.
 - User prefers being handed exact copy-pasteable commands/code with minimal
   narration when doing git/deploy operations.
+
+- User's browser downloads land in `C:\Users\HP\Downloads`; the local repo root is `C:\Users\HP\Desktop\mj-logistics`. When handing over a new/updated file, give the PowerShell command to copy it from Downloads into the right repo subfolder before git add/commit/push.
+- **Output filename rule:** when presenting an updated version of a file
+  the user will re-download (e.g. `admin.html`), don't reuse the exact
+  same output filename as the version handed over earlier in the
+  conversation/session — vary it (suffix, version tag, etc.) so it
+  doesn't silently overwrite the still-open previous download in the
+  user's `Downloads` folder before they've had a chance to compare or
+  recover it. This does not apply to this repo's own canonical, fixed-name
+  docs (`CLAUDE.md`, `AI_SESSION_LOG.md`, `README.md`) — those are meant
+  to always be replaced in place under their real name; the rule is about
+  disposable Downloads-folder copies of iterated deliverables.
