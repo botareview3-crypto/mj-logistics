@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MJ Backend — Test Page</title>
+</head>
+<body style="font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px;">
+
+<h1>Backend test page</h1>
+<p>Nothing fancy — each button hits the live backend and prints the raw response below. Use this to confirm the API works before wiring up the real site.</p>
+
+<h2>Health</h2>
+<button id="btn-health">Check /health</button>
+
+<h2>RFQ</h2>
+<button id="btn-rfq">Submit a test RFQ</button>
+
+<h2>Auth</h2>
+<p>Random test account is generated each click, so "Register" always works even after repeat clicks.</p>
+<button id="btn-register">Register test account</button>
+<button id="btn-login">Login with last registered account</button>
+<button id="btn-me">Check /api/auth/me (with stored token)</button>
+<button id="btn-logout">Logout</button>
+
+<h2>Result</h2>
+<pre id="out" style="background:#eee; padding:12px; white-space:pre-wrap; word-break:break-all; min-height:80px;"></pre>
+
+<script>
+  var API = ''; // same origin
+  var out = document.getElementById('out');
+  var lastEmail = null;
+  var lastPassword = null;
+  var lastToken = null;
+
+  function show(label, promise) {
+    out.textContent = label + ' — loading…';
+    promise
+      .then(function (res) {
+        return res.text().then(function (text) {
+          out.textContent = label + ' — HTTP ' + res.status + '\n\n' + text;
+        });
+      })
+      .catch(function (err) {
+        out.textContent = label + ' — request failed\n\n' + err.message;
+      });
+  }
+
+  document.getElementById('btn-health').addEventListener('click', function () {
+    show('GET /health', fetch(API + '/health'));
+  });
+
+  document.getElementById('btn-rfq').addEventListener('click', function () {
+    var payload = {
+      commodity: 'parts',
+      company: 'Test Co',
+      contactName: 'Test Buttons',
+      email: 'test-' + Date.now() + '@example.com',
+      phone: '555-0100',
+      quantity: '10 units',
+      spec: 'Test RFQ submitted from the button test page.',
+      targetPrice: '',
+      notes: '',
+      website: '' // honeypot, must stay empty
+    };
+    show('POST /api/rfq', fetch(API + '/api/rfq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }));
+  });
+
+  document.getElementById('btn-register').addEventListener('click', function () {
+    lastEmail = 'test-' + Date.now() + '@example.com';
+    lastPassword = 'testpass123';
+    var payload = {
+      company: 'Test Co',
+      contactName: 'Test Buttons',
+      email: lastEmail,
+      phone: '',
+      password: lastPassword
+    };
+    show('POST /api/auth/register', fetch(API + '/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      return res.clone().json().then(function (data) {
+        if (data.token) lastToken = data.token;
+        return res;
+      }).catch(function () { return res; });
+    }));
+  });
+
+  document.getElementById('btn-login').addEventListener('click', function () {
+    if (!lastEmail) {
+      out.textContent = 'Register a test account first — nothing to log in with yet.';
+      return;
+    }
+    show('POST /api/auth/login', fetch(API + '/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: lastEmail, password: lastPassword })
+    }).then(function (res) {
+      return res.clone().json().then(function (data) {
+        if (data.token) lastToken = data.token;
+        return res;
+      }).catch(function () { return res; });
+    }));
+  });
+
+  document.getElementById('btn-me').addEventListener('click', function () {
+    if (!lastToken) {
+      out.textContent = 'No token yet — register or log in first.';
+      return;
+    }
+    show('GET /api/auth/me', fetch(API + '/api/auth/me', {
+      headers: { 'Authorization': 'Bearer ' + lastToken }
+    }));
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', function () {
+    if (!lastToken) {
+      out.textContent = 'No token yet — nothing to log out of.';
+      return;
+    }
+    show('POST /api/auth/logout', fetch(API + '/api/auth/logout', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + lastToken }
+    }));
+    lastToken = null;
+  });
+</script>
+</body>
+</html>

@@ -28,7 +28,9 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme';
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 const DATA_DIR = path.join(__dirname, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'rfqs.json');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 if (ADMIN_PASSWORD === 'changeme') {
   console.warn(
@@ -46,10 +48,12 @@ if (ADMIN_PASSWORD === 'changeme') {
 function ensureDataFile() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, '[]', 'utf8');
+  if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]', 'utf8');
 }
 ensureDataFile();
 
 let writeQueue = Promise.resolve();
+let usersWriteQueue = Promise.resolve();
 
 async function readAll() {
   const raw = await fsp.readFile(DATA_FILE, 'utf8');
@@ -70,6 +74,25 @@ function withWriteLock(fn) {
 
 function saveAll(records) {
   return withWriteLock(() => fsp.writeFile(DATA_FILE, JSON.stringify(records, null, 2), 'utf8'));
+}
+
+// Same pattern as above, kept as a separate file + separate write queue so
+// user-account writes never block on (or get blocked by) RFQ writes.
+async function readAllUsers() {
+  const raw = await fsp.readFile(USERS_FILE, 'utf8');
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+function saveAllUsers(users) {
+  const result = usersWriteQueue.then(() =>
+    fsp.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf8')
+  );
+  usersWriteQueue = result.catch(() => {});
+  return result;
 }
 
 // ---------------------------------------------------------------------
@@ -114,6 +137,89 @@ function validateRfqInput(body) {
   };
 }
 
+function validateRegisterInput(body) {
+  const errors = [];
+
+  const company = clean(body.company, 200);
+  if (!company) errors.push('company is required');
+
+  const contactName = clean(body.contactName, 200);
+  if (!contactName) errors.push('contactName is required');
+
+  const email = clean(body.email, 200).toLowerCase();
+  if (!email || !EMAIL_RE.test(email)) errors.push('a valid email is required');
+
+  const phone = clean(body.phone, 50);
+
+  const password = typeof body.password === 'string' ? body.password : '';
+  if (password.length < 8) errors.push('password must be at least 8 characters');
+
+  return { errors, value: { company, contactName, email, phone, password } };
+}
+
+// ---------------------------------------------------------------------
+// Password hashing (scrypt, built into Node — no extra dependency) and
+// session tokens. Sessions live in memory only: fine for this site's
+// traffic, but it means everyone is signed out on a server restart —
+// same tradeoff already made for the admin password, called out in the
+// README as needing real auth/DB before serious traffic.
+// ---------------------------------------------------------------------
+
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, stored) {
+  const [salt, hash] = String(stored || '').split(':');
+  if (!salt || !hash) return false;
+  const check = crypto.scryptSync(password, salt, 64).toString('hex');
+  const a = Buffer.from(hash, 'hex');
+  const b = Buffer.from(check, 'hex');
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
+const sessions = new Map(); // token -> { userId, expiresAt }
+
+function createSession(userId) {
+  const token = crypto.randomBytes(32).toString('hex');
+  sessions.set(token, { userId, expiresAt: Date.now() + SESSION_TTL_MS });
+  return token;
+}
+
+function getSessionToken(req) {
+  const auth = req.headers['authorization'] || '';
+  if (auth.startsWith('Bearer ')) return auth.slice(7);
+  return req.headers['x-session-token'] || '';
+}
+
+function getSessionUserId(req) {
+  const token = getSessionToken(req);
+  if (!token) return null;
+  const session = sessions.get(token);
+  if (!session) return null;
+  if (session.expiresAt < Date.now()) {
+    sessions.delete(token);
+    return null;
+  }
+  return session.userId;
+}
+
+function toPublicProfile(user) {
+  return {
+    id: user.id,
+    company: user.company,
+    contactName: user.contactName,
+    email: user.email,
+    phone: user.phone,
+    createdAt: user.createdAt,
+    lastLoginAt: user.lastLoginAt || null,
+    loginCount: user.loginCount || 0,
+  };
+}
+
 // ---------------------------------------------------------------------
 // Very light abuse guards for the public POST endpoint:
 //   - honeypot field (real users never fill in "website")
@@ -125,12 +231,25 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 const RATE_LIMIT_MAX = 5;
 const rateLimitHits = new Map(); // ip -> [timestamps]
 
-function isRateLimited(ip) {
+function checkRateLimit(map, ip, max) {
   const now = Date.now();
-  const hits = (rateLimitHits.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  const hits = (map.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
   hits.push(now);
-  rateLimitHits.set(ip, hits);
-  return hits.length > RATE_LIMIT_MAX;
+  map.set(ip, hits);
+  return hits.length > max;
+}
+
+function isRateLimited(ip) {
+  return checkRateLimit(rateLimitHits, ip, RATE_LIMIT_MAX);
+}
+
+// Separate bucket + slightly higher ceiling for auth: a family of
+// register/login attempts on one connection shouldn't burn the RFQ quota.
+const AUTH_RATE_LIMIT_MAX = 10;
+const authRateLimitHits = new Map();
+
+function isAuthRateLimited(ip) {
+  return checkRateLimit(authRateLimitHits, ip, AUTH_RATE_LIMIT_MAX);
 }
 
 // ---------------------------------------------------------------------
@@ -254,12 +373,100 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 201, { ok: true, id: record.id });
     }
 
+    // ---- Public: create an account (site "Sign up") -----------------
+    if (pathname === '/api/auth/register' && req.method === 'POST') {
+      if (isAuthRateLimited(ip)) {
+        return sendJson(res, 429, { ok: false, errors: ['Too many requests. Please try again later.'] });
+      }
+
+      const body = await readBody(req);
+      const { errors, value } = validateRegisterInput(body);
+      if (errors.length) return sendJson(res, 400, { ok: false, errors });
+
+      const users = await readAllUsers();
+      if (users.some((u) => u.email === value.email)) {
+        return sendJson(res, 409, { ok: false, errors: ['An account with this email already exists.'] });
+      }
+
+      const now = new Date().toISOString();
+      const user = {
+        id: crypto.randomUUID(),
+        company: value.company,
+        contactName: value.contactName,
+        email: value.email,
+        phone: value.phone,
+        passwordHash: hashPassword(value.password),
+        createdAt: now,
+        lastLoginAt: now,
+        loginCount: 1,
+      };
+      users.push(user);
+      await saveAllUsers(users);
+
+      const token = createSession(user.id);
+      return sendJson(res, 201, { ok: true, token, profile: toPublicProfile(user) });
+    }
+
+    // ---- Public: sign in (site "Sign in") ----------------------------
+    if (pathname === '/api/auth/login' && req.method === 'POST') {
+      if (isAuthRateLimited(ip)) {
+        return sendJson(res, 429, { ok: false, errors: ['Too many requests. Please try again later.'] });
+      }
+
+      const body = await readBody(req);
+      const email = clean(body.email, 200).toLowerCase();
+      const password = typeof body.password === 'string' ? body.password : '';
+      if (!email || !password) {
+        return sendJson(res, 400, { ok: false, errors: ['email and password are required'] });
+      }
+
+      const users = await readAllUsers();
+      const idx = users.findIndex((u) => u.email === email);
+      if (idx === -1 || !verifyPassword(password, users[idx].passwordHash)) {
+        return sendJson(res, 401, { ok: false, errors: ['Invalid email or password.'] });
+      }
+
+      users[idx].lastLoginAt = new Date().toISOString();
+      users[idx].loginCount = (users[idx].loginCount || 0) + 1;
+      await saveAllUsers(users);
+
+      const token = createSession(users[idx].id);
+      return sendJson(res, 200, { ok: true, token, profile: toPublicProfile(users[idx]) });
+    }
+
+    // ---- Signed-in user: resume session on page load -----------------
+    if (pathname === '/api/auth/me' && req.method === 'GET') {
+      const userId = getSessionUserId(req);
+      if (!userId) return sendJson(res, 401, { ok: false, error: 'unauthorized' });
+      const users = await readAllUsers();
+      const user = users.find((u) => u.id === userId);
+      if (!user) return sendJson(res, 401, { ok: false, error: 'unauthorized' });
+      return sendJson(res, 200, { ok: true, profile: toPublicProfile(user) });
+    }
+
+    // ---- Signed-in user: sign out -------------------------------------
+    if (pathname === '/api/auth/logout' && req.method === 'POST') {
+      const token = getSessionToken(req);
+      if (token) sessions.delete(token);
+      return sendJson(res, 200, { ok: true });
+    }
+
     // ---- Admin: list all RFQs --------------------------------------
     if (pathname === '/api/admin/rfqs' && req.method === 'GET') {
       if (!isAdminAuthed(req)) return sendJson(res, 401, { ok: false, error: 'unauthorized' });
       const records = await readAll();
       records.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return sendJson(res, 200, { ok: true, records });
+    }
+
+    // ---- Admin: list all signed-up profiles -------------------------
+    if (pathname === '/api/admin/users' && req.method === 'GET') {
+      if (!isAdminAuthed(req)) return sendJson(res, 401, { ok: false, error: 'unauthorized' });
+      const users = await readAllUsers();
+      const profiles = users
+        .map(toPublicProfile)
+        .sort((a, b) => new Date(b.lastLoginAt || b.createdAt) - new Date(a.lastLoginAt || a.createdAt));
+      return sendJson(res, 200, { ok: true, profiles });
     }
 
     // ---- Admin: update one RFQ (status and/or notes) ---------------
@@ -316,6 +523,13 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname.startsWith('/admin/')) {
       return serveStatic(req, res, pathname.replace('/admin', ''));
+    }
+
+    // ---- Static test/wiring-check page --------------------------------
+    // Plain button-based page to smoke-test /api/rfq and /api/auth/* live
+    // against this backend without needing the real site frontend.
+    if (pathname === '/test' || pathname === '/test/') {
+      return serveStatic(req, res, '/test.html');
     }
 
     if (pathname === '/health') {

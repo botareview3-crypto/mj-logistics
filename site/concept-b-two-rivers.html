@@ -221,6 +221,33 @@
   .rfq-success.show{display:block;}
   .rfq-success h3{font-size:19px; margin-bottom:8px;}
   .rfq-success p{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); max-width:380px; margin:0 auto;}
+
+  /* ---------- Auth (sign in / sign up) ---------- */
+  .signin{background:none; border:none; cursor:pointer; padding:0;}
+  .auth-account{position:relative;}
+  .auth-account-btn{
+    background:none; border:none; cursor:pointer; padding:0; font-family:'Space Grotesk',sans-serif;
+    font-size:13px; color:var(--ink-soft); display:flex; align-items:center; gap:6px;
+  }
+  .auth-account-btn:hover{color:var(--blue);}
+  .auth-account-menu{
+    position:absolute; top:calc(100% + 14px); right:0; background:var(--paper); border:1px solid var(--line);
+    border-radius:10px; box-shadow:0 14px 34px rgba(0,0,0,.12); padding:14px 16px; min-width:210px; display:none;
+  }
+  .auth-account.open .auth-account-menu{display:block;}
+  .auth-account-menu .who{font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px; margin-bottom:2px;}
+  .auth-account-menu .co{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-soft); margin-bottom:12px;}
+  .auth-account-menu button{width:100%;}
+
+  .auth-tabs{display:flex; gap:6px; margin-top:20px; background:var(--paper-2); border-radius:999px; padding:4px;}
+  .auth-tab{
+    flex:1; text-align:center; padding:9px 10px; border-radius:999px; border:none; background:none; cursor:pointer;
+    font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; color:var(--ink-soft);
+    transition:background .15s, color .15s;
+  }
+  .auth-tab.active{background:var(--paper); color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.08);}
+  .auth-panel{display:none;}
+  .auth-panel.active{display:block;}
 </style>
 </head>
 <body>
@@ -243,7 +270,17 @@
         <li><a href="#contact">Contact Us</a></li>
       </ul>
       <div class="navcta">
-        <a href="#" class="signin">Sign in</a>
+        <button type="button" class="signin" id="auth-trigger">Sign in</button>
+        <div class="auth-account" id="auth-account" hidden>
+          <button type="button" class="auth-account-btn" id="auth-account-btn">
+            <span id="auth-account-name">Account</span> <span class="caret" style="width:7px;height:7px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-2px);"></span>
+          </button>
+          <div class="auth-account-menu" id="auth-account-menu">
+            <div class="who" id="auth-menu-name"></div>
+            <div class="co" id="auth-menu-company"></div>
+            <button type="button" class="btn" id="auth-signout" style="width:100%; padding:8px 16px; font-size:12.5px;">Sign out</button>
+          </div>
+        </div>
         <button type="button" class="btn solid" data-open-rfq>Post an RFQ</button>
       </div>
     </nav>
@@ -472,6 +509,69 @@
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in-view'); });
   }
 </script>
+<!-- Auth modal (sign in / sign up) -->
+<div class="rfq-overlay" id="auth-overlay" aria-hidden="true">
+  <div class="rfq-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" style="max-width:440px;">
+    <button type="button" class="rfq-close" id="auth-close" aria-label="Close">✕</button>
+
+    <h2 id="auth-title">Welcome back</h2>
+    <p class="sub">Sign in to track your RFQs, or create a free account.</p>
+
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-auth-tab="signin">Sign in</button>
+      <button type="button" class="auth-tab" data-auth-tab="signup">Sign up</button>
+    </div>
+
+    <div class="auth-panel active" id="auth-panel-signin">
+      <form class="rfq-form" id="signin-form" novalidate>
+        <div class="rfq-field">
+          <label for="signin-email">Email <span class="req">*</span></label>
+          <input type="email" id="signin-email" name="email" required maxlength="200" autocomplete="email">
+        </div>
+        <div class="rfq-field">
+          <label for="signin-password">Password <span class="req">*</span></label>
+          <input type="password" id="signin-password" name="password" required autocomplete="current-password">
+        </div>
+        <div class="rfq-actions">
+          <button type="submit" class="btn solid rfq-submit" id="signin-submit">Sign in</button>
+          <span class="rfq-status" id="signin-status" role="status"></span>
+        </div>
+      </form>
+    </div>
+
+    <div class="auth-panel" id="auth-panel-signup">
+      <form class="rfq-form" id="signup-form" novalidate>
+        <div class="rfq-row">
+          <div class="rfq-field">
+            <label for="signup-company">Company <span class="req">*</span></label>
+            <input type="text" id="signup-company" name="company" required maxlength="200" autocomplete="organization">
+          </div>
+          <div class="rfq-field">
+            <label for="signup-contact">Contact name <span class="req">*</span></label>
+            <input type="text" id="signup-contact" name="contactName" required maxlength="200" autocomplete="name">
+          </div>
+        </div>
+        <div class="rfq-field">
+          <label for="signup-email">Email <span class="req">*</span></label>
+          <input type="email" id="signup-email" name="email" required maxlength="200" autocomplete="email">
+        </div>
+        <div class="rfq-field">
+          <label for="signup-phone">Phone</label>
+          <input type="tel" id="signup-phone" name="phone" maxlength="50" autocomplete="tel">
+        </div>
+        <div class="rfq-field">
+          <label for="signup-password">Password <span class="req">*</span></label>
+          <input type="password" id="signup-password" name="password" required minlength="8" autocomplete="new-password">
+        </div>
+        <div class="rfq-actions">
+          <button type="submit" class="btn solid rfq-submit" id="signup-submit">Create account</button>
+          <span class="rfq-status" id="signup-status" role="status"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- RFQ modal -->
 <div class="rfq-overlay" id="rfq-overlay" aria-hidden="true">
   <div class="rfq-modal" role="dialog" aria-modal="true" aria-labelledby="rfq-title">
@@ -671,6 +771,196 @@
       submitBtn.disabled = false;
     });
   });
+})();
+
+(function(){
+  // Same-origin, mirrors RFQ_API_URL above — set an absolute URL here too
+  // if this page and the backend ever end up on different domains.
+  var AUTH_API_BASE = '/api/auth';
+  var STORAGE_KEY = 'mj_auth_token';
+
+  var overlay = document.getElementById('auth-overlay');
+  var closeBtn = document.getElementById('auth-close');
+  var trigger = document.getElementById('auth-trigger');
+  var accountWrap = document.getElementById('auth-account');
+  var accountBtn = document.getElementById('auth-account-btn');
+  var accountMenu = document.getElementById('auth-account-menu');
+  var accountName = document.getElementById('auth-account-name');
+  var menuName = document.getElementById('auth-menu-name');
+  var menuCompany = document.getElementById('auth-menu-company');
+  var signoutBtn = document.getElementById('auth-signout');
+
+  var tabs = document.querySelectorAll('[data-auth-tab]');
+  var panels = { signin: document.getElementById('auth-panel-signin'), signup: document.getElementById('auth-panel-signup') };
+
+  var signinForm = document.getElementById('signin-form');
+  var signinStatus = document.getElementById('signin-status');
+  var signinSubmit = document.getElementById('signin-submit');
+
+  var signupForm = document.getElementById('signup-form');
+  var signupStatus = document.getElementById('signup-status');
+  var signupSubmit = document.getElementById('signup-submit');
+
+  var lastFocused = null;
+
+  function openModal(tab){
+    setTab(tab || 'signin');
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    var firstField = document.getElementById(tab === 'signup' ? 'signup-company' : 'signin-email');
+    if (firstField) firstField.focus();
+  }
+
+  function closeModal(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  function setTab(tab){
+    tabs.forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-auth-tab') === tab);
+    });
+    panels.signin.classList.toggle('active', tab === 'signin');
+    panels.signup.classList.toggle('active', tab === 'signup');
+  }
+
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){ setTab(btn.getAttribute('data-auth-tab')); });
+  });
+
+  trigger.addEventListener('click', function(){ openModal('signin'); });
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+
+  accountBtn.addEventListener('click', function(){ accountWrap.classList.toggle('open'); });
+  document.addEventListener('click', function(e){
+    if (!accountWrap.contains(e.target)) accountWrap.classList.remove('open');
+  });
+
+  function showLoggedIn(profile){
+    trigger.hidden = true;
+    accountWrap.hidden = false;
+    var firstName = (profile.contactName || '').split(' ')[0] || 'Account';
+    accountName.textContent = firstName;
+    menuName.textContent = profile.contactName || '';
+    menuCompany.textContent = profile.company || '';
+  }
+
+  function showLoggedOut(){
+    trigger.hidden = false;
+    accountWrap.hidden = true;
+    accountWrap.classList.remove('open');
+  }
+
+  function authFetch(path, payload){
+    return fetch(AUTH_API_BASE + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(data){
+        if (!res.ok || data.ok === false) {
+          var msg = (data.errors && data.errors.join(', ')) || data.error || 'Something went wrong. Please try again.';
+          throw new Error(msg);
+        }
+        return data;
+      });
+    });
+  }
+
+  function onAuthed(data){
+    localStorage.setItem(STORAGE_KEY, data.token);
+    showLoggedIn(data.profile);
+    closeModal();
+  }
+
+  signinForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    signinStatus.textContent = '';
+    signinStatus.className = 'rfq-status';
+    var email = document.getElementById('signin-email').value.trim();
+    var password = document.getElementById('signin-password').value;
+    if (!email || !password) {
+      signinStatus.textContent = 'Please fill in both fields.';
+      signinStatus.className = 'rfq-status error';
+      return;
+    }
+    signinSubmit.disabled = true;
+    signinStatus.textContent = 'Signing in…';
+    authFetch('/login', { email: email, password: password })
+      .then(function(data){
+        signinForm.reset();
+        onAuthed(data);
+      })
+      .catch(function(err){
+        signinStatus.textContent = err.message;
+        signinStatus.className = 'rfq-status error';
+      })
+      .finally(function(){ signinSubmit.disabled = false; });
+  });
+
+  signupForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    signupStatus.textContent = '';
+    signupStatus.className = 'rfq-status';
+    var payload = {
+      company: document.getElementById('signup-company').value.trim(),
+      contactName: document.getElementById('signup-contact').value.trim(),
+      email: document.getElementById('signup-email').value.trim(),
+      phone: document.getElementById('signup-phone').value.trim(),
+      password: document.getElementById('signup-password').value
+    };
+    if (!payload.company || !payload.contactName || !payload.email || !payload.password) {
+      signupStatus.textContent = 'Please fill in all required fields.';
+      signupStatus.className = 'rfq-status error';
+      return;
+    }
+    if (payload.password.length < 8) {
+      signupStatus.textContent = 'Password must be at least 8 characters.';
+      signupStatus.className = 'rfq-status error';
+      return;
+    }
+    signupSubmit.disabled = true;
+    signupStatus.textContent = 'Creating account…';
+    authFetch('/register', payload)
+      .then(function(data){
+        signupForm.reset();
+        onAuthed(data);
+      })
+      .catch(function(err){
+        signupStatus.textContent = err.message;
+        signupStatus.className = 'rfq-status error';
+      })
+      .finally(function(){ signupSubmit.disabled = false; });
+  });
+
+  signoutBtn.addEventListener('click', function(){
+    var token = localStorage.getItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
+    showLoggedOut();
+    if (token) {
+      fetch(AUTH_API_BASE + '/logout', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token }
+      }).catch(function(){});
+    }
+  });
+
+  // Resume session on page load if a token is already stored.
+  var savedToken = localStorage.getItem(STORAGE_KEY);
+  if (savedToken) {
+    fetch(AUTH_API_BASE + '/me', { headers: { 'Authorization': 'Bearer ' + savedToken } })
+      .then(function(res){ if (!res.ok) throw new Error('expired'); return res.json(); })
+      .then(function(data){ showLoggedIn(data.profile); })
+      .catch(function(){ localStorage.removeItem(STORAGE_KEY); showLoggedOut(); });
+  }
 })();
 </script>
 </body>

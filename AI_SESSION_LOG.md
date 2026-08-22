@@ -13,6 +13,77 @@ diffs/files instead of pasting code here.
 
 ---
 
+## 2026-08-22 — Added a plain button-based backend test page
+
+**Prompt:** User asked for a simple page to test the backend system —
+just the buttons, nothing fancy — after realizing the site pages had
+never actually been deployed anywhere with a real URL.
+
+**What I did:**
+- `mj-rfq-backend/server.js`: added a `/test` route (mirrors the existing
+  `/admin` static-serve pattern) that serves a new `public/test.html`.
+- `mj-rfq-backend/public/test.html`: unstyled page with buttons to hit
+  `/health`, submit a throwaway `/api/rfq` payload, register a random
+  test account, log in with it, check `/api/auth/me`, and log out — each
+  button prints the raw JSON response on the page. No CSS effort by
+  design, matches the spirit of the existing `site/test-rfq.html`
+  throwaway.
+- Verified locally: `/test` returns 200, `/health` responds, and a
+  sample RFQ POST succeeds end-to-end.
+- Once deployed, this will be reachable at
+  `https://mj-rfq-backend.onrender.com/test` — the first time either
+  backend feature (RFQ or auth) has had an actual live URL to click
+  through, as opposed to only being testable via curl or a local file.
+
+## 2026-08-22 — Added Sign in / Sign up (site) + Users tab (Admin)
+
+**Prompt:** User asked for a working sign in/sign up button on the site
+that also logs the profile into Admin, files delivered as a zip, and a
+standing rule to rename the zip every time.
+
+**What I did:**
+- `mj-rfq-backend/server.js`: added a real account system — a separate
+  `data/users.json` store (own write-lock queue, doesn't block RFQ
+  writes), scrypt password hashing (`hashPassword`/`verifyPassword`,
+  salted, timing-safe compare), and in-memory bearer-token sessions
+  (`sessions` Map, 30-day TTL — cleared on server restart, same tradeoff
+  already accepted for the admin password). New routes: `POST
+  /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`, `POST
+  /api/auth/logout`, and `GET /api/admin/users` (admin-token gated,
+  returns every signed-up profile sorted by most recent activity — no
+  password hashes exposed). Also split the rate limiter into two buckets
+  (`rateLimitHits` for `/api/rfq`, `authRateLimitHits` for the new auth
+  routes) via a shared `checkRateLimit(map, ip, max)` helper so auth
+  attempts can't burn the RFQ submission quota or vice versa.
+- `site/concept-b-two-rivers.html`: the previously-decorative "Sign in"
+  link in the nav is now a real trigger for a Sign in / Sign up modal
+  (same visual language as the existing RFQ modal — tabs instead of two
+  separate modals). On success the token is stored in `localStorage`
+  (`mj_auth_token`) and the nav swaps to an account menu (first name +
+  company + Sign out) that also resumes automatically on page reload via
+  `/api/auth/me`. Did **not** touch `site/test-rfq.html` — `CLAUDE.md`
+  flags it as a deliberate throwaway not meant to be polished; say the
+  word if you want the same button there too.
+- `mj-rfq-backend/public/admin.html`: added an "RFQs / Users" tab
+  switcher above the existing toolbar. New Users tab lazy-loads
+  `/api/admin/users` on first click and lists signup date, company,
+  contact + email, phone, last login, and login count, with its own
+  search filter. No changes to the existing RFQ table/logic.
+- Verified end-to-end against a local run of the updated server:
+  register → user appears correctly in `/api/admin/users` → login updates
+  `lastLoginAt`/`loginCount` → bad password correctly rejected → admin
+  route correctly 401s without the token. All three inline `<script>`
+  blocks (site ×2, admin ×1) pass `node -c` syntax checks.
+- Added the "rename the zip every time" rule to `CLAUDE.md` under
+  Working conventions — a prior session's log claimed to add this but it
+  never actually landed in the file; fixed that.
+
+**Open items for next time:** admin password and now user passwords are
+both still simple/shared-style auth (no real DB, in-memory sessions reset
+on restart) — flagged in `server.js` comments as pre-production debt,
+consistent with what was already called out for the admin password.
+`site/test-rfq.html` was intentionally left without the auth button.
+
 ## 2026-08-21 — Investigating admin/test-page field mismatch
 
 **Prompt:** User uploaded the repo zip plus a screenshot of `/admin`
