@@ -59,15 +59,16 @@ is for AI context, not for the human — see `README.md` for that.
   narration when doing git/deploy operations.
 
 - User's browser downloads land in `C:\Users\HP\Downloads`; the local repo root is `C:\Users\HP\Desktop\mj-logistics`. When handing over a new/updated file, give the PowerShell command to copy it from Downloads into the right repo subfolder before git add/commit/push.
-- **Output filename rule (zips included):** every time new/edited files are
-  handed over — whether as loose files or zipped together — give the
-  download a different filename than the last one handed over in this
-  project. Name it as the actual project/file name plus what was
-  fixed/changed — no date (e.g. `mj-logistics-auth-signup.zip`,
-  `mj-logistics-admin-users-tab.zip`). Never reuse a prior filename, so a
-  new download can't silently overwrite an earlier one still sitting in
-  the user's Downloads folder. This is scoped to disposable
-  Downloads-folder deliverables — it does not apply to
+- **Output packaging/filename rule:** every time new/edited files are
+  handed over, always zip them — even a single file — never hand over a
+  loose file directly. Give the zip a different filename than the last
+  one handed over in this project. Name it as the actual project/file
+  name plus what was fixed/changed — no date (e.g.
+  `mj-logistics-auth-signup.zip`, `mj-logistics-admin-users-tab.zip`).
+  Never reuse a prior filename, so a new download can't silently
+  overwrite an earlier one still sitting in the user's Downloads folder.
+  This is scoped to disposable Downloads-folder deliverables — it does
+  not apply to
   this repo's own fixed-name docs (`CLAUDE.md`, `AI_SESSION_LOG.md`,
   `README.md`), which are meant to be replaced in place under their real
   name.
