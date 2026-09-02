@@ -31,12 +31,12 @@ PowerShell syntax**, never syntax from another shell. That covers things like:
 - `D:\Chrome_Downloads\...` style paths (Zemen's confirmed downloads folder
   — not a generic default like `C:\Users\...\Downloads`)
 
-**All PowerShell commands for a given step go in a single code block** —
-one copy-pasteable block per logical step (e.g. one block for "reset local
-and pull latest," one block for "apply changes and push"), not a separate
-block per command. Only split into multiple blocks when the steps are
-genuinely sequential stages the owner should pause between (e.g. "run this,
-check the output, then run the next block").
+**All PowerShell commands for a given delivery go in a single block, start
+to finish** — unzip, copy files, `git status`/`git diff`, `git add`,
+`git commit`, and `git push` all together in one copy-pasteable block, not
+split across separate steps. This overrides the earlier idea of pausing
+before commit/push — Zemen reviews the `git diff` output after the block
+runs, not before continuing.
 
 **Downloaded zip filenames are not reliable — use a unique internal folder
 name instead.** The platform names downloads after the zip's top-level
