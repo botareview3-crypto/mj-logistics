@@ -5,7 +5,7 @@ import { MegaMenu } from './MegaMenu';
 import { PARTS_DATABASE } from '../lib/data/parts';
 
 export const Header: React.FC = () => {
-  const { activeVehicle, setActiveVehicle, savedVehicles, cartCount, openSelectorModal, isMegaMenuOpen, setIsMegaMenuOpen, navigate, currentPath } = useApp();
+  const { activeVehicle, setActiveVehicle, cartCount, openSelectorModal, isMegaMenuOpen, setIsMegaMenuOpen, navigate, currentPath } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -116,9 +116,8 @@ export const Header: React.FC = () => {
 
               {/* Right icons */}
               <div className="flex items-center gap-3 text-white shrink-0">
-                <button type="button" onClick={() => navigate('/garage')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/garage' ? 'bg-white/20' : ''}`}>
+                <button type="button" onClick={() => navigate('/account')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/account' ? 'bg-white/20' : ''}`}>
                   <User className="w-5 h-5" />
-                  {savedVehicles.length > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow-xs">{savedVehicles.length}</span>}
                 </button>
                 <button type="button" onClick={() => navigate('/cart')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/cart' ? 'bg-white/20' : ''}`}>
                   <ShoppingCart className="w-5 h-5" />
