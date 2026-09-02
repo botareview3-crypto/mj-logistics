@@ -18,3 +18,14 @@ transcript, just the gist.
 - Local folder (`C:\Users\HP\mj-logistics`) had diverged from the GitHub
   repo, so the first push starts with a full local reset (fresh clone)
   rather than an incremental copy.
+- Zemen decided to deploy via **Hostinger** instead of (or in addition to)
+  Render. Added `frontend/public/.htaccess` (force HTTPS, gzip, asset
+  caching, 404 routing — gets copied into `out/` by `next build` since it
+  lives under `public/`) and `HOSTINGER-DEPLOY.md`, which documents two
+  independent paths: Part 1, building `frontend/out/` locally and uploading
+  it to Hostinger shared/business hosting for the storefront (works on any
+  plan, no card needed); Part 2 (optional), running the FastAPI backend on
+  a Hostinger VPS via systemd + Nginx + certbot so `/admin` also works
+  live, since shared hosting can't run FastAPI/ASGI apps. `CLAUDE.md`'s
+  "Deployed on Render" line hasn't been updated yet — flagged to Zemen to
+  confirm whether Hostinger replaces Render or the two coexist.
