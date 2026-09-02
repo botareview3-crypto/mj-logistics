@@ -44,6 +44,12 @@ transcript, just the gist.
   read-only filesystem error. Cause was that Render, with no Python
   version pinned, defaulted to a very new interpreter (3.14) that has no
   prebuilt wheel for that pydantic-core release, forcing a source build.
-  Fix: added `backend/runtime.txt` pinning `python-3.12.7`, a version
-  pydantic-core 2.23.4 ships prebuilt wheels for, so the build installs
-  from a wheel instead of compiling.
+  First fix attempt (`backend/runtime.txt`) didn't take — Render doesn't
+  actually support `runtime.txt` (that's a Heroku-only convention); the
+  build kept using 3.14 and failed the same way. Corrected fix: removed
+  `runtime.txt` and instead pinned Python via the two methods Render does
+  support — a `PYTHON_VERSION: 3.12.7` env var added to `render.yaml`
+  (highest precedence) and a `backend/.python-version` file containing
+  `3.12.7` as a backup. 3.12.7 is a version pydantic-core 2.23.4 ships
+  prebuilt wheels for, so the build should install from a wheel instead
+  of compiling.
