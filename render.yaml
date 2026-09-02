@@ -2,10 +2,6 @@ services:
   # FastAPI backend — powers only the /admin console.
   # Free tier: sleeps after 15 min idle (cold start ~30-60s), and since data
   # lives in memory it resets to the seed data on every restart/redeploy.
-  #
-  # The frontend is NOT deployed on Render — it's a static export uploaded
-  # directly to Hostinger (see HOSTINGER-DEPLOY.md), so there's only one
-  # service here.
   - type: web
     name: mj-logistics-backend
     runtime: python
@@ -19,4 +15,27 @@ services:
       - key: ADMIN_TOKEN
         generateValue: true
       - key: CORS_ORIGINS
-        value: https://mjlogisticsenterprise.com
+        fromService:
+          name: mj-logistics-frontend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # Storefront — Next.js static export (output: 'export' in next.config.js).
+  # TEMPORARY per Zemen's 2026-09-02 instruction, for iterating on the UI
+  # before the move to Hostinger (HOSTINGER-DEPLOY.md) — this deviates from
+  # the "no Render static site" decision recorded earlier the same day.
+  # No `plan` key here: static-site services don't accept one (confirmed by
+  # the earlier "no such plan free for service type web" failure) — Render
+  # static sites are free by default.
+  - type: web
+    runtime: static
+    name: mj-logistics-frontend
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: out
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE
+        fromService:
+          name: mj-logistics-backend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL

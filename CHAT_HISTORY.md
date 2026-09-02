@@ -67,3 +67,18 @@ transcript, just the gist.
   `frontend/.env.production` with `NEXT_PUBLIC_API_BASE` pointed at the
   Render URL before `npm run build`; Part 2 (the VPS walkthrough) is
   relabeled as legacy/reference-only, not part of the current setup.
+
+### 2026-09-02 (later same day)
+- Walked through the live backend deploy with Zemen: `/admin` and `/`
+  404 as expected (no HTML routes defined, API is JSON-only under `/api/*`
+  and `/docs`); confirmed `/api/health`, `/api/site/settings`, `/docs` all
+  work correctly on `mj-logistics-backend-7crs.onrender.com`.
+- Zemen wants to preview the storefront UI before committing to the
+  Hostinger upload flow, so re-added the `mj-logistics-frontend` static
+  site to `render.yaml` as a **temporary** second service — explicit,
+  session-scoped override of the "no Render static site" decision above;
+  Hostinger is still the intended final home once the UI is approved.
+  This time wired `CORS_ORIGINS` and `NEXT_PUBLIC_API_BASE` between the two
+  services via `fromService` / `RENDER_EXTERNAL_URL` (per the automatic-
+  wiring convention in `CLAUDE.md`) instead of hardcoding URLs, and left
+  off the `plan` key on the static service per the prior known failure.
