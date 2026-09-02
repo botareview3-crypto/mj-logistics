@@ -28,10 +28,33 @@ PowerShell syntax**, never syntax from another shell. That covers things like:
 - `Expand-Archive` (not `unzip`)
 - `Copy-Item` (not `cp`)
 - `Remove-Item` (not `rm`)
-- `C:\Users\HP\Downloads\...` style paths (not a generic default downloads
-  path — confirm the owner's actual download folder rather than assuming;
-  currently assumed to be `C:\Users\HP\Downloads`, correct this line if
-  that's wrong)
+- `D:\Chrome_Downloads\...` style paths (Zemen's confirmed downloads folder
+  — not a generic default like `C:\Users\...\Downloads`)
+
+**All PowerShell commands for a given step go in a single code block** —
+one copy-pasteable block per logical step (e.g. one block for "reset local
+and pull latest," one block for "apply changes and push"), not a separate
+block per command. Only split into multiple blocks when the steps are
+genuinely sequential stages the owner should pause between (e.g. "run this,
+check the output, then run the next block").
+
+**Downloaded zip filenames are not reliable — use a unique internal folder
+name instead.** The platform names downloads after the zip's top-level
+folder, not the filename Claude sets when creating the file. If every
+delivery zip contains a `mj-logistics-main\` folder, every download
+collides and Windows appends `(1)`, `(2)`, etc. — which then don't match
+the paths Claude wrote in its instructions.
+
+To avoid this, **each delivery zip's top-level folder must be renamed to
+something unique and descriptive for that delivery** (e.g.
+`mj-render-setup\`, `mj-admin-fix\`, `mj-fixed-landingpage\`) instead of
+`mj-logistics-main\`. The folder name should match the zip's own filename
+(minus `.zip`) so the download and its contents are self-evidently paired,
+and Claude writes the `Copy-Item` paths against that folder name directly —
+no more guessing `(n)` suffixes. If a download's name still doesn't match
+what Claude expected, ask Zemen to run
+`Get-ChildItem D:\Chrome_Downloads\*.zip | Sort-Object LastWriteTime -Descending | Select-Object -First 5 Name, LastWriteTime`
+to confirm before writing further commands.
 
 ## The end-to-end push workflow
 
@@ -44,10 +67,10 @@ that into the real repo is:
 cd C:\Users\HP\mj-logistics
 
 # 1. Unzip the delivered file (adjust the filename to match what was downloaded)
-Expand-Archive -Path "C:\Users\HP\Downloads\<name>.zip" -DestinationPath "C:\Users\HP\Downloads\<name>" -Force
+Expand-Archive -Path "D:\Chrome_Downloads\<name>.zip" -DestinationPath "D:\Chrome_Downloads\<name>" -Force
 
 # 2. Copy only the changed files over (one copy command per file, matching folders)
-Copy-Item "C:\Users\HP\Downloads\<name>\mj-logistics-main\<path\to\file>" -Destination .\<path\to\> -Force
+Copy-Item "D:\Chrome_Downloads\<name>\mj-logistics-main\<path\to\file>" -Destination .\<path\to\> -Force
 
 # 3. Review before committing
 git status
@@ -65,7 +88,7 @@ Rules for this flow:
   never a blind folder copy that could overwrite unrelated files.
 - Each delivered zip gets a unique filename — never reuse the same zip name
   across deliverables in a session or across sessions, so old downloads in
-  `C:\Users\HP\Downloads` don't get confused with new ones.
+  `D:\Chrome_Downloads` don't get confused with new ones.
 - Zemen reviews `git diff` before committing. Claude should tell them what
   to look for if it isn't obvious.
 - Commit messages are short, specific, and describe the change (not "update
