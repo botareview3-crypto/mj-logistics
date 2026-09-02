@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import Router from 'next/router';
 import { Vehicle, Part, CartItem } from './types';
+import { AuthUser, getStoredToken, storeToken, clearToken, fetchCurrentUser } from './auth';
 
 interface Toast {
   id: string;
@@ -37,6 +38,10 @@ interface AppContextType {
   toastType?: string;
   showToast: (message: string, type?: 'success' | 'info' | 'warning' | 'error') => void;
   removeToast: (id: string) => void;
+  currentUser: AuthUser | null;
+  isAuthLoading: boolean;
+  loginWithToken: (token: string) => Promise<void>;
+  logout: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -54,6 +59,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState('/');
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const loginWithToken = useCallback(async (token: string) => {
+    storeToken(token);
+    const user = await fetchCurrentUser(token);
+    setCurrentUser(user);
+  }, []);
+
+  const logout = useCallback(() => {
+    clearToken();
+    setCurrentUser(null);
+  }, []);
+
+  useEffect(() => {
+    const token = getStoredToken();
+    if (!token) {
+      setIsAuthLoading(false);
+      return;
+    }
+    fetchCurrentUser(token).then(user => {
+      setCurrentUser(user);
+      setIsAuthLoading(false);
+    });
+  }, []);
 
   useEffect(() => {
     try {
@@ -210,6 +240,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       toastMessage: latestToast?.message,
       toastType: latestToast?.type,
       showToast, removeToast,
+      currentUser, isAuthLoading, loginWithToken, logout,
     }}>
       {children}
     </AppContext.Provider>

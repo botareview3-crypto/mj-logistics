@@ -82,3 +82,31 @@ transcript, just the gist.
   services via `fromService` / `RENDER_EXTERNAL_URL` (per the automatic-
   wiring convention in `CLAUDE.md`) instead of hardcoding URLs, and left
   off the `plan` key on the static service per the prior known failure.
+
+### 2026-09-02 (later still)
+- Added Google + Apple social sign-in on `/account`, at Zemen's request.
+  This required real backend work, not just UI: a Postgres-backed `User`
+  table (`backend/app/db.py`, `db_models.py` — first persistence this
+  project has had, everything else is still in-memory), JWT session issuance
+  (`backend/app/auth.py`), and OAuth login/callback routes for Google and
+  Apple (`backend/app/routers/auth.py`). Apple's flow needs a signed JWT
+  client secret (ES256, from an Apple Developer `.p8` key) regenerated per
+  request, and its callback is a POST (`response_mode=form_post`) since
+  Apple only returns the user's name/email on first consent.
+- `render.yaml` now provisions a free Render Postgres (`mj-logistics-db`)
+  and auto-generates `JWT_SECRET`/`SESSION_SECRET`; `GOOGLE_CLIENT_ID`,
+  `GOOGLE_CLIENT_SECRET`, and the four `APPLE_*` vars are `sync: false`
+  placeholders Zemen has to fill in manually in the Render dashboard —
+  wrote `AUTH-SETUP.md` with exact click-by-click steps for both (Google
+  ~10 min free; Apple needs the $99/yr Developer Program and can't be
+  tested against localhost, only the live Render backend).
+- Frontend: `lib/auth.ts` (redirect to backend, store/read the JWT),
+  `AppContext.tsx` (`currentUser`/`loginWithToken`/`logout`), `account.tsx`
+  (Google/Apple buttons + signed-in state). This is new backend-calling
+  behavior on a page that previously had no real backend calls — worth
+  remembering next to the "storefront doesn't call the backend" convention
+  above, since `/account` now does.
+- Not done yet: email/password sign-in is still a placeholder toast: only
+  Google/Apple actually authenticate. No credentials are set yet, so both
+  buttons currently redirect back with a "not configured" toast until
+  Zemen completes `AUTH-SETUP.md`.

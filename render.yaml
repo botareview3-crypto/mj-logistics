@@ -1,7 +1,15 @@
+databases:
+  # Free Render Postgres — this is what makes user accounts survive a
+  # redeploy. Free-tier Postgres on Render expires after 90 days and needs
+  # to be recreated (and DATABASE_URL below reconnected); fine for now,
+  # upgrade to a paid plan before this matters in production.
+  - name: mj-logistics-db
+    plan: free
+
 services:
-  # FastAPI backend — powers only the /admin console.
-  # Free tier: sleeps after 15 min idle (cold start ~30-60s), and since data
-  # lives in memory it resets to the seed data on every restart/redeploy.
+  # FastAPI backend — powers /admin AND now sign-in (email/session storage
+  # for Google + Apple accounts lives in mj-logistics-db, see app/db.py).
+  # Free tier: sleeps after 15 min idle (cold start ~30-60s).
   - type: web
     name: mj-logistics-backend
     runtime: python
@@ -19,6 +27,41 @@ services:
           name: mj-logistics-frontend
           type: web
           envVarKey: RENDER_EXTERNAL_URL
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mj-logistics-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        # Update this to the Hostinger domain once the storefront moves
+        # there (see HOSTINGER-DEPLOY.md) — this is where the browser gets
+        # sent back to after Google/Apple sign-in.
+        fromService:
+          name: mj-logistics-frontend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: BACKEND_URL
+        fromService:
+          name: mj-logistics-backend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      # Set these manually in the Render dashboard (Environment tab) —
+      # secrets aren't committed to render.yaml. See AUTH-SETUP.md.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: APPLE_CLIENT_ID
+        sync: false
+      - key: APPLE_TEAM_ID
+        sync: false
+      - key: APPLE_KEY_ID
+        sync: false
+      - key: APPLE_PRIVATE_KEY
+        sync: false
 
   # Storefront — Next.js static export (output: 'export' in next.config.js).
   # TEMPORARY per Zemen's 2026-09-02 instruction, for iterating on the UI
