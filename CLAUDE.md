@@ -8,9 +8,13 @@ making changes.
 
 - Local folder: `C:\Users\HP\mj-logistics`
 - GitHub repo: `https://github.com/botareview3-crypto/mj-logistics` (branch: `main`)
-- Deployed on Render (two services from `render.yaml`: a static site for the
-  storefront, a free Python web service for the `/admin` API — auto-deploys
-  from `main` once the Blueprint is connected)
+- **Confirmed hosting split:** storefront is a static export uploaded to
+  **Hostinger** (Business Web Hosting plan, `mjlogisticsenterprise.com`) —
+  see `HOSTINGER-DEPLOY.md` Part 1. Only the `/admin` FastAPI backend runs
+  on **Render** (free web service, one service in `render.yaml`,
+  auto-deploys from `main`). Render's static-site plan is NOT used — Zemen
+  is not paying for anything beyond the two existing Hostinger
+  subscriptions (hosting + domain) and Render's free tier.
 - Stack: FastAPI backend (Python, in-memory data, no DB) + Next.js frontend
   (App/Pages Router, built as a static export — `next build` produces plain
   HTML/CSS/JS, no Node server needed in production)

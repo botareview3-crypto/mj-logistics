@@ -26,6 +26,16 @@ transcript, just the gist.
   it to Hostinger shared/business hosting for the storefront (works on any
   plan, no card needed); Part 2 (optional), running the FastAPI backend on
   a Hostinger VPS via systemd + Nginx + certbot so `/admin` also works
-  live, since shared hosting can't run FastAPI/ASGI apps. `CLAUDE.md`'s
-  "Deployed on Render" line hasn't been updated yet — flagged to Zemen to
-  confirm whether Hostinger replaces Render or the two coexist.
+  live, since shared hosting can't run FastAPI/ASGI apps.
+- Zemen confirmed the final split: Hostinger hosts the storefront (already
+  paying for Business Web Hosting + the `.com` domain), Render's free tier
+  hosts only the `/admin` backend, and nothing else gets paid for (no
+  Hostinger VPS, no Render static site).
+- Render's Blueprint deploy failed on the static frontend service
+  (`services[1].plan: no such plan free for service type web` — the
+  `runtime: static` service doesn't accept a `plan` key). Since that
+  service isn't needed anyway (Hostinger hosts the frontend), removed it
+  from `render.yaml` entirely and hardcoded `CORS_ORIGINS` to
+  `https://mjlogisticsenterprise.com` instead of wiring it to the removed
+  service via `fromService`. `render.yaml` now defines a single backend
+  service. Updated `CLAUDE.md`'s "Deployed on Render" line to match.
