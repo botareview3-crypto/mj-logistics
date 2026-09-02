@@ -39,3 +39,11 @@ transcript, just the gist.
   `https://mjlogisticsenterprise.com` instead of wiring it to the removed
   service via `fromService`. `render.yaml` now defines a single backend
   service. Updated `CLAUDE.md`'s "Deployed on Render" line to match.
+- Backend build failed on Render: `pip install` tried to build
+  `pydantic-core==2.23.4` from source with maturin/Rust and hit a
+  read-only filesystem error. Cause was that Render, with no Python
+  version pinned, defaulted to a very new interpreter (3.14) that has no
+  prebuilt wheel for that pydantic-core release, forcing a source build.
+  Fix: added `backend/runtime.txt` pinning `python-3.12.7`, a version
+  pydantic-core 2.23.4 ships prebuilt wheels for, so the build installs
+  from a wheel instead of compiling.
