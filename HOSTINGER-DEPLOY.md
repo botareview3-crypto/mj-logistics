@@ -7,10 +7,10 @@ This project has two parts:
   and does **not** call the backend at all.
 - **`/admin` console** — the only page that talks to the FastAPI backend.
 
-Because of that split, there are two independent deployments below. Do
-**Part 1** to get the actual site live — that's almost certainly all you
-need. Only do **Part 2** if you specifically want the `/admin` staff
-console to work online too.
+Because of that split, there used to be two independent deployments — but
+now that the backend runs on Render, **you only need Part 1**: it covers
+the whole live setup (storefront + `/admin`). Part 2 is legacy reference
+material only.
 
 ---
 
@@ -24,7 +24,18 @@ the *result*.
 The repo has already been updated for this (`frontend/next.config.js` now
 has `output: 'export'`), so you just need to build and upload.
 
-### Step 1 — Build the static site on your computer
+### Step 1 — Point the build at the live backend
+The `/admin` page needs to know where the FastAPI backend is. Create
+`frontend/.env.production` (this file is gitignored — you only need it
+locally, on the machine where you run the build):
+```
+NEXT_PUBLIC_API_BASE=https://mj-logistics-backend-7crs.onrender.com
+```
+Without this file, `/admin` silently falls back to `http://localhost:8000`
+in the built site — it'll look fine but every request will fail once it's
+live on Hostinger.
+
+### Step 2 — Build the static site on your computer
 You need [Node.js](https://nodejs.org) (18+) installed locally — this step
 does not happen on Hostinger.
 
@@ -38,7 +49,7 @@ This creates a `frontend/out/` folder containing the whole site as plain
 `.html`, `.css`, and `.js` files. That `out/` folder is everything Hostinger
 needs.
 
-### Step 2 — Get your files onto Hostinger
+### Step 3 — Get your files onto Hostinger
 In [hPanel](https://hpanel.hostinger.com):
 
 1. Go to **Websites** → pick your website (or create one / point a domain
@@ -54,13 +65,13 @@ In [hPanel](https://hpanel.hostinger.com):
    - Fastest way: zip the contents of `out/` on your computer, upload the
      zip via File Manager, then use File Manager's "Extract" option.
 
-### Step 3 — Turn on SSL
+### Step 4 — Turn on SSL
 In hPanel: **Websites → your site → SSL** → click **Install** (Hostinger
 issues a free certificate on every plan). This project's `.htaccess`
 (included in the build output) automatically redirects `http://` to
 `https://` once SSL is on.
 
-### Step 4 — Point your domain (if it isn't already)
+### Step 5 — Point your domain (if it isn't already)
 If you bought the domain through Hostinger, this is usually automatic. If
 it's registered elsewhere, add Hostinger's nameservers (or an A record
 pointing to your hosting IP) at your registrar — hPanel shows the exact
@@ -68,15 +79,24 @@ values under **Domains → DNS / Nameservers**.
 
 ### That's it
 Visit your domain — the storefront should be fully live: catalog
-browsing, product pages, search, vehicle selector, My Garage. None of that
-needs the backend.
+browsing, product pages, search, vehicle selector, My Garage — and
+`/admin` should reach the live Render backend (log in with the
+`ADMIN_TOKEN` from the backend service's Environment tab on Render).
+None of the storefront pages need the backend; only `/admin` does.
 
 **Whenever you change the catalog data** (edit `frontend/lib/data/*.ts`),
-repeat Steps 1–2: rebuild locally and re-upload the new `out/` contents.
+repeat Steps 2–3: rebuild locally and re-upload the new `out/` contents.
+`frontend/.env.production` only needs to be created once, unless the
+backend's Render URL ever changes.
 
 ---
 
-## Part 2 (optional) — Making `/admin` work too
+## Part 2 (reference only, not currently used) — Self-hosting `/admin` on a Hostinger VPS
+
+**This project doesn't use this path.** The `/admin` backend runs on
+**Render** (free tier — see `render.yaml`), not a Hostinger VPS. This
+section is kept only as a fallback reference in case Render ever needs to
+be replaced; skip it entirely under normal circumstances.
 
 `/admin` is a staff tool to add/edit parts and toggle maintenance mode. It
 needs the FastAPI backend running somewhere reachable over HTTPS.
@@ -84,12 +104,12 @@ needs the FastAPI backend running somewhere reachable over HTTPS.
 those plans is limited to basic scripts, not ASGI frameworks) — you'd need
 a **Hostinger VPS** plan instead. Also note the backend's data is
 in-memory only: anything added via `/admin` disappears on every restart —
-there's no database wired up yet.
+there's no database wired up yet (true on Render too).
 
-If you don't need `/admin` right now, skip this section entirely — the
-storefront works fine without it.
+If you don't need this section, skip it entirely — the storefront and
+`/admin` both already work via the Render + Hostinger combo in Part 1.
 
-### 2a — Get a Hostinger VPS
+### 2a — Get a Hostinger VPS (only if you ever move off Render)
 Any KVM plan works. In hPanel's setup wizard, choose the **Ubuntu**
 template (skip the Django template — this app uses FastAPI, not Django).
 
@@ -159,4 +179,4 @@ Rebuild and re-upload `out/` as in Part 1. Now `/admin` (log in with the
 | What | Where it runs | Hostinger plan needed |
 |---|---|---|
 | Storefront (everything except `/admin`) | Static files | Any (Single/Premium/Business shared) |
-| `/admin` console + FastAPI backend | Python/ASGI server | VPS only |
+| `/admin` console + FastAPI backend | Render (free tier) | N/A — not hosted on Hostinger |

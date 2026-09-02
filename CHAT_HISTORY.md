@@ -53,3 +53,17 @@ transcript, just the gist.
   `3.12.7` as a backup. 3.12.7 is a version pydantic-core 2.23.4 ships
   prebuilt wheels for, so the build should install from a wheel instead
   of compiling.
+- Confirmed the Render backend deploy succeeded — installed from prebuilt
+  cp312 wheels, no source build, service came up live at
+  `https://mj-logistics-backend-7crs.onrender.com`. The `HEAD / 404` in
+  the boot log is just Render's own health check hitting `/`, which the
+  API doesn't define a route for — harmless.
+- Caught that `HOSTINGER-DEPLOY.md` was stale: it still documented a
+  Hostinger-VPS path for `/admin` even though the backend now runs on
+  Render. Also found a real gap — Part 1 (the path Zemen actually uses)
+  never told the frontend build where the Render backend lives, so
+  `/admin` would silently fall back to `http://localhost:8000` in the
+  live site. Rewrote the doc: Part 1 now includes a step to create
+  `frontend/.env.production` with `NEXT_PUBLIC_API_BASE` pointed at the
+  Render URL before `npm run build`; Part 2 (the VPS walkthrough) is
+  relabeled as legacy/reference-only, not part of the current setup.
