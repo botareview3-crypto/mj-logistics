@@ -110,3 +110,9 @@ transcript, just the gist.
   Google/Apple actually authenticate. No credentials are set yet, so both
   buttons currently redirect back with a "not configured" toast until
   Zemen completes `AUTH-SETUP.md`.
+
+### 2026-09-02 (deploy fix)
+- First deploy of the social sign-in change crashed on boot:
+  `ModuleNotFoundError: No module named 'psycopg2'` — SQLAlchemy's Postgres
+  dialect needs a driver package, and `requirements.txt` only had
+  `sqlalchemy` itself. Added `psycopg2-binary==2.9.9`.
