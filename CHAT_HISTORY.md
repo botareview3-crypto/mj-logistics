@@ -140,3 +140,19 @@ transcript, just the gist.
   the dashboard. Deleting Render services isn't possible from the CLI/repo
   — that's a manual dashboard action, to be done once the frontend
   question above is settled so nothing live gets deleted by mistake.
+
+### 2026-09-03 (duplicate-services resolved)
+- Confirmed with Zemen: the failed-on-resume `mj-logistics-backend` (plain)
+  never actually worked — its build log is from Sep 2, 12:27 UTC (before
+  this week's changes), failing to build `pydantic-core` from source under
+  an unpinned Python 3.14 (no Rust toolchain available in Render's build
+  sandbox). Pre-existing dead leftover, unrelated to the real backend.
+- Confirmed the frontend Zemen actually uses is `mj-logistics-frontend`
+  (plain, no suffix) — matches what `render.yaml` already had, so no
+  further `render.yaml` changes were needed there.
+- Final state: `mj-logistics-backend-7crs` + `mj-logistics-db-7crs` +
+  `mj-logistics-frontend` (plain) are the real trio and match render.yaml.
+  `mj-logistics-backend` (plain), `mj-logistics-db` (plain), and
+  `mj-logistics-frontend-7crs` are unused duplicates — flagged for Zemen to
+  delete manually from the Render dashboard (not something git/render.yaml
+  can do).
