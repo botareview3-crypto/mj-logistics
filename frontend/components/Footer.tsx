@@ -92,7 +92,11 @@ export const Footer: React.FC = () => {
 
         <div className="border-t border-slate-800 pt-6 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>© {new Date().getFullYear()} AutoParts Inc. All OEM part numbers and brand logos used for reference purposes only.</div>
-          <div className="flex items-center gap-4 text-slate-400 text-[11px]"><span>Privacy Policy</span><span>Terms of Sale</span><span>OEM Cross-Reference Terms</span><span>Security Compliance</span></div>
+          <div className="flex items-center gap-4 text-slate-400 text-[11px]">
+            <button type="button" onClick={() => navigate('/privacy')} className="hover:text-white hover:underline cursor-pointer">Privacy Policy</button>
+            <button type="button" onClick={() => navigate('/terms')} className="hover:text-white hover:underline cursor-pointer">Terms of Sale</button>
+            <span>OEM Cross-Reference Terms</span><span>Security Compliance</span>
+          </div>
         </div>
       </div>
     </footer>

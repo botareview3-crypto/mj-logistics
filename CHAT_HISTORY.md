@@ -156,3 +156,15 @@ transcript, just the gist.
   `mj-logistics-frontend-7crs` are unused duplicates — flagged for Zemen to
   delete manually from the Render dashboard (not something git/render.yaml
   can do).
+
+### 2026-09-03 (privacy policy + terms pages)
+- Publishing the Google OAuth consent screen to Production requires a
+  privacy policy URL (and Google's Branding page also asks for a homepage
+  and terms link) — the site had none, so added `frontend/pages/privacy.tsx`
+  and `frontend/pages/terms.tsx`, generic but real content covering what the
+  Google/Apple sign-in flow actually collects, plus standard e-commerce
+  terms. Wired the footer's existing (previously non-clickable) "Privacy
+  Policy"/"Terms of Sale" text into real links to these pages.
+- Not legal review — Zemen should have an actual lawyer look these over
+  before relying on them for anything beyond satisfying Google's publish
+  requirement, especially once real orders/payments are involved.
