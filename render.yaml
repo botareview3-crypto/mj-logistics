@@ -3,15 +3,15 @@ databases:
   # redeploy. Free-tier Postgres on Render expires after 90 days and needs
   # to be recreated (and DATABASE_URL below reconnected); fine for now,
   # upgrade to a paid plan before this matters in production.
-  - name: mj-logistics-db
+  - name: mj-logistics-db-7crs
     plan: free
 
 services:
   # FastAPI backend — powers /admin AND now sign-in (email/session storage
-  # for Google + Apple accounts lives in mj-logistics-db, see app/db.py).
+  # for Google + Apple accounts lives in mj-logistics-db-7crs, see app/db.py).
   # Free tier: sleeps after 15 min idle (cold start ~30-60s).
   - type: web
-    name: mj-logistics-backend
+    name: mj-logistics-backend-7crs
     runtime: python
     plan: free
     rootDir: backend
@@ -29,7 +29,7 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
       - key: DATABASE_URL
         fromDatabase:
-          name: mj-logistics-db
+          name: mj-logistics-db-7crs
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
@@ -45,7 +45,7 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
       - key: BACKEND_URL
         fromService:
-          name: mj-logistics-backend
+          name: mj-logistics-backend-7crs
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       # Set these manually in the Render dashboard (Environment tab) —
@@ -79,6 +79,6 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_BASE
         fromService:
-          name: mj-logistics-backend
+          name: mj-logistics-backend-7crs
           type: web
           envVarKey: RENDER_EXTERNAL_URL

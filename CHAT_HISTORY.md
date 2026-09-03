@@ -116,3 +116,27 @@ transcript, just the gist.
   `ModuleNotFoundError: No module named 'psycopg2'` — SQLAlchemy's Postgres
   dialect needs a driver package, and `requirements.txt` only had
   `sqlalchemy` itself. Added `psycopg2-binary==2.9.9`.
+
+### 2026-09-03 (render.yaml duplicate-services incident)
+- The social sign-in `render.yaml` used plain service/db names
+  (`mj-logistics-backend`, `mj-logistics-frontend`, `mj-logistics-db`)
+  instead of the names Render already had on file
+  (`mj-logistics-backend-7crs`, `mj-logistics-frontend-7crs`,
+  `mj-logistics-db-7crs`). Because Blueprint sync matches by name, this
+  didn't update the real services — it created new parallel ones under the
+  plain names, including a duplicate DB and a duplicate backend that ended
+  up suspended (no harm: no data existed to lose, nothing pointed at it).
+- Confirmed via the real backend's `DATABASE_URL` env var that
+  `mj-logistics-backend-7crs` is correctly wired to
+  `mj-logistics-db-7crs` — that pairing is healthy and unaffected.
+- Fixed `render.yaml`: backend and DB now use the confirmed real
+  `-7crs` names throughout (including the `fromService`/`fromDatabase`
+  cross-references). **Frontend name left as-is (`mj-logistics-frontend`,
+  no suffix)** — still unconfirmed which of `mj-logistics-frontend` /
+  `mj-logistics-frontend-7crs` is the one actually being previewed, so
+  that part needs Zemen to confirm before touching it further.
+- Not yet cleaned up: the orphaned duplicate `mj-logistics-backend`
+  (plain, currently resumed) and `mj-logistics-db` (plain) still exist in
+  the dashboard. Deleting Render services isn't possible from the CLI/repo
+  — that's a manual dashboard action, to be done once the frontend
+  question above is settled so nothing live gets deleted by mistake.
