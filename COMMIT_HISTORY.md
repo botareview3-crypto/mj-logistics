@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-09-04** `c59c821` Include images field in part serialization
+- **2026-09-04** `40ed8b9` Update commit history
 - **2026-09-04** `014a430` Add Cloudinary image upload for parts
 - **2026-09-03** `a4d77ad` Add privacy policy and terms pages, link them from the footer
 - **2026-09-03** `3975cd1` Log render.yaml duplicate-services investigation and resolution
