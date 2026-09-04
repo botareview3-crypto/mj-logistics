@@ -39,6 +39,20 @@ function AppLayout({ Component, pageProps }: AppProps) {
     }).catch(() => undefined);
   }, [apiBase]);
 
+  // Hidden admin shortcut — Ctrl+Shift+A (or Cmd+Shift+A on Mac) jumps to
+  // the admin console from anywhere on the storefront. No visible link is
+  // shown to regular visitors.
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'a') {
+        event.preventDefault();
+        router.push('/admin');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [router]);
+
   if (siteSettings.maintenance_mode && typeof window !== 'undefined' && window.location.pathname !== '/admin') {
     return <div className="min-h-screen bg-slate-100 px-5 flex items-center justify-center"><div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm"><Wrench className="mx-auto h-8 w-8 text-[#0077c7]" /><h1 className="mt-4 text-2xl font-bold text-slate-900">We&apos;re updating the catalogue</h1><p className="mt-2 text-sm leading-6 text-slate-600">{siteSettings.announcement || 'Please check back shortly.'}</p></div></div>;
   }
