@@ -18,10 +18,15 @@ making changes.
 - Stack: FastAPI backend (Python, in-memory data, no DB) + Next.js frontend
   (App/Pages Router, built as a static export — `next build` produces plain
   HTML/CSS/JS, no Node server needed in production)
-- File storage: none. The backend's catalog/admin data lives in memory only
-  and resets on every restart or redeploy. There is no cloud storage
-  provider configured. If persistence is ever needed, that's a future
-  decision (e.g. Render Postgres), not something currently wired up.
+- File storage: catalog/admin data (parts, categories, brands, etc.) still
+  lives in memory only and resets on every restart or redeploy — unchanged.
+  **Part images are the one exception**: those go to **Cloudinary**
+  (`backend/app/cloudinary_config.py`, credentials via `CLOUDINARY_*` env
+  vars, `sync: false` in `render.yaml` — set manually in the Render
+  dashboard and in a local `.env`). The image *URLs* Cloudinary returns are
+  still stored on the in-memory `Part.images` list, so they're lost on
+  restart same as everything else — only the actual files persist in
+  Cloudinary itself.
 
 ## The shell is always PowerShell
 

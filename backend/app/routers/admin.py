@@ -1,6 +1,8 @@
 import os
-from fastapi import APIRouter, Depends, Header, HTTPException
+import cloudinary.uploader
+from fastapi import APIRouter, Depends, Header, HTTPException, UploadFile, File
 from .. import data
+from .. import cloudinary_config  # noqa: F401 — importing runs cloudinary.config()
 from ..models import AdminPartCreate, AdminPartUpdate, Fitment, Part, SiteSettings
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -94,6 +96,40 @@ def remove_part(part_id: str):
     if part_id not in data.PARTS:
         raise HTTPException(404, "Part not found")
     data.delete_part(part_id)
+
+
+@router.post("/parts/{part_id}/images", dependencies=[Depends(require_admin)])
+def upload_part_image(part_id: str, file: UploadFile = File(...)):
+    current = data.PARTS.get(part_id)
+    if not current:
+        raise HTTPException(404, "Part not found")
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(422, "File must be an image")
+
+    try:
+        result = cloudinary.uploader.upload(
+            file.file,
+            folder=f"mj-logistics/parts/{part_id}",
+        )
+    except Exception as exc:  # cloudinary raises its own error types
+        raise HTTPException(502, f"Cloudinary upload failed: {exc}") from exc
+
+    image_url = result["secure_url"]
+    updated_images = [*current.images, image_url]
+    data.PARTS[part_id] = current.model_copy(update={"images": updated_images})
+    return serialize(data.PARTS[part_id])
+
+
+@router.delete("/parts/{part_id}/images", dependencies=[Depends(require_admin)])
+def remove_part_image(part_id: str, image_url: str):
+    current = data.PARTS.get(part_id)
+    if not current:
+        raise HTTPException(404, "Part not found")
+    if image_url not in current.images:
+        raise HTTPException(404, "Image not found on this part")
+    remaining = [url for url in current.images if url != image_url]
+    data.PARTS[part_id] = current.model_copy(update={"images": remaining})
+    return serialize(data.PARTS[part_id])
 
 
 @router.get("/settings", dependencies=[Depends(require_admin)])

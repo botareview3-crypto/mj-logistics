@@ -168,3 +168,29 @@ transcript, just the gist.
 - Not legal review — Zemen should have an actual lawyer look these over
   before relying on them for anything beyond satisfying Google's publish
   requirement, especially once real orders/payments are involved.
+
+### 2026-09-04 (Cloudinary image upload)
+- `pip install -r requirements.txt` failed locally: `psycopg2-binary==2.9.9`
+  had no prebuilt wheel for Zemen's installed Python (3.14.5), forcing a
+  source build that needs `pg_config` (not installed). Fixed by creating a
+  Python 3.12 venv (`py -3.12 -m venv venv`) matching the project's pinned
+  `.python-version`; bumped `psycopg2-binary` to `2.9.10` in
+  `requirements.txt` for a modern-Python wheel regardless.
+- Zemen got Cloudinary API keys but the project had zero Cloudinary
+  integration — no code referenced it anywhere. Wired it in: added
+  `cloudinary==1.41.0` to `requirements.txt`, new
+  `backend/app/cloudinary_config.py` (reads `CLOUDINARY_CLOUD_NAME`,
+  `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` from env), and two new
+  endpoints in `backend/app/routers/admin.py`: `POST
+  /api/admin/parts/{part_id}/images` (multipart upload → Cloudinary →
+  appends `secure_url` to that part's `images` list) and `DELETE
+  /api/admin/parts/{part_id}/images` (detaches a URL from the part; does
+  **not** delete the file from Cloudinary itself).
+- Added the three `CLOUDINARY_*` vars to `render.yaml` as `sync: false`
+  (manual, like the `GOOGLE_*`/`APPLE_*` vars) and a new
+  `backend/.env.example` for local dev — `.env` was already gitignored.
+- Updated `CLAUDE.md`'s "File storage: none" line — no longer fully
+  accurate now that part images persist in Cloudinary (the URLs referencing
+  them still live in-memory only, same as the rest of the catalog).
+- Not done yet: the admin **frontend** has no upload UI (file input) to
+  actually call the new endpoint — backend-only so far.

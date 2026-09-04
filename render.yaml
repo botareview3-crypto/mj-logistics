@@ -62,6 +62,12 @@ services:
         sync: false
       - key: APPLE_PRIVATE_KEY
         sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
 
   # Storefront — Next.js static export (output: 'export' in next.config.js).
   # TEMPORARY per Zemen's 2026-09-02 instruction, for iterating on the UI
