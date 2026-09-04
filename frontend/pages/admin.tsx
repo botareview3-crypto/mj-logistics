@@ -151,6 +151,12 @@ export default function AdminPage() {
   const [tab, setTab] = useState<'overview' | 'parts' | 'add'>('overview');
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ── Image management ────────────────────────────────────────────────────────
+  const [imagesPartId, setImagesPartId] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imageError, setImageError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   // ── Auth ────────────────────────────────────────────────────────────────────
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -252,6 +258,36 @@ export default function AdminPage() {
       setDeleteId(null);
     }
   }
+
+  // ── Image upload / delete ───────────────────────────────────────────────────
+  async function handleImageSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file later
+    if (!file || !imagesPartId) return;
+    setImageError('');
+    setUploadingImage(true);
+    try {
+      const updated = await adminApi.uploadPartImage(token, imagesPartId, file);
+      setParts(prev => prev.map(p => (p.id === updated.id ? updated : p)));
+    } catch (err: unknown) {
+      setImageError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploadingImage(false);
+    }
+  }
+
+  async function handleImageDelete(imageUrl: string) {
+    if (!imagesPartId) return;
+    setImageError('');
+    try {
+      const updated = await adminApi.deletePartImage(token, imagesPartId, imageUrl);
+      setParts(prev => prev.map(p => (p.id === updated.id ? updated : p)));
+    } catch (err: unknown) {
+      setImageError(err instanceof Error ? err.message : 'Remove failed');
+    }
+  }
+
+  const imagesPart = parts.find(p => p.id === imagesPartId) || null;
 
   // ── Convenience alias ───────────────────────────────────────────────────────
   function set(field: keyof FormState, value: string | boolean) {
@@ -364,6 +400,7 @@ export default function AdminPage() {
                   <thead className="bg-gray-100 text-gray-600 text-left">
                     <tr>
                       <th className="px-4 py-3 font-medium">SKU</th>
+                      <th className="px-4 py-3 font-medium">Photo</th>
                       <th className="px-4 py-3 font-medium">Name</th>
                       <th className="px-4 py-3 font-medium">Brand</th>
                       <th className="px-4 py-3 font-medium">Type</th>
@@ -376,6 +413,21 @@ export default function AdminPage() {
                     {parts.map(p => (
                       <tr key={p.id} className="hover:bg-gray-50">
                         <td className="px-4 py-2 font-mono text-xs text-gray-500">{p.sku}</td>
+                        <td className="px-4 py-2">
+                          <button
+                            onClick={() => { setImagesPartId(p.id); setImageError(''); }}
+                            className="block w-10 h-10 rounded-md overflow-hidden border border-gray-200 bg-gray-50 hover:ring-2 hover:ring-blue-400 transition"
+                            title="Manage photos"
+                          >
+                            {p.images?.[0] ? (
+                              <img src={p.images[0]} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
+                                +
+                              </span>
+                            )}
+                          </button>
+                        </td>
                         <td className="px-4 py-2">{p.name}</td>
                         <td className="px-4 py-2 text-gray-500">{p.brand}</td>
                         <td className="px-4 py-2 text-gray-500 text-xs">{p.part_type}</td>
@@ -395,7 +447,7 @@ export default function AdminPage() {
                     ))}
                     {!loading && parts.length === 0 && (
                       <tr>
-                        <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
+                        <td colSpan={8} className="px-4 py-8 text-center text-gray-400">
                           No parts found.
                         </td>
                       </tr>
@@ -723,6 +775,76 @@ export default function AdminPage() {
                 className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg transition"
               >
                 Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Manage photos modal ──────────────────────────────────────────── */}
+      {imagesPart && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-lg w-full space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-gray-800">
+                Photos — {imagesPart.name}
+              </h3>
+              <button
+                onClick={() => setImagesPartId(null)}
+                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            {imageError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
+                {imageError}
+              </div>
+            )}
+
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+              {imagesPart.images?.map(url => (
+                <div key={url} className="relative group aspect-square rounded-lg overflow-hidden border border-gray-200">
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <button
+                    onClick={() => handleImageDelete(url)}
+                    className="absolute top-1 right-1 bg-black/60 hover:bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center transition"
+                    title="Remove photo"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingImage}
+                className="aspect-square rounded-lg border-2 border-dashed border-gray-300 hover:border-blue-400 text-gray-400 hover:text-blue-500 flex flex-col items-center justify-center text-xs gap-1 transition disabled:opacity-50"
+              >
+                <span className="text-lg leading-none">+</span>
+                {uploadingImage ? 'Uploading…' : 'Add photo'}
+              </button>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelected}
+              className="hidden"
+            />
+
+            {(!imagesPart.images || imagesPart.images.length === 0) && (
+              <p className="text-xs text-gray-400">No photos yet — click "Add photo" to upload one.</p>
+            )}
+
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setImagesPartId(null)}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-5 py-2 rounded-lg transition text-sm"
+              >
+                Done
               </button>
             </div>
           </div>

@@ -31,6 +31,7 @@ export interface AdminPart {
   price: number;
   stock_qty: number;
   attributes: Record<string, unknown>;
+  images: string[];
   oem_numbers: string[];
   universal: boolean;
 }
@@ -89,6 +90,30 @@ async function adminFetch<T>(
   return res.json() as Promise<T>;
 }
 
+// Separate from adminFetch because multipart/form-data requests must NOT set
+// a Content-Type header manually — the browser sets it (with the correct
+// boundary) only when we let fetch infer it from a FormData body.
+async function adminUpload<T>(token: string, path: string, formData: FormData): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: 'POST',
+    headers: { 'X-Admin-Token': token },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    let detail = `HTTP ${res.status}`;
+    try {
+      const body = await res.json();
+      detail = body?.detail ?? detail;
+    } catch {
+      // ignore parse errors
+    }
+    throw new Error(detail);
+  }
+
+  return res.json() as Promise<T>;
+}
+
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export const adminApi = {
@@ -123,4 +148,19 @@ export const adminApi = {
   /** Delete a part and its fitment records */
   deletePart: (token: string, partId: string) =>
     adminFetch<null>(token, `/api/admin/parts/${partId}`, { method: 'DELETE' }),
+
+  /** Upload an image for a part — returns the updated part (with the new URL in `images`) */
+  uploadPartImage: (token: string, partId: string, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return adminUpload<AdminPart>(token, `/api/admin/parts/${partId}/images`, formData);
+  },
+
+  /** Remove one image URL from a part */
+  deletePartImage: (token: string, partId: string, imageUrl: string) =>
+    adminFetch<AdminPart>(
+      token,
+      `/api/admin/parts/${partId}/images?image_url=${encodeURIComponent(imageUrl)}`,
+      { method: 'DELETE' },
+    ),
 };

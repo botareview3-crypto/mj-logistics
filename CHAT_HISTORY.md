@@ -202,3 +202,15 @@ transcript, just the gist.
   gap, not something the upload endpoint introduced. Added `"images":
   part.images` to `serialize()` so upload results (and any future part
   reads) actually show attached images.
+- Re-tested after the fix — confirmed a real `res.cloudinary.com` URL now
+  comes back in `images`, end-to-end upload working live.
+- Built the actual admin **frontend** upload UI (previously backend-only):
+  `lib/adminApi.ts` gained `images: string[]` on `AdminPart`, a
+  multipart-aware `adminUpload()` helper (separate from the JSON
+  `adminFetch()` — must NOT set `Content-Type` manually or the browser
+  can't add the multipart boundary), plus `uploadPartImage()` and
+  `deletePartImage()`. `pages/admin.tsx` Parts List table got a new
+  "Photo" column (thumbnail or a `+` placeholder, click to manage); a
+  modal lets staff view all of a part's photos, delete any one, or add a
+  new one via a hidden file input — no page reload, updates the part in
+  local state directly from the API response.
