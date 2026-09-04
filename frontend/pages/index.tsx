@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Disc, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ArrowRight, ChevronRight, TrendingUp, Search, Car } from 'lucide-react';
+import { Disc, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ArrowRight, ChevronRight, TrendingUp, Search, Car, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { CATEGORY_ROOTS } from '../lib/data/categories';
 import { PARTS_DATABASE, POPULAR_BRANDS } from '../lib/data/parts';
@@ -35,8 +35,11 @@ export default function HomePage() {
               <button className="rounded-md bg-[#0077c7] px-4 text-sm font-bold text-white hover:bg-[#005a96]">Search</button>
             </form>
             <button type="button" onClick={() => openSelectorModal('cascading')} className="flex items-center justify-between rounded-lg border border-white/20 bg-white/10 px-5 py-3 text-left hover:bg-white/15">
-              <span><span className="block text-xs text-sky-200">Check compatibility</span><span className="text-sm font-bold">Select your vehicle</span></span>
-              <Car className="h-5 w-5 text-sky-200" />
+              <span>
+                <span className="block text-xs text-sky-200">{activeVehicle ? 'Active vehicle' : 'Check compatibility'}</span>
+                <span className="text-sm font-bold">{activeVehicle ? `${activeVehicle.make} ${activeVehicle.model}` : 'Select your vehicle'}</span>
+              </span>
+              {activeVehicle ? <CheckCircle2 className="h-5 w-5 text-emerald-400" /> : <Car className="h-5 w-5 text-sky-200" />}
             </button>
           </div>
           {activeVehicle && <div className="mt-4 flex items-center gap-2 text-sm text-sky-100"><span className="h-2 w-2 rounded-full bg-emerald-400" />Checking compatibility for <strong>{activeVehicle.make} {activeVehicle.model}</strong><button type="button" onClick={() => openSelectorModal('cascading')} className="ml-1 underline underline-offset-4">Change</button></div>}
