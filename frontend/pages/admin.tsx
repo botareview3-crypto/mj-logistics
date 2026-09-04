@@ -157,6 +157,65 @@ export default function AdminPage() {
   const [imageError, setImageError] = useState('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // ── Edit part ────────────────────────────────────────────────────────────────
+  const [editPartId, setEditPartId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: '', part_type: '', brand: '', price: '', stock_qty: '', oem_raw: '', universal: false,
+  });
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [editError, setEditError] = useState('');
+
+  function openEdit(p: AdminPart) {
+    setEditPartId(p.id);
+    setEditError('');
+    setEditForm({
+      name: p.name,
+      part_type: p.part_type,
+      brand: p.brand,
+      price: String(p.price),
+      stock_qty: String(p.stock_qty),
+      oem_raw: p.oem_numbers.join(', '),
+      universal: p.universal,
+    });
+  }
+
+  async function handleEditSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editPartId) return;
+    setEditError('');
+
+    if (!editForm.name.trim() || !editForm.part_type.trim() || !editForm.brand.trim()) {
+      setEditError('Name, Part Type, and Brand are required.');
+      return;
+    }
+    const price = parseFloat(editForm.price);
+    if (!editForm.price || Number.isNaN(price) || price <= 0) {
+      setEditError('Price must be a positive number.');
+      return;
+    }
+
+    setEditSubmitting(true);
+    try {
+      const updated = await adminApi.updatePart(token, editPartId, {
+        name: editForm.name.trim(),
+        part_type: editForm.part_type.trim(),
+        brand: editForm.brand.trim(),
+        price,
+        stock_qty: parseInt(editForm.stock_qty || '0', 10),
+        oem_numbers: editForm.oem_raw.split(/[\n,|]+/).map(s => s.trim()).filter(Boolean),
+        universal: editForm.universal,
+      });
+      setParts(prev => prev.map(p => (p.id === updated.id ? updated : p)));
+      setEditPartId(null);
+    } catch (err: unknown) {
+      setEditError(err instanceof Error ? err.message : 'Update failed');
+    } finally {
+      setEditSubmitting(false);
+    }
+  }
+
+  const editingPart = parts.find(p => p.id === editPartId) || null;
+
   // ── Auth ────────────────────────────────────────────────────────────────────
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -435,7 +494,13 @@ export default function AdminPage() {
                         <td className={`px-4 py-2 text-right font-medium ${p.stock_qty <= 5 ? 'text-red-600' : 'text-gray-700'}`}>
                           {p.stock_qty}
                         </td>
-                        <td className="px-4 py-2 text-right">
+                        <td className="px-4 py-2 text-right whitespace-nowrap">
+                          <button
+                            onClick={() => openEdit(p)}
+                            className="text-xs text-blue-500 hover:text-blue-700 transition mr-3"
+                          >
+                            Edit
+                          </button>
                           <button
                             onClick={() => setDeleteId(p.id)}
                             className="text-xs text-red-500 hover:text-red-700 transition"
@@ -778,6 +843,123 @@ export default function AdminPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── Edit part modal ──────────────────────────────────────────────── */}
+      {editingPart && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <form
+            onSubmit={handleEditSubmit}
+            className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full space-y-4"
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-gray-800">
+                Edit — {editingPart.sku}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditPartId(null)}
+                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            <p className="text-xs text-gray-400 -mt-2">
+              Category, description, and fitment aren&apos;t editable here yet —
+              only these fields. Delete and re-add the part if those need to
+              change.
+            </p>
+
+            <Field label="Part Name" required>
+              <input
+                value={editForm.name}
+                onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
+                className="input"
+              />
+            </Field>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Part Type" required>
+                <input
+                  value={editForm.part_type}
+                  onChange={e => setEditForm(f => ({ ...f, part_type: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+              <Field label="Brand" required>
+                <input
+                  value={editForm.brand}
+                  onChange={e => setEditForm(f => ({ ...f, brand: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Price" required>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={editForm.price}
+                  onChange={e => setEditForm(f => ({ ...f, price: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+              <Field label="Stock Qty">
+                <input
+                  type="number"
+                  min="0"
+                  value={editForm.stock_qty}
+                  onChange={e => setEditForm(f => ({ ...f, stock_qty: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+            </div>
+
+            <Field label="OEM Numbers" hint="Comma or newline separated">
+              <textarea
+                rows={2}
+                value={editForm.oem_raw}
+                onChange={e => setEditForm(f => ({ ...f, oem_raw: e.target.value }))}
+                className="input resize-y"
+              />
+            </Field>
+
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={editForm.universal}
+                onChange={e => setEditForm(f => ({ ...f, universal: e.target.checked }))}
+              />
+              Universal part (fits any vehicle)
+            </label>
+
+            {editError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
+                {editError}
+              </div>
+            )}
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="submit"
+                disabled={editSubmitting}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-2 rounded-lg transition"
+              >
+                {editSubmitting ? 'Saving…' : 'Save Changes'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditPartId(null)}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
         </div>
       )}
 

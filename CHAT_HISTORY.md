@@ -214,3 +214,18 @@ transcript, just the gist.
   modal lets staff view all of a part's photos, delete any one, or add a
   new one via a hidden file input — no page reload, updates the part in
   local state directly from the API response.
+- Zemen deployed the photo-upload UI to the Render preview
+  (`mj-logistics-frontend.onrender.com`) and confirmed it live — first
+  went to `/account` by mistake (that's the customer sign-in page, unrelated
+  to admin), then found `/admin` correctly, which needs the backend's
+  `ADMIN_TOKEN` (not a shopper login) and shows the Photo column on
+  Parts List as expected.
+- Added a full **Edit** button/modal for parts (previously only
+  Add/Delete existed — no way to change a part after creation). Backend's
+  `AdminPartUpdate` model only accepts name, part_type, brand, price,
+  stock_qty, oem_numbers, and universal — **not** category, description,
+  or fitment — so the edit modal in `admin.tsx` is scoped to exactly
+  those fields, with a note in the UI that the rest isn't editable yet
+  (would need a backend model change to support). Reuses the existing
+  `adminApi.updatePart()` (already correctly typed, wasn't being called
+  from anywhere in the UI before this).
