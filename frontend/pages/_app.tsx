@@ -7,7 +7,7 @@ import { AppProvider, useApp } from '../lib/AppContext';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { VehicleSelectorModal } from '../components/VehicleSelectorModal';
-import { CheckCircle2, AlertCircle, Info, X, Wrench } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Info, X, Wrench, ChevronDown, Phone, Mail, Clock, ShieldCheck } from 'lucide-react';
 
 function ToastOverlay() {
   const { toasts, removeToast } = useApp();
@@ -23,6 +23,46 @@ function ToastOverlay() {
           <button type="button" onClick={() => removeToast(toast.id)} className="ml-1 text-white/60 hover:text-white cursor-pointer"><X className="w-3.5 h-3.5" /></button>
         </div>
       ))}
+    </div>
+  );
+}
+
+// Static "About us" content shown on the maintenance screen while the
+// catalogue is down. Deliberately hardcoded — no API/DB calls here, so it
+// still renders correctly during maintenance or a backend outage.
+function MaintenanceScreen({ announcement }: { announcement: string }) {
+  const [showAbout, setShowAbout] = React.useState(false);
+
+  return (
+    <div className="min-h-screen bg-slate-100 px-5 flex items-center justify-center">
+      <div className="max-w-md w-full rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <Wrench className="mx-auto h-8 w-8 text-[#0077c7]" />
+        <h1 className="mt-4 text-2xl font-bold text-slate-900">We&apos;re updating the catalogue</h1>
+        <p className="mt-2 text-sm leading-6 text-slate-600">{announcement || 'Please check back shortly.'}</p>
+
+        <button
+          type="button"
+          onClick={() => setShowAbout(prev => !prev)}
+          className="mt-5 mx-auto flex items-center gap-1.5 text-xs font-bold text-[#0077C7] hover:text-[#0060A1] cursor-pointer"
+        >
+          <span>{showAbout ? 'Hide' : 'Learn more about us'}</span>
+          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAbout ? 'rotate-180' : ''}`} />
+        </button>
+
+        {showAbout && (
+          <div className="mt-4 pt-4 border-t border-slate-200 text-left space-y-3">
+            <div className="flex items-start gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#0077C7] shrink-0 mt-0.5" />
+              <p className="text-xs text-slate-600 leading-relaxed">Industrial-grade automotive spare parts &amp; accessories catalog. Built for DIY car enthusiasts and professional garage technicians demanding verified fitment, genuine OE brands, and rapid dispatch.</p>
+            </div>
+            <div className="space-y-1.5 text-xs text-slate-600">
+              <div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" /><span>+1 (800) 555-AUTO • Toll Free</span></div>
+              <div className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" /><span>Mon–Fri: 07:00 – 20:00 EST | Sat: 08:00 – 16:00</span></div>
+              <div className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" /><span>orders@autoparts-direct.com</span></div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -54,7 +94,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   }, [router]);
 
   if (siteSettings.maintenance_mode && typeof window !== 'undefined' && window.location.pathname !== '/admin') {
-    return <div className="min-h-screen bg-slate-100 px-5 flex items-center justify-center"><div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm"><Wrench className="mx-auto h-8 w-8 text-[#0077c7]" /><h1 className="mt-4 text-2xl font-bold text-slate-900">We&apos;re updating the catalogue</h1><p className="mt-2 text-sm leading-6 text-slate-600">{siteSettings.announcement || 'Please check back shortly.'}</p></div></div>;
+    return <MaintenanceScreen announcement={siteSettings.announcement} />;
   }
 
   if (isAdminRoute) {
