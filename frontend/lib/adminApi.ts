@@ -121,6 +121,13 @@ export const adminApi = {
   overview: (token: string) =>
     adminFetch<AdminOverview>(token, '/api/admin/overview'),
 
+  /** Update site-wide settings (maintenance mode, announcement banner) */
+  updateSettings: (token: string, settings: AdminOverview['settings']) =>
+    adminFetch<AdminOverview['settings']>(token, '/api/admin/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settings),
+    }),
+
   /** List all parts, optionally filtered by a search query */
   listParts: (token: string, q = '') => {
     const qs = q ? `?q=${encodeURIComponent(q)}` : '';

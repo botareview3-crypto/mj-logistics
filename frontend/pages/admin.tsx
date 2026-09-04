@@ -216,6 +216,37 @@ export default function AdminPage() {
 
   const editingPart = parts.find(p => p.id === editPartId) || null;
 
+  // ── Site settings (Overview tab) ────────────────────────────────────────────
+  const [settingsForm, setSettingsForm] = useState({ maintenance_mode: false, announcement: '' });
+  const [settingsDirty, setSettingsDirty] = useState(false);
+  const [settingsSaving, setSettingsSaving] = useState(false);
+  const [settingsSaved, setSettingsSaved] = useState(false);
+
+  useEffect(() => {
+    if (overview) {
+      setSettingsForm(overview.settings);
+      setSettingsDirty(false);
+    }
+  }, [overview]);
+
+  async function saveSettings() {
+    setSettingsSaving(true);
+    setSettingsSaved(false);
+    try {
+      const updated = await adminApi.updateSettings(token, settingsForm);
+      setOverview(prev => (prev ? { ...prev, settings: updated } : prev));
+      setSettingsDirty(false);
+      setSettingsSaved(true);
+      setTimeout(() => setSettingsSaved(false), 2000);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to save settings');
+    } finally {
+      setSettingsSaving(false);
+    }
+  }
+
+  const lowStockParts = parts.filter(p => p.stock_qty <= 5).sort((a, b) => a.stock_qty - b.stock_qty);
+
   // ── Auth ────────────────────────────────────────────────────────────────────
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -428,18 +459,117 @@ export default function AdminPage() {
 
           {/* ── Overview ───────────────────────────────────────────────────── */}
           {tab === 'overview' && overview && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { label: 'Total Parts',  value: overview.parts },
-                { label: 'Categories',   value: overview.categories },
-                { label: 'Brands',       value: overview.brands },
-                { label: 'Low Stock (≤5)', value: overview.low_stock },
-              ].map(stat => (
-                <div key={stat.label} className="bg-white rounded-xl shadow-sm p-5 text-center">
-                  <p className="text-3xl font-bold text-gray-800">{stat.value}</p>
-                  <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[
+                  { label: 'Total Parts',  value: overview.parts },
+                  { label: 'Categories',   value: overview.categories },
+                  { label: 'Brands',       value: overview.brands },
+                  { label: 'Low Stock (≤5)', value: overview.low_stock },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-xl shadow-sm p-5 text-center">
+                    <p className="text-3xl font-bold text-gray-800">{stat.value}</p>
+                    <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Quick actions */}
+              <div className="bg-white rounded-xl shadow-sm p-5">
+                <h3 className="font-semibold text-gray-800 mb-3">Quick Actions</h3>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setTab('add')}
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+                  >
+                    + Add Product
+                  </button>
+                  <button
+                    onClick={() => setTab('parts')}
+                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg transition"
+                  >
+                    View Parts List
+                  </button>
                 </div>
-              ))}
+              </div>
+
+              {/* Low stock */}
+              <div className="bg-white rounded-xl shadow-sm p-5">
+                <h3 className="font-semibold text-gray-800 mb-3">
+                  Low Stock ({lowStockParts.length})
+                </h3>
+                {lowStockParts.length === 0 ? (
+                  <p className="text-sm text-gray-400">Nothing is low on stock right now.</p>
+                ) : (
+                  <div className="divide-y">
+                    {lowStockParts.map(p => (
+                      <div key={p.id} className="flex items-center justify-between py-2 text-sm">
+                        <div>
+                          <span className="text-gray-800">{p.name}</span>
+                          <span className="text-gray-400 ml-2 font-mono text-xs">{p.sku}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className={p.stock_qty === 0 ? 'text-red-600 font-semibold' : 'text-amber-600 font-semibold'}>
+                            {p.stock_qty} left
+                          </span>
+                          <button
+                            onClick={() => openEdit(p)}
+                            className="text-xs text-blue-500 hover:text-blue-700"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Site settings */}
+              <div className="bg-white rounded-xl shadow-sm p-5 space-y-4">
+                <h3 className="font-semibold text-gray-800">Site Settings</h3>
+
+                <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={settingsForm.maintenance_mode}
+                    onChange={e => {
+                      setSettingsForm(f => ({ ...f, maintenance_mode: e.target.checked }));
+                      setSettingsDirty(true);
+                    }}
+                  />
+                  Maintenance mode (shoppers see a maintenance page instead of the storefront)
+                </label>
+
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    Announcement banner
+                  </label>
+                  <input
+                    type="text"
+                    value={settingsForm.announcement}
+                    onChange={e => {
+                      setSettingsForm(f => ({ ...f, announcement: e.target.value }));
+                      setSettingsDirty(true);
+                    }}
+                    placeholder="e.g. Free shipping this week!"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={saveSettings}
+                    disabled={!settingsDirty || settingsSaving}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition"
+                  >
+                    {settingsSaving ? 'Saving…' : 'Save Settings'}
+                  </button>
+                  {settingsSaved && (
+                    <span className="text-xs text-green-600">Saved.</span>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 

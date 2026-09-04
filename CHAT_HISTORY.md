@@ -229,3 +229,11 @@ transcript, just the gist.
   (would need a backend model change to support). Reuses the existing
   `adminApi.updatePart()` (already correctly typed, wasn't being called
   from anywhere in the UI before this).
+- Zemen said the Overview tab "looks empty" (just 4 stat cards, lots of
+  blank space below). Filled it in: Quick Actions (jump to Add Product /
+  Parts List), a Low Stock list (parts at ≤5 stock, red at 0, with an
+  inline Edit link reusing the same edit modal), and a Site Settings panel
+  (maintenance-mode toggle + announcement-banner text, with Save). The
+  backend already had `GET/PUT /api/admin/settings` fully working but
+  nothing in the frontend ever called it — added `adminApi.updateSettings()`
+  to close that gap.
