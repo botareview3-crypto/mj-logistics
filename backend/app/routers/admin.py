@@ -26,6 +26,7 @@ def serialize(part: Part) -> dict:
         "id": part.id, "sku": part.sku, "name": part.name, "part_type": part.part_type,
         "brand": brand.name if brand else "", "category_slug": category.slug if category else "",
         "price": part.price, "stock_qty": part.stock_qty, "attributes": part.attributes,
+        "images": part.images,
         "oem_numbers": part.oem_numbers, "universal": part.universal,
     }
 

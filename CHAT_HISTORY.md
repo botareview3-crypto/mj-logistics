@@ -194,3 +194,11 @@ transcript, just the gist.
   them still live in-memory only, same as the rest of the catalog).
 - Not done yet: the admin **frontend** has no upload UI (file input) to
   actually call the new endpoint — backend-only so far.
+- Zemen tested the live upload endpoint (`part-64`, real image, real admin
+  token) — it succeeded (200, correct part data back) but the response
+  never showed the uploaded image, which looked like a possible failure.
+  Root cause: `serialize()` in `admin.py` was already missing the `images`
+  field from its output *before* this session's changes — a pre-existing
+  gap, not something the upload endpoint introduced. Added `"images":
+  part.images` to `serialize()` so upload results (and any future part
+  reads) actually show attached images.
