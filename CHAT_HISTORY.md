@@ -237,3 +237,12 @@ transcript, just the gist.
   backend already had `GET/PUT /api/admin/settings` fully working but
   nothing in the frontend ever called it — added `adminApi.updateSettings()`
   to close that gap.
+- Zemen noticed the admin page still showed storefront nav (Catalog menu,
+  part search bar, vehicle selector, cart/account icons) at the top —
+  those belong to the shopper-facing site, not an internal admin tool.
+  Root cause: `_app.tsx` wraps **every** page in the shared `<Header>` and
+  `<Footer>` with no exception for `/admin` (it already had one special
+  case for `/admin` — skipping maintenance mode — but not this). Added an
+  `isAdmin` check via `useRouter().pathname` that renders `/admin` in a
+  plain wrapper with none of the storefront chrome; admin.tsx already has
+  its own "AutoParts Admin" header bar, so nothing needed adding there.
