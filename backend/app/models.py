@@ -38,11 +38,18 @@ class Part(BaseModel):
     brand_id: str
     oem_numbers: list[str] = []
     price: float
+    original_price: Optional[float] = None  # set higher than `price` to show a discount strike-through
     stock_qty: int
     attributes: dict = {}
     images: list[str] = []
     description: str = ""
     universal: bool = False
+    rating: float = 0.0  # admin-set average, 0-5 — no per-review data yet
+    review_count: int = 0
+    warranty_years: int = 1
+    delivery_days: int = 3
+    featured: bool = False
+    bestseller: bool = False
 
 
 class Vehicle(BaseModel):
@@ -78,11 +85,18 @@ class AdminPartCreate(BaseModel):
     part_type: str
     brand: str
     price: float
+    original_price: Optional[float] = None
     stock_qty: int = 0
     attributes: dict = {}
     oem_numbers: list[str] = []
     universal: bool = False
     description: str = ""
+    rating: float = 0.0
+    review_count: int = 0
+    warranty_years: int = 1
+    delivery_days: int = 3
+    featured: bool = False
+    bestseller: bool = False
     position: Optional[str] = None
     fitment_make: Optional[str] = None
     fitment_model: Optional[str] = None
@@ -98,10 +112,17 @@ class AdminPartUpdate(BaseModel):
     part_type: Optional[str] = None
     brand: Optional[str] = None
     price: Optional[float] = None
+    original_price: Optional[float] = None
     stock_qty: Optional[int] = None
     attributes: Optional[dict] = None
     oem_numbers: Optional[list[str]] = None
     universal: Optional[bool] = None
+    rating: Optional[float] = None
+    review_count: Optional[int] = None
+    warranty_years: Optional[int] = None
+    delivery_days: Optional[int] = None
+    featured: Optional[bool] = None
+    bestseller: Optional[bool] = None
 
 
 class SiteSettings(BaseModel):

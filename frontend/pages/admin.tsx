@@ -47,6 +47,14 @@ interface FormState {
   vin_reference: string;
   // Description
   description: string;
+  // Merchandising (new — rating/discount/warranty/delivery/badges)
+  original_price: string;      // blank = no discount shown
+  rating: string;              // 0-5, blank = 0
+  review_count: string;
+  warranty_years: string;
+  delivery_days: string;
+  featured: boolean;
+  bestseller: boolean;
 }
 
 const EMPTY_FORM: FormState = {
@@ -58,6 +66,9 @@ const EMPTY_FORM: FormState = {
   fitment_year_from: '', fitment_year_to: '', fitment_engine_code: '',
   vin_reference: '',
   description: '',
+  original_price: '', rating: '', review_count: '',
+  warranty_years: '1', delivery_days: '3',
+  featured: false, bestseller: false,
 };
 
 type FormAction =
@@ -161,6 +172,8 @@ export default function AdminPage() {
   const [editPartId, setEditPartId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({
     name: '', part_type: '', brand: '', price: '', stock_qty: '', oem_raw: '', universal: false,
+    original_price: '', rating: '', review_count: '', warranty_years: '', delivery_days: '',
+    featured: false, bestseller: false,
   });
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [editError, setEditError] = useState('');
@@ -176,6 +189,13 @@ export default function AdminPage() {
       stock_qty: String(p.stock_qty),
       oem_raw: p.oem_numbers.join(', '),
       universal: p.universal,
+      original_price: p.original_price != null ? String(p.original_price) : '',
+      rating: String(p.rating),
+      review_count: String(p.review_count),
+      warranty_years: String(p.warranty_years),
+      delivery_days: String(p.delivery_days),
+      featured: p.featured,
+      bestseller: p.bestseller,
     });
   }
 
@@ -201,9 +221,16 @@ export default function AdminPage() {
         part_type: editForm.part_type.trim(),
         brand: editForm.brand.trim(),
         price,
+        original_price: editForm.original_price ? parseFloat(editForm.original_price) : null,
         stock_qty: parseInt(editForm.stock_qty || '0', 10),
         oem_numbers: editForm.oem_raw.split(/[\n,|]+/).map(s => s.trim()).filter(Boolean),
         universal: editForm.universal,
+        rating: editForm.rating ? parseFloat(editForm.rating) : 0,
+        review_count: editForm.review_count ? parseInt(editForm.review_count, 10) : 0,
+        warranty_years: editForm.warranty_years ? parseInt(editForm.warranty_years, 10) : 1,
+        delivery_days: editForm.delivery_days ? parseInt(editForm.delivery_days, 10) : 3,
+        featured: editForm.featured,
+        bestseller: editForm.bestseller,
       });
       setParts(prev => prev.map(p => (p.id === updated.id ? updated : p)));
       setEditPartId(null);
@@ -297,12 +324,19 @@ export default function AdminPage() {
       brand: form.brand.trim(),
       category_slug: form.category_slug,
       price: parseFloat(form.price),
+      original_price: form.original_price ? parseFloat(form.original_price) : undefined,
       stock_qty: parseInt(form.stock_qty || '0', 10),
       oem_numbers,
       universal: form.universal,
       description: form.description.trim(),
       position: form.position || undefined,
       vin_reference: form.vin_reference.trim() || undefined,
+      rating: form.rating ? parseFloat(form.rating) : 0,
+      review_count: form.review_count ? parseInt(form.review_count, 10) : 0,
+      warranty_years: form.warranty_years ? parseInt(form.warranty_years, 10) : 1,
+      delivery_days: form.delivery_days ? parseInt(form.delivery_days, 10) : 3,
+      featured: form.featured,
+      bestseller: form.bestseller,
     };
 
     if (form.fitment_make && form.fitment_model && form.fitment_year_from) {
@@ -778,6 +812,91 @@ export default function AdminPage() {
                       className="input"
                     />
                   </Field>
+
+                  <Field label="Original Price (€)" hint="Set higher than Price to show a discount strike-through. Leave blank for no discount.">
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={form.original_price}
+                      onChange={e => set('original_price', e.target.value)}
+                      placeholder="Leave blank if not discounted"
+                      className="input"
+                    />
+                  </Field>
+                </div>
+              </Section>
+
+              {/* ── 3b. Merchandising ────────────────────────────────────── */}
+              <Section title="Merchandising">
+                <p className="text-xs text-gray-400 -mt-2">
+                  Rating and review count are an overall figure you set (not
+                  from individual customer reviews yet).
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Field label="Rating (0-5)">
+                    <input
+                      type="number"
+                      min="0"
+                      max="5"
+                      step="0.1"
+                      value={form.rating}
+                      onChange={e => set('rating', e.target.value)}
+                      placeholder="e.g. 4.5"
+                      className="input"
+                    />
+                  </Field>
+                  <Field label="Review Count">
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={form.review_count}
+                      onChange={e => set('review_count', e.target.value)}
+                      placeholder="e.g. 120"
+                      className="input"
+                    />
+                  </Field>
+                  <Field label="Warranty (years)">
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={form.warranty_years}
+                      onChange={e => set('warranty_years', e.target.value)}
+                      className="input"
+                    />
+                  </Field>
+                  <Field label="Delivery Estimate (days)">
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={form.delivery_days}
+                      onChange={e => set('delivery_days', e.target.value)}
+                      className="input"
+                    />
+                  </Field>
+                </div>
+                <div className="flex gap-6 pt-1">
+                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={form.featured}
+                      onChange={e => set('featured', e.target.checked)}
+                      className="w-4 h-4 accent-blue-600"
+                    />
+                    Featured
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={form.bestseller}
+                      onChange={e => set('bestseller', e.target.checked)}
+                      className="w-4 h-4 accent-blue-600"
+                    />
+                    Bestseller
+                  </label>
                 </div>
               </Section>
 
@@ -1066,6 +1185,85 @@ export default function AdminPage() {
               />
               Universal part (fits any vehicle)
             </label>
+
+            <div className="border-t pt-4 space-y-4">
+              <p className="text-xs font-medium text-gray-500">Merchandising</p>
+
+              <Field label="Original Price" hint="Higher than Price = shows a discount. Blank = no discount.">
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={editForm.original_price}
+                  onChange={e => setEditForm(f => ({ ...f, original_price: e.target.value }))}
+                  placeholder="Leave blank if not discounted"
+                  className="input"
+                />
+              </Field>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Rating (0-5)">
+                  <input
+                    type="number"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    value={editForm.rating}
+                    onChange={e => setEditForm(f => ({ ...f, rating: e.target.value }))}
+                    className="input"
+                  />
+                </Field>
+                <Field label="Review Count">
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={editForm.review_count}
+                    onChange={e => setEditForm(f => ({ ...f, review_count: e.target.value }))}
+                    className="input"
+                  />
+                </Field>
+                <Field label="Warranty (years)">
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={editForm.warranty_years}
+                    onChange={e => setEditForm(f => ({ ...f, warranty_years: e.target.value }))}
+                    className="input"
+                  />
+                </Field>
+                <Field label="Delivery (days)">
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={editForm.delivery_days}
+                    onChange={e => setEditForm(f => ({ ...f, delivery_days: e.target.value }))}
+                    className="input"
+                  />
+                </Field>
+              </div>
+
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={editForm.featured}
+                    onChange={e => setEditForm(f => ({ ...f, featured: e.target.checked }))}
+                  />
+                  Featured
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={editForm.bestseller}
+                    onChange={e => setEditForm(f => ({ ...f, bestseller: e.target.checked }))}
+                  />
+                  Bestseller
+                </label>
+              </div>
+            </div>
 
             {editError && (
               <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">

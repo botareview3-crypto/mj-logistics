@@ -9,8 +9,12 @@ def _serialize(p) -> dict:
     return {
         "id": p.id, "sku": p.sku, "name": p.name, "part_type": p.part_type,
         "brand": brand.name if brand else None, "price": p.price,
+        "original_price": p.original_price,
         "stock_qty": p.stock_qty, "attributes": p.attributes, "universal": p.universal,
-        "oem_numbers": p.oem_numbers,
+        "oem_numbers": p.oem_numbers, "images": p.images,
+        "rating": p.rating, "review_count": p.review_count,
+        "warranty_years": p.warranty_years, "delivery_days": p.delivery_days,
+        "featured": p.featured, "bestseller": p.bestseller,
     }
 
 

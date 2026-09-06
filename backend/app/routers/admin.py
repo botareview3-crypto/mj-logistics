@@ -25,9 +25,12 @@ def serialize(part: Part) -> dict:
     return {
         "id": part.id, "sku": part.sku, "name": part.name, "part_type": part.part_type,
         "brand": brand.name if brand else "", "category_slug": category.slug if category else "",
-        "price": part.price, "stock_qty": part.stock_qty, "attributes": part.attributes,
-        "images": part.images,
+        "price": part.price, "original_price": part.original_price, "stock_qty": part.stock_qty,
+        "attributes": part.attributes, "images": part.images,
         "oem_numbers": part.oem_numbers, "universal": part.universal,
+        "rating": part.rating, "review_count": part.review_count,
+        "warranty_years": part.warranty_years, "delivery_days": part.delivery_days,
+        "featured": part.featured, "bestseller": part.bestseller,
     }
 
 
@@ -60,13 +63,17 @@ def create_part(payload: AdminPartCreate):
     part = Part(
         id=part_id, sku=payload.sku.strip(), name=payload.name.strip(), category_id=category.id,
         part_type=payload.part_type.strip(), brand_id=data.brand_id_for_name(payload.brand),
-        price=payload.price, stock_qty=payload.stock_qty, attributes={
+        price=payload.price, original_price=payload.original_price, stock_qty=payload.stock_qty,
+        attributes={
             **payload.attributes,
             **({"position": payload.position} if payload.position else {}),
             **({"vin_reference": payload.vin_reference} if payload.vin_reference else {}),
         },
         oem_numbers=payload.oem_numbers, universal=payload.universal,
         description=payload.description or "Added from the staff admin console.", images=[],
+        rating=payload.rating, review_count=payload.review_count,
+        warranty_years=payload.warranty_years, delivery_days=payload.delivery_days,
+        featured=payload.featured, bestseller=payload.bestseller,
     )
     data.PARTS[part_id] = part
     if payload.fitment_make and payload.fitment_model and payload.fitment_year_from:

@@ -29,11 +29,18 @@ export interface AdminPart {
   brand: string;
   category_slug: string;
   price: number;
+  original_price: number | null;
   stock_qty: number;
   attributes: Record<string, unknown>;
   images: string[];
   oem_numbers: string[];
   universal: boolean;
+  rating: number;
+  review_count: number;
+  warranty_years: number;
+  delivery_days: number;
+  featured: boolean;
+  bestseller: boolean;
 }
 
 export interface AdminPartPayload {

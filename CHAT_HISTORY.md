@@ -246,3 +246,30 @@ transcript, just the gist.
   `isAdmin` check via `useRouter().pathname` that renders `/admin` in a
   plain wrapper with none of the storefront chrome; admin.tsx already has
   its own "AutoParts Admin" header bar, so nothing needed adding there.
+- Ran a full bug/gap audit (Zemen asked "find me bugs/things to improve").
+  Headline finding: the storefront's homepage/search/catalog/part-detail
+  pages never call the real backend at all — they all import a hardcoded
+  static mock dataset (`lib/data/parts.ts`) with fake Unsplash photos.
+  Only the admin console talks to the real API. Started wiring this up
+  (Batch 1) but **Zemen then decided the real storefront will be rebuilt
+  in WordPress separately** — so connecting this Next.js storefront to
+  the live backend is no longer needed; this repo's frontend is a
+  prototype/demo only going forward.
+- Kept and finished the backend-side piece of that batch anyway, since it
+  only touches the admin console + API (not the storefront pages Zemen is
+  dropping): added `rating`, `review_count`, `warranty_years`,
+  `delivery_days`, `original_price` (nullable, for showing a discount),
+  `featured`, and `bestseller` to the `Part` model, `AdminPartCreate`,
+  `AdminPartUpdate`, and both serializers (admin + public `/api/parts`).
+  Admin's Add Product form got a new "Merchandising" section for these;
+  the Edit modal got matching fields. Ratings/reviews are an
+  admin-set aggregate number only (e.g. "4.5 stars, 120 reviews") — no
+  per-review submission system, by Zemen's explicit choice.
+- Other findings from the audit, not yet acted on: checkout is fully
+  fake (hardcoded order number, no backend call, no order storage);
+  Apple sign-in doesn't verify its ID token's signature; admin-token
+  comparison isn't constant-time; `.gitignore` doesn't cover
+  `frontend/out/` or `*.tsbuildinfo`; 2 high-severity npm vulnerabilities
+  flagged by `npm install` output, not yet investigated; delete-image
+  endpoint only detaches the URL, never deletes the file from Cloudinary
+  itself.
