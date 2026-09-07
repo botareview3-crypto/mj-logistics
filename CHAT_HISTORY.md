@@ -273,3 +273,47 @@ transcript, just the gist.
   flagged by `npm install` output, not yet investigated; delete-image
   endpoint only detaches the URL, never deletes the file from Cloudinary
   itself.
+- Fixed the still-relevant security/hygiene items from that list (skipped
+  the fake-checkout one — that's storefront/WordPress territory now):
+  `.gitignore` now covers `frontend/out/` and `*.tsbuildinfo`; admin-token
+  check uses `secrets.compare_digest` (constant-time) instead of `!=`;
+  Apple sign-in's `id_token` is now verified against Apple's real public
+  keys via `PyJWKClient` (`routers/auth.py`) instead of skipping signature
+  verification entirely; deleting a part's image now also calls
+  `cloudinary.uploader.destroy()` on the actual file (parsing the
+  public_id back out of the stored URL), not just detaching the URL —
+  best-effort, still detaches even if the Cloudinary call fails; bumped
+  `next` from `^14.2.5` to `^14.2.35` in `package.json` (several
+  vulnerabilities patched since 14.2.5 per Next.js's own advisories,
+  though the worst one — CVE-2025-29927, middleware bypass — doesn't
+  apply here since this site is a static export with no middleware).
+  Zemen needs to run `npm install` locally to regenerate
+  `package-lock.json` — couldn't do that in the sandbox (no network
+  access there).
+- Zemen confirmed the plan is now to rebuild the **entire** app (not just
+  checkout) in WordPress/WooCommerce once they're ready — this Next.js +
+  FastAPI project becomes a demo/prototype only, not the long-term stack.
+  Did one more audit pass to catch anything a WordPress rebuild might
+  silently drop: VIN decoder and license-plate lookup
+  (`routers/vehicles.py`) are both **fake stubs** — they hash the input
+  and deterministically return one of the seeded demo vehicles, no real
+  vehicle-data API involved; the "Garage" (saved vehicles) isn't scoped
+  to a user or session at all — it's one shared in-memory list for every
+  visitor; there's no admin UI to manage categories/brands or edit
+  fitment after a part is created; the public parts API has no text
+  search or sort. Agreed none of these are worth building out here since
+  a real fitment plugin (PCFitment, Webkul, etc.) and WooCommerce's own
+  admin will replace all of it — the only thing worth doing on this app
+  going forward is treating it as a data source for the migration.
+- Built `backend/export_catalog.py` — a stdlib-only script (no pip
+  installs needed) that pulls the **live** current catalog from the
+  running backend (not the seed-data file, since storage is in-memory and
+  anything added/edited through the admin console — including uploaded
+  photos — only exists in the live running process) and writes four CSVs:
+  `products.csv` in WooCommerce's product-importer format (SKU, price,
+  discount, stock, category path, images, brand/part-type/OEM as
+  attributes, rating/warranty/delivery/featured/bestseller as meta
+  fields), `fitments.csv` (part SKU → vehicle compatibility, for whichever
+  fitment plugin gets chosen), `categories.csv`, and `brands.csv`. Run
+  with `python export_catalog.py --api-base <render-url> --admin-token
+  <token>`.
