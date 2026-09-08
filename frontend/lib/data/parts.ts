@@ -1962,7 +1962,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=800&q=80',
+      'https://www.americanmuscle.com/image/michelin-camaro-primacy-4-tire-mich-28976.469217.jpg',
     ],
     specs: {
       'Width': '205 mm',
@@ -1994,7 +1994,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.7,
     reviewCount: 96,
     images: [
-      'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=800&q=80',
+      'https://cdn.grip500.com/assets/img/rw/tyre/big/continental-allseasoncontact-737695.jpg',
     ],
     specs: {
       'Width': '205 mm',
