@@ -337,8 +337,32 @@ transcript, just the gist.
   `pages/catalog/[system]/index.tsx`, `pages/index.tsx`) — would have
   silently fallen back to a generic disc icon — added the import + map
   entry in all 4 so it renders correctly.
-- **Still left in this feedback batch**: C) stationery/equipment shop
-  section, D) MJ Mining corporate/info page.
+- **Still left in this feedback batch**: D) MJ Mining corporate/info page.
+- **Batch C (stationery/equipment shop) done**, and it required more than
+  just adding category data. Found the mega menu, catalog index page, and
+  homepage were all **hardcoded to exactly 2 root categories**
+  (`CATEGORY_ROOTS[0]`/`[1]` referenced directly) — a 3rd root would have
+  been invisible in the UI even with real data behind it. Also found
+  `CategoryRoot.id` and `CategorySystem.rootId` in `lib/types.ts` were
+  typed as a hardcoded union (`'car-parts' | 'accessories'`), which would
+  have been a compile error the moment a 3rd root was added. Fixed all of
+  it: widened both types to `string`; rewrote `MegaMenu.tsx`,
+  `pages/catalog/index.tsx`, and the homepage's secondary-shop promo
+  section to `.map()` over all of `CATEGORY_ROOTS` generically (with a
+  cycling style-preset array so a 4th+ root also renders sensibly,
+  relevant for Batch D); `components/Footer.tsx` had the same hardcoded
+  `[0]`/`[1]` pattern in its link columns — since the footer's 5-column
+  grid was already full, merged all non-primary roots' systems into the
+  existing "Garage & Accessories" column instead of adding a column.
+  Then added the actual "Stationery & Equipment" root: two systems
+  (Office Stationery; Business & Office Equipment) with 3 subsystems
+  each. Didn't hand-write demo products for it — confirmed the existing
+  `buildCoverageParts()` filler-generator in `parts.ts` already loops
+  over `CATEGORY_ROOTS` generically and auto-fills 2 placeholder products
+  per subsystem lacking real ones, same as how the existing `accessories`
+  root already relies on it (only 4 hand-written products across that
+  whole root), so the new shop is populated automatically and
+  consistently with the rest of the site.
 - **Batch B (more vehicle types) done**: added 4 new makes to
   `lib/data/vehicles.ts` — Hyundai (Elantra, Tucson), Nissan (X-Trail,
   Sunny), Isuzu (D-Max), Suzuki (Vitara, Swift) — chosen for relevance to

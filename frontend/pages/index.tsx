@@ -6,7 +6,7 @@ import { PARTS_DATABASE, POPULAR_BRANDS } from '../lib/data/parts';
 import { ProductCard } from '../components/ProductCard';
 import { TrustStrip } from '../components/TrustStrip';
 
-const iconMap: Record<string, React.ElementType> = { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck };
+const iconMap: Record<string, React.ElementType> = { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, Package };
 
 export default function HomePage() {
   const { activeVehicle, openSelectorModal, navigate } = useApp();
@@ -66,15 +66,19 @@ export default function HomePage() {
             );
           })}
         </div>
-        <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#0077C7] text-white flex items-center justify-center shrink-0 shadow-sm"><Wrench className="w-5 h-5" /></div>
-            <div>
-              <h3 className="text-sm font-bold text-gray-900 uppercase">Garage Equipment, Detailing & Accessories</h3>
-              <p className="text-xs text-gray-500">Diagnostic scanners, hydraulic jacks, wiper blades, and workshop fluids.</p>
+        <div className="space-y-3">
+          {CATEGORY_ROOTS.slice(1).map(root => (
+            <div key={root.id} className="bg-gray-100 border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#0077C7] text-white flex items-center justify-center shrink-0 shadow-sm"><Wrench className="w-5 h-5" /></div>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 uppercase">{root.name}</h3>
+                  <p className="text-xs text-gray-500">{root.description}</p>
+                </div>
+              </div>
+              <button type="button" onClick={() => navigate(`/catalog/${root.systems[0]?.id ?? ''}`)} className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wide rounded-md transition-colors cursor-pointer shrink-0">Explore {root.name}</button>
             </div>
-          </div>
-          <button type="button" onClick={() => navigate('/catalog')} className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wide rounded-md transition-colors cursor-pointer shrink-0">Explore Accessories</button>
+          ))}
         </div>
       </section>
 

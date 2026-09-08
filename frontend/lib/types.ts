@@ -44,7 +44,7 @@ export interface VehicleEngine {
 }
 
 export interface CategoryRoot {
-  id: 'car-parts' | 'accessories';
+  id: string;
   name: string;
   description: string;
   systems: CategorySystem[];
@@ -52,7 +52,7 @@ export interface CategoryRoot {
 
 export interface CategorySystem {
   id: string;
-  rootId: 'car-parts' | 'accessories';
+  rootId: string;
   name: string;
   iconName: string;
   description: string;

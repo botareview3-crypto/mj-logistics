@@ -63,11 +63,11 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Accessories */}
+          {/* Accessories & Other Shops */}
           <div>
-            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white mb-3">Garage & Accessories</h4>
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-white mb-3">Garage, Accessories & More</h4>
             <ul className="space-y-2 text-xs">
-              {CATEGORY_ROOTS[1].systems.map(system => (
+              {CATEGORY_ROOTS.slice(1).flatMap(root => root.systems).map(system => (
                 <li key={system.id}><button type="button" onClick={() => navigate(`/catalog/${system.id}`)} className="text-slate-400 hover:text-white hover:underline transition-colors text-left cursor-pointer">{system.name}</button></li>
               ))}
               <li><button type="button" onClick={() => navigate('/garage')} className="text-sky-400 hover:underline font-semibold cursor-pointer">My Garage Vehicles</button></li>
