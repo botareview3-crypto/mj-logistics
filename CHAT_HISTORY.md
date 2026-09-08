@@ -370,3 +370,29 @@ transcript, just the gist.
   already-covered European brands. Vehicle picker now covers 10 makes
   total instead of 6 (previously only VW, BMW, Audi, Toyota, Ford,
   Mercedes-Benz).
+
+### 2026-09-08 (catalog expansion: more vehicles + more parts)
+- Expanded `lib/data/vehicles.ts` from 10 makes (~65 engines) to 16 makes
+  (~103 engines): added 6 new makes (Kia, Honda, Mazda, Peugeot, Renault,
+  Mitsubishi — all with strong presence in the East African market) and
+  added new models/generations to 10 of the existing makes (e.g. VW
+  Tiguan/T-Roc, BMW X3/X5, Audi Q5/A6, Toyota RAV4/Hilux, Ford Kuga/Ranger,
+  Mercedes E-Class/GLC, Hyundai i30/Santa Fe, Nissan Qashqai/Navara, Isuzu
+  MU-X, Suzuki Jimny) so pickup/SUV coverage is much stronger, not just
+  sedans/hatchbacks.
+- Expanded `lib/data/parts.ts` `SEEDED_PARTS` from 25 to 70 hand-written
+  products. Confirmed `buildCoverageParts()` was already silently filling
+  every subsystem lacking real products with 2 generic placeholder items —
+  targeted the 17 subsystems that had zero real products (brake calipers,
+  brake drums/shoes, master cylinder/booster, timing belt kits, gaskets,
+  wheel bearings, exhaust silencers/cat converters/lambda sensors/assembly
+  parts, alternators/starters, radiators, thermostats/coolant, torque
+  wrenches, floor mats/liners) and added 2-3 real products to each, plus
+  extra depth in a few shallow ones already live (tires, batteries,
+  headlights, oil, filters, spark plugs). Every product has real specs,
+  OEM numbers, fitsVehicles tied to the new/existing vehicle IDs, and a
+  placeholder Unsplash image consistent with the existing style.
+- Verified both files with `tsc --noEmit` (bundler resolution) — no syntax
+  or type errors. Caught and fixed one bug in the process: an unescaped
+  apostrophe in a Meguiar's product name/brand that would have broken the
+  build.
