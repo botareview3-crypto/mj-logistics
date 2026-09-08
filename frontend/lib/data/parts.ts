@@ -2527,6 +2527,147 @@ function catalogueImage(label: string, accent: string) {
 }
 
 /**
+ * Fixes the "wrong picture" problem: SEEDED_PARTS used to point at a small
+ * pool of reused Unsplash stock photos (a tire photo showing up on a spark
+ * plug, the same brake photo on 14 unrelated products, etc.) because those
+ * URLs were hand-typed per product and easy to copy-paste wrong.
+ *
+ * Instead, every seeded part's image is generated locally from its own
+ * subsystemId, using a shape that actually matches that part family (tire,
+ * disc, caliper, battery, spark plug, filter, bottle, etc.). This can never
+ * drift out of sync with the product it's attached to, and — since the
+ * storefront is a static export with no image server — it also removes the
+ * only images in the catalog that depended on a third-party host staying up.
+ */
+type PartIcon =
+  | 'wheel' | 'brakePad' | 'brakeDisc' | 'brakeCaliper' | 'brakeDrum'
+  | 'battery' | 'sparkPlug' | 'filter' | 'fluidBottle' | 'beltKit'
+  | 'sensor' | 'gasket' | 'mat' | 'exhaust' | 'radiator' | 'alternator'
+  | 'wiper' | 'suspension' | 'tool' | 'headlight' | 'default';
+
+const SUBSYSTEM_ICON: Record<string, { icon: PartIcon; accent: string }> = {
+  'passenger-tires': { icon: 'wheel', accent: '#1f2937' },
+  'suv-4x4-tires': { icon: 'wheel', accent: '#1f2937' },
+  'wheel-rims': { icon: 'wheel', accent: '#475569' },
+  'wheel-bearings': { icon: 'wheel', accent: '#0f766e' },
+  'brake-pads': { icon: 'brakePad', accent: '#b91c1c' },
+  'brake-discs': { icon: 'brakeDisc', accent: '#b91c1c' },
+  'brake-calipers': { icon: 'brakeCaliper', accent: '#b91c1c' },
+  'brake-drums-shoes': { icon: 'brakeDrum', accent: '#b91c1c' },
+  'brake-hoses-fluid': { icon: 'fluidBottle', accent: '#b91c1c' },
+  'master-cylinder': { icon: 'brakeCaliper', accent: '#991b1b' },
+  'spark-glow-plugs': { icon: 'sparkPlug', accent: '#d97706' },
+  'headlights-bulbs': { icon: 'headlight', accent: '#d97706' },
+  'car-batteries': { icon: 'battery', accent: '#0369a1' },
+  'alternators-starters': { icon: 'alternator', accent: '#0369a1' },
+  'air-cabin-filters': { icon: 'filter', accent: '#16a34a' },
+  'oil-filters': { icon: 'filter', accent: '#15803d' },
+  'engine-oil-lubricants': { icon: 'fluidBottle', accent: '#7c3aed' },
+  'washer-fluids': { icon: 'fluidBottle', accent: '#2563eb' },
+  'shampoos-waxes': { icon: 'fluidBottle', accent: '#7c3aed' },
+  'torque-wrenches': { icon: 'tool', accent: '#334155' },
+  'jacks-stands': { icon: 'tool', accent: '#334155' },
+  'obd2-scanners': { icon: 'tool', accent: '#334155' },
+  'timing-belts-kits': { icon: 'beltKit', accent: '#b45309' },
+  'thermostats-coolant': { icon: 'gasket', accent: '#0e7490' },
+  'lambda-sensors': { icon: 'sensor', accent: '#0e7490' },
+  'gaskets-seals': { icon: 'gasket', accent: '#57534e' },
+  'floor-mats-liners': { icon: 'mat', accent: '#78350f' },
+  'exhaust-silencers': { icon: 'exhaust', accent: '#4b5563' },
+  'exhaust-assembly-parts': { icon: 'exhaust', accent: '#4b5563' },
+  'catalytic-converters': { icon: 'exhaust', accent: '#4b5563' },
+  'engine-radiators': { icon: 'radiator', accent: '#0e7490' },
+  'wiper-blades': { icon: 'wiper', accent: '#1f2937' },
+  'shock-absorbers': { icon: 'suspension', accent: '#334155' },
+  'control-arms-wishbones': { icon: 'suspension', accent: '#334155' },
+  'anti-roll-bar-links': { icon: 'suspension', accent: '#334155' },
+};
+
+function partIconGlyph(icon: PartIcon, accent: string): string {
+  const cx = 320, cy = 205;
+  switch (icon) {
+    case 'wheel': {
+      const spokes = Array.from({ length: 5 }, (_, i) => {
+        const a = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+        const x = cx + Math.cos(a) * 58, y = cy + Math.sin(a) * 58;
+        return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#fff" stroke-width="9" stroke-linecap="round"/>`;
+      }).join('');
+      return `<circle cx="${cx}" cy="${cy}" r="98" fill="none" stroke="${accent}" stroke-width="24"/><circle cx="${cx}" cy="${cy}" r="66" fill="${accent}"/>${spokes}<circle cx="${cx}" cy="${cy}" r="14" fill="#fff"/>`;
+    }
+    case 'brakePad':
+      return `<rect x="${cx - 90}" y="${cy - 65}" width="180" height="130" rx="16" fill="${accent}"/><rect x="${cx - 90}" y="${cy - 65}" width="180" height="34" rx="10" fill="#fff" opacity=".85"/><circle cx="${cx - 55}" cy="${cy + 30}" r="9" fill="#fff"/><circle cx="${cx + 55}" cy="${cy + 30}" r="9" fill="#fff"/>`;
+    case 'brakeDisc': {
+      const holes = Array.from({ length: 6 }, (_, i) => {
+        const a = (Math.PI * 2 * i) / 6;
+        const x = cx + Math.cos(a) * 60, y = cy + Math.sin(a) * 60;
+        return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="#f8fafc"/>`;
+      }).join('');
+      return `<circle cx="${cx}" cy="${cy}" r="98" fill="none" stroke="${accent}" stroke-width="14"/><circle cx="${cx}" cy="${cy}" r="70" fill="none" stroke="${accent}" stroke-width="6"/>${holes}<circle cx="${cx}" cy="${cy}" r="20" fill="${accent}"/>`;
+    }
+    case 'brakeCaliper':
+      return `<circle cx="${cx}" cy="${cy}" r="90" fill="none" stroke="#cbd5e1" stroke-width="10"/><path d="M ${cx - 20} ${cy - 92} A 95 95 0 0 1 ${cx + 75} ${cy + 62} L ${cx + 40} ${cy + 78} A 62 62 0 0 0 ${cx - 12} ${cy - 60} Z" fill="${accent}"/><circle cx="${cx + 30}" cy="${cy + 5}" r="10" fill="#fff"/>`;
+    case 'brakeDrum':
+      return `<circle cx="${cx}" cy="${cy}" r="98" fill="${accent}"/><circle cx="${cx}" cy="${cy}" r="70" fill="#f8fafc"/><circle cx="${cx}" cy="${cy}" r="70" fill="none" stroke="${accent}" stroke-width="4"/><circle cx="${cx}" cy="${cy}" r="16" fill="${accent}"/>`;
+    case 'battery':
+      return `<rect x="${cx - 95}" y="${cy - 60}" width="190" height="120" rx="10" fill="${accent}"/><rect x="${cx - 40}" y="${cy - 82}" width="24" height="22" rx="4" fill="${accent}"/><rect x="${cx + 16}" y="${cy - 82}" width="24" height="22" rx="4" fill="${accent}"/><rect x="${cx - 75}" y="${cy - 40}" width="150" height="80" rx="4" fill="#fff" opacity=".9"/><text x="${cx}" y="${cy + 12}" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="${accent}">+ -</text>`;
+    case 'sparkPlug':
+      return `<rect x="${cx - 18}" y="${cy - 95}" width="36" height="60" rx="4" fill="${accent}"/><polygon points="${cx - 26},${cy - 35} ${cx + 26},${cy - 35} ${cx + 16},${cy + 10} ${cx - 16},${cy + 10}" fill="#94a3b8"/><rect x="${cx - 6}" y="${cy + 10}" width="12" height="45" fill="#475569"/><path d="M ${cx - 14} ${cy + 55} L ${cx - 14} ${cy + 75} L ${cx + 14} ${cy + 75}" fill="none" stroke="#475569" stroke-width="6"/>`;
+    case 'filter': {
+      const pleats = Array.from({ length: 7 }, (_, i) => `<line x1="${cx - 60 + i * 20}" y1="${cy - 70}" x2="${cx - 60 + i * 20}" y2="${cy + 70}" stroke="#fff" stroke-width="4" opacity=".7"/>`).join('');
+      return `<rect x="${cx - 70}" y="${cy - 70}" width="140" height="140" rx="70" fill="${accent}"/>${pleats}<circle cx="${cx}" cy="${cy}" r="22" fill="#fff"/>`;
+    }
+    case 'fluidBottle':
+      return `<rect x="${cx - 42}" y="${cy - 30}" width="84" height="110" rx="10" fill="${accent}"/><rect x="${cx - 16}" y="${cy - 78}" width="32" height="48" rx="6" fill="${accent}"/><rect x="${cx - 20}" y="${cy - 88}" width="40" height="14" rx="4" fill="#475569"/><rect x="${cx - 30}" y="${cy - 6}" width="60" height="46" rx="4" fill="#fff" opacity=".85"/>`;
+    case 'beltKit': {
+      const r = 46, dx = 70;
+      return `<circle cx="${cx - dx}" cy="${cy + 20}" r="${r}" fill="none" stroke="${accent}" stroke-width="14"/><circle cx="${cx + dx}" cy="${cy - 20}" r="${r * 0.7}" fill="none" stroke="${accent}" stroke-width="14"/><line x1="${cx - dx - r}" y1="${cy + 20 - r}" x2="${cx + dx - r * 0.7}" y2="${cy - 20 - r * 0.7}" stroke="${accent}" stroke-width="10"/><line x1="${cx - dx + r}" y1="${cy + 20 + r}" x2="${cx + dx + r * 0.7}" y2="${cy - 20 + r * 0.7}" stroke="${accent}" stroke-width="10"/>`;
+    }
+    case 'sensor':
+      return `<rect x="${cx - 20}" y="${cy - 60}" width="40" height="70" rx="8" fill="${accent}"/><path d="M ${cx} ${cy + 10} C ${cx + 60} ${cy + 30}, ${cx + 70} ${cy + 70}, ${cx + 90} ${cy + 90}" fill="none" stroke="${accent}" stroke-width="8" stroke-linecap="round"/><circle cx="${cx}" cy="${cy - 75}" r="14" fill="#94a3b8"/>`;
+    case 'gasket':
+      return `<circle cx="${cx}" cy="${cy}" r="95" fill="${accent}"/><circle cx="${cx}" cy="${cy}" r="52" fill="#f8fafc"/>`;
+    case 'mat': {
+      const ridges = Array.from({ length: 5 }, (_, i) => `<line x1="${cx - 80}" y1="${cy - 50 + i * 25}" x2="${cx + 80}" y2="${cy - 50 + i * 25}" stroke="#fff" stroke-width="6" opacity=".6"/>`).join('');
+      return `<rect x="${cx - 100}" y="${cy - 70}" width="200" height="140" rx="18" fill="${accent}"/>${ridges}`;
+    }
+    case 'exhaust':
+      return `<rect x="${cx - 100}" y="${cy - 24}" width="130" height="48" rx="24" fill="${accent}"/><ellipse cx="${cx + 65}" cy="${cy}" rx="42" ry="46" fill="${accent}"/><ellipse cx="${cx + 65}" cy="${cy}" rx="22" ry="26" fill="#1f2937"/>`;
+    case 'radiator': {
+      const fins = Array.from({ length: 8 }, (_, i) => `<line x1="${cx - 90 + i * 24}" y1="${cy - 65}" x2="${cx - 90 + i * 24}" y2="${cy + 65}" stroke="${accent}" stroke-width="10"/>`).join('');
+      return `<rect x="${cx - 100}" y="${cy - 75}" width="200" height="150" rx="6" fill="#e2e8f0"/>${fins}`;
+    }
+    case 'alternator':
+      return `<circle cx="${cx}" cy="${cy}" r="80" fill="${accent}"/><circle cx="${cx}" cy="${cy}" r="34" fill="#f8fafc"/><circle cx="${cx + 74}" cy="${cy - 40}" r="22" fill="${accent}"/><line x1="${cx + 30}" y1="${cy - 65}" x2="${cx + 55}" y2="${cy - 55}" stroke="${accent}" stroke-width="10"/>`;
+    case 'wiper':
+      return `<rect x="${cx - 110}" y="${cy - 10}" width="220" height="18" rx="9" fill="${accent}"/><rect x="${cx - 14}" y="${cy - 60}" width="28" height="55" rx="6" fill="#475569"/>`;
+    case 'suspension':
+      return `<line x1="${cx}" y1="${cy - 95}" x2="${cx}" y2="${cy + 95}" stroke="${accent}" stroke-width="10"/>${Array.from({ length: 6 }, (_, i) => `<ellipse cx="${cx}" cy="${cy - 70 + i * 24}" rx="34" ry="10" fill="none" stroke="${accent}" stroke-width="8"/>`).join('')}`;
+    case 'headlight':
+      return `<path d="M ${cx - 95} ${cy - 55} Q ${cx + 90} ${cy - 75}, ${cx + 95} ${cy}, Q ${cx + 90} ${cy + 75}, ${cx - 95} ${cy + 55} Z" fill="${accent}" opacity=".9"/><ellipse cx="${cx - 10}" cy="${cy}" rx="55" ry="42" fill="#fff" opacity=".9"/><circle cx="${cx - 10}" cy="${cy}" r="20" fill="${accent}"/>`;
+    case 'tool':
+      return `<rect x="${cx - 90}" y="${cy - 16}" width="180" height="32" rx="16" fill="${accent}"/><circle cx="${cx - 90}" cy="${cy}" r="34" fill="none" stroke="${accent}" stroke-width="16"/><circle cx="${cx + 90}" cy="${cy}" r="24" fill="none" stroke="${accent}" stroke-width="14"/>`;
+    default:
+      return `<circle cx="${cx}" cy="${cy}" r="92" fill="${accent}" opacity=".85"/><circle cx="${cx}" cy="${cy}" r="52" fill="#fff"/>`;
+  }
+}
+
+function partImage(label: string, subsystemId: string): string {
+  const { icon, accent } = SUBSYSTEM_ICON[subsystemId] || { icon: 'default' as PartIcon, accent: '#0077c7' };
+  const glyph = partIconGlyph(icon, accent);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480"><rect width="640" height="480" fill="#f8fafc"/><rect x="52" y="55" width="536" height="330" rx="22" fill="${accent}" opacity=".08"/>${glyph}<text x="320" y="420" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#172033">${label.replace(/&/g, 'and')}</text></svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+// Replace every seeded part's (previously hand-typed, frequently mismatched)
+// Unsplash URLs with images generated from that part's own subsystem + name.
+SEEDED_PARTS.forEach(part => {
+  part.images = [
+    partImage(part.name, part.subsystemId),
+    partImage(`${part.brand} — ${part.partType}`, part.subsystemId),
+  ];
+});
+
+/**
  * Every navigable subsystem has products, including the sections not yet
  * supplied by a distributor feed. These clearly labelled catalogue entries
  * keep navigation, filtering, product pages and cart flows usable; replace
