@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ArrowRight, ChevronRight, TrendingUp, Search, Car } from 'lucide-react';
+import { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ArrowRight, ChevronRight, TrendingUp, Search, Car, Package } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { CATEGORY_ROOTS } from '../lib/data/categories';
 import { PARTS_DATABASE, POPULAR_BRANDS } from '../lib/data/parts';
