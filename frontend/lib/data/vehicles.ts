@@ -292,6 +292,137 @@ export const VEHICLE_MAKES_DATABASE: VehicleMake[] = [
       },
     ],
   },
+  {
+    name: 'Hyundai',
+    models: [
+      {
+        name: 'Elantra',
+        generations: [
+          {
+            name: 'Elantra CN7',
+            yearRange: '2020 - Present',
+            startYear: 2020,
+            endYear: 2026,
+            engines: [
+              { id: 'hyundai-elantra-cn7-16-123', name: '1.6 MPI (123 HP / 90 kW)', code: 'G4FG', displacement: '1591 ccm', powerHp: 123, powerKw: 90, fuelType: 'Petrol' },
+              { id: 'hyundai-elantra-cn7-20-149', name: '2.0 MPI (149 HP / 110 kW)', code: 'G4NL', displacement: '1999 ccm', powerHp: 149, powerKw: 110, fuelType: 'Petrol' },
+            ],
+          },
+          {
+            name: 'Elantra AD',
+            yearRange: '2015 - 2020',
+            startYear: 2015,
+            endYear: 2020,
+            engines: [
+              { id: 'hyundai-elantra-ad-16-128', name: '1.6 GDI (128 HP / 94 kW)', code: 'G4FD', displacement: '1591 ccm', powerHp: 128, powerKw: 94, fuelType: 'Petrol' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Tucson',
+        generations: [
+          {
+            name: 'Tucson TL',
+            yearRange: '2015 - 2020',
+            startYear: 2015,
+            endYear: 2020,
+            engines: [
+              { id: 'hyundai-tucson-tl-20crdi-185', name: '2.0 CRDi (185 HP / 136 kW)', code: 'D4HA', displacement: '1995 ccm', powerHp: 185, powerKw: 136, fuelType: 'Diesel' },
+              { id: 'hyundai-tucson-tl-16t-177', name: '1.6 T-GDI (177 HP / 130 kW)', code: 'G4FJ', displacement: '1591 ccm', powerHp: 177, powerKw: 130, fuelType: 'Petrol' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Nissan',
+    models: [
+      {
+        name: 'X-Trail',
+        generations: [
+          {
+            name: 'X-Trail T32',
+            yearRange: '2014 - 2022',
+            startYear: 2014,
+            endYear: 2022,
+            engines: [
+              { id: 'nissan-xtrail-t32-16dci-130', name: '1.6 dCi (130 HP / 96 kW)', code: 'R9M', displacement: '1598 ccm', powerHp: 130, powerKw: 96, fuelType: 'Diesel' },
+              { id: 'nissan-xtrail-t32-25-171', name: '2.5 (171 HP / 126 kW)', code: 'QR25DE', displacement: '2488 ccm', powerHp: 171, powerKw: 126, fuelType: 'Petrol' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Sunny',
+        generations: [
+          {
+            name: 'Sunny B17',
+            yearRange: '2011 - Present',
+            startYear: 2011,
+            endYear: 2026,
+            engines: [
+              { id: 'nissan-sunny-b17-16-107', name: '1.6 (107 HP / 79 kW)', code: 'HR16DE', displacement: '1598 ccm', powerHp: 107, powerKw: 79, fuelType: 'Petrol' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Isuzu',
+    models: [
+      {
+        name: 'D-Max',
+        generations: [
+          {
+            name: 'D-Max III',
+            yearRange: '2012 - Present',
+            startYear: 2012,
+            endYear: 2026,
+            engines: [
+              { id: 'isuzu-dmax-3-25ddi-136', name: '2.5 DDi (136 HP / 100 kW)', code: '4JK1-TC', displacement: '2499 ccm', powerHp: 136, powerKw: 100, fuelType: 'Diesel' },
+              { id: 'isuzu-dmax-3-30ddi-177', name: '3.0 DDi (177 HP / 130 kW)', code: '4JJ1-TC', displacement: '2999 ccm', powerHp: 177, powerKw: 130, fuelType: 'Diesel' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Suzuki',
+    models: [
+      {
+        name: 'Vitara',
+        generations: [
+          {
+            name: 'Vitara IV (LY)',
+            yearRange: '2015 - Present',
+            startYear: 2015,
+            endYear: 2026,
+            engines: [
+              { id: 'suzuki-vitara-4-16-120', name: '1.6 VVT (120 HP / 88 kW)', code: 'M16A', displacement: '1586 ccm', powerHp: 120, powerKw: 88, fuelType: 'Petrol' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Swift',
+        generations: [
+          {
+            name: 'Swift IV (AZ)',
+            yearRange: '2017 - Present',
+            startYear: 2017,
+            endYear: 2026,
+            engines: [
+              { id: 'suzuki-swift-4-12-90', name: '1.2 Dualjet (90 HP / 66 kW)', code: 'K12C', displacement: '1242 ccm', powerHp: 90, powerKw: 66, fuelType: 'Petrol' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export interface VinDecodeResult {

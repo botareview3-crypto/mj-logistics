@@ -337,6 +337,12 @@ transcript, just the gist.
   `pages/catalog/[system]/index.tsx`, `pages/index.tsx`) — would have
   silently fallen back to a generic disc icon — added the import + map
   entry in all 4 so it renders correctly.
-- **Still left in this feedback batch**: B) more vehicle types in the
-  picker, C) stationery/equipment shop section, D) MJ Mining
-  corporate/info page.
+- **Still left in this feedback batch**: C) stationery/equipment shop
+  section, D) MJ Mining corporate/info page.
+- **Batch B (more vehicle types) done**: added 4 new makes to
+  `lib/data/vehicles.ts` — Hyundai (Elantra, Tucson), Nissan (X-Trail,
+  Sunny), Isuzu (D-Max), Suzuki (Vitara, Swift) — chosen for relevance to
+  the Ethiopian/East African market rather than adding more
+  already-covered European brands. Vehicle picker now covers 10 makes
+  total instead of 6 (previously only VW, BMW, Audi, Toyota, Ford,
+  Mercedes-Benz).
