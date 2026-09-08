@@ -317,3 +317,26 @@ transcript, just the gist.
   fitment plugin gets chosen), `categories.csv`, and `brands.csv`. Run
   with `python export_catalog.py --api-base <render-url> --admin-token
   <token>`.
+- The boss reviewed the site and asked for: car tires, more selectable
+  vehicle types, a stationery/equipment shop, and "MJ Mining" (his
+  separate diamond/gold mining company). Confirmed structure: all under
+  one site (mjlogisticsenterprise.com), MJ Mining as a corporate/info
+  page for now (not e-commerce — "we'll go to option 2 if we have to").
+  Confirmed: keep building this out on the current Next.js prototype
+  first to show him the fuller vision, before any WordPress work starts.
+  Planned as batches: A) tires category, B) more vehicle types, C)
+  stationery/equipment shop, D) MJ Mining page. Starting with A.
+- **Batch A (tires) done**: added a new "Tires & Wheels" system to
+  `lib/data/categories.ts` under the `car-parts` root, with three
+  subsystems (Passenger Car Tires, SUV & 4x4 Tires, Wheel Rims). Added 4
+  real demo products to `lib/data/parts.ts` covering all three
+  (Michelin Primacy 4 in two sizes, a BFGoodrich all-terrain, and a
+  generic alloy wheel). Along the way, found the system-level category
+  icon (`CircleDot`) wasn't in the hardcoded `iconMap` duplicated across
+  4 files (`MegaMenu.tsx`, `pages/catalog/index.tsx`,
+  `pages/catalog/[system]/index.tsx`, `pages/index.tsx`) — would have
+  silently fallen back to a generic disc icon — added the import + map
+  entry in all 4 so it renders correctly.
+- **Still left in this feedback batch**: B) more vehicle types in the
+  picker, C) stationery/equipment shop section, D) MJ Mining
+  corporate/info page.

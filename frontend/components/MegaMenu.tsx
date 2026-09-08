@@ -1,9 +1,9 @@
 import React from 'react';
-import { Disc, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ArrowRight, X, Package } from 'lucide-react';
+import { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ArrowRight, X, Package } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { CATEGORY_ROOTS } from '../lib/data/categories';
 
-const iconMap: Record<string, React.ElementType> = { Disc, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck };
+const iconMap: Record<string, React.ElementType> = { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck };
 
 export const MegaMenu: React.FC = () => {
   const { isMegaMenuOpen, setIsMegaMenuOpen, navigate } = useApp();

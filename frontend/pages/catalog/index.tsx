@@ -1,10 +1,10 @@
 import React from 'react';
-import { Disc, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ChevronRight, Package } from 'lucide-react';
+import { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ChevronRight, Package } from 'lucide-react';
 import { useApp } from '../../lib/AppContext';
 import { CATEGORY_ROOTS } from '../../lib/data/categories';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 
-const iconMap: Record<string, React.ElementType> = { Disc, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck };
+const iconMap: Record<string, React.ElementType> = { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck };
 
 export default function CatalogIndexPage() {
   const { navigate } = useApp();
