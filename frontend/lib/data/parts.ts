@@ -1945,7 +1945,7 @@ const SEEDED_PARTS: Part[] = [
     compatibleEngineIds: [],
   },
   {
-    id: 'part-michelin-primacy4-205-55r16',
+    id: 'part-michelin-primacy4-uni-205-55r16',
     sku: 'Primacy 4 205/55R16 91V',
     name: 'Michelin Primacy 4 Tire 205/55R16',
     brand: 'Michelin',
@@ -2011,7 +2011,7 @@ const SEEDED_PARTS: Part[] = [
     compatibleEngineIds: [],
   },
   {
-    id: 'part-bfgoodrich-at-ko2-265-65r17',
+    id: 'part-bfgoodrich-at-ko2-hilux-265-65r17',
     sku: 'All-Terrain T/A KO2 265/65R17 112T',
     name: 'BFGoodrich All-Terrain T/A KO2 265/65R17',
     brand: 'BFGoodrich',
@@ -2485,7 +2485,7 @@ const SEEDED_PARTS: Part[] = [
     compatibleEngineIds: ['bmw-3-g20-330i-258'],
   },
   {
-    id: 'part-castrol-edge-5w30-5l',
+    id: 'part-castrol-edge-5w30-5l-universal',
     sku: '15669B',
     name: 'Castrol EDGE 5W-30 Fully Synthetic Oil 5L',
     brand: 'Castrol',

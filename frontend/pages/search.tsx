@@ -37,6 +37,14 @@ export default function SearchResultsPage() {
     );
   }, [query]);
 
+  // Facet counts shown in the sidebar must respect the vehicle-fitment filter,
+  // or a facet can show a count like "2" while selecting it (with the vehicle
+  // filter already on) yields zero results.
+  const vehicleFilteredParts = useMemo(() => {
+    if (!(filters.onlyFitsVehicle && activeVehicle)) return baseMatchedParts;
+    return baseMatchedParts.filter(part => isPartCompatibleWithActiveVehicle(part));
+  }, [baseMatchedParts, filters.onlyFitsVehicle, activeVehicle, isPartCompatibleWithActiveVehicle]);
+
   const filteredParts = useMemo(() => {
     return baseMatchedParts.filter(part => {
       if (filters.onlyFitsVehicle && activeVehicle) { if (!isPartCompatibleWithActiveVehicle(part)) return false; }
@@ -69,7 +77,7 @@ export default function SearchResultsPage() {
       </div>
 
       <div className="flex flex-col md:flex-row items-start gap-6">
-        <FilterSidebar availableParts={baseMatchedParts} filters={filters} onFilterChange={setFilters} isOpenMobile={isMobileFilterOpen} onCloseMobile={() => setIsMobileFilterOpen(false)} />
+        <FilterSidebar availableParts={vehicleFilteredParts} filters={filters} onFilterChange={setFilters} isOpenMobile={isMobileFilterOpen} onCloseMobile={() => setIsMobileFilterOpen(false)} />
         <div className="flex-1 w-full space-y-4">
           <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">

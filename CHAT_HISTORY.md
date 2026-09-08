@@ -396,3 +396,25 @@ transcript, just the gist.
   or type errors. Caught and fixed one bug in the process: an unescaped
   apostrophe in a Meguiar's product name/brand that would have broken the
   build.
+
+### 2026-09-08 (later same day — duplicate part IDs + facet-count bug)
+- Zemen reported the tire filter showing a count badge of "2" that produced
+  zero results when clicked (screenshot: Nissan X-Trail active, Passenger
+  Car Tire filter). Investigated in two parts:
+  1. Found the two new tires added in the earlier batch today
+     (`part-michelin-primacy4-205-55r16`, `part-bfgoodrich-at-ko2-265-65r17`)
+     reused IDs that already existed in the original seed data (a
+     Golf/Corolla-fit tire and a — separately — Golf GTI part). Also found
+     `part-castrol-edge-5w30-5l` collided with an existing oil listing.
+     Renamed all three new IDs (`-uni-`, `-hilux-`, `-universal` suffixes)
+     so every part id in `SEEDED_PARTS` is unique again.
+  2. The actual "2 → 0" symptom was a separate, pre-existing bug: the
+     catalog subsystem page and the search page both compute sidebar facet
+     counts (Part Type / Brand / Position) from the *unfiltered* subsystem
+     part list, while the results grid applies the vehicle-fitment filter.
+     So a facet could show a count that ignored which vehicle was active,
+     then filter down to 0 once combined with "Only parts that fit my
+     vehicle." Fixed both `pages/catalog/[system]/[subsystem].tsx` and
+     `pages/search.tsx` to compute facet counts from a vehicle-filtered set
+     whenever the fitment checkbox is on, so counts and results always
+     agree.
