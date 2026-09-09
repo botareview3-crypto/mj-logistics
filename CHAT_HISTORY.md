@@ -393,3 +393,13 @@ transcript, just the gist.
   visibility behavior for the new "MJ Mining" link for consistency rather
   than fixing this — it's a real gap worth addressing separately, not
   something this batch caused or was scoped to fix.
+- Boss's feedback batches are all done. Zemen asked for more data across
+  the board (more cars, parts, stationery, mining info) plus better
+  photos. Confirmed scope: "better/more realistic stock photos" (not
+  literal company photos to be supplied), and "a small bump" in data
+  quantity per category, not a large expansion. Working through as
+  batches E (cars) → F (parts) → G (stationery) → H (mining detail +
+  photos).
+- **Batch E (more vehicle makes) done**: added Kia (Sportage, Rio),
+  Mitsubishi (L200, Pajero), Honda (Civic, CR-V) to
+  `lib/data/vehicles.ts` — picker now covers 13 makes total (up from 10).
