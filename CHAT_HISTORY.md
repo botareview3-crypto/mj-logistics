@@ -403,3 +403,19 @@ transcript, just the gist.
 - **Batch E (more vehicle makes) done**: added Kia (Sportage, Rio),
   Mitsubishi (L200, Pajero), Honda (Civic, CR-V) to
   `lib/data/vehicles.ts` — picker now covers 13 makes total (up from 10).
+- **Batch F (more parts, better photos) done**. Found `exhaust-system` and
+  `cooling-heating` had **zero** hand-written products — 100% generic
+  filler. Added 4 real products there for the most visible improvement:
+  a Bosal rear silencer and BM Catalysts catalytic converter (exhaust), a
+  Nissens radiator and Wahler thermostat (cooling). Tried to source
+  genuinely better-matched photos via search first — found a promising
+  exhaust-pipe photo but it turned out to be an Unsplash+ paywalled/
+  watermarked image, not usable as a free hotlink, and further searches
+  didn't yield confidently-safe new photo IDs worth the added risk for a
+  "small bump" batch. Reused already-confirmed-working images from
+  elsewhere in the file instead of risking new broken/paywalled URLs —
+  transparently, not claiming these are freshly sourced photos. Also
+  flagged (not yet fixed): the same generic photo ID
+  (`1517524008697-84bbe3c3fd98`) is currently reused across headlights,
+  lambda sensors, AND radiators simultaneously — a real mismatch worth
+  cleaning up in a future image-focused pass.
