@@ -419,3 +419,13 @@ transcript, just the gist.
   (`1517524008697-84bbe3c3fd98`) is currently reused across headlights,
   lambda sensors, AND radiators simultaneously — a real mismatch worth
   cleaning up in a future image-focused pass.
+- **Batch G (stationery items) done**: added 5 real products across the
+  previously filler-only "Stationery & Equipment" root — BIC ballpoint
+  pens, A4 copy paper, a Leitz ring binder (Office Stationery system), an
+  HP LaserJet printer, and a Logitech keyboard/mouse combo (Business &
+  Office Equipment system). Tried `image_search` for stationery photos
+  first (a different tool from the manual Unsplash web-search approach in
+  Batch F) — it returned image titles for inline chat display but no
+  embeddable URLs usable in the actual codebase, so reused the two
+  already-assigned root/system-level images again, same transparent
+  reuse approach as Batch F.
