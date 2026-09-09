@@ -57,6 +57,9 @@ export const Header: React.FC = () => {
                 <button type="button" onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)} className={`hidden md:flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-md transition-all cursor-pointer ${isMegaMenuOpen ? 'bg-white/20 text-white ring-1 ring-white/30' : 'text-white hover:bg-white/10'}`}>
                   <Menu className="w-4 h-4" /><span>Catalog</span><ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMegaMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
+                <button type="button" onClick={() => navigate('/mining')} className="hidden md:flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-md transition-all cursor-pointer text-white hover:bg-white/10">
+                  <span>MJ Mining</span>
+                </button>
               </div>
 
               {/* Search */}

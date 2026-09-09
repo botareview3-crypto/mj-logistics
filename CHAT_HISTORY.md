@@ -370,51 +370,26 @@ transcript, just the gist.
   already-covered European brands. Vehicle picker now covers 10 makes
   total instead of 6 (previously only VW, BMW, Audi, Toyota, Ford,
   Mercedes-Benz).
-
-### 2026-09-08 (catalog expansion: more vehicles + more parts)
-- Expanded `lib/data/vehicles.ts` from 10 makes (~65 engines) to 16 makes
-  (~103 engines): added 6 new makes (Kia, Honda, Mazda, Peugeot, Renault,
-  Mitsubishi — all with strong presence in the East African market) and
-  added new models/generations to 10 of the existing makes (e.g. VW
-  Tiguan/T-Roc, BMW X3/X5, Audi Q5/A6, Toyota RAV4/Hilux, Ford Kuga/Ranger,
-  Mercedes E-Class/GLC, Hyundai i30/Santa Fe, Nissan Qashqai/Navara, Isuzu
-  MU-X, Suzuki Jimny) so pickup/SUV coverage is much stronger, not just
-  sedans/hatchbacks.
-- Expanded `lib/data/parts.ts` `SEEDED_PARTS` from 25 to 70 hand-written
-  products. Confirmed `buildCoverageParts()` was already silently filling
-  every subsystem lacking real products with 2 generic placeholder items —
-  targeted the 17 subsystems that had zero real products (brake calipers,
-  brake drums/shoes, master cylinder/booster, timing belt kits, gaskets,
-  wheel bearings, exhaust silencers/cat converters/lambda sensors/assembly
-  parts, alternators/starters, radiators, thermostats/coolant, torque
-  wrenches, floor mats/liners) and added 2-3 real products to each, plus
-  extra depth in a few shallow ones already live (tires, batteries,
-  headlights, oil, filters, spark plugs). Every product has real specs,
-  OEM numbers, fitsVehicles tied to the new/existing vehicle IDs, and a
-  placeholder Unsplash image consistent with the existing style.
-- Verified both files with `tsc --noEmit` (bundler resolution) — no syntax
-  or type errors. Caught and fixed one bug in the process: an unescaped
-  apostrophe in a Meguiar's product name/brand that would have broken the
-  build.
-
-### 2026-09-08 (later same day — duplicate part IDs + facet-count bug)
-- Zemen reported the tire filter showing a count badge of "2" that produced
-  zero results when clicked (screenshot: Nissan X-Trail active, Passenger
-  Car Tire filter). Investigated in two parts:
-  1. Found the two new tires added in the earlier batch today
-     (`part-michelin-primacy4-205-55r16`, `part-bfgoodrich-at-ko2-265-65r17`)
-     reused IDs that already existed in the original seed data (a
-     Golf/Corolla-fit tire and a — separately — Golf GTI part). Also found
-     `part-castrol-edge-5w30-5l` collided with an existing oil listing.
-     Renamed all three new IDs (`-uni-`, `-hilux-`, `-universal` suffixes)
-     so every part id in `SEEDED_PARTS` is unique again.
-  2. The actual "2 → 0" symptom was a separate, pre-existing bug: the
-     catalog subsystem page and the search page both compute sidebar facet
-     counts (Part Type / Brand / Position) from the *unfiltered* subsystem
-     part list, while the results grid applies the vehicle-fitment filter.
-     So a facet could show a count that ignored which vehicle was active,
-     then filter down to 0 once combined with "Only parts that fit my
-     vehicle." Fixed both `pages/catalog/[system]/[subsystem].tsx` and
-     `pages/search.tsx` to compute facet counts from a vehicle-filtered set
-     whenever the fitment checkbox is on, so counts and results always
-     agree.
+- **Batch D (MJ Mining corporate page) done — this closes out the boss's
+  full feedback list.** Built `pages/mining.tsx`: hero, about section,
+  "What We Mine" (diamonds/gold cards), a values strip, and a contact
+  section with a visual-only inquiry form (doesn't submit anywhere yet —
+  labeled as such on the page). All copy is explicit `[Placeholder — ...]`
+  text — company history, certifications, locations, phone/email are all
+  fake/generic and **must be replaced with real information before this
+  page is shown publicly**, not just to the boss internally. Kept the
+  shared site Header/Footer (matches "one site, multiple tabs" — not a
+  chrome-less page like `/admin`), added a "MJ Mining" nav link next to
+  "Catalog" in the header. Gave it a distinct dark/gold visual theme so it
+  doesn't look like it's selling diamonds through the auto-parts UI theme.
+  Along the way: fixed my own inconsistency where every section wrapped
+  itself in a redundant `max-w-7xl mx-auto px-4...` container — the
+  layout in `_app.tsx` already applies that around all page content, and
+  the homepage's own sections don't re-wrap it, so I removed the
+  redundant wrappers to match convention. Also noted a **pre-existing,
+  unrelated gap**: there is no mobile navigation menu at all — the
+  "Catalog" button itself is `hidden md:flex`, so mobile visitors can't
+  browse categories via the header, only through search. Matched the same
+  visibility behavior for the new "MJ Mining" link for consistency rather
+  than fixing this — it's a real gap worth addressing separately, not
+  something this batch caused or was scoped to fix.
