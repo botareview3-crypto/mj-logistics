@@ -64,6 +64,24 @@ export default function MiningPage() {
         </div>
       </section>
 
+      {/* Stats strip */}
+      <section className="pt-10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[
+            { label: 'Years Active', value: '[X]' },
+            { label: 'Active Sites', value: '[X]' },
+            { label: 'Team Members', value: '[X]' },
+            { label: 'Regions Covered', value: '[X]' },
+          ].map(stat => (
+            <div key={stat.label} className="rounded-xl bg-slate-50 border border-slate-200 p-5 text-center">
+              <p className="text-2xl font-black text-amber-600">{stat.value}</p>
+              <p className="text-xs text-slate-500 mt-1">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-[11px] text-slate-400 mt-2 text-center">[Placeholder figures — replace all four with real numbers before publishing.]</p>
+      </section>
+
       {/* What we mine */}
       <section className="pt-14 sm:pt-16">
         <div className="text-center max-w-2xl mx-auto mb-10">
@@ -87,6 +105,27 @@ export default function MiningPage() {
               <p className="text-xs text-slate-500 mt-2 leading-relaxed">[Placeholder — describe gold extraction methods, purity standards, and volumes here.]</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Our Process */}
+      <section className="pt-14 sm:pt-16">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-xs font-extrabold uppercase tracking-wider text-amber-600">How We Operate</span>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">Our Process</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {[
+            { step: '01', title: 'Exploration', desc: '[Placeholder — describe site survey and licensing process here.]' },
+            { step: '02', title: 'Extraction', desc: '[Placeholder — describe extraction methods and safety standards here.]' },
+            { step: '03', title: 'Export & Sale', desc: '[Placeholder — describe grading, certification, and distribution here.]' },
+          ].map(item => (
+            <div key={item.step} className="rounded-xl border border-slate-200 p-6">
+              <span className="text-3xl font-black text-amber-200">{item.step}</span>
+              <h3 className="text-base font-bold text-slate-900 mt-2">{item.title}</h3>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 

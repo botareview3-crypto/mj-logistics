@@ -429,3 +429,21 @@ transcript, just the gist.
   embeddable URLs usable in the actual codebase, so reused the two
   already-assigned root/system-level images again, same transparent
   reuse approach as Batch F.
+- **Batch H (more mining detail + photos) — partial**. Tried to verify
+  the 3 photo URLs already on the mining page (picked without
+  verification when the page was first built) or source new ones, but
+  hit a real tool limitation: `web_fetch` refuses any URL not already
+  returned by a prior search/fetch in the conversation, and neither
+  `web_search` nor `image_search` reliably surfaces a specific existing
+  Unsplash photo ID to check it, or hands back a stable embeddable URL
+  for a fresh one. Being upfront about this rather than guessing — photo
+  verification/sourcing for this page is not reliably achievable with
+  the tools available; the practical path is for Zemen to flag anything
+  broken or mismatched once the live page is checked, so a targeted
+  search can be done for that one specific replacement.
+  What WAS added: a placeholder stats strip (Years Active, Active Sites,
+  Team Members, Regions Covered — all `[X]`, clearly marked to replace)
+  between the About and "What We Mine" sections, and a new "Our Process"
+  section (Exploration → Extraction → Export & Sale, 3 steps) between
+  "What We Mine" and the values strip — both add real informational
+  structure without inventing specific false company claims.
