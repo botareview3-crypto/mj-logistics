@@ -56,7 +56,7 @@ export default function MiningPage() {
           </div>
           <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200">
             <img
-              src="https://images.unsplash.com/photo-1610375461369-d613b564f4c4?auto=format&fit=crop&w=900&q=80"
+              src="https://images.unsplash.com/photo-1680463990599-9d318aaecf71?auto=format&fit=crop&w=900&q=80"
               alt="Mining operations"
               className="w-full h-72 sm:h-96 object-cover"
             />
@@ -90,7 +90,7 @@ export default function MiningPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="rounded-xl border border-slate-200 shadow-sm overflow-hidden group">
-            <img src="https://images.unsplash.com/photo-1600003263720-8b7f80125bd0?auto=format&fit=crop&w=700&q=80" alt="Diamonds" className="w-full h-52 object-cover" />
+            <img src="https://images.unsplash.com/photo-1677768061375-cd600727e274?auto=format&fit=crop&w=700&q=80" alt="Diamonds" className="w-full h-52 object-cover" />
             <div className="p-6">
               <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center mb-3"><Sparkles className="w-5 h-5" /></div>
               <h3 className="text-lg font-bold text-slate-900">Diamonds</h3>
@@ -98,7 +98,7 @@ export default function MiningPage() {
             </div>
           </div>
           <div className="rounded-xl border border-slate-200 shadow-sm overflow-hidden group">
-            <img src="https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&w=700&q=80" alt="Gold" className="w-full h-52 object-cover" />
+            <img src="https://images.unsplash.com/photo-1718752773274-4baba3906300?auto=format&fit=crop&w=700&q=80" alt="Gold" className="w-full h-52 object-cover" />
             <div className="p-6">
               <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center mb-3"><Award className="w-5 h-5" /></div>
               <h3 className="text-lg font-bold text-slate-900">Gold</h3>

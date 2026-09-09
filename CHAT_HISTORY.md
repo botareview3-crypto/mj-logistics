@@ -447,3 +447,19 @@ transcript, just the gist.
   section (Exploration → Extraction → Export & Sale, 3 steps) between
   "What We Mine" and the values strip — both add real informational
   structure without inventing specific false company claims.
+- Zemen pushed back on the "verify photos" dead-end ("i dont want to do
+  the search thats the whole point") — fair correction: the actual fix
+  wasn't asking Zemen to search, it was persisting through more
+  search+fetch cycles myself until landing on non-paywalled results,
+  rather than stopping after one paywalled hit. Did that properly this
+  time: searched and fetched multiple candidate Unsplash pages per
+  subject (open-pit mining, diamonds, gold bars), confirmed each one's
+  license (`images.unsplash.com` domain + "Free to use under the
+  Unsplash License", not `plus.unsplash.com`) before using it. Replaced
+  all 3 mining-page photos with verified, working ones: an open-pit
+  excavator photo (Abdul Basit) for the About section, a diamond ring
+  close-up (Thomas Beaman) for the Diamonds card, and gold bullion bars
+  (Scottsdale Mint) for the Gold card. This is the correct method to use
+  going forward for any future "verify/replace images" request — search,
+  then fetch each promising candidate to check its license, don't stop
+  at the first attempt.
