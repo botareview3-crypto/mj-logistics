@@ -56,7 +56,7 @@ export const SiteHeader: React.FC = () => {
           </nav>
 
           <div className="hidden md:flex items-center gap-3 shrink-0">
-            <button type="button" onClick={() => go('/account')} className="text-sm font-semibold text-white/80 hover:text-white px-3 py-2 transition-colors cursor-pointer">
+            <button type="button" onClick={() => go(currentUser ? '/account' : '/login')} className="text-sm font-semibold text-white/80 hover:text-white px-3 py-2 transition-colors cursor-pointer">
               {currentUser ? 'My Account' : 'Sign In'}
             </button>
             <button type="button" onClick={() => go('/shop')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#0B1220] text-sm font-bold hover:bg-slate-100 transition-colors cursor-pointer">
@@ -78,7 +78,7 @@ export const SiteHeader: React.FC = () => {
                 {link.label}
               </button>
             ))}
-            <button type="button" onClick={() => go('/account')} className="text-left py-3 text-base font-semibold text-white/70 border-b border-white/5 cursor-pointer">
+            <button type="button" onClick={() => go(currentUser ? '/account' : '/login')} className="text-left py-3 text-base font-semibold text-white/70 border-b border-white/5 cursor-pointer">
               {currentUser ? 'My Account' : 'Sign In'}
             </button>
             <button type="button" onClick={() => go('/shop')} className="mt-4 mb-2 w-full text-center py-3 rounded-full bg-white text-[#0B1220] text-sm font-bold cursor-pointer">

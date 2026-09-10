@@ -38,9 +38,10 @@ function AppLayout({ Component, pageProps }: AppProps) {
   // landing page additionally goes full-bleed (no max-w wrapper) so its
   // hero can run edge-to-edge; MJ Mining keeps the contained width its
   // existing sections were built for.
-  const MARKETING_PATHS = ['/', '/mining'];
+  const MARKETING_PATHS = ['/', '/mining', '/login'];
   const isMarketingPage = MARKETING_PATHS.includes(router.pathname);
-  const isFullBleed = router.pathname === '/';
+  // /login is full-bleed too — it handles its own background/centering
+  const isFullBleed = router.pathname === '/' || router.pathname === '/login';
   const [siteSettings, setSiteSettings] = React.useState({ maintenance_mode: false, announcement: '' });
   const apiBase = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
 
