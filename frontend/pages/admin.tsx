@@ -424,7 +424,7 @@ export default function AdminPage() {
   if (!authed) {
     return (
       <>
-        <Head><title>Admin Login — AutoParts</title></Head>
+        <Head><title>Admin Login — MJ Logistics</title></Head>
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
           <form
             onSubmit={handleLogin}
@@ -458,12 +458,12 @@ export default function AdminPage() {
   // ─────────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <Head><title>Admin Console — AutoParts</title></Head>
+      <Head><title>Admin Console — MJ Logistics</title></Head>
       <div className="min-h-screen bg-gray-50">
 
         {/* Header */}
         <header className="bg-gray-900 text-white px-6 py-4 flex items-center justify-between">
-          <span className="font-bold text-lg tracking-tight">AutoParts Admin</span>
+          <span className="font-bold text-lg tracking-tight">MJ Logistics Admin</span>
           <button
             onClick={() => { setAuthed(false); setToken(''); }}
             className="text-sm text-gray-400 hover:text-white transition"

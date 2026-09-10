@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
     e.preventDefault();
     if (!newsletterEmail || !newsletterEmail.includes('@')) return;
     setIsSubscribed(true);
-    showToast('Subscribed to AutoParts technical updates and discount codes!', 'success');
+    showToast('Subscribed to MJ Logistics technical updates and discount codes!', 'success');
   };
 
   return (
@@ -43,13 +43,13 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-[#0077C7] flex items-center justify-center text-white"><Wrench className="w-4 h-4 transform -rotate-12" /></div>
-              <span className="text-xl font-black text-white tracking-tight">AUTO<span className="text-[#0077C7]">PARTS</span></span>
+              <span className="text-xl font-black text-white tracking-tight">MJ <span className="text-[#0077C7]">LOGISTICS</span></span>
             </div>
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">Industrial-grade automotive spare parts & accessories catalog. Built for DIY car enthusiasts and professional garage technicians demanding verified fitment, genuine OE brands, and rapid dispatch.</p>
             <div className="space-y-2 pt-2 text-xs">
-              <div className="flex items-center gap-2 text-slate-300"><Phone className="w-3.5 h-3.5 text-sky-400 shrink-0" /><span className="font-semibold text-white">+1 (800) 555-AUTO</span><span className="text-slate-500">• Toll Free</span></div>
-              <div className="flex items-center gap-2 text-slate-400"><Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" /><span>Mon–Fri: 07:00 – 20:00 EST | Sat: 08:00 – 16:00</span></div>
-              <div className="flex items-center gap-2 text-slate-400"><Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /><span>orders@autoparts-direct.com</span></div>
+              <div className="flex items-center gap-2 text-slate-300"><Phone className="w-3.5 h-3.5 text-sky-400 shrink-0" /><span className="font-semibold text-white">+251 XX XXX XXXX</span></div>
+              <div className="flex items-center gap-2 text-slate-400"><Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" /><span>Mon–Fri: 07:00 – 20:00 | Sat: 08:00 – 16:00</span></div>
+              <div className="flex items-center gap-2 text-slate-400"><Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /><span>orders@mjlogisticsenterprise.com</span></div>
             </div>
           </div>
 
@@ -91,7 +91,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-slate-800 pt-6 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div>© {new Date().getFullYear()} AutoParts Inc. All OEM part numbers and brand logos used for reference purposes only.</div>
+          <div>© {new Date().getFullYear()} MJ Logistics Enterprise. All OEM part numbers and brand logos used for reference purposes only.</div>
           <div className="flex items-center gap-4 text-slate-400 text-[11px]">
             <button type="button" onClick={() => navigate('/privacy')} className="hover:text-white hover:underline cursor-pointer">Privacy Policy</button>
             <button type="button" onClick={() => navigate('/terms')} className="hover:text-white hover:underline cursor-pointer">Terms of Sale</button>

@@ -6,6 +6,8 @@ import '../styles/globals.css';
 import { AppProvider, useApp } from '../lib/AppContext';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { SiteHeader } from '../components/SiteHeader';
+import { SiteFooter } from '../components/SiteFooter';
 import { VehicleSelectorModal } from '../components/VehicleSelectorModal';
 import { CheckCircle2, AlertCircle, Info, X, Wrench } from 'lucide-react';
 
@@ -30,6 +32,15 @@ function ToastOverlay() {
 function AppLayout({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const isAdmin = router.pathname === '/admin';
+  // Corporate/marketing pages get <SiteHeader>/<SiteFooter> instead of the
+  // shop's search-and-cart chrome, since neither the landing page nor MJ
+  // Mining has any use for a part search bar or vehicle selector. The
+  // landing page additionally goes full-bleed (no max-w wrapper) so its
+  // hero can run edge-to-edge; MJ Mining keeps the contained width its
+  // existing sections were built for.
+  const MARKETING_PATHS = ['/', '/mining'];
+  const isMarketingPage = MARKETING_PATHS.includes(router.pathname);
+  const isFullBleed = router.pathname === '/';
   const [siteSettings, setSiteSettings] = React.useState({ maintenance_mode: false, announcement: '' });
   const apiBase = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
 
@@ -50,6 +61,20 @@ function AppLayout({ Component, pageProps }: AppProps) {
     return (
       <div className="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased selection:bg-[#0077C7] selection:text-white">
         <Component {...pageProps} />
+        <ToastOverlay />
+      </div>
+    );
+  }
+
+  if (isMarketingPage) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0077C7] selection:text-white">
+        {siteSettings.announcement && <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-xs font-medium text-amber-900">{siteSettings.announcement}</div>}
+        <SiteHeader />
+        <main className={isFullBleed ? 'flex-1' : 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6'}>
+          <Component {...pageProps} />
+        </main>
+        <SiteFooter />
         <ToastOverlay />
       </div>
     );

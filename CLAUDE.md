@@ -142,6 +142,23 @@ CHAT_HISTORY.md is the log.
 - `render.yaml` wires `NEXT_PUBLIC_API_BASE` (frontend) and `CORS_ORIGINS`
   (backend) to each other automatically via `RENDER_EXTERNAL_URL` — no
   manual URL copy-pasting between the two services.
+- `pages/_app.tsx` now picks page chrome by route, not just the earlier
+  admin-vs-everything-else split: `/` and `/mining` get `<SiteHeader>`/
+  `<SiteFooter>` (the corporate/marketing chrome — logo, nav, no search
+  bar or vehicle selector); everything else (shop, cart, account, garage,
+  etc.) keeps the original `<Header>`/`<Footer>` (search, vehicle
+  selector, cart). `/` also renders full-bleed (no `max-w-7xl` wrapper) so
+  its hero can run edge-to-edge — `/mining` stays contained. Adding a new
+  corporate/info page later means adding its path to `MARKETING_PATHS` in
+  `_app.tsx`, not building new chrome.
+- The old shopping homepage (search bar, category grid, best sellers) moved
+  from `/` to `/shop` — `/` is now the corporate landing page for MJ
+  Logistics Enterprise (both divisions, no sign-in required to browse).
+- Checkout now requires sign-in (it didn't before — browsing, cart, and
+  garage still don't). `cart.tsx`'s checkout button redirects to
+  `/account?redirect=/cart` when signed out; `account.tsx` stashes that
+  target in `localStorage` (a query param alone doesn't survive the OAuth
+  round trip) and sends the shopper back once `loginWithToken` resolves.
 
 ---
 ### One-time setup note (this session)

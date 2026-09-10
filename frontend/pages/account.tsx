@@ -24,6 +24,10 @@ function AppleIcon({ className = 'w-4 h-4' }: { className?: string }) {
   );
 }
 
+// Bridges "sign in, then send me back to what I was doing" across the OAuth
+// round trip — see the effect below for how it's used.
+const REDIRECT_KEY = 'mj_post_login_redirect';
+
 export default function MyAccountPage() {
   const { savedVehicles, cartCount, navigate, showToast, currentUser, isAuthLoading, loginWithToken, logout } = useApp();
   const router = useRouter();
@@ -32,6 +36,23 @@ export default function MyAccountPage() {
   const [password, setPassword] = useState('');
   const handledCallback = useRef(false);
 
+  // Where to send the shopper back to once they're signed in (e.g. "/cart"
+  // after clicking Checkout while signed out). A query param alone can't
+  // survive the OAuth round trip — the browser leaves for the backend and
+  // the provider, then lands back on a plain /account?token=... — so this
+  // gets stashed in localStorage instead, as soon as it's seen.
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { redirect } = router.query;
+    if (typeof redirect === 'string' && redirect.startsWith('/')) {
+      try { localStorage.setItem(REDIRECT_KEY, redirect); } catch { /* ignore */ }
+      // Already signed in (e.g. session was still restoring when Checkout
+      // redirected here) — no need to make them click anything.
+      if (currentUser && !isAuthLoading) navigate(redirect);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady, router.query.redirect, currentUser, isAuthLoading]);
+
   // Pick up ?token=... (successful redirect back from the backend's OAuth
   // callback) or ?auth_error=... (something went wrong) once on mount.
   useEffect(() => {
@@ -39,7 +60,15 @@ export default function MyAccountPage() {
     handledCallback.current = true;
     const { token, auth_error } = router.query;
     if (typeof token === 'string' && token) {
-      loginWithToken(token).then(() => showToast('Signed in!', 'success'));
+      loginWithToken(token).then(() => {
+        showToast('Signed in!', 'success');
+        let target: string | null = null;
+        try {
+          target = localStorage.getItem(REDIRECT_KEY);
+          if (target) localStorage.removeItem(REDIRECT_KEY);
+        } catch { /* ignore */ }
+        if (target) navigate(target);
+      });
       Router.replace('/account', undefined, { shallow: true });
     } else if (typeof auth_error === 'string' && auth_error) {
       showToast('Sign-in failed — please try again.', 'error');
@@ -64,6 +93,13 @@ export default function MyAccountPage() {
           <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">Sign in to track orders, save delivery addresses and check out faster next time.</p>
         </div>
       </div>
+
+      {typeof router.query.redirect === 'string' && !currentUser && (
+        <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 flex items-center gap-3 text-sm text-sky-900">
+          <Lock className="w-4 h-4 text-[#0077C7] shrink-0" />
+          <span>Sign in to continue — you&apos;ll be sent right back to finish up.</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">

@@ -463,3 +463,31 @@ transcript, just the gist.
   going forward for any future "verify/replace images" request — search,
   then fetch each promising candidate to check its license, don't stop
   at the first attempt.
+
+### 2026-09-10 (corporate landing page + checkout sign-in gate)
+- Built a new `/` landing page for MJ Logistics Enterprise (the parent
+  brand over both divisions) — hero, a two-division panel (Auto &
+  Industrial Parts / MJ Mining), a stats strip, and an about band. Public,
+  no sign-in required to browse, matching the "accounts aren't required to
+  browse" principle already stated on `/account`.
+- The old shopping homepage (search bar, category grid, best sellers) moved
+  from `/` to `/shop` unchanged — still the marketplace's own entry point,
+  just no longer sitting at the site root.
+- New `<SiteHeader>`/`<SiteFooter>` components for the corporate side of
+  the site (landing page + `/mining`) — no search bar or vehicle selector,
+  since neither page needs them. `_app.tsx` now picks chrome by route; see
+  CLAUDE.md's "Other conventions" for the mechanics.
+- Checkout now actually requires sign-in (previously it didn't check
+  `currentUser` at all — the checkout flow itself is still a simulated
+  fake order, that part is unchanged). Signed-out shoppers get redirected
+  to `/account?redirect=/cart` and land back on the cart, already signed
+  in, once they complete Google/Apple sign-in.
+- Found and fixed a branding leftover: the shop's footer still said
+  "AutoParts Inc." / "orders@autoparts-direct.com" (predating the site's
+  rename to MJ Logistics) while the header already said "MJ Logistics" —
+  footer now matches, with a `mjlogisticsenterprise.com` address and the
+  same placeholder-style phone number pattern already used on the mining
+  page.
+- Not done: dedicated About/Contact pages (nav points at the landing page
+  and `/shop`/`/mining` only for now); MJ Mining's own content is still
+  all placeholder text as before, untouched this session.

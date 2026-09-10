@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Trash2, ShieldCheck, Truck, RotateCcw, CreditCard, ArrowRight, Plus, Minus, CheckCircle2, Tag, Car } from 'lucide-react';
+import { ShoppingCart, Trash2, ShieldCheck, Truck, RotateCcw, CreditCard, ArrowRight, Plus, Minus, CheckCircle2, Tag, Car, Lock } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { VehicleFitBadge } from '../components/VehicleFitBadge';
 
 export default function CartPage() {
-  const { cart, updateCartQuantity, removeFromCart, clearCart, cartCount, cartSubtotal, activeVehicle, navigate, showToast } = useApp();
+  const { cart, updateCartQuantity, removeFromCart, clearCart, cartCount, cartSubtotal, activeVehicle, navigate, showToast, currentUser, isAuthLoading } = useApp();
   const [promoCode, setPromoCode] = useState('');
   const [discountPercent, setDiscountPercent] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
@@ -27,6 +27,12 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
+    if (isAuthLoading) return;
+    if (!currentUser) {
+      showToast('Sign in to complete your order — your cart will be waiting.', 'info');
+      navigate('/account?redirect=/cart');
+      return;
+    }
     setIsCheckingOut(true);
     setTimeout(() => { setIsCheckingOut(false); setOrderComplete(true); clearCart(); showToast('Order #AP-88421 confirmed! Dispatching with Fitment Guarantee.', 'success'); }, 1200);
   };
@@ -127,9 +133,16 @@ export default function CartPage() {
                 {promoApplied && <span className="text-[11px] text-emerald-700 font-semibold block mt-1">✓ Promo code active: {discountPercent}% discount</span>}
               </form>
 
-              <button type="button" disabled={isCheckingOut} onClick={handleCheckout} className="w-full py-3.5 px-4 bg-[#0077C7] hover:bg-[#0060A1] text-white font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer">
-                {isCheckingOut ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Processing Order...</span></> : <><CreditCard className="w-4 h-4" /><span>Proceed to Checkout</span><ArrowRight className="w-4 h-4 ml-1" /></>}
+              <button type="button" disabled={isCheckingOut || isAuthLoading} onClick={handleCheckout} className="w-full py-3.5 px-4 bg-[#0077C7] hover:bg-[#0060A1] text-white font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+                {isCheckingOut ? (
+                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Processing Order...</span></>
+                ) : currentUser ? (
+                  <><CreditCard className="w-4 h-4" /><span>Proceed to Checkout</span><ArrowRight className="w-4 h-4 ml-1" /></>
+                ) : (
+                  <><Lock className="w-4 h-4" /><span>Sign In to Checkout</span></>
+                )}
               </button>
+              {!currentUser && !isAuthLoading && <p className="text-[11px] text-slate-400 text-center -mt-1">You'll sign in, then come right back to finish.</p>}
 
               <div className="pt-3 border-t border-slate-100 space-y-2 text-[11px] text-slate-500">
                 <div className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" /><span>256-Bit SSL Encrypted Checkout</span></div>
