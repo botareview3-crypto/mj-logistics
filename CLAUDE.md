@@ -154,11 +154,20 @@ CHAT_HISTORY.md is the log.
 - The old shopping homepage (search bar, category grid, best sellers) moved
   from `/` to `/shop` — `/` is now the corporate landing page for MJ
   Logistics Enterprise (both divisions, no sign-in required to browse).
+- Sign-in/create-account UI lives on its own bare page, `/signin` — not on
+  `/account`. `_app.tsx`'s bare-chrome branch (`isBareChrome`) now covers
+  `/signin` alongside `/admin`. `/account` is a signed-in-only dashboard
+  that redirects signed-out visitors to `/signin`, EXCEPT it still has to
+  catch the backend's OAuth callback itself first — the backend always
+  redirects to `/account?token=...` (hardcoded there, not on the
+  frontend), so changing that landing route means editing the backend,
+  not just `_app.tsx`/`signin.tsx`. The post-login redirect target is
+  bridged through `localStorage` via `POST_LOGIN_REDIRECT_KEY` (exported
+  from `lib/auth.ts`) since a `?redirect=` query param doesn't survive
+  that round trip.
 - Checkout now requires sign-in (it didn't before — browsing, cart, and
   garage still don't). `cart.tsx`'s checkout button redirects to
-  `/account?redirect=/cart` when signed out; `account.tsx` stashes that
-  target in `localStorage` (a query param alone doesn't survive the OAuth
-  round trip) and sends the shopper back once `loginWithToken` resolves.
+  `/signin?redirect=/cart` when signed out.
 
 ---
 ### One-time setup note (this session)

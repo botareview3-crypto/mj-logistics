@@ -480,14 +480,34 @@ transcript, just the gist.
 - Checkout now actually requires sign-in (previously it didn't check
   `currentUser` at all — the checkout flow itself is still a simulated
   fake order, that part is unchanged). Signed-out shoppers get redirected
-  to `/account?redirect=/cart` and land back on the cart, already signed
+  to `/signin?redirect=/cart` and land back on the cart, already signed
   in, once they complete Google/Apple sign-in.
+- Follow-up same session: Zemen flagged that "Sign In" was dropping people
+  onto the full `/account` dashboard just to sign in. Split that into a
+  new standalone `/signin` page — no header/footer, own tiny logo/back
+  link, holds the Sign In / Create Account UI that used to live on
+  `/account`. `/account` is now a signed-in-only dashboard that bounces
+  signed-out visitors to `/signin`; it still has to catch the backend's
+  OAuth callback itself (hardcoded to `/account?token=...`, see
+  `lib/auth.ts`) before forwarding them on. The post-login redirect
+  bridge (`localStorage`, since a query param doesn't survive the OAuth
+  round trip) moved to a shared `POST_LOGIN_REDIRECT_KEY` export in
+  `lib/auth.ts` so both pages use the same key. Gotcha worth remembering:
+  don't gate a page's render on `isAuthLoading` for anything that should
+  show real content in the static export — `isAuthLoading` is always
+  `true` at build time (no browser to resolve it), so a guard like `if
+  (isAuthLoading || ...) return null` renders the page completely blank
+  in `out/`. Gate on the specific known state instead (e.g. `if
+  (currentUser) return null`).
 - Found and fixed a branding leftover: the shop's footer still said
   "AutoParts Inc." / "orders@autoparts-direct.com" (predating the site's
   rename to MJ Logistics) while the header already said "MJ Logistics" —
   footer now matches, with a `mjlogisticsenterprise.com` address and the
   same placeholder-style phone number pattern already used on the mining
-  page.
+  page. Same fix applied to `privacy.tsx`, `terms.tsx`, and `admin.tsx`,
+  which had the same stale email/wordmark.
 - Not done: dedicated About/Contact pages (nav points at the landing page
   and `/shop`/`/mining` only for now); MJ Mining's own content is still
-  all placeholder text as before, untouched this session.
+  all placeholder text as before, untouched this session; email/password
+  sign-in is still just a "not available yet" placeholder on the new
+  `/signin` page, same as it was on `/account` before.

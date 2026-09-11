@@ -30,7 +30,7 @@ export default function CartPage() {
     if (isAuthLoading) return;
     if (!currentUser) {
       showToast('Sign in to complete your order — your cart will be waiting.', 'info');
-      navigate('/account?redirect=/cart');
+      navigate('/signin?redirect=/cart');
       return;
     }
     setIsCheckingOut(true);

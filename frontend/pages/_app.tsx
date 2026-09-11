@@ -32,16 +32,19 @@ function ToastOverlay() {
 function AppLayout({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const isAdmin = router.pathname === '/admin';
+  // /signin is deliberately bare too — no header/footer — so signing in
+  // stays a quick, focused stop instead of a trip into the rest of the
+  // site. It builds its own tiny logo/back-link inline (see signin.tsx).
+  const isBareChrome = isAdmin || router.pathname === '/signin';
   // Corporate/marketing pages get <SiteHeader>/<SiteFooter> instead of the
   // shop's search-and-cart chrome, since neither the landing page nor MJ
   // Mining has any use for a part search bar or vehicle selector. The
   // landing page additionally goes full-bleed (no max-w wrapper) so its
   // hero can run edge-to-edge; MJ Mining keeps the contained width its
   // existing sections were built for.
-  const MARKETING_PATHS = ['/', '/mining', '/login'];
+  const MARKETING_PATHS = ['/', '/mining'];
   const isMarketingPage = MARKETING_PATHS.includes(router.pathname);
-  // /login is full-bleed too — it handles its own background/centering
-  const isFullBleed = router.pathname === '/' || router.pathname === '/login';
+  const isFullBleed = router.pathname === '/';
   const [siteSettings, setSiteSettings] = React.useState({ maintenance_mode: false, announcement: '' });
   const apiBase = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
 
@@ -55,10 +58,10 @@ function AppLayout({ Component, pageProps }: AppProps) {
     return <div className="min-h-screen bg-slate-100 px-5 flex items-center justify-center"><div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm"><Wrench className="mx-auto h-8 w-8 text-[#0077c7]" /><h1 className="mt-4 text-2xl font-bold text-slate-900">We&apos;re updating the catalogue</h1><p className="mt-2 text-sm leading-6 text-slate-600">{siteSettings.announcement || 'Please check back shortly.'}</p></div></div>;
   }
 
-  // The admin console is a separate internal tool — it should not carry the
-  // storefront chrome (catalog nav, part search, vehicle selector, cart,
-  // account, footer). It has its own header inside admin.tsx.
-  if (isAdmin) {
+  // The admin console and /signin are separate, chrome-free experiences —
+  // no storefront nav, no marketing header. Admin has its own header inside
+  // admin.tsx; /signin builds its own tiny logo/back-link inline.
+  if (isBareChrome) {
     return (
       <div className="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased selection:bg-[#0077C7] selection:text-white">
         <Component {...pageProps} />

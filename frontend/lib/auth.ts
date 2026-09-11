@@ -9,6 +9,13 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
 const TOKEN_KEY = 'autoparts_auth_token';
 
+// Bridges "sign in, then send me back to what I was doing" across the OAuth
+// round trip. The backend always redirects back to /account?token=... (see
+// above), so a ?redirect= query param on /signin can't survive that trip on
+// its own — /signin stashes it here, /account reads + clears it once the
+// token is handled.
+export const POST_LOGIN_REDIRECT_KEY = 'mj_post_login_redirect';
+
 export type AuthProvider = 'google' | 'apple';
 
 export interface AuthUser {

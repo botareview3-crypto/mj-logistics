@@ -5,7 +5,7 @@ import { MegaMenu } from './MegaMenu';
 import { PARTS_DATABASE } from '../lib/data/parts';
 
 export const Header: React.FC = () => {
-  const { activeVehicle, setActiveVehicle, cartCount, openSelectorModal, isMegaMenuOpen, setIsMegaMenuOpen, navigate, currentPath } = useApp();
+  const { activeVehicle, setActiveVehicle, cartCount, openSelectorModal, isMegaMenuOpen, setIsMegaMenuOpen, navigate, currentPath, currentUser } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -119,7 +119,7 @@ export const Header: React.FC = () => {
 
               {/* Right icons */}
               <div className="flex items-center gap-3 text-white shrink-0">
-                <button type="button" onClick={() => navigate('/account')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/account' ? 'bg-white/20' : ''}`}>
+                <button type="button" onClick={() => navigate(currentUser ? '/account' : '/signin')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/account' || currentPath === '/signin' ? 'bg-white/20' : ''}`}>
                   <User className="w-5 h-5" />
                 </button>
                 <button type="button" onClick={() => navigate('/cart')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/cart' ? 'bg-white/20' : ''}`}>
