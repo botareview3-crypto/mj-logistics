@@ -20,7 +20,7 @@ function ToastOverlay() {
         <div key={toast.id} className={`flex items-center gap-3 px-4 py-3 rounded-xl shadow-xl text-xs sm:text-sm font-bold border animate-in slide-in-from-bottom-5 duration-200 ${toast.type === 'success' ? 'bg-emerald-900 text-white border-emerald-700' : toast.type === 'error' ? 'bg-rose-900 text-white border-rose-700' : 'bg-slate-900 text-white border-slate-700'}`}>
           {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
           {toast.type === 'error' && <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />}
-          {(toast.type === 'info' || toast.type === 'warning') && <Info className="w-4 h-4 text-sky-400 shrink-0" />}
+          {(toast.type === 'info' || toast.type === 'warning') && <Info className="w-4 h-4 text-[#0ea5e9] shrink-0" />}
           <span>{toast.message}</span>
           <button type="button" onClick={() => removeToast(toast.id)} className="ml-1 text-white/60 hover:text-white cursor-pointer"><X className="w-3.5 h-3.5" /></button>
         </div>
@@ -42,7 +42,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   // landing page additionally goes full-bleed (no max-w wrapper) so its
   // hero can run edge-to-edge; MJ Mining keeps the contained width its
   // existing sections were built for.
-  const MARKETING_PATHS = ['/', '/mining'];
+  const MARKETING_PATHS = ['/', '/mining', '/divisions', '/advantages'];
   const isMarketingPage = MARKETING_PATHS.includes(router.pathname);
   const isFullBleed = router.pathname === '/';
   const [siteSettings, setSiteSettings] = React.useState({ maintenance_mode: false, announcement: '' });
@@ -55,7 +55,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   }, [apiBase]);
 
   if (siteSettings.maintenance_mode && typeof window !== 'undefined' && window.location.pathname !== '/admin') {
-    return <div className="min-h-screen bg-slate-100 px-5 flex items-center justify-center"><div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm"><Wrench className="mx-auto h-8 w-8 text-[#0077c7]" /><h1 className="mt-4 text-2xl font-bold text-slate-900">We&apos;re updating the catalogue</h1><p className="mt-2 text-sm leading-6 text-slate-600">{siteSettings.announcement || 'Please check back shortly.'}</p></div></div>;
+    return <div className="min-h-screen bg-slate-100 px-5 flex items-center justify-center"><div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm"><Wrench className="mx-auto h-8 w-8 text-[#0056b3]" /><h1 className="mt-4 text-2xl font-bold text-slate-900">We&apos;re updating the catalogue</h1><p className="mt-2 text-sm leading-6 text-slate-600">{siteSettings.announcement || 'Please check back shortly.'}</p></div></div>;
   }
 
   // The admin console and /signin are separate, chrome-free experiences —
@@ -63,7 +63,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   // admin.tsx; /signin builds its own tiny logo/back-link inline.
   if (isBareChrome) {
     return (
-      <div className="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased selection:bg-[#0077C7] selection:text-white">
+      <div className="min-h-screen bg-slate-100 font-sans text-slate-800 antialiased selection:bg-[#0056b3] selection:text-white">
         <Component {...pageProps} />
         <ToastOverlay />
       </div>
@@ -72,7 +72,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
 
   if (isMarketingPage) {
     return (
-      <div className="min-h-screen bg-white flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0077C7] selection:text-white">
+      <div className="min-h-screen bg-white flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0056b3] selection:text-white">
         {siteSettings.announcement && <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-xs font-medium text-amber-900">{siteSettings.announcement}</div>}
         <SiteHeader />
         <main className={isFullBleed ? 'flex-1' : 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6'}>
@@ -85,7 +85,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0077C7] selection:text-white">
+    <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0056b3] selection:text-white">
       {siteSettings.announcement && <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-xs font-medium text-amber-900">{siteSettings.announcement}</div>}
       <Header />
       <VehicleSelectorModal />

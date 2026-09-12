@@ -42,8 +42,8 @@ export const Footer: React.FC = () => {
           {/* Brand */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#0077C7] flex items-center justify-center text-white"><Wrench className="w-4 h-4 transform -rotate-12" /></div>
-              <span className="text-xl font-black text-white tracking-tight">MJ <span className="text-[#0077C7]">LOGISTICS</span></span>
+              <div className="w-8 h-8 rounded-lg bg-[#0056b3] flex items-center justify-center text-white"><Wrench className="w-4 h-4 transform -rotate-12" /></div>
+              <span className="text-xl font-black text-white tracking-tight">MJ <span className="text-[#0056b3]">LOGISTICS</span></span>
             </div>
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">Industrial-grade automotive spare parts & accessories catalog. Built for DIY car enthusiasts and professional garage technicians demanding verified fitment, genuine OE brands, and rapid dispatch.</p>
             <div className="space-y-2 pt-2 text-xs">
@@ -83,8 +83,8 @@ export const Footer: React.FC = () => {
               <div className="p-2.5 bg-emerald-950/60 border border-emerald-800 text-emerald-300 rounded-lg text-xs flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /><span>You are subscribed!</span></div>
             ) : (
               <form onSubmit={handleNewsletter} className="space-y-2">
-                <input type="email" value={newsletterEmail} onChange={e => setNewsletterEmail(e.target.value)} placeholder="Enter workshop or personal email" className="w-full px-3 py-2 text-xs bg-slate-800 border border-slate-700 rounded-lg text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#0077C7]" required />
-                <button type="submit" className="w-full py-2 px-3 bg-[#0077C7] hover:bg-[#0060A1] text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer"><Send className="w-3 h-3" /><span>Subscribe</span></button>
+                <input type="email" value={newsletterEmail} onChange={e => setNewsletterEmail(e.target.value)} placeholder="Enter workshop or personal email" className="w-full px-3 py-2 text-xs bg-slate-800 border border-slate-700 rounded-lg text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#0056b3]" required />
+                <button type="submit" className="w-full py-2 px-3 bg-[#0056b3] hover:bg-[#004494] text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer"><Send className="w-3 h-3" /><span>Subscribe</span></button>
               </form>
             )}
           </div>
