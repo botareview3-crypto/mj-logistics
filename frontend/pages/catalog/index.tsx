@@ -9,9 +9,9 @@ const iconMap: Record<string, React.ElementType> = { Disc, CircleDot, Gauge, Sli
 // Alternating visual treatment per root — cycles if there are more roots
 // than presets defined, so a newly added root always renders sensibly.
 const ROOT_STYLES = [
-  { labelColor: 'text-sky-600', iconBg: 'bg-sky-50', iconText: 'text-[#0077C7]', hoverBorder: 'hover:border-[#0077C7]', chipHover: 'hover:bg-sky-50 hover:text-[#0077C7] hover:border-sky-200', linkColor: 'text-[#0077C7] hover:text-[#0060A1]', unit: 'Parts available', cta: 'View System', fallbackIcon: Disc },
-  { labelColor: 'text-amber-600', iconBg: 'bg-amber-50', iconText: 'text-amber-700', hoverBorder: 'hover:border-amber-400', chipHover: 'hover:bg-amber-50 hover:text-amber-800 hover:border-amber-200', linkColor: 'text-amber-700 hover:text-amber-800', unit: 'Items available', cta: 'View Equipment', fallbackIcon: Wrench },
-  { labelColor: 'text-emerald-600', iconBg: 'bg-emerald-50', iconText: 'text-emerald-700', hoverBorder: 'hover:border-emerald-400', chipHover: 'hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200', linkColor: 'text-emerald-700 hover:text-emerald-800', unit: 'Items available', cta: 'View Shop', fallbackIcon: Package },
+  { labelColor: 'text-[#0077C7]', iconBg: 'bg-sky-50', iconText: 'text-[#0077C7]', hoverBorder: 'hover:border-[#0077C7]', chipHover: 'hover:bg-sky-50 hover:text-[#0077C7] hover:border-sky-200', linkColor: 'text-[#0077C7] hover:text-[#0060A1]', unit: 'Parts available', cta: 'View System', fallbackIcon: Disc },
+  { labelColor: 'text-[#1769aa]', iconBg: 'bg-blue-50', iconText: 'text-[#1769aa]', hoverBorder: 'hover:border-[#1769aa]', chipHover: 'hover:bg-blue-50 hover:text-[#1769aa] hover:border-blue-200', linkColor: 'text-[#1769aa] hover:text-[#0b4f86]', unit: 'Items available', cta: 'View Equipment', fallbackIcon: Wrench },
+  { labelColor: 'text-[#315f91]', iconBg: 'bg-indigo-50', iconText: 'text-[#315f91]', hoverBorder: 'hover:border-[#315f91]', chipHover: 'hover:bg-indigo-50 hover:text-[#315f91] hover:border-indigo-200', linkColor: 'text-[#315f91] hover:text-[#24486e]', unit: 'Items available', cta: 'View Shop', fallbackIcon: Package },
 ];
 
 export default function CatalogIndexPage() {
@@ -21,10 +21,13 @@ export default function CatalogIndexPage() {
     <div className="space-y-8 pb-12">
       <Breadcrumbs items={[{ label: 'Catalog Index' }]} />
 
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs space-y-2">
-        <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0077C7] text-xs font-bold uppercase tracking-wider"><Package className="w-3.5 h-3.5" /><span>Full Product Hierarchy</span></div>
-        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Everything We Carry</h1>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-3xl">Browse every shop, category, and sub-category across the full catalog.</p>
+      <div className="relative overflow-hidden rounded-3xl bg-[#071a33] p-7 text-white shadow-xl sm:p-10">
+        <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#1689d8]/30 blur-3xl" />
+        <div className="relative space-y-3">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-300/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-sky-200"><Package className="w-3.5 h-3.5" /><span>Full Product Hierarchy</span></div>
+          <h1 className="text-3xl font-black tracking-tight sm:text-5xl">Find the system behind the solution.</h1>
+          <p className="max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">Browse automotive, industrial, and equipment categories through a clear path from system to compatible part.</p>
+        </div>
       </div>
 
       {CATEGORY_ROOTS.map((root, idx) => {

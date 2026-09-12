@@ -33,18 +33,18 @@ export default function SystemCategoryPage() {
     <div className="space-y-8 pb-12">
       <Breadcrumbs items={[{ label: root?.name || 'Catalog', path: '/catalog' }, { label: system.name }]} />
 
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-br from-[#071a33] to-[#0d4c7f] rounded-2xl border border-sky-900 p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-white">
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-sky-50 text-[#0077C7] border border-sky-100 flex items-center justify-center shrink-0 shadow-xs"><IconComponent className="w-7 h-7" /></div>
+          <div className="w-14 h-14 rounded-2xl bg-white/10 text-sky-200 border border-white/15 flex items-center justify-center shrink-0 shadow-xs"><IconComponent className="w-7 h-7" /></div>
           <div className="space-y-1">
             <div className="text-xs font-bold text-[#0077C7] uppercase tracking-wider">{root?.name}</div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{system.name}</h1>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">{system.description}</p>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">{system.name}</h1>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl">{system.description}</p>
           </div>
         </div>
-        <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-right shrink-0 w-full md:w-auto">
-          <span className="text-xs text-slate-400 block font-medium">Subsystems</span>
-          <span className="text-xl font-extrabold text-slate-900">{system.subsystems.length} Assemblies</span>
+        <div className="bg-white/10 border border-white/15 rounded-xl px-4 py-3 text-right shrink-0 w-full md:w-auto">
+          <span className="text-xs text-sky-200 block font-medium">Subsystems</span>
+          <span className="text-xl font-extrabold">{system.subsystems.length} Assemblies</span>
         </div>
       </div>
 

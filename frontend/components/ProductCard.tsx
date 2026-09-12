@@ -25,7 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
 
   if (viewMode === 'list') {
     return (
-      <div onClick={handleCardClick} className="bg-white rounded-xl border border-slate-200 hover:border-[#0077C7] hover:shadow-md transition-all p-4 flex flex-col sm:flex-row items-center gap-4 cursor-pointer group">
+      <div onClick={handleCardClick} className="bg-white rounded-2xl border border-slate-200 hover:border-[#0077C7] hover:shadow-xl transition-all p-4 flex flex-col sm:flex-row items-center gap-4 cursor-pointer group">
         <div className="w-full sm:w-40 h-36 bg-slate-50 rounded-lg overflow-hidden border border-slate-100 shrink-0 relative flex items-center justify-center p-2">
           <img src={part.images[0]} alt={part.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
           {part.isBestSeller && <span className="absolute top-2 left-2 bg-amber-500 text-white font-bold text-[10px] uppercase px-1.5 py-0.5 rounded-xs tracking-wider">Top Seller</span>}
@@ -50,8 +50,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
               <span className="text-xl font-extrabold text-slate-900">${part.price.toFixed(2)}</span>
               {part.originalPrice && <span className="text-xs text-slate-400 line-through">${part.originalPrice.toFixed(2)}</span>}
             </div>
-            <div className="text-[11px] text-emerald-700 font-semibold flex items-center sm:justify-end gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /><span>In Stock ({part.stockCount} available)</span>
+            <div className="text-[11px] text-[#1769aa] font-semibold flex items-center sm:justify-end gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1689d8]" /><span>In Stock ({part.stockCount} available)</span>
             </div>
           </div>
           <button onClick={handleAddToCart} className={`w-full py-2 px-3 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0077C7] hover:bg-[#0060A1] text-white shadow-xs'}`}>
@@ -63,7 +63,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
   }
 
   return (
-    <div onClick={handleCardClick} className="bg-white rounded-xl border border-slate-200 hover:border-[#0077C7] hover:shadow-md transition-all flex flex-col justify-between cursor-pointer group relative overflow-hidden">
+    <div onClick={handleCardClick} className="bg-white rounded-2xl border border-slate-200 hover:border-[#0077C7] hover:shadow-xl transition-all flex flex-col justify-between cursor-pointer group relative overflow-hidden">
       <div className="relative p-3 bg-slate-50/70 border-b border-slate-100 flex items-center justify-center h-44 overflow-hidden">
         <img src={part.images[0]} alt={part.name} className="max-h-36 max-w-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
@@ -92,8 +92,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
                 <span className="text-base sm:text-lg font-black text-slate-900">${part.price.toFixed(2)}</span>
                 {part.originalPrice && <span className="text-xs text-slate-400 line-through">${part.originalPrice.toFixed(2)}</span>}
               </div>
-              <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /><span>In Stock ({part.stockCount} pcs)</span>
+              <div className="text-[10px] text-[#1769aa] font-medium flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1689d8]" /><span>In Stock ({part.stockCount} pcs)</span>
               </div>
             </div>
             <div className="text-[10px] text-slate-500 text-right"><span>Delivery:</span><strong className="block text-slate-700 font-semibold">1-2 days</strong></div>

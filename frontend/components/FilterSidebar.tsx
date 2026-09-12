@@ -54,7 +54,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({ availableParts, fi
         {activeVehicle ? (
           <label className="flex items-start gap-2.5 cursor-pointer mt-1 pt-1 border-t border-slate-200/80">
             <input type="checkbox" checked={filters.onlyFitsVehicle} onChange={e => onFilterChange({ ...filters, onlyFitsVehicle: e.target.checked })} className="mt-0.5 rounded-sm text-[#0077C7] focus:ring-[#0077C7] cursor-pointer" />
-            <div className="text-xs"><span className="font-bold text-slate-900 block leading-tight">Only parts that fit my:</span><span className="text-emerald-700 font-bold block mt-0.5">✓ {activeVehicle.make} {activeVehicle.model} ({activeVehicle.engine.split(' ')[0]})</span></div>
+            <div className="text-xs"><span className="font-bold text-slate-900 block leading-tight">Only parts that fit my:</span><span className="text-[#1769aa] font-bold block mt-0.5">✓ {activeVehicle.make} {activeVehicle.model} ({activeVehicle.engine.split(' ')[0]})</span></div>
           </label>
         ) : (
           <div className="text-xs text-slate-600 space-y-2 pt-1">

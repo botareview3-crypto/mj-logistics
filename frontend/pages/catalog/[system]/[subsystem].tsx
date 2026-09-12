@@ -71,11 +71,11 @@ export default function SubsystemPage() {
 
       {/* Vehicle banner */}
       {activeVehicle ? (
-        <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+        <div className="bg-sky-50 border border-sky-200 rounded-xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-800 flex items-center justify-center shrink-0"><CheckCircle2 className="w-5 h-5 text-emerald-600" /></div>
+            <div className="w-9 h-9 rounded-lg bg-white border border-sky-200 text-[#0077C7] flex items-center justify-center shrink-0"><CheckCircle2 className="w-5 h-5 text-[#0077C7]" /></div>
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Fitment Guaranteed for:</div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-[#0060A1]">Fitment Guaranteed for:</div>
               <div className="text-sm font-black text-slate-900">{activeVehicle.year} {activeVehicle.make} {activeVehicle.model} ({activeVehicle.engine})</div>
               <div className="text-[11px] text-slate-600 font-mono">{activeVehicle.regNumber ? `Plate: ${activeVehicle.regNumber} • ` : ''}Engine Code: {activeVehicle.engineCode || 'OE'}</div>
             </div>
@@ -104,7 +104,7 @@ export default function SubsystemPage() {
             <div className="flex items-center gap-2">
               <button type="button" onClick={() => setIsMobileFilterOpen(true)} className="md:hidden px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-lg border border-slate-300 flex items-center gap-1.5 cursor-pointer"><SlidersHorizontal className="w-3.5 h-3.5" /><span>Filters</span></button>
               <span className="text-xs font-semibold text-slate-700">Showing <strong className="text-slate-900 font-black">{filteredParts.length}</strong> {filteredParts.length === 1 ? 'part' : 'parts'}</span>
-              {filters.onlyFitsVehicle && activeVehicle && <span className="hidden sm:inline-block px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-sm">✓ Verified Compatible Only</span>}
+              {filters.onlyFitsVehicle && activeVehicle &&               <span className="hidden sm:inline-block px-2 py-0.5 bg-sky-100 text-[#0060A1] text-[10px] font-bold rounded-sm">✓ Verified Compatible Only</span>}
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 text-xs text-slate-600">

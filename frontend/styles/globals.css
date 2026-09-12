@@ -3,11 +3,11 @@
 @layer base {
   :root {
     /* Professional unified color palette inspired by Onstream Media */
-    --primary: #0056b3;
-    --primary-dark: #004494;
-    --primary-light: #e8f4fd;
-    --dark-blue: #0a2540;
-    --accent: #0ea5e9;
+    --primary: #006fc4;
+    --primary-dark: #07508d;
+    --primary-light: #eaf6ff;
+    --dark-blue: #071a33;
+    --accent: #55b8ff;
     --white: #ffffff;
     --gray-100: #f8fafc;
     --gray-200: #e2e8f0;
@@ -19,7 +19,7 @@
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     color: var(--gray-700);
-    background-color: var(--white);
+    background-color: #f4f8fc;
   }
 
   code, pre, .font-mono {

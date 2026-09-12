@@ -86,7 +86,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0056b3] selection:text-white">
+    <div className="min-h-screen bg-[#f4f8fc] flex flex-col font-sans text-slate-800 antialiased selection:bg-[#006fc4] selection:text-white">
       {siteSettings.announcement && <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-xs font-medium text-amber-900">{siteSettings.announcement}</div>}
       <Header />
       <VehicleSelectorModal />
