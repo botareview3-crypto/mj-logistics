@@ -1,292 +1,293 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
-import { ArrowUpRight, ChevronRight, Zap, ShieldCheck, Globe, Package, CheckCircle2, ArrowUp } from 'lucide-react';
+import { motion, useReducedMotion, type Transition } from 'motion/react';
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  ChevronRight,
+  CircleArrowOutUpRight,
+  Factory,
+  Gem,
+  Menu,
+  ShieldCheck,
+  Truck,
+  Wrench,
+} from 'lucide-react';
 import { useApp } from '../lib/AppContext';
-import { useScrollAnimation } from '../lib/useScrollAnimation';
 
-// Completely redesigned landing page inspired by Onstream Media
-// Replicating their layout, animations, imagery style, and structure
-// Adapted for MJ Logistics Enterprise content
+const IMAGE_URLS = {
+  hero: 'https://images.unsplash.com/photo-1487754180451-c456f71a1f72?auto=format&fit=crop&w=2200&q=85',
+  parts: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=85',
+  industry: 'https://images.unsplash.com/photo-1565610222536-ef125c59da2e?auto=format&fit=crop&w=1400&q=85',
+  mining: 'https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=1400&q=85',
+  detail: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1800&q=85',
+};
 
-const FEATURES = [
-  { 
-    icon: Zap, 
-    title: 'Fast Delivery', 
-    subtitle: 'Parts delivered within 24-48 hours',
-    description: 'Tracked local courier service'
-  },
-  { 
-    icon: ShieldCheck, 
-    title: 'Verified Quality', 
-    subtitle: '2-Year Warranty on all parts',
-    description: 'OEM cross-reference system'
-  },
-  { 
-    icon: Globe, 
-    title: 'Global Sourcing', 
-    subtitle: '13 Vehicle Makes Supported',
-    description: 'International manufacturers'
-  }
-];
-
-const SERVICES = [
+const SOLUTIONS = [
   {
     title: 'Auto Parts',
-    subtitle: 'Vehicle-first parts catalog',
-    description: 'Vehicle-first parts catalogue spanning car parts, workshop accessories, and business equipment — filtered to what actually fits before you order.',
-    features: ['Verified OEM Parts', 'Fitment Guarantee', '30-Day Returns']
+    eyebrow: 'Parts marketplace',
+    description: 'Find dependable parts with vehicle fitment at the centre of every search.',
+    image: IMAGE_URLS.parts,
+    icon: Wrench,
+    href: '/shop',
+    action: 'Shop parts',
   },
   {
-    title: 'Industrial Equipment',
-    subtitle: 'Business-grade solutions',
-    description: 'Comprehensive industrial equipment and supplies for manufacturing, construction, and business operations.',
-    features: ['Bulk Ordering', 'Corporate Accounts', 'Technical Support']
+    title: 'Industrial Supply',
+    eyebrow: 'Business equipment',
+    description: 'Practical equipment and sourcing support for workshops and growing operations.',
+    image: IMAGE_URLS.industry,
+    icon: Factory,
+    href: '/catalog',
+    action: 'Explore equipment',
   },
   {
-    title: 'Mining Operations',
-    subtitle: 'Diamond and Gold extraction',
-    description: 'Diamond and gold mining operations built on responsible extraction, transparent sourcing, and long-term partnership with the communities we operate in.',
-    features: ['Responsible Sourcing', 'Quality Grading', 'Ethical Operations']
-  }
+    title: 'MJ Mining',
+    eyebrow: 'Natural resources',
+    description: 'A focused mining operation built around long-term partnerships and opportunity.',
+    image: IMAGE_URLS.mining,
+    icon: Gem,
+    href: '/mining',
+    action: 'Discover mining',
+  },
 ];
 
-const CAPABILITIES = [
-  { title: 'Verified Parts', subtitle: 'OEM Cross-Reference', description: 'Every part checked against real vehicle fitment data before it ships.' },
-  { title: 'Fast Delivery', subtitle: '24-48 Hour Dispatch', description: 'Reliable delivery updates with tracked local courier service.' },
-  { title: 'Expert Support', subtitle: 'Technical Assistance', description: 'Expert analysis and support for all your parts and equipment needs.' },
-  { title: 'Secure Checkout', subtitle: '256-Bit SSL Encrypted', description: 'Industry-standard security measures for all transactions.' },
-  { title: 'Bulk Ordering', subtitle: 'Corporate Solutions', description: 'Special pricing and support for business accounts and bulk orders.' },
-  { title: 'Global Network', subtitle: 'International Sourcing', description: 'Access to parts and equipment from manufacturers worldwide.' }
-];
+const REVEAL = {
+  hidden: { opacity: 0, y: 36 },
+  visible: { opacity: 1, y: 0 },
+};
+const REVEAL_TRANSITION: Transition = {
+  duration: 0.7,
+  ease: [0.22, 1, 0.36, 1],
+};
 
 export default function LandingPage() {
   const { navigate } = useApp();
+  const reduceMotion = useReducedMotion();
 
-  const heroRef = useScrollAnimation(0.1);
-  const featuresRef = useScrollAnimation(0.1);
-  const expertsRef = useScrollAnimation(0.1);
-  const realtimeRef = useScrollAnimation(0.1);
-  const servicesRef = useScrollAnimation(0.1);
-  const ctaRef = useScrollAnimation(0.1);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  const revealProps = (delay = 0) => ({
+    variants: REVEAL,
+    initial: reduceMotion ? 'visible' : 'hidden',
+    whileInView: 'visible',
+    viewport: { once: true, amount: 0.2 },
+    transition: { ...REVEAL_TRANSITION, delay },
+  });
 
   return (
-    <div>
+    <div className="overflow-hidden bg-[#f4f6f3] text-[#10211b]">
       <Head>
-        <title>MJ Logistics Enterprise | Parts marketplace &amp; MJ Mining</title>
-        <meta name="description" content="MJ Logistics Enterprise runs a verified auto and industrial parts marketplace and MJ Mining, a diamond and gold operation. Browse freely — sign in only when you're ready to buy." />
+        <title>MJ Logistics Enterprise | Built for the road ahead</title>
+        <meta
+          name="description"
+          content="MJ Logistics Enterprise connects automotive, industrial, and mining opportunities through dependable service."
+        />
       </Head>
 
-      {/* Hero Section - Onstream Media Style */}
-      <section className="relative bg-[#0a2540] overflow-hidden min-h-screen flex items-center">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '56px 56px' }} />
-        
-        {/* Animated cut-out elements */}
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="absolute w-32 h-32 bg-[#0056b3]/10 rounded-full blur-2xl pointer-events-none floating-element"
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${30 + (i % 2) * 20}%`,
-              animationDelay: `${i * 0.5}s`
-            }}
-          />
-        ))}
+      <section className="relative min-h-[720px] bg-[#10211b] text-white lg:min-h-[810px]">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-60"
+          style={{ backgroundImage: `url(${IMAGE_URLS.hero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#10211b] via-[#10211b]/80 to-[#10211b]/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#10211b] via-transparent to-[#10211b]/20" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div ref={heroRef.ref} className={`animate-on-scroll ${heroRef.isVisible ? 'visible' : ''}`}>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#0ea5e9] mb-4">
-              Simple & Reliable Parts Solutions
+        <div className="relative mx-auto flex min-h-[720px] max-w-7xl flex-col justify-between px-5 py-10 sm:px-8 lg:min-h-[810px] lg:px-12">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="group flex items-center gap-3 text-left"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d6f36a] text-[#10211b] transition-transform duration-300 group-hover:rotate-12">
+                <Wrench className="h-5 w-5 -rotate-12" />
+              </span>
+              <span className="text-sm font-bold uppercase tracking-[0.18em]">
+                MJ Logistics
+                <span className="block text-[10px] font-medium tracking-[0.3em] text-white/60">Enterprise</span>
+              </span>
+            </button>
+            <div className="hidden items-center gap-8 text-sm font-medium text-white/75 lg:flex">
+              <button type="button" onClick={() => navigate('/shop')} className="transition-colors hover:text-[#d6f36a]">Marketplace</button>
+              <button type="button" onClick={() => navigate('/mining')} className="transition-colors hover:text-[#d6f36a]">MJ Mining</button>
+              <button type="button" onClick={() => navigate('/divisions')} className="transition-colors hover:text-[#d6f36a]">About</button>
+              <button type="button" onClick={() => navigate('/contact')} className="transition-colors hover:text-[#d6f36a]">Contact</button>
+            </div>
+            <button type="button" onClick={() => navigate('/shop')} className="hidden items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-sm font-bold transition-colors hover:border-[#d6f36a] hover:bg-[#d6f36a] hover:text-[#10211b] lg:flex">
+              Enter marketplace <ArrowUpRight className="h-4 w-4" />
+            </button>
+            <button type="button" onClick={() => navigate('/shop')} aria-label="Open marketplace" className="rounded-full border border-white/30 p-3 lg:hidden">
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
+
+          <motion.div {...revealProps()} className="max-w-4xl pb-8 pt-24 lg:pb-16">
+            <p className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-[#d6f36a]">
+              <span className="h-px w-10 bg-[#d6f36a]" />
+              Moving business forward
             </p>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.1] mb-6">
-              Parts simplified
+            <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.06em] sm:text-7xl lg:text-[clamp(5rem,9vw,9rem)]">
+              Built for the
+              <span className="block text-[#d6f36a]">road ahead.</span>
             </h1>
-            
-            {/* Animated word */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {['Fast', 'Verified', 'Reliable'].map((word, i) => (
-                <span key={word} className="text-2xl sm:text-4xl font-bold text-white/80 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
-                  {word}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-12 flex flex-wrap gap-4">
-              <button type="button" onClick={() => navigate('/shop')} className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0a2540] font-bold text-lg hover:bg-slate-100 transition-all transform hover:scale-105 cursor-pointer">
-                <span>Explore Marketplace</span>
-                <ArrowUpRight className="w-5 h-5" />
+            <p className="mt-8 max-w-xl text-base leading-7 text-white/75 sm:text-lg">
+              Parts, equipment, and opportunities for the people and businesses that keep progress moving.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <button type="button" onClick={() => navigate('/shop')} className="group inline-flex items-center gap-3 rounded-full bg-[#d6f36a] px-6 py-3.5 text-sm font-black text-[#10211b] transition-transform hover:-translate-y-1">
+                Explore the marketplace
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </button>
-              <button type="button" onClick={() => navigate('/mining')} className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-bold text-lg hover:bg-white/10 transition-all cursor-pointer">
-                <span>MJ Mining</span>
+              <button type="button" onClick={() => navigate('/mining')} className="inline-flex items-center gap-3 rounded-full border border-white/35 px-6 py-3.5 text-sm font-bold text-white transition-colors hover:border-white hover:bg-white/10">
+                Explore MJ Mining
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
 
-        {/* Floating cut-out shapes */}
-        <div className="absolute bottom-10 right-10 hidden lg:block">
-          <div className="relative w-48 h-48">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0056b3]/20 to-[#0ea5e9]/20 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute top-4 right-4 w-16 h-16 bg-white/10 rounded-full backdrop-blur-sm" />
-            <div className="absolute bottom-8 left-8 w-12 h-12 bg-[#0ea5e9]/20 rounded-full backdrop-blur-sm" />
+          <div className="flex items-end justify-between border-t border-white/20 pt-5 text-xs uppercase tracking-[0.18em] text-white/55">
+            <span>Ethiopia / East Africa</span>
+            <span className="hidden sm:block">01 — 05</span>
+            <span className="flex items-center gap-2"><ArrowDownRight className="h-4 w-4 text-[#d6f36a]" /> Scroll to explore</span>
           </div>
         </div>
       </section>
 
-      {/* Feature Highlights - Onstream Media Style */}
-      <section className="bg-white py-16">
-        <div ref={featuresRef.ref} className={`animate-on-scroll ${featuresRef.isVisible ? 'visible' : ''} max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {FEATURES.map((feature, index) => (
-              <div key={feature.title} className="text-center group">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-[#0a2540] rounded-2xl mb-4 group-hover:bg-[#0056b3] transition-colors">
-                  <feature.icon className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-2">{feature.title}</h3>
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <ArrowUp className="w-4 h-4 text-[#0056b3]" />
-                  <p className="text-3xl font-black text-slate-900">{feature.subtitle}</p>
-                </div>
-                <p className="text-sm text-slate-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
+      <section className="bg-[#d6f36a] px-5 py-5 sm:px-8 lg:px-12">
+        <div className="mx-auto grid max-w-7xl gap-4 text-sm font-bold sm:grid-cols-3 sm:gap-8">
+          {['Parts that fit', 'Business-ready supply', 'Long-term partnerships'].map((item, index) => (
+            <motion.div key={item} {...revealProps(index * 0.08)} className="flex items-center gap-3">
+              <span className="text-xs opacity-50">0{index + 1}</span>
+              <span>{item}</span>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Experts Section - Onstream Media Style */}
-      <section className="bg-[#0a2540] py-20">
-        <div ref={expertsRef.ref} className={`animate-on-scroll ${expertsRef.isVisible ? 'visible' : ''} max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#0ea5e9] mb-4">Experts</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white">
-              Parts & Mining <span className="text-[#0ea5e9]">Excellence</span>
-            </h2>
-            <p className="text-xl text-white/70 mt-4">Since establishment</p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <p className="text-lg text-slate-300 leading-relaxed text-center">
-              MJ Logistics Enterprise has spent years building reliable, user-friendly solutions that industry leaders trust. Our parts marketplace and mining operations aren't just services—they're your ticket to partnering with experts who deliver verified quality and responsible sourcing. With MJ Logistics, you're not just buying parts or materials; you're tapping into a legacy of innovation and excellence.
-            </p>
-            
-            <div className="mt-8 flex justify-center">
-              <button type="button" onClick={() => navigate('/shop')} className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0a2540] font-bold text-lg hover:bg-slate-100 transition-all cursor-pointer">
-                <span>Explore</span>
-                <ArrowUpRight className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Real-Time Section - Onstream Media Style */}
-      <section className="bg-white py-20">
-        <div ref={realtimeRef.ref} className={`animate-on-scroll ${realtimeRef.isVisible ? 'visible' : ''} max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#0056b3] mb-4">Reliable</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-900">
-              Scalable, Verified, <span className="text-[#0056b3]">Measurable.</span>
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12 lg:py-36">
+        <motion.div {...revealProps()} className="mb-14 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div>
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#58705f]">What we do</p>
+            <h2 className="max-w-3xl text-4xl font-black leading-none tracking-[-0.05em] sm:text-6xl">
+              Three ways to
+              <span className="text-[#58705f]"> move forward.</span>
             </h2>
           </div>
-
-          <div className="max-w-4xl mx-auto">
-            <p className="text-lg text-slate-600 leading-relaxed text-center">
-              Our cutting-edge parts and mining solutions are designed to meet the evolving demands of modern industry. Scalable to accommodate orders of any size, our platform effortlessly adapts to fluctuating demand, ensuring smooth performance during peak times. With verification at its core, our service delivers high-quality parts and materials across all categories. Perhaps most importantly, our solutions are inherently <span className="font-bold text-[#0056b3]">Measurable</span>, providing comprehensive tracking and insights. This data-driven approach allows you to monitor orders, analyze fitment accuracy, and make informed decisions to optimize your procurement strategies for maximum impact and efficiency.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section - Onstream Media Style */}
-      <section className="bg-slate-50 py-20">
-        <div ref={servicesRef.ref} className={`animate-on-scroll ${servicesRef.isVisible ? 'visible' : ''} max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
-          <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#0056b3] mb-4">Services</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-slate-900">
-              Your Simple, Reliable, and <span className="text-[#0056b3]">Verified</span> Solution
-            </h2>
-            <p className="text-lg text-slate-600 mt-4 max-w-2xl mx-auto">
-              For Auto Parts, Industrial Equipment, and Mining Operations
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {SERVICES.map((service, index) => (
-              <div key={service.title} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-12 h-12 bg-[#0a2540] rounded-xl flex items-center justify-center">
-                    <Package className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">{service.title}</h3>
-                    <p className="text-sm text-slate-500">{service.subtitle}</p>
-                  </div>
-                </div>
-                
-                <p className="text-slate-600 mb-6 leading-relaxed">{service.description}</p>
-                
-                <div className="space-y-2 mb-6">
-                  {service.features.map((feature) => (
-                    <div key={feature} className="flex items-center gap-2 text-sm text-slate-700">
-                      <CheckCircle2 className="w-4 h-4 text-[#0056b3]" />
-                      <span>{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <button 
-                  type="button" 
-                  onClick={() => index === 2 ? navigate('/mining') : navigate('/shop')}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0a2540] text-white font-bold rounded-lg hover:bg-[#0056b3] transition-colors cursor-pointer"
-                >
-                  <span>Learn More</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Capabilities Section - Onstream Media Style */}
-      <section className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CAPABILITIES.map((capability, index) => (
-              <div key={capability.title} className="border border-slate-200 rounded-xl p-6 hover:border-[#0056b3] transition-colors">
-                <h3 className="text-lg font-bold text-slate-900 mb-1">{capability.title}</h3>
-                <p className="text-sm font-semibold text-[#0056b3] mb-2">{capability.subtitle}</p>
-                <p className="text-sm text-slate-600 leading-relaxed">{capability.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA - Onstream Media Style */}
-      <section className="bg-[#0056b3] py-20">
-        <div ref={ctaRef.ref} className={`animate-on-scroll ${ctaRef.isVisible ? 'visible' : ''} max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center`}>
-          <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
-            Ready to Elevate Your <span className="text-[#0ea5e9]">Procurement</span> Experience?
-          </h2>
-          <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
-            Join businesses and industry leaders who trust MJ Logistics Enterprise for their reliable, verified, and high-quality auto parts, industrial equipment, and mining materials.
+          <p className="max-w-sm text-base leading-7 text-[#58705f]">
+            A focused enterprise connecting everyday mobility, industrial capability, and natural-resource opportunity.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <button type="button" onClick={() => navigate('/shop')} className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0056b3] font-bold text-lg hover:bg-slate-100 transition-all cursor-pointer">
-              <span>Shop Parts</span>
-              <ArrowUpRight className="w-5 h-5" />
-            </button>
-            <button type="button" onClick={() => navigate('/mining')} className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white text-white font-bold text-lg hover:bg-white/10 transition-all cursor-pointer">
-              <span>MJ Mining</span>
-            </button>
+        </motion.div>
+
+        <div className="grid gap-5 lg:grid-cols-3">
+          {SOLUTIONS.map((solution, index) => (
+            <motion.article
+              key={solution.title}
+              {...revealProps(index * 0.1)}
+              whileHover={reduceMotion ? undefined : { y: -8 }}
+              className="group relative min-h-[490px] overflow-hidden rounded-[2rem] bg-[#10211b] text-white"
+            >
+              <img src={solution.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-85" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#10211b] via-[#10211b]/50 to-transparent" />
+              <div className="relative flex h-full flex-col justify-between p-7 sm:p-8">
+                <div className="flex items-center justify-between">
+                  <span className="rounded-full border border-white/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em]">{solution.eyebrow}</span>
+                  <solution.icon className="h-6 w-6 text-[#d6f36a]" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-black tracking-[-0.04em]">{solution.title}</h3>
+                  <p className="mt-3 max-w-xs text-sm leading-6 text-white/70">{solution.description}</p>
+                  <button type="button" onClick={() => navigate(solution.href)} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#d6f36a]">
+                    {solution.action} <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-[#10211b] text-white">
+        <div className="mx-auto grid max-w-7xl lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative min-h-[480px] overflow-hidden lg:min-h-[680px]">
+            <img src={IMAGE_URLS.detail} alt="Industrial equipment in a workshop" className="absolute inset-0 h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#10211b] via-transparent to-transparent" />
+            <div className="absolute bottom-8 left-5 right-5 flex items-end justify-between sm:left-8 sm:right-8">
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#d6f36a]">The MJ standard</span>
+              <span className="text-6xl font-black tracking-[-0.08em] text-white/25">02</span>
+            </div>
+          </div>
+          <div className="flex items-center px-5 py-20 sm:px-10 lg:px-20">
+            <motion.div {...revealProps()}>
+              <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-[#d6f36a]">Simple by design</p>
+              <h2 className="max-w-xl text-4xl font-black leading-[0.98] tracking-[-0.05em] sm:text-6xl">
+                Less searching.
+                <span className="block text-[#d6f36a]">More certainty.</span>
+              </h2>
+              <p className="mt-7 max-w-lg text-base leading-7 text-white/65">
+                Whether you are keeping a vehicle on the road or equipping a growing operation, we make the next step easier to see.
+              </p>
+              <div className="mt-10 grid gap-5 sm:grid-cols-2">
+                {[
+                  ['01', 'Choose what you need', 'Start with a vehicle, category, or business requirement.'],
+                  ['02', 'Move with confidence', 'Use clear product information and direct support.'],
+                ].map(([number, title, description]) => (
+                  <div key={number} className="border-t border-white/20 pt-4">
+                    <span className="text-xs font-bold text-[#d6f36a]">{number}</span>
+                    <h3 className="mt-3 font-bold">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-white/55">{description}</p>
+                  </div>
+                ))}
+              </div>
+              <button type="button" onClick={() => navigate('/shop')} className="mt-10 inline-flex items-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-black text-[#10211b] transition-transform hover:-translate-y-1">
+                Find your next part <ArrowUpRight className="h-4 w-4" />
+              </button>
+            </motion.div>
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12 lg:py-36">
+        <motion.div {...revealProps()} className="grid gap-12 lg:grid-cols-[1fr_1.3fr] lg:items-end">
+          <div>
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#58705f]">Why MJ Logistics</p>
+            <h2 className="max-w-lg text-4xl font-black leading-none tracking-[-0.05em] sm:text-6xl">
+              Built around
+              <span className="text-[#58705f]"> your next move.</span>
+            </h2>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {[
+              [Truck, 'Dependable movement', 'Clear steps from selection to delivery.'],
+              [ShieldCheck, 'Better information', 'Fitment, product, and support details in one place.'],
+              [Factory, 'Built for business', 'Solutions that scale from one part to larger requirements.'],
+              [CircleArrowOutUpRight, 'A direct relationship', 'A team that helps you make practical decisions.'],
+            ].map(([Icon, title, text]) => (
+              <div key={title as string} className="border-t border-[#cbd5cb] pt-5">
+                <Icon className="h-6 w-6 text-[#58705f]" />
+                <h3 className="mt-5 font-bold">{title as string}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#58705f]">{text as string}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="bg-[#d6f36a] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <motion.div {...revealProps()} className="mx-auto flex max-w-7xl flex-col justify-between gap-10 lg:flex-row lg:items-end">
+          <div>
+            <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-[#58705f]">Start here</p>
+            <h2 className="max-w-3xl text-5xl font-black leading-[0.92] tracking-[-0.06em] sm:text-7xl">
+              Ready for the next move?
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <button type="button" onClick={() => navigate('/shop')} className="inline-flex items-center gap-3 rounded-full bg-[#10211b] px-6 py-3.5 text-sm font-black text-white transition-transform hover:-translate-y-1">
+              Visit marketplace <ArrowUpRight className="h-4 w-4" />
+            </button>
+            <button type="button" onClick={() => navigate('/contact')} className="inline-flex items-center gap-3 rounded-full border border-[#10211b]/30 px-6 py-3.5 text-sm font-bold text-[#10211b] transition-colors hover:bg-white/40">
+              Talk to us <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
+        </motion.div>
       </section>
     </div>
   );

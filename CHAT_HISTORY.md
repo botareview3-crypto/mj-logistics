@@ -6,6 +6,17 @@ transcript, just the gist.
 
 ---
 
+### 2026-09-12
+- Created `LANDING_PAGE.md` with the recommended professional homepage
+  structure, section order, copy direction, calls to action, and quality
+  requirements.
+- Created `OTHER_PAGES.md` covering the frontend page map and recommended UI
+  for the shop, catalog, product, garage, cart, industrial, mining, corporate,
+  contact, authentication, account, and legal pages.
+- Replaced the homepage with an image-led editorial design using the existing
+  `motion` animation library, removed the unwanted Advantages, Divisions, and
+  Request a Quote navigation labels, and removed the generic hero copy.
+
 ### 2026-09-02
 - Set up the project for free deployment on Render: static-exported the
   Next.js frontend (`next.config.js` → `output: 'export'`, `trailingSlash:

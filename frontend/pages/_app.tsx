@@ -45,6 +45,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   const MARKETING_PATHS = ['/', '/mining', '/divisions', '/advantages'];
   const isMarketingPage = MARKETING_PATHS.includes(router.pathname);
   const isFullBleed = router.pathname === '/';
+  const isLandingPage = router.pathname === '/';
   const [siteSettings, setSiteSettings] = React.useState({ maintenance_mode: false, announcement: '' });
   const apiBase = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
 
@@ -74,7 +75,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
     return (
       <div className="min-h-screen bg-white flex flex-col font-sans text-slate-800 antialiased selection:bg-[#0056b3] selection:text-white">
         {siteSettings.announcement && <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-xs font-medium text-amber-900">{siteSettings.announcement}</div>}
-        <SiteHeader />
+        {!isLandingPage && <SiteHeader />}
         <main className={isFullBleed ? 'flex-1' : 'flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6'}>
           <Component {...pageProps} />
         </main>

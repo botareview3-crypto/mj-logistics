@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Wrench, ArrowUpRight, Phone, Search, ShoppingCart, User, ChevronDown, Globe } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 
-// Professional header for corporate/marketing pages with full navigation structure
-// Based on enterprise website standards with utility bar, dropdown navigation, and comprehensive menu
+// Shared navigation for corporate pages. The homepage owns its own editorial
+// navigation; inner marketing pages use this more compact header.
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
@@ -16,9 +16,8 @@ const NAV_ITEMS = [
       { label: 'Mining', href: '/mining', description: 'Diamond & gold responsible sourcing' }
     ]
   },
-  { label: 'Divisions', href: '/divisions' },
-  { label: 'Advantages', href: '/advantages' },
-  { label: 'Request Info', href: '/contact' }
+  { label: 'About', href: '/divisions' },
+  { label: 'Contact', href: '/contact' }
 ];
 
 export const SiteHeader: React.FC = () => {
@@ -165,7 +164,7 @@ export const SiteHeader: React.FC = () => {
                 onClick={() => go('/contact')}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0056b3] hover:bg-[#004494] text-white text-sm font-bold rounded-lg transition-colors cursor-pointer"
               >
-                <span>Get Quote</span>
+                <span>Contact Us</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
@@ -272,7 +271,7 @@ export const SiteHeader: React.FC = () => {
               onClick={() => go('/contact')}
               className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#0056b3] text-white text-sm font-bold rounded-lg cursor-pointer"
             >
-              <span>Get Quote</span>
+              <span>Contact Us</span>
               <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>
