@@ -125,3 +125,27 @@
 .animate-on-scroll.slide-right.visible {
   transform: translateX(0);
 }
+
+.mj-grid-pattern {
+  background-image:
+    linear-gradient(rgba(7, 26, 51, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(7, 26, 51, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+.mj-dot-pattern {
+  background-image: radial-gradient(rgba(0, 119, 199, 0.35) 1.5px, transparent 1.5px);
+  background-size: 15px 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
