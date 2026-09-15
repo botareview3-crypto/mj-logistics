@@ -5,8 +5,23 @@ frontend/node_modules/
 # Build outputs
 .next/
 frontend/.next/
+frontend/out/
 dist/
 build/
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Root-level images folder
+images/
+
+# Generated files
+frontend/tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # Environment files
 .env
