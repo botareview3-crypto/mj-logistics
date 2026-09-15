@@ -1,4 +1,4 @@
-import { Part } from '../types';
+﻿import { Part } from '../types';
 import { CATEGORY_ROOTS } from './categories';
 
 const SEEDED_PARTS: Part[] = [
@@ -24,8 +24,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1600790142055-619df03207e6?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/01-brembo-ceramic-front-brake-pad-set.webp',
     ],
     specs: {
       'Fitting Position': 'Front Axle',
@@ -76,7 +75,7 @@ const SEEDED_PARTS: Part[] = [
     material: 'Semi-Metallic with Rubber Shim',
     isBestSeller: true,
     images: [
-      'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/02-bosch-semi-metallic-rear-brake-pad-set.webp',
     ],
     specs: {
       'Fitting Position': 'Rear Axle',
@@ -125,7 +124,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 46,
     material: 'Eco-Friction Low Copper',
     images: [
-      'https://images.unsplash.com/photo-1600790142055-619df03207e6?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/03-ferodo-eco-friction-front-brake-pads.webp',
     ],
     specs: {
       'Fitting Position': 'Front Axle',
@@ -170,7 +169,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/04-brembo-vented-front-brake-disc-pair.webp',
     ],
     specs: {
       'Fitting Position': 'Front Axle',
@@ -219,7 +218,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 62,
     material: 'High-Carbon Alloy Steel with Endless Groove',
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/05-ate-drilled-sport-front-brake-disc-pair.webp',
     ],
     specs: {
       'Diameter': '312.0 mm',
@@ -264,12 +263,12 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 210,
     isBestSeller: true,
     images: [
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/06-castrol-dot-4-brake-fluid-1l-1.webp',
     ],
     specs: {
       'Specification': 'DOT 4 / ISO 4925 Class 6',
-      'Dry Boiling Point': '265 °C (509 °F)',
-      'Wet Boiling Point': '175 °C (347 °F)',
+      'Dry Boiling Point': '265 Â°C (509 Â°F)',
+      'Wet Boiling Point': '175 Â°C (347 Â°F)',
       'Volume': '1 Litre',
       'Compatibility': 'ABS / ESP / TCS hydraulic circuits',
     },
@@ -313,7 +312,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.8,
     reviewCount: 31,
     images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/07-bosch-brake-pad-wear-sensor-cable.webp',
     ],
     specs: {
       'Fitting Position': 'Front Axle Left',
@@ -350,7 +349,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/08-mann-filter-cartridge-oil-filter.webp',
     ],
     specs: {
       'Filter Type': 'Filter Insert / Cartridge',
@@ -397,7 +396,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.9,
     reviewCount: 165,
     images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/09-mann-filter-cabin-air-filter.webp',
     ],
     specs: {
       'Filter Type': 'Activated Charcoal with Polyphenol Bio-Shield',
@@ -444,7 +443,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.8,
     reviewCount: 77,
     images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/10-mahle-engine-air-filter-element.webp',
     ],
     specs: {
       'Length': '292 mm',
@@ -482,7 +481,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/11-castrol-edge-5w-30-synthetic-engine-oil-5l.webp',
     ],
     specs: {
       'Viscosity Grade': 'SAE 5W-30',
@@ -530,7 +529,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.9,
     reviewCount: 88,
     images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/12-ngk-laser-iridium-spark-plug-pack.webp',
     ],
     specs: {
       'Spanner Size': '16 mm',
@@ -571,7 +570,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.85,
     reviewCount: 52,
     images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/13-bosch-duraterm-diesel-glow-plug-set.webp',
     ],
     specs: {
       'Voltage': '4.4 V',
@@ -580,7 +579,7 @@ const SEEDED_PARTS: Part[] = [
       'Fitting Depth': '30 mm',
     },
     oemNumbers: ['03L963319A', '059963319AB', '059963319C'],
-    description: 'Post-heating glow plugs that reach over 1,000°C in under 2 seconds, ensuring instant cold winter starts without smoke and quieter diesel combustion.',
+    description: 'Post-heating glow plugs that reach over 1,000Â°C in under 2 seconds, ensuring instant cold winter starts without smoke and quieter diesel combustion.',
     fitsVehicles: [
       { make: 'Volkswagen', model: 'Golf', generation: 'Golf Mk7 (5G1, BQ1, BE1, BE2)', yearRange: '2012 - 2020', engineNames: ['1.6 TDI (115 HP)', '2.0 TDI (150 HP)'] },
       { make: 'Audi', model: 'A4', generation: 'A4 B9 (8W2, 8WC, 8W5)', yearRange: '2015 - 2023', engineNames: ['2.0 TDI (150 HP)'] },
@@ -615,7 +614,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/14-bilstein-b4-front-suspension-strut.webp',
     ],
     specs: {
       'Fitting Position': 'Front Axle Left/Right',
@@ -641,8 +640,8 @@ const SEEDED_PARTS: Part[] = [
   {
     id: 'part-lemforder-drop-link',
     sku: '36952 01',
-    name: 'Lemförder Heavy-Duty Front Anti-Roll Stabilizer Link Bar',
-    brand: 'Lemförder',
+    name: 'LemfÃ¶rder Heavy-Duty Front Anti-Roll Stabilizer Link Bar',
+    brand: 'LemfÃ¶rder',
     systemId: 'suspension-steering',
     subsystemId: 'anti-roll-bar-links',
     partType: 'Sway Bar Link',
@@ -655,7 +654,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.8,
     reviewCount: 64,
     images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/15-lemforder-anti-roll-stabilizer-link-bar.webp',
     ],
     specs: {
       'Fitting Position': 'Front Axle Both Sides',
@@ -702,7 +701,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/16-varta-agm-70ah-car-battery.webp',
     ],
     specs: {
       'Capacity': '70 Ah',
@@ -745,7 +744,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.8,
     reviewCount: 240,
     images: [
-      'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/17-osram-night-breaker-h7-headlight-bulbs.webp',
     ],
     specs: {
       'Bulb Type': 'H7 (PX26d)',
@@ -792,7 +791,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/18-bosch-aerotwin-flat-wiper-blades-set.webp',
     ],
     specs: {
       'Driver Side Length': '650 mm (26")',
@@ -837,7 +836,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.85,
     reviewCount: 95,
     images: [
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/19-autel-maxilink-obd2-diagnostic-scanner.webp',
     ],
     specs: {
       'Protocol Support': 'CAN, ISO9141, KWP2000, J1850 PWM & VPW',
@@ -882,7 +881,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.9,
     reviewCount: 130,
     images: [
-      'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/20-sonax-ceramic-spray-coating-750ml.webp',
     ],
     specs: {
       'Volume': '750 ml Spray Trigger',
@@ -921,7 +920,7 @@ const SEEDED_PARTS: Part[] = [
     rating: 4.95,
     reviewCount: 48,
     images: [
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/21-bahco-3-ton-hydraulic-trolley-jack.webp',
     ],
     specs: {
       'Max Load Capacity': '3,000 kg (3 Ton)',
@@ -966,7 +965,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/22-michelin-primacy-4-tire-205-55r16.webp',
     ],
     specs: {
       'Size': '205/55 R16',
@@ -1006,7 +1005,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 158,
     material: 'All-Season Compound',
     images: [
-      'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/23-michelin-primacy-4-tire-225-45r17.webp',
     ],
     specs: {
       'Size': '225/45 R17',
@@ -1044,7 +1043,7 @@ const SEEDED_PARTS: Part[] = [
     material: 'All-Terrain Compound with CoreGard sidewall',
     isBestSeller: true,
     images: [
-      'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/24-bfgoodrich-all-terrain-ko2-265-65r17.webp',
     ],
     specs: {
       'Size': '265/65 R17',
@@ -1078,7 +1077,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 27,
     material: 'Cast Aluminum Alloy',
     images: [
-      'https://images.unsplash.com/photo-1580274455191-1c62238fa333?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/25-alloy-wheel-rim-17in-5x112.webp',
     ],
     specs: {
       'Diameter': '17 inches',
@@ -1114,7 +1113,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 61,
     material: 'Aluminized Steel',
     images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/26-bosal-rear-exhaust-silencer.webp',
     ],
     specs: {
       'Material': 'Aluminized Steel',
@@ -1149,7 +1148,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 38,
     material: 'Ceramic Monolith, Stainless Steel Housing',
     images: [
-      'https://images.unsplash.com/photo-1600790142055-619df03207e6?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/27-bm-catalysts-catalytic-converter.webp',
     ],
     specs: {
       'Substrate': 'Ceramic Monolith',
@@ -1185,7 +1184,7 @@ const SEEDED_PARTS: Part[] = [
     material: 'Aluminum Core, Plastic End Tanks',
     isBestSeller: true,
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/28-nissens-engine-coolant-radiator-1.webp',
     ],
     specs: {
       'Core Material': 'Aluminum',
@@ -1219,15 +1218,15 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 29,
     material: 'Composite Housing, Wax-Pellet Element',
     images: [
-      'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/29-wahler-engine-thermostat-with-housing.webp',
     ],
     specs: {
-      'Opening Temperature': '87°C',
+      'Opening Temperature': '87Â°C',
       'Housing Material': 'Composite',
       'Includes': 'Integrated housing and seal',
     },
     oemNumbers: ['03L121111F'],
-    description: 'An OE-spec wax-pellet thermostat with an integrated composite housing, opening at 87°C to keep the engine at its correct operating temperature.',
+    description: 'An OE-spec wax-pellet thermostat with an integrated composite housing, opening at 87Â°C to keep the engine at its correct operating temperature.',
     fitsVehicles: [
       { make: 'Audi', model: 'A4', generation: 'A4 B9', yearRange: '2015 - 2023', engineNames: ['2.0 TDI'] },
       { make: 'Volkswagen', model: 'Golf', generation: 'Golf Mk7 (5G1, BQ1, BE1, BE2)', yearRange: '2012 - 2020', engineNames: ['2.0 TDI'] },
@@ -1253,7 +1252,7 @@ const SEEDED_PARTS: Part[] = [
     material: 'Plastic, Tungsten Carbide Tip',
     isBestSeller: true,
     images: [
-      'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/30-bic-cristal-ballpoint-pens-box-of-50.webp',
     ],
     specs: {
       'Quantity': '50 pens',
@@ -1283,7 +1282,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 54,
     material: 'Wood-free Paper',
     images: [
-      'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/31-a4-copy-paper-80gsm-ream.webp',
     ],
     specs: {
       'Sheet Count': '500',
@@ -1313,7 +1312,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 22,
     material: 'Polypropylene-coated Cardboard',
     images: [
-      'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/32-leitz-2-ring-binder-a4-blue.webp',
     ],
     specs: {
       'Ring Type': '2-Ring, 25 mm capacity',
@@ -1345,7 +1344,7 @@ const SEEDED_PARTS: Part[] = [
     isBestSeller: true,
     featured: true,
     images: [
-      'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/33-hp-laserjet-pro-m404dn-printer.webp',
     ],
     specs: {
       'Print Type': 'Monochrome Laser',
@@ -1375,7 +1374,7 @@ const SEEDED_PARTS: Part[] = [
     reviewCount: 67,
     material: 'Plastic',
     images: [
-      'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80',
+      '/images/parts/34-logitech-mk270-keyboard-mouse-combo.webp',
     ],
     specs: {
       'Connectivity': '2.4 GHz Wireless',
@@ -1449,7 +1448,7 @@ export const POPULAR_BRANDS = [
   { name: 'Ferodo', country: 'UK', logo: 'Ferodo', highlight: 'Friction Specialists' },
   { name: 'Varta', country: 'Germany', logo: 'Varta', highlight: 'AGM Batteries' },
   { name: 'ATE', country: 'Germany', logo: 'ATE', highlight: 'Brake Hydraulics' },
-  { name: 'Lemförder', country: 'Germany', logo: 'Lemförder', highlight: 'Steering & Chassis' },
+  { name: 'LemfÃ¶rder', country: 'Germany', logo: 'LemfÃ¶rder', highlight: 'Steering & Chassis' },
 ];
 
 export const SAMPLE_PART_REVIEWS = [
@@ -1484,4 +1483,5 @@ export const SAMPLE_PART_REVIEWS = [
     verifiedPurchase: true,
   },
 ];
+
 

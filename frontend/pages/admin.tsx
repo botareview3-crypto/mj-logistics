@@ -643,7 +643,7 @@ export default function AdminPage() {
                             title="Manage photos"
                           >
                             {p.images?.[0] ? (
-                              <img src={p.images[0]} alt="" className="w-full h-full object-cover" />
+                              <img src={p.images[0]} alt="" className="w-full h-full object-cover" loading="lazy" />
                             ) : (
                               <span className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
                                 +
@@ -1316,7 +1316,7 @@ export default function AdminPage() {
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {imagesPart.images?.map(url => (
                 <div key={url} className="relative group aspect-square rounded-lg overflow-hidden border border-gray-200">
-                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <img src={url} alt="" className="w-full h-full object-cover" loading="lazy" />
                   <button
                     onClick={() => handleImageDelete(url)}
                     className="absolute top-1 right-1 bg-black/60 hover:bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center transition"

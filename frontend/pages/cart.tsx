@@ -1,29 +1,44 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Trash2, ShieldCheck, Truck, RotateCcw, CreditCard, ArrowRight, Plus, Minus, CheckCircle2, Tag, Car, Lock } from 'lucide-react';
+import {
+  ShoppingCart, Trash2, ShieldCheck, Truck, RotateCcw,
+  CreditCard, ArrowRight, Plus, Minus, CheckCircle2,
+  Tag, Car, Lock, Package,
+} from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { VehicleFitBadge } from '../components/VehicleFitBadge';
 
 export default function CartPage() {
-  const { cart, updateCartQuantity, removeFromCart, clearCart, cartCount, cartSubtotal, activeVehicle, navigate, showToast, currentUser, isAuthLoading } = useApp();
-  const [promoCode, setPromoCode] = useState('');
-  const [discountPercent, setDiscountPercent] = useState(0);
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [orderComplete, setOrderComplete] = useState(false);
+  const {
+    cart, updateCartQuantity, removeFromCart, clearCart,
+    cartCount, cartSubtotal, activeVehicle,
+    navigate, showToast, currentUser, isAuthLoading,
+  } = useApp();
 
-  const shippingCost = cartSubtotal >= 75 || cartSubtotal === 0 ? 0 : 9.99;
-  const discountAmount = (cartSubtotal * discountPercent) / 100;
-  const estimatedTax = (cartSubtotal - discountAmount) * 0.08;
-  const grandTotal = cartSubtotal - discountAmount + shippingCost + (cartSubtotal > 0 ? estimatedTax : 0);
+  const [promoCode,       setPromoCode]       = useState('');
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [promoApplied,    setPromoApplied]    = useState(false);
+  const [isCheckingOut,   setIsCheckingOut]   = useState(false);
+  const [orderComplete,   setOrderComplete]   = useState(false);
+
+  const shippingCost    = cartSubtotal >= 75 || cartSubtotal === 0 ? 0 : 9.99;
+  const discountAmount  = (cartSubtotal * discountPercent) / 100;
+  const estimatedVat    = (cartSubtotal - discountAmount) * 0.08;
+  const grandTotal      = cartSubtotal - discountAmount + shippingCost + (cartSubtotal > 0 ? estimatedVat : 0);
 
   const handleApplyPromo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!promoCode.trim()) return;
     const code = promoCode.toUpperCase();
-    if (code === 'AUTOPRO10' || code === 'PROMO10') { setDiscountPercent(10); setPromoApplied(true); showToast('10% Workshop discount applied!', 'success'); }
-    else if (code === 'FREESHIP') { setDiscountPercent(5); setPromoApplied(true); showToast('Discount code applied!', 'success'); }
-    else { showToast('Invalid promo code. Try "AUTOPRO10"', 'error'); }
+    if (code === 'AUTOPRO10' || code === 'PROMO10') {
+      setDiscountPercent(10); setPromoApplied(true);
+      showToast('10% discount applied!', 'success');
+    } else if (code === 'FREESHIP') {
+      setDiscountPercent(5); setPromoApplied(true);
+      showToast('Discount code applied!', 'success');
+    } else {
+      showToast('Invalid code. Try "AUTOPRO10"', 'error');
+    }
   };
 
   const handleCheckout = () => {
@@ -34,24 +49,49 @@ export default function CartPage() {
       return;
     }
     setIsCheckingOut(true);
-    setTimeout(() => { setIsCheckingOut(false); setOrderComplete(true); clearCart(); showToast('Order #AP-88421 confirmed! Dispatching with Fitment Guarantee.', 'success'); }, 1200);
+    setTimeout(() => {
+      setIsCheckingOut(false);
+      setOrderComplete(true);
+      clearCart();
+      showToast('Order #AP-88421 confirmed! Dispatching with Fitment Guarantee.', 'success');
+    }, 1200);
   };
 
+  /* ── Order success ────────────────────────────────────────────────── */
   if (orderComplete) {
     return (
-      <div className="max-w-2xl mx-auto py-12 text-center space-y-6">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm"><CheckCircle2 className="w-10 h-10" /></div>
-        <div className="space-y-2">
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Order Successfully Placed</span>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900">Thank You For Your Order!</h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">Order confirmation #AP-88421 has been recorded. All parts are verified for fitment and prepared for tracked dispatch.</p>
+      <div className="max-w-lg mx-auto py-16 text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+          <CheckCircle2 className="w-9 h-9" />
         </div>
-        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl max-w-md mx-auto text-xs text-left space-y-2">
-          <div className="flex justify-between"><span className="text-slate-500">Order Number:</span><span className="font-mono font-bold text-slate-900">AP-88421-2026</span></div>
-          <div className="flex justify-between"><span className="text-slate-500">Estimated Delivery:</span><span className="font-bold text-emerald-700">Tomorrow (Tracked Courier)</span></div>
-          <div className="flex justify-between"><span className="text-slate-500">Warranty Coverage:</span><span className="font-bold text-slate-900">2-Year Full OE Guarantee</span></div>
+        <div>
+          <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 mb-3">
+            Order Placed
+          </span>
+          <h1 className="font-display text-3xl font-bold text-[#0d1f3c]">Thank You!</h1>
+          <p className="text-slate-500 text-sm mt-2 leading-relaxed">
+            Order #AP-88421 is confirmed. Parts are verified for fitment and prepared for dispatch.
+          </p>
         </div>
-        <button type="button" onClick={() => { setOrderComplete(false); navigate('/'); }} className="px-6 py-2.5 bg-[#0077C7] hover:bg-[#0060A1] text-white font-bold text-sm rounded-lg shadow-sm cursor-pointer">Continue Shopping</button>
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 text-sm text-left space-y-3">
+          {[
+            { label: 'Order Number',     value: 'AP-88421-2026' },
+            { label: 'Est. Delivery',    value: 'Tomorrow (Tracked)' },
+            { label: 'Warranty',         value: '2-Year OE Guarantee' },
+          ].map(row => (
+            <div key={row.label} className="flex justify-between">
+              <span className="text-slate-500">{row.label}</span>
+              <span className="font-semibold text-[#0d1f3c]">{row.value}</span>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => { setOrderComplete(false); navigate('/shop'); }}
+          className="px-7 py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold rounded-xl cursor-pointer transition-colors inline-flex items-center gap-2"
+        >
+          Continue Shopping <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
     );
   }
@@ -59,107 +99,238 @@ export default function CartPage() {
   return (
     <div className="space-y-8 pb-16">
       <Breadcrumbs items={[{ label: 'Shopping Cart' }]} />
-      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+
+      {/* Page header */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Shopping Cart ({cartCount} {cartCount === 1 ? 'item' : 'items'})</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Review your selected replacement parts, quantities, and fitment checks.</p>
+          <h1 className="font-display text-3xl font-bold text-[#0d1f3c]">
+            Shopping Cart
+            <span className="ml-2 text-[20px] font-normal text-slate-400">({cartCount})</span>
+          </h1>
+          <p className="text-sm text-slate-500 mt-0.5">Review your parts, quantities, and fitment checks.</p>
         </div>
-        {cart.length > 0 && <button type="button" onClick={() => { if (window.confirm('Clear all items from your cart?')) clearCart(); }} className="text-xs text-slate-400 hover:text-rose-600 font-semibold flex items-center gap-1 cursor-pointer transition-colors"><Trash2 className="w-3.5 h-3.5" /><span>Clear Cart</span></button>}
+        {cart.length > 0 && (
+          <button
+            type="button"
+            onClick={() => { if (window.confirm('Clear all items?')) clearCart(); }}
+            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-rose-600 font-semibold transition-colors cursor-pointer"
+          >
+            <Trash2 className="w-3.5 h-3.5" /> Clear all
+          </button>
+        )}
       </div>
 
       {cart.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Cart items */}
+
+          {/* ── Cart items ─────────────────────────────────────────── */}
           <div className="lg:col-span-8 space-y-4">
-            <div className="p-3.5 bg-sky-50 border border-sky-200 rounded-xl text-xs flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-[#0077C7] shrink-0" />
-                {cartSubtotal >= 75 ? <span className="text-sky-950 font-bold">✓ You&apos;ve unlocked <strong className="text-emerald-700 font-black">Free Next-Day Delivery</strong>!</span> : <span className="text-slate-700">Add <strong className="text-[#0077C7] font-bold">${(75 - cartSubtotal).toFixed(2)}</strong> more to get Free Delivery!</span>}
+            {/* Free shipping progress */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-sky-50 border border-sky-200 rounded-xl text-xs">
+              <Truck className="w-4 h-4 text-[#1e4d8c] shrink-0" />
+              {cartSubtotal >= 75
+                ? <span className="font-semibold text-[#0d1f3c]">✓ You've unlocked <strong className="text-emerald-700">Free Delivery!</strong></span>
+                : <span className="text-slate-700">Add <strong className="text-[#1e4d8c]">€{(75 - cartSubtotal).toFixed(2)}</strong> more for free delivery</span>
+              }
+              <div className="ml-auto w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden hidden sm:block">
+                <div
+                  className="h-full bg-[#1e4d8c] rounded-full transition-all"
+                  style={{ width: `${Math.min(100, (cartSubtotal / 75) * 100)}%` }}
+                />
               </div>
-              <div className="w-24 bg-slate-200 rounded-full h-2 overflow-hidden hidden sm:block"><div className="bg-[#0077C7] h-full transition-all" style={{ width: `${Math.min(100, (cartSubtotal / 75) * 100)}%` }} /></div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
+            {/* Items list */}
+            <div className="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100 overflow-hidden">
               {cart.map(({ part, quantity }) => (
-                <div key={part.id} className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group">
-                  <div className="flex items-start gap-3.5 flex-1">
-                    <div onClick={() => navigate(`/parts/${part.id}`)} className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-50 border border-slate-200 rounded-xl p-1.5 shrink-0 flex items-center justify-center cursor-pointer hover:border-[#0077C7] transition-colors">
-                      <img src={part.images[0]} alt={part.name} className="max-h-full max-w-full object-contain" />
+                <div key={part.id} className="p-4 sm:p-5 flex flex-col sm:flex-row gap-4">
+                  {/* Image */}
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/parts/${part.id}`)}
+                    className="w-full sm:w-20 h-20 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center p-2 shrink-0 hover:border-[#1e4d8c] transition-colors cursor-pointer"
+                  >
+                    <img src={part.images[0]} alt={part.name} className="max-h-full max-w-full object-contain" loading="lazy" />
+                  </button>
+
+                  {/* Info */}
+                  <div className="flex-1 space-y-1 min-w-0">
+                    <div className="flex items-center gap-2 text-[11px]">
+                      <span className="font-bold text-[#1e4d8c] uppercase">{part.brand}</span>
+                      <span className="text-slate-300">·</span>
+                      <span className="font-mono text-slate-400">SKU: {part.sku}</span>
                     </div>
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2"><span className="font-extrabold text-xs text-slate-800 uppercase">{part.brand}</span><span className="text-slate-300">•</span><span className="font-mono text-xs text-slate-500 font-medium">SKU: {part.sku}</span></div>
-                      <h3 onClick={() => navigate(`/parts/${part.id}`)} className="text-xs sm:text-sm font-bold text-slate-900 hover:text-[#0077C7] transition-colors cursor-pointer line-clamp-1">{part.name}</h3>
-                      <div className="pt-1"><VehicleFitBadge part={part} size="sm" /></div>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/parts/${part.id}`)}
+                      className="font-display text-[15px] font-semibold text-[#0d1f3c] hover:text-[#1e4d8c] transition-colors cursor-pointer text-left leading-snug"
+                    >
+                      {part.name}
+                    </button>
+                    <VehicleFitBadge part={part} size="sm" />
                   </div>
-                  <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                    <div className="flex items-center border border-slate-300 rounded-lg bg-slate-50 overflow-hidden">
-                      <button type="button" onClick={() => updateCartQuantity(part.id, quantity - 1)} className="p-1.5 hover:bg-slate-200 text-slate-600 cursor-pointer"><Minus className="w-3.5 h-3.5" /></button>
-                      <span className="w-8 text-center text-xs font-bold text-slate-900 font-mono">{quantity}</span>
-                      <button type="button" onClick={() => updateCartQuantity(part.id, quantity + 1)} className="p-1.5 hover:bg-slate-200 text-slate-600 cursor-pointer"><Plus className="w-3.5 h-3.5" /></button>
+
+                  {/* Controls */}
+                  <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-between gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 shrink-0">
+                    {/* Qty stepper */}
+                    <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                      <button
+                        type="button"
+                        onClick={() => updateCartQuantity(part.id, quantity - 1)}
+                        className="p-2 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                        aria-label="Decrease quantity"
+                      >
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="w-8 text-center text-sm font-bold text-[#0d1f3c] font-mono">{quantity}</span>
+                      <button
+                        type="button"
+                        onClick={() => updateCartQuantity(part.id, quantity + 1)}
+                        className="p-2 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                        aria-label="Increase quantity"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
                     </div>
-                    <div className="text-right min-w-[90px]">
-                      <div className="text-sm sm:text-base font-extrabold text-slate-900">${(part.price * quantity).toFixed(2)}</div>
-                      <div className="text-[10px] text-slate-400">${part.price.toFixed(2)} each</div>
+
+                    {/* Line price + remove */}
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <p className="font-display font-bold text-[18px] text-[#0d1f3c]">€{(part.price * quantity).toFixed(2)}</p>
+                        <p className="text-[11px] text-slate-400">€{part.price.toFixed(2)} each</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFromCart(part.id)}
+                        className="p-1.5 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
+                        aria-label={`Remove ${part.name}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
-                    <button type="button" onClick={() => removeFromCart(part.id)} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
               ))}
             </div>
-            <button type="button" onClick={() => navigate('/catalog')} className="text-xs font-bold text-[#0077C7] hover:underline inline-flex items-center gap-1 cursor-pointer">← Continue browsing catalog</button>
+
+            <button
+              type="button"
+              onClick={() => navigate('/catalog')}
+              className="text-[13px] font-semibold text-[#1e4d8c] hover:text-[#0d1f3c] transition-colors cursor-pointer"
+            >
+              ← Continue browsing catalog
+            </button>
           </div>
 
-          {/* Order summary */}
-          <div className="lg:col-span-4 space-y-4">
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-5">
-              <h2 className="text-base font-black text-slate-900 pb-3 border-b border-slate-100">Order Summary</h2>
-              <div className="space-y-2.5 text-xs">
-                <div className="flex justify-between text-slate-600"><span>Subtotal ({cartCount} items):</span><span className="font-mono font-bold text-slate-900">${cartSubtotal.toFixed(2)}</span></div>
-                {discountPercent > 0 && <div className="flex justify-between text-emerald-700 font-bold"><span>Discount ({discountPercent}%):</span><span className="font-mono">-${discountAmount.toFixed(2)}</span></div>}
-                <div className="flex justify-between text-slate-600"><span>Delivery:</span><span className="font-mono font-bold">{shippingCost === 0 ? <span className="text-emerald-700">FREE</span> : `$${shippingCost.toFixed(2)}`}</span></div>
-                <div className="flex justify-between text-slate-600"><span>Estimated Tax (8%):</span><span className="font-mono font-bold text-slate-900">${estimatedTax.toFixed(2)}</span></div>
-                <div className="pt-3 border-t border-slate-200 flex justify-between items-baseline"><span className="text-sm font-bold text-slate-900">Total (VAT incl.):</span><span className="text-xl sm:text-2xl font-black text-[#0077C7]">${grandTotal.toFixed(2)}</span></div>
+          {/* ── Order summary ──────────────────────────────────────── */}
+          <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
+              <h2 className="font-display text-xl font-bold text-[#0d1f3c] pb-3 border-b border-slate-100">
+                Order Summary
+              </h2>
+
+              {/* Line items */}
+              <div className="space-y-2.5 text-sm">
+                <div className="flex justify-between text-slate-600">
+                  <span>Subtotal ({cartCount} items)</span>
+                  <span className="font-semibold text-[#0d1f3c]">€{cartSubtotal.toFixed(2)}</span>
+                </div>
+                {discountPercent > 0 && (
+                  <div className="flex justify-between text-emerald-700 font-semibold">
+                    <span>Discount ({discountPercent}%)</span>
+                    <span>−€{discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-slate-600">
+                  <span>Delivery</span>
+                  <span className={`font-semibold ${shippingCost === 0 ? 'text-emerald-700' : 'text-[#0d1f3c]'}`}>
+                    {shippingCost === 0 ? 'FREE' : `€${shippingCost.toFixed(2)}`}
+                  </span>
+                </div>
+                <div className="flex justify-between text-slate-600">
+                  <span>VAT (8%)</span>
+                  <span className="font-semibold text-[#0d1f3c]">€{estimatedVat.toFixed(2)}</span>
+                </div>
+                <div className="pt-3 border-t border-slate-100 flex justify-between items-baseline">
+                  <span className="font-bold text-[#0d1f3c]">Total</span>
+                  <span className="font-display text-2xl font-bold text-[#0d1f3c]">€{grandTotal.toFixed(2)}</span>
+                </div>
               </div>
 
-              <form onSubmit={handleApplyPromo} className="pt-2">
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <input type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Promo code (e.g. AUTOPRO10)" className="w-full pl-8 pr-2 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg uppercase font-mono focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0077C7]" />
-                    <Tag className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
-                  </div>
-                  <button type="submit" className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg cursor-pointer transition-colors">Apply</button>
+              {/* Promo code */}
+              <form onSubmit={handleApplyPromo} className="flex gap-2">
+                <div className="relative flex-1">
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={e => setPromoCode(e.target.value)}
+                    placeholder="Promo code"
+                    className="w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:bg-white transition-all"
+                  />
                 </div>
-                {promoApplied && <span className="text-[11px] text-emerald-700 font-semibold block mt-1">✓ Promo code active: {discountPercent}% discount</span>}
+                <button type="submit" className="px-4 py-2.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors">
+                  Apply
+                </button>
               </form>
+              {promoApplied && (
+                <p className="text-xs text-emerald-700 font-semibold -mt-2">✓ {discountPercent}% discount active</p>
+              )}
 
-              <button type="button" disabled={isCheckingOut || isAuthLoading} onClick={handleCheckout} className="w-full py-3.5 px-4 bg-[#0077C7] hover:bg-[#0060A1] text-white font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+              {/* Checkout button */}
+              <button
+                type="button"
+                disabled={isCheckingOut || isAuthLoading}
+                onClick={handleCheckout}
+                className="w-full py-4 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              >
                 {isCheckingOut ? (
-                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Processing Order...</span></>
+                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Processing…</span></>
                 ) : currentUser ? (
-                  <><CreditCard className="w-4 h-4" /><span>Proceed to Checkout</span><ArrowRight className="w-4 h-4 ml-1" /></>
+                  <><CreditCard className="w-4 h-4" /><span>Proceed to Checkout</span><ArrowRight className="w-4 h-4" /></>
                 ) : (
                   <><Lock className="w-4 h-4" /><span>Sign In to Checkout</span></>
                 )}
               </button>
-              {!currentUser && !isAuthLoading && <p className="text-[11px] text-slate-400 text-center -mt-1">You'll sign in, then come right back to finish.</p>}
+              {!currentUser && !isAuthLoading && (
+                <p className="text-[11px] text-slate-400 text-center -mt-1">You'll sign in, then come right back.</p>
+              )}
 
-              <div className="pt-3 border-t border-slate-100 space-y-2 text-[11px] text-slate-500">
-                <div className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" /><span>256-Bit SSL Encrypted Checkout</span></div>
-                <div className="flex items-center gap-2"><RotateCcw className="w-3.5 h-3.5 text-amber-600 shrink-0" /><span>30-Day Hassle-Free Parts Return</span></div>
-                <div className="flex items-center gap-2"><Car className="w-3.5 h-3.5 text-[#0077C7] shrink-0" /><span>Guaranteed Fitment Pre-Shipment Audit</span></div>
+              {/* Trust items */}
+              <div className="pt-3 border-t border-slate-100 space-y-2 text-[12px] text-slate-500">
+                {[
+                  { icon: ShieldCheck, color: 'text-emerald-500', label: '256-Bit SSL Encrypted Checkout' },
+                  { icon: RotateCcw,   color: 'text-amber-500',   label: '30-Day Hassle-Free Returns'     },
+                  { icon: Car,         color: 'text-[#1e4d8c]',   label: 'Guaranteed Fitment Verification' },
+                ].map(item => (
+                  <div key={item.label} className="flex items-center gap-2">
+                    <item.icon className={`w-3.5 h-3.5 shrink-0 ${item.color}`} />
+                    <span>{item.label}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-5 shadow-xs max-w-lg mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-sky-50 text-[#0077C7] flex items-center justify-center mx-auto shadow-xs"><ShoppingCart className="w-8 h-8" /></div>
-          <div className="space-y-1"><h2 className="text-xl font-bold text-slate-900">Your Cart is Currently Empty</h2><p className="text-xs sm:text-sm text-slate-500">Select your vehicle or browse our system categories to find guaranteed-fit parts.</p></div>
-          <button type="button" onClick={() => navigate('/catalog')} className="px-6 py-3 bg-[#0077C7] hover:bg-[#0060A1] text-white font-bold text-sm rounded-lg shadow-sm cursor-pointer inline-flex items-center gap-2"><span>Explore Parts Catalog</span><ArrowRight className="w-4 h-4" /></button>
+        /* ── Empty state ────────────────────────────────────────────── */
+        <div className="bg-white rounded-2xl border border-slate-200 p-14 text-center space-y-5 max-w-lg mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-slate-50 text-slate-300 flex items-center justify-center mx-auto">
+            <ShoppingCart className="w-8 h-8" />
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">Your Cart is Empty</h2>
+            <p className="text-sm text-slate-500 mt-1 leading-relaxed">Select your vehicle or browse categories to find guaranteed-fit parts.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/catalog')}
+            className="inline-flex items-center gap-2 px-7 py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold rounded-xl transition-colors cursor-pointer"
+          >
+            <Package className="w-4 h-4" /> Browse Catalog
+          </button>
         </div>
       )}
     </div>
   );
 }
-

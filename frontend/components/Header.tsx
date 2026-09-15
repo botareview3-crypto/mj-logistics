@@ -1,144 +1,233 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Car, Search, ShoppingCart, ChevronDown, X, Menu, Phone, ShieldCheck, Truck, RotateCcw, Wrench, CheckCircle2, User, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, ShoppingCart, User, Car, ChevronDown, Menu, X, Wrench } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
-import { MegaMenu } from './MegaMenu';
-import { PARTS_DATABASE } from '../lib/data/parts';
 
 export const Header: React.FC = () => {
-  const { activeVehicle, setActiveVehicle, cartCount, openSelectorModal, isMegaMenuOpen, setIsMegaMenuOpen, navigate, currentPath, currentUser } = useApp();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const { navigate, currentUser, cartCount, activeVehicle, openSelectorModal } = useApp();
+  const [searchQuery, setSearchQuery]   = useState('');
+  const [scrolled, setScrolled]         = useState(false);
+  const [mobileOpen, setMobileOpen]     = useState(false);
+  const [vehicleMenuOpen, setVehicleMenuOpen] = useState(false);
+  const vehicleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) setIsSearchFocused(false);
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const searchResults = searchQuery.trim().length > 1
-    ? PARTS_DATABASE.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.sku.toLowerCase().includes(searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(searchQuery.toLowerCase()) || p.oemNumbers.some(oem => oem.toLowerCase().includes(searchQuery.toLowerCase()))).slice(0, 5)
-    : [];
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (vehicleRef.current && !vehicleRef.current.contains(e.target as Node)) {
+        setVehicleMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
-    setIsSearchFocused(false);
-    navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
   };
 
+  const vehicleLabel = activeVehicle
+    ? `${activeVehicle.make} ${activeVehicle.model}`
+    : 'Select Vehicle';
+
   return (
-    <>
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
-        {/* Top Utility Strip */}
-        <div className="bg-[#004494] text-white/90 text-[11px] sm:text-xs py-1.5 px-4 sm:px-6 lg:px-8 border-b border-white/10">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto whitespace-nowrap">
-              <span className="flex items-center gap-1.5 text-white font-medium"><ShieldCheck className="w-3.5 h-3.5 text-[#69b9ef] shrink-0" /><span>Check fitment before you buy</span></span>
-              <span className="hidden md:flex items-center gap-1.5"><Truck className="w-3.5 h-3.5 text-sky-200 shrink-0" /><span>Reliable delivery updates</span></span>
-              <span className="hidden lg:flex items-center gap-1.5"><RotateCcw className="w-3.5 h-3.5 text-sky-200 shrink-0" /><span>30-day returns</span></span>
-            </div>
-
+    <header
+      className={`sticky top-0 z-40 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white shadow-md border-b border-slate-200'
+          : 'bg-white border-b border-slate-100'
+      }`}
+    >
+      {/* ── Top bar ─────────────────────────────────────────────────────── */}
+      <div className="bg-[#0d1f3c] text-white text-xs py-2">
+        <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between">
+          <div className="flex items-center gap-4 text-white/70">
+            <span>📦 Free shipping over €75</span>
+            <span className="hidden sm:inline">✓ Guaranteed fitment</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button type="button" onClick={() => navigate(currentUser ? '/account' : '/signin')} className="hover:text-white transition-colors cursor-pointer flex items-center gap-1">
+              <User className="w-3 h-3" /> {currentUser ? 'Account' : 'Sign In'}
+            </button>
+            <button type="button" onClick={() => navigate('/garage')} className="hover:text-white transition-colors cursor-pointer hidden sm:block">
+              My Garage
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Main Header Bar */}
-        <div className="bg-[#0056b3] text-white shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <div className="flex items-center justify-between gap-3 sm:gap-5">
-              {/* Logo */}
-              <div className="flex items-center gap-3 shrink-0">
-                <button type="button" onClick={() => navigate('/')} className="flex items-center gap-2.5 text-left cursor-pointer group">
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-md flex items-center justify-center text-[#0056b3] shadow-sm"><Wrench className="w-5 h-5 transform -rotate-12" /></div>
-                  <span className="text-white font-bold text-lg sm:text-xl tracking-tight uppercase">MJ <span className="text-sky-200">Logistics</span></span>
-                </button>
-                <button type="button" onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)} className={`hidden md:flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-md transition-all cursor-pointer ${isMegaMenuOpen ? 'bg-white/20 text-white ring-1 ring-white/30' : 'text-white hover:bg-white/10'}`}>
-                  <Menu className="w-4 h-4" /><span>Catalog</span><ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMegaMenuOpen ? 'rotate-180' : ''}`} />
-                </button>
-                <button type="button" onClick={() => navigate('/mining')} className="hidden md:flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-md transition-all cursor-pointer text-white hover:bg-white/10">
-                  <span>MJ Mining</span>
-                </button>
+      {/* ── Main bar ────────────────────────────────────────────────────── */}
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="flex items-center gap-4 h-[64px]">
+
+          {/* Logo */}
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
+            aria-label="MJ Logistics — home"
+          >
+            <div className="w-8 h-8 bg-[#0d1f3c] rounded-lg flex items-center justify-center">
+              <Wrench className="w-4 h-4 text-white -rotate-12" />
+            </div>
+            <div className="hidden sm:block leading-none">
+              <span className="font-display text-[18px] font-bold text-[#0d1f3c] block">MJ</span>
+              <span className="font-display text-[10px] font-medium text-slate-500 uppercase tracking-widest">Logistics</span>
+            </div>
+          </button>
+
+          {/* Search bar */}
+          <form onSubmit={handleSearch} className="flex-1 relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search parts, brands, OEM numbers…"
+              className="w-full h-10 pl-4 pr-12 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:border-transparent transition-all"
+              aria-label="Search parts"
+            />
+            <button
+              type="submit"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0d1f3c] transition-colors cursor-pointer"
+              aria-label="Submit search"
+            >
+              <Search className="w-4.5 h-4.5" />
+            </button>
+          </form>
+
+          {/* Vehicle selector */}
+          <div ref={vehicleRef} className="relative hidden md:block">
+            <button
+              type="button"
+              onClick={() => {
+                if (activeVehicle) setVehicleMenuOpen(p => !p);
+                else openSelectorModal?.();
+              }}
+              className={`
+                flex items-center gap-2 px-4 h-10 rounded-xl border text-sm font-medium transition-all cursor-pointer
+                ${activeVehicle
+                  ? 'bg-[#0d1f3c] text-white border-[#0d1f3c] hover:bg-[#1a3560]'
+                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-[#0d1f3c]'
+                }
+              `}
+            >
+              <Car className="w-4 h-4 shrink-0" />
+              <span className="max-w-[140px] truncate">{vehicleLabel}</span>
+              {activeVehicle && <ChevronDown className={`w-3.5 h-3.5 shrink-0 transition-transform ${vehicleMenuOpen ? 'rotate-180' : ''}`} />}
+            </button>
+
+            {vehicleMenuOpen && activeVehicle && (
+              <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
+                <div className="px-4 py-2 border-b border-slate-100">
+                  <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Active vehicle</p>
+                  <p className="text-sm font-semibold text-[#0d1f3c] mt-0.5">{activeVehicle.make} {activeVehicle.model}</p>
+                  {activeVehicle.year && <p className="text-[12px] text-slate-500">{activeVehicle.year}</p>}
+                </div>
+                <button type="button" onClick={() => { navigate('/garage'); setVehicleMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">My Garage</button>
+                <button type="button" onClick={() => { openSelectorModal?.(); setVehicleMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">Change vehicle</button>
               </div>
+            )}
+          </div>
 
-              {/* Search */}
-              <div ref={searchContainerRef} className="flex-1 max-w-2xl relative mx-1 sm:mx-2">
-                <form onSubmit={handleSearchSubmit} className="relative flex items-center">
-                  <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onFocus={() => setIsSearchFocused(true)} placeholder="Search by name or part number" aria-label="Search by name or part number" className="w-full bg-white h-10 px-4 pl-10 pr-20 rounded-md shadow-inner text-xs sm:text-sm text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0056b3] font-medium transition-all" />
-                  <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
-                  {searchQuery && <button type="button" onClick={() => setSearchQuery('')} className="absolute right-14 sm:right-16 text-gray-400 hover:text-gray-600 p-1 cursor-pointer"><X className="w-3.5 h-3.5" /></button>}
-                  <button type="submit" className="absolute right-1 sm:right-1.5 px-3 py-1.5 bg-[#0056b3] hover:bg-[#004494] text-white text-xs font-bold rounded uppercase tracking-wider transition-colors cursor-pointer shrink-0">Search</button>
-                </form>
+          {/* Cart */}
+          <button
+            type="button"
+            onClick={() => navigate('/cart')}
+            className="relative p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-[#0d1f3c] hover:text-white hover:border-[#0d1f3c] transition-all cursor-pointer"
+            aria-label={`Cart (${cartCount} items)`}
+          >
+            <ShoppingCart className="w-5 h-5" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-[#e8a020] text-white text-[9px] font-bold flex items-center justify-center rounded-full">
+                {cartCount > 9 ? '9+' : cartCount}
+              </span>
+            )}
+          </button>
 
-                {/* Suggestions dropdown */}
-                {isSearchFocused && searchQuery.trim().length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden text-xs sm:text-sm animate-in fade-in-50 duration-150 text-slate-900">
-                    <div className="p-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between text-slate-500 font-semibold text-[11px]"><span>Suggested Products & Parts</span><span>Press Enter for all results</span></div>
-                    {searchResults.length > 0 ? (
-                      <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
-                        {searchResults.map(part => (
-                          <button key={part.id} type="button" onClick={() => { setIsSearchFocused(false); setSearchQuery(''); navigate(`/parts/${part.id}`); }} className="w-full p-2.5 flex items-center justify-between hover:bg-sky-50 text-left transition-colors cursor-pointer group">
-                            <div className="flex items-center gap-2.5">
-                              <img src={part.images[0]} alt={part.name} className="w-10 h-10 object-cover rounded-md border border-slate-200 bg-white shrink-0" />
-                              <div><div className="font-semibold text-slate-900 group-hover:text-[#0056b3] line-clamp-1">{part.name}</div><div className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5"><span className="font-bold text-slate-700">{part.brand}</span><span>•</span><span className="font-mono text-slate-500">SKU: {part.sku}</span></div></div>
-                            </div>
-                            <div className="text-right shrink-0 ml-2"><div className="font-extrabold text-[#0056b3]">${part.price.toFixed(2)}</div></div>
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="p-4 text-center text-slate-500 text-xs">No direct part matches for &quot;{searchQuery}&quot;. Press search to query full catalog.</div>
-                    )}
-                    <div className="p-2.5 bg-slate-50 border-t border-slate-100">
-                      <button type="button" onClick={() => { setIsSearchFocused(false); navigate(`/search?q=${encodeURIComponent(searchQuery)}`); }} className="text-xs font-bold text-[#0056b3] hover:underline flex items-center gap-1">
-                        <span>View all search results for &quot;{searchQuery}&quot;</span><ArrowRight className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+          {/* Mobile menu toggle */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(p => !p)}
+            className="md:hidden p-2 text-slate-600 cursor-pointer"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
 
-              {/* Vehicle pill */}
-              <div className="relative hidden md:block shrink-0">
-                {activeVehicle ? (
-                  <div className="h-10 bg-white/10 border border-white/20 rounded-full flex items-center px-3.5 gap-2 text-white cursor-pointer hover:bg-white/20 transition-all">
-                    <button type="button" onClick={() => openSelectorModal('vin')} className="flex items-center gap-2 text-left cursor-pointer">
-                      <div className="w-5 h-5 bg-[#22C55E] rounded-full flex items-center justify-center shrink-0"><CheckCircle2 className="w-3.5 h-3.5 text-white" /></div>
-                      <div className="flex flex-col leading-tight max-w-[150px] truncate"><span className="text-[9px] uppercase font-bold text-white/80 tracking-wider">Active Vehicle</span><span className="text-xs font-bold text-white truncate">{activeVehicle.make} {activeVehicle.model}</span></div>
-                      <ChevronDown className="w-3.5 h-3.5 text-white/80 ml-0.5" />
-                    </button>
-                    <button type="button" onClick={() => setActiveVehicle(null)} className="text-white/60 hover:text-rose-200 p-0.5 transition-colors cursor-pointer"><X className="w-3.5 h-3.5" /></button>
-                  </div>
-                ) : (
-                  <button type="button" onClick={() => openSelectorModal('vin')} className="h-10 bg-white/10 border border-white/20 rounded-full flex items-center px-4 gap-2 text-white cursor-pointer hover:bg-white/20 transition-all font-semibold text-xs">
-                    <Car className="w-4 h-4 text-sky-200" /><span>Select vehicle</span><ChevronDown className="w-3.5 h-3.5 text-white/70" />
-                  </button>
-                )}
-              </div>
+      {/* ── Category nav strip ──────────────────────────────────────────── */}
+      <div className="hidden lg:block border-t border-slate-100 bg-[#f8f9fa]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="flex items-center gap-1 h-10 overflow-x-auto scrollbar-none">
+            {[
+              { label: 'Braking System',       href: '/catalog/braking-system' },
+              { label: 'Engine & Transmission', href: '/catalog/engine-transmission' },
+              { label: 'Suspension',            href: '/catalog/suspension-steering' },
+              { label: 'Electrical',            href: '/catalog/electrical-lighting' },
+              { label: 'Exhaust',               href: '/catalog/exhaust-system' },
+              { label: 'Tires & Wheels',        href: '/catalog/tires-wheels' },
+              { label: 'Car Care',              href: '/catalog/car-care-detailing' },
+              { label: 'Tools',                 href: '/catalog/tools-workshop' },
+              { label: 'Office Supplies',       href: '/catalog/office-stationery' },
+            ].map(item => (
+              <button
+                key={item.href}
+                type="button"
+                onClick={() => navigate(item.href)}
+                className="shrink-0 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-[#0d1f3c] hover:bg-white rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-              {/* Right icons */}
-              <div className="flex items-center gap-3 text-white shrink-0">
-                <button type="button" onClick={() => navigate(currentUser ? '/account' : '/signin')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/account' || currentPath === '/signin' ? 'bg-white/20' : ''}`}>
-                  <User className="w-5 h-5" />
+      {/* ── Mobile menu ─────────────────────────────────────────────────── */}
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-t border-slate-200 animate-fade-in-down">
+          <div className="max-w-[1200px] mx-auto px-6 py-4 space-y-3">
+            <button
+              type="button"
+              onClick={() => { openSelectorModal?.(); setMobileOpen(false); }}
+              className="w-full flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 cursor-pointer"
+            >
+              <Car className="w-4 h-4" />
+              {vehicleLabel}
+            </button>
+
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {[
+                { label: 'My Garage', href: '/garage' },
+                { label: 'Catalog',   href: '/catalog' },
+                { label: 'Shop',      href: '/shop' },
+                { label: 'Search',    href: '/search' },
+                { label: 'Account',   href: currentUser ? '/account' : '/signin' },
+                { label: 'Cart',      href: '/cart' },
+              ].map(link => (
+                <button
+                  key={link.href}
+                  type="button"
+                  onClick={() => { navigate(link.href); setMobileOpen(false); }}
+                  className="px-4 py-2.5 bg-slate-50 rounded-lg text-slate-700 hover:bg-slate-100 text-left cursor-pointer font-medium"
+                >
+                  {link.label}
                 </button>
-                <button type="button" onClick={() => navigate('/cart')} className={`p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer relative ${currentPath === '/cart' ? 'bg-white/20' : ''}`}>
-                  <ShoppingCart className="w-5 h-5" />
-                  {cartCount > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold shadow-xs">{cartCount}</span>}
-                </button>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-
-        {/* Mobile vehicle bar */}
-        <div className="md:hidden bg-[#004494] text-white px-4 py-2 flex items-center justify-between border-t border-white/10 text-xs">
-          <div className="flex items-center gap-2"><Car className="w-4 h-4 text-sky-200" />{activeVehicle ? <span className="font-semibold truncate">Fitment: <strong className="text-white font-bold">{activeVehicle.make} {activeVehicle.model}</strong></span> : <span className="text-white/80">No vehicle selected</span>}</div>
-          <button type="button" onClick={() => openSelectorModal('vin')} className="px-2.5 py-1 bg-white text-[#0056b3] rounded text-[11px] font-bold shrink-0 cursor-pointer uppercase tracking-wider">{activeVehicle ? 'Change' : 'Select vehicle'}</button>
-        </div>
-
-        <MegaMenu />
-      </header>
-    </>
+      )}
+    </header>
   );
 };

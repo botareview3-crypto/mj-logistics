@@ -1,279 +1,486 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Wrench, ArrowUpRight, Phone, Search, ShoppingCart, User, ChevronDown, Globe } from 'lucide-react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Menu, X, ChevronRight, ChevronDown, Search, ShoppingCart, User, Phone } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
+import { gsap } from '../lib/gsap';
 
-// Shared navigation for corporate pages. The homepage owns its own editorial
-// navigation; inner marketing pages use this more compact header.
+/* ─── Types ──────────────────────────────────────────────────────────────── */
+interface SubCategory {
+  label: string;
+  href: string;
+}
 
-const NAV_ITEMS = [
-  { label: 'Home', href: '/' },
+interface MegaSection {
+  label: string;
+  href: string;
+  image?: string;
+  imageAlt?: string;
+  subcategories?: SubCategory[];
+  defaultOpen?: boolean;
+}
+
+/* ─── Data ───────────────────────────────────────────────────────────────── */
+const MEGA_SECTIONS: MegaSection[] = [
   {
-    label: 'Products & Services',
-    hasDropdown: true,
-    items: [
-      { label: 'Auto Parts', href: '/shop', description: 'Verified fitment data & marketplace' },
-      { label: 'Industrial Equipment', href: '/catalog', description: 'Heavy-duty machinery & components' },
-      { label: 'Mining', href: '/mining', description: 'Diamond & gold responsible sourcing' }
-    ]
+    label: 'Auto Parts',
+    href: '/catalog',
+    image: '/categories/auto-parts.webp',
+    imageAlt: 'Auto Parts — brake disc',
+    subcategories: [
+      { label: 'Braking System',         href: '/catalog/braking-system' },
+      { label: 'Engine & Transmission',  href: '/catalog/engine-transmission' },
+      { label: 'Suspension & Steering',  href: '/catalog/suspension-steering' },
+      { label: 'Electrical & Lighting',  href: '/catalog/electrical-lighting' },
+      { label: 'Cooling & Heating',      href: '/catalog/cooling-heating' },
+      { label: 'Tires & Wheels',         href: '/catalog/tires-wheels' },
+      { label: 'Exhaust System',         href: '/catalog/exhaust-system' },
+    ],
+    defaultOpen: true,
   },
-  { label: 'About', href: '/divisions' },
-  { label: 'Contact', href: '/contact' }
+  {
+    label: 'Stationery',
+    href: '/catalog/office-stationery',
+    image: '/categories/pen-paper.webp',
+    imageAlt: 'Office stationery',
+    subcategories: [
+      { label: 'Pens & Writing',         href: '/catalog/office-stationery' },
+      { label: 'Paper & Printing',       href: '/catalog/office-stationery' },
+      { label: 'Filing & Organisation',  href: '/catalog/office-stationery' },
+    ],
+  },
+  {
+    label: 'Business Equipment',
+    href: '/catalog/business-equipment',
+    image: '/categories/pen-paper.webp',
+    imageAlt: 'Business equipment',
+    subcategories: [
+      { label: 'Printers & Scanners',    href: '/catalog/business-equipment' },
+      { label: 'Computer Accessories',   href: '/catalog/business-equipment' },
+      { label: 'Office Furniture',       href: '/catalog/business-equipment' },
+    ],
+  },
 ];
 
+const NAV_LINKS = [
+  { label: 'About',   href: '/divisions' },
+  { label: 'Contact', href: '/contact' },
+];
+
+/* ─── Component ──────────────────────────────────────────────────────────── */
 export const SiteHeader: React.FC = () => {
   const { navigate, currentPath, currentUser, cartCount } = useApp();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
-  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(-1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [scrolled,       setScrolled]       = useState(false);
+  const [megaOpen,       setMegaOpen]       = useState(false);
+  const [mobileOpen,     setMobileOpen]     = useState(false);
+  const [openSection,    setOpenSection]    = useState<number>(0);   // which accordion section
+  const [mobileSection,  setMobileSection]  = useState<number>(-1);
+  const [searchQuery,    setSearchQuery]    = useState('');
+  const [searchVisible,  setSearchVisible]  = useState(false);
 
+  const megaRef   = useRef<HTMLDivElement>(null);
+  const navRef    = useRef<HTMLElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  /* ── GSAP entrance animation (slides header down from top) ─── */
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 24);
+    if (!navRef.current) return;
+    gsap.fromTo(
+      navRef.current,
+      { y: -80, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.1, clearProps: 'transform,opacity' }
+    );
+  }, []);
+
+  /* scroll detection */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  /* close mega on outside click */
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDesktopDropdownOpen(false);
+    const handler = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setMegaOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const go = (href: string) => {
-    setIsMobileOpen(false);
-    setDesktopDropdownOpen(false);
-    setMobileDropdownOpen(-1);
-    navigate(href);
-  };
+  /* focus search input when revealed */
+  useEffect(() => {
+    if (searchVisible) searchRef.current?.focus();
+  }, [searchVisible]);
 
-  const isActive = (href: string) => (href === '/' ? currentPath === '/' : currentPath.startsWith(href));
+  /* close mobile menu on route change */
+  useEffect(() => {
+    setMobileOpen(false);
+    setMegaOpen(false);
+  }, [currentPath]);
+
+  const go = useCallback((href: string) => {
+    setMobileOpen(false);
+    setMegaOpen(false);
+    navigate(href);
+  }, [navigate]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    if (searchQuery.trim()) {
+      go(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setSearchVisible(false);
+    }
   };
 
+  /* header background: transparent when on hero page and not scrolled */
+  const isHeroPage  = currentPath === '/';
+  const isTransparent = isHeroPage && !scrolled && !megaOpen && !mobileOpen;
+
+  const headerBase = isTransparent
+    ? 'glass'
+    : scrolled
+      ? 'bg-white/95 shadow-md backdrop-blur-md border-b border-slate-200/60'
+      : 'bg-white/90 backdrop-blur-sm border-b border-slate-200/40';
+
+  const textColor  = isTransparent ? 'text-white' : 'text-[#0d1f3c]';
+  const logoColor  = isTransparent ? 'text-white'  : 'text-[#0d1f3c]';
+  const iconColor  = isTransparent ? 'text-white/80 hover:text-white' : 'text-slate-600 hover:text-[#0d1f3c]';
+
   return (
-    <header className="sticky top-0 z-50 bg-white">
-      {/* Top Utility Bar */}
-      <div className="bg-[#004494] text-white text-xs py-2 px-4 sm:px-6 lg:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5 text-sky-200" />
-              <span className="font-medium">+1 (800) 655-4321</span>
-            </div>
-            <div className="hidden sm:flex items-center gap-2">
-              <Globe className="w-3.5 h-3.5 text-sky-200" />
-              <span className="font-medium">EN</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <button type="button" onClick={() => go(currentUser ? '/account' : '/signin')} className="flex items-center gap-1.5 hover:text-sky-200 transition-colors cursor-pointer">
-              <User className="w-3.5 h-3.5" />
-              <span className="font-medium">{currentUser ? 'Account' : 'Sign In'}</span>
-            </button>
-            <button type="button" onClick={() => go('/cart')} className="flex items-center gap-1.5 hover:text-sky-200 transition-colors cursor-pointer relative">
-              <ShoppingCart className="w-3.5 h-3.5" />
-              <span className="font-medium">Cart</span>
-              {cartCount > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">{cartCount}</span>}
-            </button>
-          </div>
-        </div>
-      </div>
+    <header
+      ref={navRef}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBase}`}
+      style={{ borderRadius: isTransparent ? '0 0 0 0' : undefined }}
+    >
+      {/* ── Main bar ─────────────────────────────────────────────────────── */}
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+        <div className="flex items-center justify-between h-[68px]">
 
-      {/* Main Header */}
-      <div className={`bg-white border-b border-slate-200 transition-shadow duration-300 ${isScrolled ? 'shadow-md' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-[72px]">
-            {/* Logo */}
-            <button type="button" onClick={() => go('/')} className="flex items-center gap-2.5 text-left cursor-pointer group shrink-0">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-[#0056b3] rounded-md flex items-center justify-center text-white shadow-sm"><Wrench className="w-5 h-5 transform -rotate-12" /></div>
-              <span className="text-slate-900 font-bold text-base sm:text-lg tracking-tight">MJ Logistics <span className="text-[#0056b3] font-medium">Enterprise</span></span>
-            </button>
+          {/* Logo */}
+          <button
+            type="button"
+            onClick={() => go('/')}
+            className={`flex flex-col leading-none cursor-pointer group shrink-0 ${logoColor}`}
+            aria-label="MJ Logistics — home"
+          >
+            <span
+              className="font-display text-[9px] font-bold uppercase opacity-70"
+              style={{ letterSpacing: '0.35em', fontFamily: "'Chopin Trial', serif" }}
+            >
+              ENTERPRISE
+            </span>
+            <span
+              className="font-display font-bold text-[20px] leading-none"
+              style={{ fontFamily: "'Chopin Trial', serif", letterSpacing: '0.05em' }}
+            >
+              MJ Logistics
+            </span>
+          </button>
 
-            {/* Main Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {NAV_ITEMS.map((item) => (
-                <div key={item.label} className="relative" ref={item.hasDropdown ? dropdownRef : null}>
-                  {item.hasDropdown ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => setDesktopDropdownOpen(!desktopDropdownOpen)}
-                        className="flex items-center gap-1 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-[#0056b3] transition-colors cursor-pointer"
-                      >
-                        {item.label}
-                        <ChevronDown className={`w-4 h-4 transition-transform ${desktopDropdownOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      {desktopDropdownOpen && (
-                        <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-50">
-                          {item.items?.map((subItem) => (
-                            <button
-                              key={subItem.label}
-                              type="button"
-                              onClick={() => go(subItem.href)}
-                              className="w-full text-left px-4 py-2 hover:bg-slate-50 transition-colors cursor-pointer group"
-                            >
-                              <div className="text-sm font-semibold text-slate-900 group-hover:text-[#0056b3]">{subItem.label}</div>
-                              <div className="text-xs text-slate-500">{subItem.description}</div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => go(item.href || '#')}
-                      className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-[#0056b3] transition-colors cursor-pointer"
-                    >
-                      {item.label}
-                    </button>
-                  )}
-                </div>
-              ))}
-            </nav>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-2" aria-label="Main navigation">
 
-            {/* Right Utilities */}
-            <div className="hidden lg:flex items-center gap-3 shrink-0">
-              {/* Search */}
-              <form onSubmit={handleSearch} className="relative">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="w-48 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0056b3] focus:border-transparent"
-                />
-                <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0056b3] cursor-pointer">
-                  <Search className="w-4 h-4" />
-                </button>
-              </form>
-
-              {/* CTA Button */}
+            {/* Products & Services with mega dropdown */}
+            <div className="relative">
               <button
                 type="button"
-                onClick={() => go('/contact')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0056b3] hover:bg-[#004494] text-white text-sm font-bold rounded-lg transition-colors cursor-pointer"
+                onClick={() => setMegaOpen(p => !p)}
+                onMouseEnter={() => setMegaOpen(true)}
+                aria-expanded={megaOpen}
+                aria-haspopup="true"
+                className={`
+                  flex items-center gap-1.5 px-4 py-2 rounded-lg text-[15px] font-medium
+                  transition-colors duration-150 cursor-pointer select-none
+                  ${textColor}
+                  ${megaOpen
+                    ? (isTransparent ? 'bg-white/90' : 'bg-slate-100')
+                    : 'hover:bg-white/90 lg:hover:bg-slate-100'}
+                `}
               >
-                <span>Contact Us</span>
-                <ArrowUpRight className="w-4 h-4" />
+                <span className="font-display text-[16px]">Product and Services</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${megaOpen ? 'rotate-180' : ''}`}
+                  strokeWidth={2}
+                />
               </button>
             </div>
 
-            {/* Mobile Menu Toggle */}
+            {/* Other links */}
+            {NAV_LINKS.map(link => (
+              <button
+                key={link.href}
+                type="button"
+                onClick={() => go(link.href)}
+                className={`
+                  px-4 py-2 rounded-lg text-[15px] font-medium font-display
+                  transition-colors duration-150 cursor-pointer
+                  hover:bg-white/90 lg:hover:bg-slate-100
+                  ${textColor}
+                  ${currentPath.startsWith(link.href) ? 'font-semibold' : ''}
+                `}
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Right icons */}
+          <div className="hidden lg:flex items-center gap-1">
+            {/* Search toggle */}
+            <div className="relative">
+              {searchVisible ? (
+                <form onSubmit={handleSearch} className="flex items-center">
+                  <input
+                    ref={searchRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    placeholder="Search parts…"
+                    className="w-48 px-3 py-1.5 text-sm bg-white/90 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] text-[#0d1f3c]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setSearchVisible(false)}
+                    className="ml-1 p-1.5 cursor-pointer text-slate-400 hover:text-slate-700"
+                    aria-label="Close search"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </form>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setSearchVisible(true)}
+                  className={`p-2 rounded-lg transition-colors cursor-pointer ${iconColor}`}
+                  aria-label="Open search"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+
+            {/* Account */}
             <button
               type="button"
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              aria-expanded={isMobileOpen}
-              aria-label="Toggle menu"
-              className="lg:hidden p-2 text-slate-700 cursor-pointer"
+              onClick={() => go(currentUser ? '/account' : '/signin')}
+              className={`p-2 rounded-lg transition-colors cursor-pointer ${iconColor}`}
+              aria-label={currentUser ? 'My Account' : 'Sign In'}
             >
-              {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <User className="w-5 h-5" />
+            </button>
+
+            {/* Cart */}
+            <button
+              type="button"
+              onClick={() => go('/cart')}
+              className={`relative p-2 rounded-lg transition-colors cursor-pointer ${iconColor}`}
+              aria-label={`Cart (${cartCount} items)`}
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#e8a020] text-white text-[9px] font-bold flex items-center justify-center rounded-full">
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              )}
             </button>
           </div>
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(p => !p)}
+            aria-expanded={mobileOpen}
+            aria-label="Toggle menu"
+            className={`lg:hidden p-2 rounded-lg cursor-pointer ${iconColor}`}
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileOpen && (
-        <div className="lg:hidden bg-white border-t border-slate-200">
-          <div className="px-4 sm:px-6 py-4">
-            {/* Mobile Search */}
-            <form onSubmit={handleSearch} className="mb-4">
+      {/* ── Mega Dropdown ─────────────────────────────────────────────────── */}
+      {megaOpen && (
+        <div
+          ref={megaRef}
+          className="hidden lg:block absolute left-1/2 -translate-x-1/2 mt-1"
+          style={{ top: '100%', width: 'min(860px, calc(100vw - 48px))' }}
+          onMouseLeave={() => setMegaOpen(false)}
+          role="dialog"
+          aria-label="Products & Services menu"
+        >
+          <div className="glass-dropdown rounded-2xl overflow-hidden animate-mega-drop">
+            <div className="flex">
+              {/* Sections accordion */}
+              <div className="w-[220px] shrink-0 border-r border-white/30 py-4">
+                {MEGA_SECTIONS.map((section, i) => (
+                  <div key={section.label}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenSection(i);
+                        go(section.href);
+                      }}
+                      onMouseEnter={() => setOpenSection(i)}
+                      className={`
+                        w-full flex items-center justify-between px-5 py-3
+                        text-[14px] font-semibold font-display transition-colors cursor-pointer
+                        ${openSection === i
+                          ? 'text-[#0d1f3c] bg-white/90'
+                          : 'text-[#1a3560] hover:bg-white/70'}
+                      `}
+                    >
+                      <span>{section.label}</span>
+                      {section.subcategories && section.subcategories.length > 0 && (
+                        openSection === i
+                          ? <ChevronDown className="w-4 h-4 shrink-0" strokeWidth={2} />
+                          : <ChevronRight className="w-4 h-4 shrink-0" strokeWidth={2} />
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Subcategories panel */}
+              <div className="flex-1 flex min-h-[260px]">
+                {MEGA_SECTIONS[openSection] && (
+                  <>
+                    {/* Links list */}
+                    <div className="flex-1 py-5 px-6">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 mb-3">
+                        {MEGA_SECTIONS[openSection].label}
+                      </p>
+                      <ul className="space-y-1">
+                        {MEGA_SECTIONS[openSection].subcategories?.map(sub => (
+                          <li key={sub.href}>
+                            <button
+                              type="button"
+                              onClick={() => go(sub.href)}
+                              className="mega-sub-link w-full text-left text-[14px] font-medium text-[#0d1f3c] py-1.5 cursor-pointer"
+                            >
+                              {sub.label}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Product image */}
+                    {MEGA_SECTIONS[openSection].image && (
+                      <div className="w-[200px] shrink-0 flex flex-col items-center justify-center py-6 px-4 border-l border-white/25">
+                        <div className="w-[140px] h-[140px] flex items-center justify-center">
+                          <img
+                            src={MEGA_SECTIONS[openSection].image}
+                            alt={MEGA_SECTIONS[openSection].imageAlt}
+                            className="max-w-full max-h-full object-contain drop-shadow-lg"
+                            loading="lazy"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => go(MEGA_SECTIONS[openSection].href)}
+                          className="mt-4 text-xs font-semibold text-[#0d1f3c] underline underline-offset-2 cursor-pointer hover:opacity-70 transition-opacity"
+                        >
+                          View all →
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Mobile Menu ───────────────────────────────────────────────────── */}
+      {mobileOpen && (
+        <div className="lg:hidden glass-dark border-t border-white/10 animate-fade-in">
+          <div className="max-w-[1200px] mx-auto px-6 py-4 space-y-1">
+
+            {/* Mobile search */}
+            <form onSubmit={handleSearch} className="flex gap-2 mb-4">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full px-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0056b3]"
+                placeholder="Search parts…"
+                className="flex-1 px-3 py-2 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
               />
+              <button type="submit" className="px-4 py-2 bg-white/20 text-white text-sm rounded-lg cursor-pointer hover:bg-white/30 transition-colors">
+                Go
+              </button>
             </form>
 
-            {/* Mobile Navigation */}
-            <div className="space-y-1">
-              {NAV_ITEMS.map((item, index) => (
-                <div key={item.label}>
-                  {item.hasDropdown ? (
-                    <div className="border-b border-slate-100">
+            {/* Products & Services accordion */}
+            <div className="border-b border-white/10">
+              <button
+                type="button"
+                onClick={() => setMobileSection(mobileSection === 99 ? -1 : 99)}
+                className="w-full flex items-center justify-between py-3 text-white font-display text-[16px] font-medium cursor-pointer"
+              >
+                <span>Product and Services</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${mobileSection === 99 ? 'rotate-180' : ''}`} />
+              </button>
+
+              {mobileSection === 99 && (
+                <div className="pl-4 pb-3 space-y-2 animate-fade-in">
+                  {MEGA_SECTIONS.map((section, i) => (
+                    <div key={section.label}>
                       <button
                         type="button"
-                        onClick={() => setMobileDropdownOpen(mobileDropdownOpen === index ? -1 : index)}
-                        className="w-full flex items-center justify-between py-3 text-base font-semibold text-slate-700 cursor-pointer"
+                        onClick={() => setMobileSection(mobileSection === i ? 99 : i)}
+                        className="w-full flex items-center justify-between py-2 text-white/80 font-display text-[15px] cursor-pointer"
                       >
-                        {item.label}
-                        <ChevronDown className={`w-4 h-4 transition-transform ${mobileDropdownOpen === index ? 'rotate-180' : ''}`} />
+                        <span>{section.label}</span>
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileSection === i ? 'rotate-180' : ''}`} />
                       </button>
-                      {mobileDropdownOpen === index && (
-                        <div className="pl-4 pb-2 space-y-1">
-                          {item.items?.map((subItem) => (
+                      {mobileSection === i && (
+                        <div className="pl-4 space-y-1 animate-fade-in">
+                          {section.subcategories?.map(sub => (
                             <button
-                              key={subItem.label}
+                              key={sub.href}
                               type="button"
-                              onClick={() => go(subItem.href)}
-                              className="w-full text-left py-2 text-sm text-slate-600 hover:text-[#0056b3] cursor-pointer"
+                              onClick={() => go(sub.href)}
+                              className="block py-1.5 text-sm text-white/65 hover:text-white transition-colors cursor-pointer text-left"
                             >
-                              {subItem.label}
+                              {sub.label}
                             </button>
                           ))}
                         </div>
                       )}
                     </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => go(item.href || '#')}
-                      className="w-full text-left py-3 text-base font-semibold text-slate-700 border-b border-slate-100 cursor-pointer"
-                    >
-                      {item.label}
-                    </button>
-                  )}
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
 
-            {/* Mobile Utility Items */}
-            <div className="mt-4 pt-4 border-t border-slate-200 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <Phone className="w-4 h-4" />
-                <span>+1 (800) 655-4321</span>
+            {NAV_LINKS.map(link => (
+              <button
+                key={link.href}
+                type="button"
+                onClick={() => go(link.href)}
+                className="w-full text-left py-3 border-b border-white/10 text-white font-display text-[16px] font-medium cursor-pointer"
+              >
+                {link.label}
+              </button>
+            ))}
+
+            {/* Mobile utility row */}
+            <div className="flex items-center gap-4 pt-3">
+              <button type="button" onClick={() => go(currentUser ? '/account' : '/signin')} className="flex items-center gap-2 text-sm text-white/80 cursor-pointer hover:text-white">
+                <User className="w-4 h-4" /> {currentUser ? 'Account' : 'Sign In'}
+              </button>
+              <button type="button" onClick={() => go('/cart')} className="flex items-center gap-2 text-sm text-white/80 cursor-pointer hover:text-white">
+                <ShoppingCart className="w-4 h-4" /> Cart {cartCount > 0 && <span className="bg-[#e8a020] text-white text-xs px-1.5 py-0.5 rounded-full">{cartCount}</span>}
+              </button>
+              <div className="flex items-center gap-1.5 text-sm text-white/60 ml-auto">
+                <Phone className="w-3.5 h-3.5" />
+                <span>+251 XX XXX XXXX</span>
               </div>
-              <button
-                type="button"
-                onClick={() => go(currentUser ? '/account' : '/signin')}
-                className="flex items-center gap-2 text-sm font-semibold text-slate-700 cursor-pointer"
-              >
-                <User className="w-4 h-4" />
-                <span>{currentUser ? 'My Account' : 'Sign In'}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => go('/cart')}
-                className="flex items-center gap-2 text-sm font-semibold text-slate-700 cursor-pointer relative"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                <span>Cart</span>
-                {cartCount > 0 && <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{cartCount}</span>}
-              </button>
             </div>
-
-            {/* Mobile CTA */}
-            <button
-              type="button"
-              onClick={() => go('/contact')}
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#0056b3] text-white text-sm font-bold rounded-lg cursor-pointer"
-            >
-              <span>Contact Us</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
       )}

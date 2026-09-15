@@ -61,7 +61,7 @@ export default function DivisionsPage() {
           {DIVISIONS.map((division) => (
             <article key={division.title} className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-2 hover:shadow-xl">
               <div className="relative h-64 overflow-hidden">
-                <img src={division.image} alt="" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <img src={division.image} alt="" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071a33]/80 to-transparent" />
                 <div className="absolute bottom-5 left-5 flex items-center gap-3 text-white">
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#55b8ff] text-[#071a33]"><division.icon className="h-5 w-5" /></span>

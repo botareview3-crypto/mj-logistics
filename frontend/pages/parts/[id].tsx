@@ -65,7 +65,7 @@ export default function ProductDetailPage() {
           {/* Image gallery */}
           <div className="lg:col-span-5 space-y-4">
             <div className="relative bg-slate-50 border border-slate-200 rounded-xl overflow-hidden h-80 sm:h-96 flex items-center justify-center p-6">
-              <img src={part.images[selectedImageIndex] || part.images[0]} alt={part.name} className="max-h-full max-w-full object-contain transition-all duration-200" />
+              <img src={part.images[selectedImageIndex] || part.images[0]} alt={part.name} className="max-h-full max-w-full object-contain transition-all duration-200" loading="lazy" />
               {part.isBestSeller && <span className="absolute top-3 left-3 bg-amber-500 text-white font-black text-xs uppercase px-2.5 py-1 rounded-md tracking-wider shadow-xs">Best Seller</span>}
               {part.originalPrice && <span className="absolute top-3 right-3 bg-rose-600 text-white font-bold text-xs uppercase px-2 py-0.5 rounded-md shadow-xs">Save ${(part.originalPrice - part.price).toFixed(2)}</span>}
             </div>
@@ -73,7 +73,7 @@ export default function ProductDetailPage() {
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {part.images.map((img, idx) => (
                   <button key={idx} type="button" onClick={() => setSelectedImageIndex(idx)} className={`w-16 h-16 rounded-lg border-2 p-1 bg-slate-50 shrink-0 transition-all cursor-pointer ${selectedImageIndex === idx ? 'border-[#0077C7] ring-2 ring-sky-100' : 'border-slate-200 hover:border-slate-400'}`}>
-                    <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-contain" />
+                    <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-contain" loading="lazy" />
                   </button>
                 ))}
               </div>

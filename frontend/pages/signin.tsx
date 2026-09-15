@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { LogIn, UserPlus, Mail, Lock, Wrench, Package, MapPin, Bell } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, Package, MapPin, Bell } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { startOAuth, POST_LOGIN_REDIRECT_KEY } from '../lib/auth';
-
-// A standalone, no-chrome sign-in / create-account page — reached from the
-// "Sign In" link on the landing page and MJ Mining, and from Checkout when
-// you're signed out. Deliberately NOT wrapped in the site header/footer: the
-// whole point is that signing in should be a quick, focused stop, not a trip
-// into the rest of the site. The OAuth callback itself still lands on
-// /account (see lib/auth.ts for why) — this page just kicks that off and,
-// for anyone who's already signed in, bounces straight there.
 
 function GoogleIcon({ className = 'w-4 h-4' }: { className?: string }) {
   return (
@@ -35,117 +27,176 @@ function AppleIcon({ className = 'w-4 h-4' }: { className?: string }) {
 export default function SignInPage() {
   const { navigate, showToast, currentUser, isAuthLoading } = useApp();
   const router = useRouter();
-  const [mode, setMode] = useState<'signin' | 'create'>('signin');
-  const [email, setEmail] = useState('');
+  const [mode,     setMode]     = useState<'signin' | 'create'>('signin');
+  const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
 
-  // Remember where to send the shopper back to (e.g. "/cart") once they're
-  // signed in — has to survive the OAuth round trip, so it's stashed in
-  // localStorage rather than kept only in the URL. See lib/auth.ts.
   useEffect(() => {
     if (!router.isReady) return;
     const { redirect } = router.query;
     if (typeof redirect === 'string' && redirect.startsWith('/')) {
       try { localStorage.setItem(POST_LOGIN_REDIRECT_KEY, redirect); } catch { /* ignore */ }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, router.query.redirect]);
 
-  // Already signed in — nothing to do here.
   useEffect(() => {
     if (isAuthLoading || !currentUser) return;
     const redirect = typeof router.query.redirect === 'string' ? router.query.redirect : '/account';
     navigate(redirect);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthLoading, currentUser]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('Email sign-in is not available yet — try Google or Apple above.', 'info');
+    showToast('Email sign-in is not yet available — try Google or Apple above.', 'info');
   };
 
-  if (currentUser) return null; // redirecting away, see effect above
+  if (currentUser) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#f0f4f8] flex flex-col">
       <Head>
-        <title>Sign In | MJ Logistics Enterprise</title>
-        <meta name="description" content="Sign in or create an account with MJ Logistics Enterprise." />
+        <title>Sign In — MJ Logistics</title>
+        <meta name="description" content="Sign in or create an account with MJ Logistics." />
       </Head>
 
+      {/* Top bar */}
       <div className="p-5 sm:p-6">
-        <button type="button" onClick={() => navigate('/')} className="inline-flex items-center gap-2 cursor-pointer">
-          <div className="w-8 h-8 rounded-md bg-[#0077C7] flex items-center justify-center text-white"><Wrench className="w-4 h-4 transform -rotate-12" /></div>
-          <span className="font-bold text-slate-900 tracking-tight">MJ Logistics <span className="text-slate-400 font-medium hidden sm:inline">Enterprise</span></span>
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="flex flex-col leading-none cursor-pointer"
+          aria-label="Back to home"
+        >
+          <span className="font-display text-[10px] uppercase tracking-[0.25em] text-slate-400">Back to</span>
+          <span className="font-display text-[20px] font-bold text-[#0d1f3c]">MJ Logistics</span>
         </button>
       </div>
 
+      {/* Main content */}
       <div className="flex-1 flex items-center justify-center px-4 pb-16">
-        <div className="w-full max-w-md space-y-6">
-          <div className="text-center space-y-1.5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">{mode === 'signin' ? 'Welcome back' : 'Create your account'}</h1>
-            <p className="text-sm text-slate-500">{mode === 'signin' ? 'Sign in to pick up right where you left off.' : 'Takes a few seconds with Google or Apple.'}</p>
+        <div className="w-full max-w-[420px] space-y-6">
+
+          {/* Heading */}
+          <div className="text-center">
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#0d1f3c]">
+              {mode === 'signin' ? 'Welcome back' : 'Create account'}
+            </h1>
+            <p className="text-slate-500 text-sm mt-2">
+              {mode === 'signin'
+                ? 'Sign in to pick up right where you left off.'
+                : 'Takes a few seconds with Google or Apple.'}
+            </p>
           </div>
 
+          {/* Card */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="flex border-b border-slate-200">
-              <button type="button" onClick={() => setMode('signin')} className={`flex-1 px-4 py-3 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer ${mode === 'signin' ? 'text-[#0077C7] border-b-2 border-[#0077C7] bg-sky-50/50' : 'text-slate-500 hover:text-slate-700'}`}>
-                <LogIn className="w-4 h-4" /><span>Sign In</span>
-              </button>
-              <button type="button" onClick={() => setMode('create')} className={`flex-1 px-4 py-3 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer ${mode === 'create' ? 'text-[#0077C7] border-b-2 border-[#0077C7] bg-sky-50/50' : 'text-slate-500 hover:text-slate-700'}`}>
-                <UserPlus className="w-4 h-4" /><span>Create Account</span>
-              </button>
+            {/* Tab bar */}
+            <div className="flex border-b border-slate-100">
+              {(['signin', 'create'] as const).map(m => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setMode(m)}
+                  className={`flex-1 py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
+                    mode === m
+                      ? 'text-[#0d1f3c] border-b-2 border-[#0d1f3c] font-bold'
+                      : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  {m === 'signin' ? <><LogIn className="w-4 h-4" /> Sign In</> : <><UserPlus className="w-4 h-4" /> Create Account</>}
+                </button>
+              ))}
             </div>
 
-            <div className="p-6 sm:p-8 space-y-5">
+            <div className="p-7 space-y-5">
+              {/* OAuth buttons */}
               <div className="space-y-2.5">
-                <button type="button" onClick={() => startOAuth('google')} className="w-full h-10 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm font-bold text-slate-700 flex items-center justify-center gap-2.5 transition-colors cursor-pointer">
-                  <GoogleIcon /><span>Continue with Google</span>
+                <button
+                  type="button"
+                  onClick={() => startOAuth('google')}
+                  className="w-full h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold text-[#0d1f3c] flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                >
+                  <GoogleIcon /> Continue with Google
                 </button>
-                <button type="button" onClick={() => startOAuth('apple')} className="w-full h-10 rounded-lg bg-black hover:bg-slate-800 text-sm font-bold text-white flex items-center justify-center gap-2.5 transition-colors cursor-pointer">
-                  <AppleIcon /><span>Continue with Apple</span>
+                <button
+                  type="button"
+                  onClick={() => startOAuth('apple')}
+                  className="w-full h-11 rounded-xl bg-[#0d1f3c] hover:bg-[#1a3560] text-sm font-semibold text-white flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                >
+                  <AppleIcon /> Continue with Apple
                 </button>
               </div>
 
+              {/* Divider */}
               <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">or use email</span>
-                <div className="h-px flex-1 bg-slate-200" />
+                <div className="h-px flex-1 bg-slate-100" />
+                <span className="text-[11px] font-bold text-slate-300 uppercase tracking-widest">or email</span>
+                <div className="h-px flex-1 bg-slate-100" />
               </div>
 
+              {/* Email form */}
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Email Address</label>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    Email Address
+                  </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0077C7]" />
+                    <Mail className="w-4 h-4 text-slate-300 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm text-[#0d1f3c] placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:border-transparent transition-all"
+                    />
                   </div>
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Password</label>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    Password
+                  </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0077C7]" />
+                    <Lock className="w-4 h-4 text-slate-300 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm text-[#0d1f3c] placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:border-transparent transition-all"
+                    />
                   </div>
                 </div>
-                <button type="submit" className="w-full py-2.5 bg-[#0077C7] hover:bg-[#0060A1] text-white font-bold text-sm rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2">
-                  {mode === 'signin' ? <><LogIn className="w-4 h-4" /><span>Sign In</span></> : <><UserPlus className="w-4 h-4" /><span>Create Account</span></>}
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-bold text-sm rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2"
+                >
+                  {mode === 'signin'
+                    ? <><LogIn className="w-4 h-4" /> Sign In</>
+                    : <><UserPlus className="w-4 h-4" /> Create Account</>
+                  }
                 </button>
               </form>
             </div>
           </div>
 
-          <p className="text-center text-xs text-slate-400">Browsing never requires an account — we only ask you to sign in when you're ready to buy.</p>
+          <p className="text-center text-xs text-slate-400 leading-relaxed">
+            Browsing never requires an account — we only ask when you&apos;re ready to buy.
+          </p>
 
-          <div className="flex items-center justify-center gap-5 sm:gap-6 pt-2">
+          {/* Feature pills */}
+          <div className="flex items-center justify-center gap-6">
             {[
-              { Icon: Package, label: 'Track orders' },
-              { Icon: MapPin, label: 'Saved addresses' },
-              { Icon: Bell, label: 'Stock alerts' },
-            ].map(({ Icon, label }) => (
+              { icon: Package, label: 'Track orders' },
+              { icon: MapPin,  label: 'Saved addresses' },
+              { icon: Bell,    label: 'Stock alerts' },
+            ].map(({ icon: Icon, label }) => (
               <div key={label} className="flex flex-col items-center gap-1.5 text-center">
-                <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-[#0077C7] flex items-center justify-center"><Icon className="w-4 h-4" /></div>
-                <span className="text-[11px] text-slate-500 max-w-[6.5rem] leading-tight">{label}</span>
+                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 text-[#1e4d8c] flex items-center justify-center">
+                  <Icon className="w-4 h-4" />
+                </div>
+                <span className="text-[11px] text-slate-400 leading-tight">{label}</span>
               </div>
             ))}
           </div>

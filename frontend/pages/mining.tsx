@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Sparkles, Award, MapPin, ShieldCheck, Phone, Mail, Send, ArrowRight, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { useScrollAnimation } from '../lib/useScrollAnimation';
@@ -23,8 +23,14 @@ export default function MiningPage() {
   return (
     <div className="pb-16">
       {/* Hero */}
-      <section className="rounded-2xl bg-[#0a2540] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_20%,#0ea5e9,transparent_45%),radial-gradient(circle_at_80%_60%,#0ea5e9,transparent_40%)]" />
+      <section className="rounded-2xl text-white relative overflow-hidden min-h-[420px]">
+        {/* Real mining hero image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/mining/hero.webp')" }}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a2540]/90 via-[#0a2540]/70 to-transparent" />
         <div className="relative px-6 py-10 sm:px-10 sm:py-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0ea5e9]/10 border border-[#0ea5e9]/30 text-[#0ea5e9] text-xs font-bold uppercase tracking-wider mb-5">
             <Sparkles className="w-3.5 h-3.5" /><span>A Division of MJ Logistics Enterprise</span>
@@ -65,9 +71,9 @@ export default function MiningPage() {
           </div>
           <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200">
             <img
-              src="https://images.unsplash.com/photo-1578316985166-23f2aa3175c1?auto=format&fit=crop&w=900&q=80"
+              src="/images/mining/hero.webp"
               alt="Mining operations"
-              className="w-full h-72 sm:h-96 object-cover"
+              className="w-full h-72 sm:h-96 object-cover" loading="lazy"
             />
           </div>
         </div>
@@ -100,7 +106,7 @@ export default function MiningPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="rounded-xl border border-slate-200 shadow-sm overflow-hidden group">
-              <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=700&q=80" alt="Diamonds" className="w-full h-52 object-cover" />
+              <img src="/images/mining/diamonds.webp" alt="Diamonds" className="w-full h-52 object-cover" loading="lazy" />
               <div className="p-6">
                 <div className="w-10 h-10 rounded-lg bg-[#0ea5e9]/10 text-[#0ea5e9] flex items-center justify-center mb-3"><Sparkles className="w-5 h-5" /></div>
                 <h3 className="text-lg font-bold text-slate-900">Diamonds</h3>
@@ -108,7 +114,7 @@ export default function MiningPage() {
               </div>
             </div>
             <div className="rounded-xl border border-slate-200 shadow-sm overflow-hidden group">
-              <img src="https://images.unsplash.com/photo-1610375461246-83df859d9062?auto=format&fit=crop&w=700&q=80" alt="Gold" className="w-full h-52 object-cover" />
+              <img src="/images/mining/gold.webp" alt="Gold" className="w-full h-52 object-cover" loading="lazy" />
               <div className="p-6">
                 <div className="w-10 h-10 rounded-lg bg-[#0ea5e9]/10 text-[#0ea5e9] flex items-center justify-center mb-3"><Award className="w-5 h-5" /></div>
                 <h3 className="text-lg font-bold text-slate-900">Gold</h3>
@@ -183,9 +189,9 @@ export default function MiningPage() {
               real ones before publishing.]
             </p>
             <div className="mt-6 space-y-3 text-sm">
-              <div className="flex items-center gap-2.5 text-slate-200"><Phone className="w-4 h-4 text-[#0ea5e9] shrink-0" /><span>+251 XX XXX XXXX</span></div>
+              <div className="flex items-center gap-2.5 text-slate-200"><Phone className="w-4 h-4 text-[#0ea5e9] shrink-0" /><span>+X XXX XXX XXXX</span></div>
               <div className="flex items-center gap-2.5 text-slate-200"><Mail className="w-4 h-4 text-[#0ea5e9] shrink-0" /><span>mining@mjlogisticsenterprise.com</span></div>
-              <div className="flex items-center gap-2.5 text-slate-200"><MapPin className="w-4 h-4 text-[#0ea5e9] shrink-0" /><span>Addis Ababa, Ethiopia</span></div>
+              <div className="flex items-center gap-2.5 text-slate-200"><MapPin className="w-4 h-4 text-[#0ea5e9] shrink-0" /><span>[Office location placeholder]</span></div>
             </div>
           </div>
           <form

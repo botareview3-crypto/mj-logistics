@@ -74,7 +74,7 @@ export default function MyAccountPage() {
               <div className="flex items-center gap-4">
                 {currentUser.avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={currentUser.avatar_url} alt="" className="w-14 h-14 rounded-full border border-slate-200" />
+                  <img src={currentUser.avatar_url} alt="" className="w-14 h-14 rounded-full border border-slate-200" loading="lazy" />
                 ) : (
                   <div className="w-14 h-14 rounded-full bg-sky-100 text-[#0077C7] flex items-center justify-center"><UserCircle2 className="w-7 h-7" /></div>
                 )}

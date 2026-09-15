@@ -1,65 +1,147 @@
-import React from 'react';
-import { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, ChevronRight, Package } from 'lucide-react';
+﻿import React, { useState } from 'react';
+import {
+  Disc, CircleDot, Gauge, Sliders, Flame, Zap,
+  Thermometer, Sparkles, Wrench, ShieldCheck, ChevronRight,
+  Package, Search,
+} from 'lucide-react';
 import { useApp } from '../../lib/AppContext';
 import { CATEGORY_ROOTS } from '../../lib/data/categories';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 
-const iconMap: Record<string, React.ElementType> = { Disc, CircleDot, Gauge, Sliders, Flame, Zap, Thermometer, Sparkles, Wrench, ShieldCheck, Package };
+const iconMap: Record<string, React.ElementType> = {
+  Disc, CircleDot, Gauge, Sliders, Flame, Zap,
+  Thermometer, Sparkles, Wrench, ShieldCheck, Package,
+};
 
-// Alternating visual treatment per root — cycles if there are more roots
-// than presets defined, so a newly added root always renders sensibly.
-const ROOT_STYLES = [
-  { labelColor: 'text-[#0077C7]', iconBg: 'bg-sky-50', iconText: 'text-[#0077C7]', hoverBorder: 'hover:border-[#0077C7]', chipHover: 'hover:bg-sky-50 hover:text-[#0077C7] hover:border-sky-200', linkColor: 'text-[#0077C7] hover:text-[#0060A1]', unit: 'Parts available', cta: 'View System', fallbackIcon: Disc },
-  { labelColor: 'text-[#1769aa]', iconBg: 'bg-blue-50', iconText: 'text-[#1769aa]', hoverBorder: 'hover:border-[#1769aa]', chipHover: 'hover:bg-blue-50 hover:text-[#1769aa] hover:border-blue-200', linkColor: 'text-[#1769aa] hover:text-[#0b4f86]', unit: 'Items available', cta: 'View Equipment', fallbackIcon: Wrench },
-  { labelColor: 'text-[#315f91]', iconBg: 'bg-indigo-50', iconText: 'text-[#315f91]', hoverBorder: 'hover:border-[#315f91]', chipHover: 'hover:bg-indigo-50 hover:text-[#315f91] hover:border-indigo-200', linkColor: 'text-[#315f91] hover:text-[#24486e]', unit: 'Items available', cta: 'View Shop', fallbackIcon: Package },
-];
+const ROOT_ACCENT: Record<number, string> = {
+  0: '#1e4d8c',
+  1: '#1a3560',
+  2: '#243d6a',
+};
 
 export default function CatalogIndexPage() {
   const { navigate } = useApp();
+  const [query, setQuery] = useState('');
+
+  const filteredRoots = CATEGORY_ROOTS.map(root => ({
+    ...root,
+    systems: root.systems.filter(sys =>
+      !query || sys.name.toLowerCase().includes(query.toLowerCase()) ||
+      sys.subsystems.some(s => s.name.toLowerCase().includes(query.toLowerCase()))
+    ),
+  })).filter(root => root.systems.length > 0);
 
   return (
-    <div className="space-y-8 pb-12">
-      <Breadcrumbs items={[{ label: 'Catalog Index' }]} />
+    <div className="space-y-10 pb-16">
+      <Breadcrumbs items={[{ label: 'Catalog' }]} />
 
-      <div className="relative overflow-hidden rounded-3xl bg-[#071a33] p-7 text-white shadow-xl sm:p-10">
-        <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#1689d8]/30 blur-3xl" />
-        <div className="relative space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-300/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-sky-200"><Package className="w-3.5 h-3.5" /><span>Full Product Hierarchy</span></div>
-          <h1 className="text-3xl font-black tracking-tight sm:text-5xl">Find the system behind the solution.</h1>
-          <p className="max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">Browse automotive, industrial, and equipment categories through a clear path from system to compatible part.</p>
+      {/* ── Hero banner ──────────────────────────────────────────────── */}
+      <div className="relative rounded-3xl overflow-hidden bg-[#0d1f3c]">
+        <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('/aerial-view-container-cargo-ship-sea.webp')" }} />
+        <div className="relative px-8 py-12 sm:px-12">
+          <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-white/50 mb-3">
+            Complete Product Catalog
+          </p>
+          <h1 className="font-display text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
+            Find the Right Part.<br />
+            <span className="italic font-light">Every Time.</span>
+          </h1>
+          <p className="text-white/65 text-[15px] max-w-lg mb-8 leading-relaxed">
+            Auto parts with vehicle fitment, office stationery, and business equipment — all in one place.
+          </p>
+
+          {/* Inline search */}
+          <div className="relative max-w-md">
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Filter systems…"
+              className="w-full pl-5 pr-12 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30 text-sm"
+            />
+            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          </div>
         </div>
       </div>
 
-      {CATEGORY_ROOTS.map((root, idx) => {
-        const style = ROOT_STYLES[idx % ROOT_STYLES.length];
+      {/* ── Category roots ───────────────────────────────────────────── */}
+      {filteredRoots.map((root, idx) => {
+        const accent = ROOT_ACCENT[idx] ?? '#1e4d8c';
         return (
-          <section key={root.id} className={idx === 0 ? 'space-y-4' : 'space-y-4 pt-4'}>
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-              <div><span className={`text-xs font-extrabold uppercase tracking-wider ${style.labelColor}`}>Root Category {idx + 1}</span><h2 className="text-xl font-black text-slate-900">{root.name}</h2></div>
-              <span className="text-xs text-slate-400 font-medium">{root.systems.length} Major Systems</span>
+          <section key={root.id} className="space-y-5">
+            {/* Section heading */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-1 h-7 rounded-full"
+                  style={{ background: accent }}
+                />
+                <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">{root.name}</h2>
+              </div>
+              <span className="text-xs text-slate-400 font-medium hidden sm:block">
+                {root.systems.length} systems
+              </span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/* System cards grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {root.systems.map(system => {
-                const IconComponent = iconMap[system.iconName] || style.fallbackIcon;
+                const IconComponent = iconMap[system.iconName] || Wrench;
+                const totalItems = system.subsystems.reduce((t, s) => t + s.itemCount, 0);
                 return (
-                  <div key={system.id} className={`bg-white rounded-xl border border-slate-200 shadow-xs ${style.hoverBorder} transition-all p-5 flex flex-col justify-between space-y-4`}>
-                    <div>
-                      <div className="flex items-start gap-3">
-                        <div className={`w-10 h-10 rounded-xl ${style.iconBg} ${style.iconText} flex items-center justify-center shrink-0`}><IconComponent className="w-5 h-5" /></div>
-                        <div>
-                          <button type="button" onClick={() => navigate(`/catalog/${system.id}`)} className="text-base font-bold text-slate-900 hover:text-[#0077C7] transition-colors text-left cursor-pointer">{system.name}</button>
-                          <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{system.description}</p>
-                        </div>
+                  <div
+                    key={system.id}
+                    className="product-card bg-white rounded-2xl border border-slate-200 p-5 flex flex-col gap-4"
+                  >
+                    {/* Header */}
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                        style={{ background: `${accent}18`, color: accent }}
+                      >
+                        <IconComponent className="w-5 h-5" />
                       </div>
-                      <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
-                        {system.subsystems.map(sub => (
-                          <button key={sub.id} type="button" onClick={() => navigate(`/catalog/${system.id}/${sub.id}`)} className={`px-2.5 py-1 text-xs bg-slate-50 ${style.chipHover} text-slate-700 rounded-md border border-slate-200 transition-colors cursor-pointer text-left`}>{sub.name}</button>
-                        ))}
+                      <div className="min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => navigate(`/catalog/${system.id}`)}
+                          className="font-display text-[16px] font-bold text-[#0d1f3c] hover:text-[#1e4d8c] transition-colors cursor-pointer text-left leading-tight"
+                        >
+                          {system.name}
+                        </button>
+                        {system.description && (
+                          <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{system.description}</p>
+                        )}
                       </div>
                     </div>
-                    <div className="pt-2 flex items-center justify-between">
-                      <span className="text-[11px] text-slate-400 font-medium">{system.subsystems.reduce((t, s) => t + s.itemCount, 0).toLocaleString()} {style.unit}</span>
-                      <button type="button" onClick={() => navigate(`/catalog/${system.id}`)} className={`text-xs font-bold ${style.linkColor} flex items-center gap-1 cursor-pointer`}><span>{style.cta}</span><ChevronRight className="w-3.5 h-3.5" /></button>
+
+                    {/* Subcategory chips */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {system.subsystems.map(sub => (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => navigate(`/catalog/${system.id}/${sub.id}`)}
+                          className="px-2.5 py-1 text-[11px] font-medium bg-slate-50 hover:bg-[#0d1f3c] hover:text-white text-slate-600 rounded-lg border border-slate-200 hover:border-[#0d1f3c] transition-all cursor-pointer"
+                        >
+                          {sub.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-100 mt-auto">
+                      <span className="text-[11px] text-slate-400 font-medium">
+                        {totalItems.toLocaleString()} items
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/catalog/${system.id}`)}
+                        className="flex items-center gap-1 text-xs font-bold transition-colors cursor-pointer"
+                        style={{ color: accent }}
+                      >
+                        View all <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
                 );
@@ -68,6 +150,14 @@ export default function CatalogIndexPage() {
           </section>
         );
       })}
+
+      {filteredRoots.length === 0 && (
+        <div className="text-center py-20 text-slate-400">
+          <Package className="w-12 h-12 mx-auto mb-4 opacity-30" />
+          <p className="font-display text-xl font-semibold">No systems match &ldquo;{query}&rdquo;</p>
+          <button type="button" onClick={() => setQuery('')} className="mt-3 text-sm text-[#1e4d8c] underline cursor-pointer">Clear filter</button>
+        </div>
+      )}
     </div>
   );
 }

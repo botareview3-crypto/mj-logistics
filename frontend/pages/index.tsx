@@ -1,333 +1,426 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
-import { motion, useReducedMotion, type Transition } from 'motion/react';
-import {
-  ArrowUpRight,
-  ChevronDown,
-  ChevronRight,
-  CircleArrowOutUpRight,
-  Factory,
-  Gem,
-  Menu,
-  ShieldCheck,
-  Truck,
-  Wrench,
-} from 'lucide-react';
+import { ChevronRight, Wrench, Package, Gem, ArrowRight } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
+import { SiteHeader } from '../components/SiteHeader';
+import { SiteFooter } from '../components/SiteFooter';
+import { VideoScrollSection } from '../components/VideoScrollSection';
+import { gsap, ScrollTrigger, animateDataGsap } from '../lib/gsap';
 
-const IMAGE_URLS = {
-  hero: 'https://images.unsplash.com/photo-1487754180451-c456f71a1f72?auto=format&fit=crop&w=2200&q=85',
-  parts: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=85',
-  industry: 'https://images.unsplash.com/photo-1565610222536-ef125c59da2e?auto=format&fit=crop&w=1400&q=85',
-  mining: 'https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=1400&q=85',
-  detail: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1800&q=85',
-};
+/* ─── Category cards data ────────────────────────────────────────────────── */
+interface Category {
+  title: string;
+  href: string;
+  count: number;
+  color: string | null;
+  image: string;
+}
 
-const SOLUTIONS = [
+const CATEGORIES: Category[] = [
   {
-    title: 'Auto Parts',
-    eyebrow: 'Parts marketplace',
-    description: 'Find dependable parts with vehicle fitment at the centre of every search.',
-    image: IMAGE_URLS.parts,
-    icon: Wrench,
-    href: '/shop',
-    action: 'Shop parts',
+    title: 'Braking System',
+    href: '/catalog/braking-system',
+    count: 47,
+    color: null,
+    image: '/categories/brake-disc.webp',
   },
   {
-    title: 'Industrial Supply',
-    eyebrow: 'Business equipment',
-    description: 'Practical equipment and sourcing support for workshops and growing operations.',
-    image: IMAGE_URLS.industry,
-    icon: Factory,
-    href: '/catalog',
-    action: 'Explore equipment',
+    title: 'Engine & Transmission',
+    href: '/catalog/engine-transmission',
+    count: 63,
+    color: null,
+    image: '/categories/engine.webp',
   },
   {
-    title: 'MJ Mining',
-    eyebrow: 'Natural resources',
-    description: 'A focused mining operation built around long-term partnerships and opportunity.',
-    image: IMAGE_URLS.mining,
-    icon: Gem,
-    href: '/mining',
-    action: 'Discover mining',
+    title: 'Suspension & Steering',
+    href: '/catalog/suspension-steering',
+    count: 38,
+    color: null,
+    image: '/categories/shock-absorber.webp',
+  },
+  {
+    title: 'Electrical & Lighting',
+    href: '/catalog/electrical-lighting',
+    count: 55,
+    color: null,
+    image: '/categories/headlight.webp',
+  },
+  {
+    title: 'Tires & Wheels',
+    href: '/catalog/tires-wheels',
+    count: 29,
+    color: null,
+    image: '/categories/tire.webp',
+  },
+  {
+    title: 'Office & Stationery',
+    href: '/catalog/office-stationery',
+    count: 34,
+    color: null,
+    image: '/categories/pen-paper.webp',
   },
 ];
 
-const REVEAL = {
-  hidden: { opacity: 0, y: 36 },
-  visible: { opacity: 1, y: 0 },
-};
-const REVEAL_TRANSITION: Transition = {
-  duration: 0.7,
-  ease: [0.22, 1, 0.36, 1],
-};
+/* ─── Additional categories for dropdown ─────────────────────────────────── */
+const ADDITIONAL_CATEGORIES = [
+  { label: 'Exhaust System',         href: '/catalog/exhaust-system' },
+  { label: 'Car Care & Detailing',  href: '/catalog/car-care-detailing' },
+  { label: 'Tools & Workshop',      href: '/catalog/tools-workshop' },
+  { label: 'Cooling & Heating',     href: '/catalog/cooling-heating' },
+  { label: 'Business Equipment',   href: '/catalog/business-equipment' },
+  { label: 'Filtration',            href: '/catalog/filtration' },
+  { label: 'Fuel System',           href: '/catalog/fuel-system' },
+  { label: 'Ignition System',       href: '/catalog/ignition-system' },
+];
 
-export default function LandingPage() {
+/* ─── Page ───────────────────────────────────────────────────────────────── */
+export default function HomePage() {
   const { navigate } = useApp();
-  const reduceMotion = useReducedMotion();
-  const [productsOpen, setProductsOpen] = useState(false);
+  const [catalogDropdownOpen, setCatalogDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const revealProps = (delay = 0) => ({
-    variants: REVEAL,
-    initial: reduceMotion ? 'visible' : 'hidden',
-    whileInView: 'visible',
-    viewport: { once: true, amount: 0.2 },
-    transition: { ...REVEAL_TRANSITION, delay },
-  });
+  // Refs for GSAP targets
+  const heroTaglineRef  = useRef<HTMLParagraphElement>(null);
+  const heroH1Ref       = useRef<HTMLHeadingElement>(null);
+  const heroDescRef     = useRef<HTMLParagraphElement>(null);
+  const heroBtnsRef     = useRef<HTMLDivElement>(null);
+  const mainRef         = useRef<HTMLElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setCatalogDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // ── GSAP animations ──────────────────────────────────────────────────────
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const ctx = gsap.context(() => {
+      // Hero entrance timeline
+      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      if (heroTaglineRef.current) {
+        gsap.set(heroTaglineRef.current, { opacity: 0, y: 20 });
+        heroTl.to(heroTaglineRef.current, { opacity: 1, y: 0, duration: 0.7 }, 0.3);
+      }
+      if (heroH1Ref.current) {
+        gsap.set(heroH1Ref.current, { opacity: 0, y: 40 });
+        heroTl.to(heroH1Ref.current, { opacity: 1, y: 0, duration: 0.9 }, 0.5);
+      }
+      if (heroDescRef.current) {
+        gsap.set(heroDescRef.current, { opacity: 0, y: 24 });
+        heroTl.to(heroDescRef.current, { opacity: 1, y: 0, duration: 0.75 }, 0.75);
+      }
+      if (heroBtnsRef.current) {
+        gsap.set(heroBtnsRef.current, { opacity: 0, y: 20 });
+        heroTl.to(heroBtnsRef.current, { opacity: 1, y: 0, duration: 0.65 }, 0.95);
+      }
+
+      // ScrollTrigger batch animations for all [data-gsap] elements
+      if (mainRef.current) {
+        animateDataGsap(mainRef.current);
+      }
+
+      // Category cards stagger
+      const catCards = document.querySelectorAll<HTMLElement>('.cat-card');
+      if (catCards.length) {
+        gsap.set(catCards, { opacity: 0, y: 36, scale: 0.96 });
+        ScrollTrigger.batch(catCards, {
+          start: 'top 90%',
+          once: true,
+          onEnter: (batch) =>
+            gsap.to(batch, {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.6,
+              stagger: 0.07,
+              ease: 'power3.out',
+            }),
+        });
+      }
+
+      // Division cards
+      const divCards = document.querySelectorAll<HTMLElement>('.div-card');
+      if (divCards.length) {
+        gsap.set(divCards, { opacity: 0, y: 40 });
+        ScrollTrigger.batch(divCards, {
+          start: 'top 88%',
+          once: true,
+          onEnter: (batch) =>
+            gsap.to(batch, {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              stagger: 0.1,
+              ease: 'power3.out',
+            }),
+        });
+      }
+    }, mainRef);
+
+    return () => {
+      ctx.revert();
+    };
+  }, []);
 
   return (
-    <div className="overflow-hidden bg-[#f4f8fc] text-[#071a33]">
+    <>
       <Head>
-        <title>MJ Logistics Enterprise | Built for the road ahead</title>
-        <meta
-          name="description"
-          content="MJ Logistics Enterprise connects automotive, industrial, and mining opportunities through dependable service."
-        />
+        <title>MJ Logistics — Auto Parts, Stationery &amp; Business Equipment</title>
+        <meta name="description" content="Find genuine auto parts with fitment verification, office stationery, and business equipment. Fast delivery guaranteed." />
       </Head>
 
-      <section className="relative overflow-hidden bg-white text-[#071a33]">
-        <div className="mj-grid-pattern absolute inset-0 opacity-60" />
-        <div className="relative mx-auto max-w-7xl px-5 py-7 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-6">
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              className="group flex items-center gap-3 text-left"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#071a33] text-[#55b8ff] transition-transform duration-300 group-hover:rotate-12">
-                <Wrench className="h-5 w-5 -rotate-12" />
-              </span>
-              <span className="text-sm font-bold uppercase tracking-[0.18em]">
-                MJ Logistics
-                <span className="block text-[10px] font-medium tracking-[0.3em] text-slate-400">Enterprise</span>
-              </span>
-            </button>
-            <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
-              <div className="relative">
-                <button type="button" onClick={() => setProductsOpen(!productsOpen)} className="flex items-center gap-1 transition-colors hover:text-[#55b8ff]">
-                  Products &amp; Services <ChevronDown className={`h-4 w-4 transition-transform ${productsOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {productsOpen && (
-                  <div className="absolute left-0 top-8 z-20 w-64 rounded-2xl border border-slate-200 bg-white/95 p-2 text-[#071a33] shadow-2xl backdrop-blur-xl">
-                    <button type="button" onClick={() => navigate('/shop')} className="block w-full rounded-xl px-4 py-3 text-left text-sm hover:bg-sky-50">
-                      <span className="block font-bold">Auto Parts</span>
-                      <span className="text-xs text-slate-500">Vehicle-first marketplace</span>
-                    </button>
-                    <button type="button" onClick={() => navigate('/catalog')} className="block w-full rounded-xl px-4 py-3 text-left text-sm hover:bg-sky-50">
-                      <span className="block font-bold">Industrial Equipment</span>
-                      <span className="text-xs text-slate-500">Business-ready supply</span>
-                    </button>
-                    <button type="button" onClick={() => navigate('/mining')} className="block w-full rounded-xl px-4 py-3 text-left text-sm hover:bg-sky-50">
-                      <span className="block font-bold">MJ Mining</span>
-                      <span className="text-xs text-slate-500">Natural-resource opportunities</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-              <button type="button" onClick={() => navigate('/divisions')} className="transition-colors hover:text-[#55b8ff]">About</button>
-              <button type="button" onClick={() => navigate('/contact')} className="transition-colors hover:text-[#55b8ff]">Contact</button>
-            </div>
-            <button type="button" onClick={() => navigate('/shop')} className="hidden items-center gap-2 rounded-full border border-[#071a33]/20 px-5 py-2.5 text-sm font-bold transition-colors hover:border-[#071a33] hover:bg-[#071a33] hover:text-white lg:flex">
-              Enter marketplace <ArrowUpRight className="h-4 w-4" />
-            </button>
-            <button type="button" onClick={() => navigate('/shop')} aria-label="Open marketplace" className="rounded-full border border-[#071a33]/20 p-3 lg:hidden">
-              <Menu className="h-5 w-5" />
-            </button>
-          </div>
+      {/* Fixed glassmorphic header */}
+      <SiteHeader />
 
-          <div className="grid items-center gap-12 py-20 lg:grid-cols-[.85fr_1.15fr] lg:gap-20 lg:py-28">
-            <motion.div {...revealProps()} className="relative z-10">
-              <p className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.28em] text-[#0077C7]">
-                <span className="h-px w-10 bg-[#0077C7]" />
-                Moving business forward
+      <main ref={mainRef}>
+        {/* ── HERO ───────────────────────────────────────────────────────── */}
+        <section className="relative min-h-screen w-full overflow-hidden">
+          {/* Background image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/homepage/hero-bg.webp')" }}
+            aria-hidden="true"
+          />
+          {/* Overlay gradient */}
+          <div className="hero-overlay absolute inset-0" aria-hidden="true" />
+
+          {/* Hero content */}
+          <div className="relative z-10 flex flex-col justify-end min-h-screen pb-20 pt-32 px-6 max-w-[1200px] mx-auto">
+            <div className="max-w-2xl">
+              <p
+                ref={heroTaglineRef}
+                className="font-display text-[12px] font-bold uppercase tracking-[0.35em] text-white/70 mb-4"
+                style={{ opacity: 0 }}
+              >
+                MJ Logistics Enterprise
               </p>
-              <h1 className="max-w-3xl text-5xl font-black leading-[.96] tracking-[-.06em] sm:text-6xl lg:text-[clamp(4rem,7vw,7rem)]">
-                Built for the
-                <span className="block text-[#0077C7]">road ahead.</span>
+
+              <h1
+                ref={heroH1Ref}
+                className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
+                style={{ opacity: 0 }}
+              >
+                Parts That Fit.<br />
+                <span className="italic font-normal" style={{ fontFamily: "'Chopin Trial', serif" }}>Delivered Fast.</span>
               </h1>
-              <p className="mt-7 max-w-md text-sm leading-7 text-slate-600 sm:text-base">
-                Parts, equipment, and opportunities for the people and businesses that keep progress moving.
+
+              <p
+                ref={heroDescRef}
+                className="text-[16px] text-white/80 leading-relaxed max-w-xl mb-10"
+                style={{ opacity: 0 }}
+              >
+                Your trusted source for genuine auto parts, office stationery, and business equipment — with verified fitment and expert support.
               </p>
-              <div className="mt-9 flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => navigate('/shop')} className="group inline-flex items-center gap-3 rounded-full bg-[#071a33] px-5 py-3 text-sm font-bold text-white transition-transform hover:-translate-y-1">
-                  Explore the marketplace
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </button>
-                <button type="button" onClick={() => navigate('/mining')} className="inline-flex items-center gap-3 rounded-full border border-[#071a33]/20 px-5 py-3 text-sm font-bold text-[#071a33] transition-colors hover:border-[#0077C7] hover:text-[#0077C7]">
-                  Explore MJ Mining
-                </button>
-              </div>
-            </motion.div>
 
-            <motion.div
-              {...revealProps(0.12)}
-              className="relative"
-            >
-              <div className="mj-dot-pattern absolute -right-8 -top-8 h-40 w-40 rounded-full opacity-70" />
-              <div className="relative h-[440px] overflow-hidden rounded-[2rem] bg-[#071a33] shadow-2xl sm:h-[560px]">
-                <motion.img
-                  src={IMAGE_URLS.hero}
-                  alt="Mechanic working on a vehicle"
-                  className="h-full w-full object-cover"
-                  initial={reduceMotion ? { scale: 1 } : { scale: 1.15 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true, amount: 0.35 }}
-                  transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#071a33]/75 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-white">
-                  <span className="max-w-[180px] text-sm font-medium leading-6">Keeping people, machines, and opportunity in motion.</span>
-                  <span className="text-6xl font-black tracking-[-.08em] text-white/30">01</span>
+              <div ref={heroBtnsRef} className="flex flex-wrap gap-3" style={{ opacity: 0 }}>
+                <button
+                  type="button"
+                  onClick={() => navigate('/shop')}
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-white text-[#0d1f3c] font-bold text-[14px] rounded-xl hover:bg-white/90 transition-all cursor-pointer shadow-lg"
+                >
+                  Shop Parts
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <div ref={dropdownRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setCatalogDropdownOpen(!catalogDropdownOpen)}
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 glass text-white font-bold text-[14px] rounded-xl hover:bg-white/20 transition-all cursor-pointer"
+                  >
+                    Browse Catalog
+                    <ChevronRight className={`w-4 h-4 transition-transform ${catalogDropdownOpen ? 'rotate-90' : ''}`} />
+                  </button>
+
+                  {catalogDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
+                      <div className="px-4 py-2 border-b border-slate-100">
+                        <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">More Categories</p>
+                      </div>
+                      {ADDITIONAL_CATEGORIES.map(cat => (
+                        <button
+                          key={cat.href}
+                          type="button"
+                          onClick={() => { navigate(cat.href); setCatalogDropdownOpen(false); }}
+                          className="w-full text-left px-4 py-2 text-[12px] text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                        >
+                          {cat.label}
+                        </button>
+                      ))}
+                      <div className="border-t border-slate-100 mt-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => { navigate('/catalog'); setCatalogDropdownOpen(false); }}
+                          className="w-full text-left px-4 py-2 text-[12px] font-bold text-[#0d1f3c] hover:bg-slate-50 transition-colors cursor-pointer"
+                        >
+                          View All Categories →
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
+        </section>
 
-        </div>
-      </section>
+        {/* ── CATEGORIES GRID ────────────────────────────────────────────── */}
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div data-gsap="fade-up" className="flex items-end justify-between mb-10">
+              <div>
+                <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-2">Browse by category</p>
+                <h2 className="font-display text-4xl font-bold text-[#0d1f3c]">Shop by System</h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/catalog')}
+                className="hidden sm:flex items-center gap-1.5 text-[13px] font-bold text-[#1e4d8c] hover:text-[#0d1f3c] transition-colors cursor-pointer"
+              >
+                All categories <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
 
-      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12 lg:py-36">
-        <motion.div {...revealProps()} className="mb-14 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#2e628d]">What we do</p>
-            <h2 className="max-w-3xl text-4xl font-black leading-none tracking-[-0.05em] sm:text-5xl">
-              Three ways to
-              <span className="text-[#2e628d]"> move forward.</span>
-            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.title}
+                  type="button"
+                  onClick={() => navigate(cat.href)}
+                  className="cat-card relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer bg-transparent flex flex-col items-center justify-center gap-2 p-4 transition-all duration-200 hover:scale-[1.04] hover:shadow-xl group"
+                >
+                  <img
+                    src={cat.image}
+                    alt={cat.title}
+                    className="w-20 h-20 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-200"
+                    loading="lazy"
+                  />
+                  <span className="font-display text-[11px] font-bold text-center leading-tight text-[#0d1f3c]">{cat.title}</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">{cat.count} items</span>
+                </button>
+              ))}
+            </div>
           </div>
-          <p className="max-w-sm text-base leading-7 text-[#2e628d]">
-            A focused enterprise connecting everyday mobility, industrial capability, and natural-resource opportunity.
-          </p>
-        </motion.div>
+        </section>
 
-        <div className="grid gap-5 lg:grid-cols-3">
-          {SOLUTIONS.map((solution, index) => (
-            <motion.article
-              key={solution.title}
-              {...revealProps(index * 0.1)}
-              whileHover={reduceMotion ? undefined : { y: -8 }}
-              className="group relative min-h-[490px] overflow-hidden rounded-[2rem] bg-[#071a33] text-white"
-            >
-              <motion.img
-                src={solution.image}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-85"
-                initial={reduceMotion ? { scale: 1 } : { scale: 1.12 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#071a33] via-[#071a33]/50 to-transparent" />
-              <div className="relative flex h-full flex-col justify-between p-7 sm:p-8">
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full border border-white/25 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em]">{solution.eyebrow}</span>
-                  <solution.icon className="h-6 w-6 text-[#55b8ff]" />
-                </div>
-                <div>
-                  <h3 className="text-3xl font-black tracking-[-0.04em]">{solution.title}</h3>
-                  <p className="mt-3 max-w-xs text-sm leading-6 text-white/70">{solution.description}</p>
-                  <button type="button" onClick={() => navigate(solution.href)} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#55b8ff]">
-                    {solution.action} <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        {/* ── VIDEO SCROLL SECTION ───────────────────────────────────────── */}
+        <VideoScrollSection />
+
+        {/* ── DIVISIONS STRIP ────────────────────────────────────────────── */}
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div data-gsap="fade-up" className="text-center mb-12">
+              <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-3">Our Divisions</p>
+              <h2 className="font-display text-4xl font-bold text-[#0d1f3c]">Everything You Need</h2>
+              <p className="mt-3 text-slate-500 max-w-lg mx-auto text-[14px] leading-relaxed">
+                From auto parts to office supplies and natural resources — MJ Logistics covers it all.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                {
+                  icon: Wrench,
+                  title: 'Auto Parts',
+                  desc: 'Thousands of genuine parts with vehicle fitment verification built in.',
+                  href: '/shop',
+                  cta: 'Shop parts',
+                  bg: 'bg-gradient-to-br from-[#0d1f3c] to-[#1a3560]',
+                  image: '/homepage/auto-parts.webp',
+                },
+                {
+                  icon: Package,
+                  title: 'Office & Stationery',
+                  desc: 'Complete office supplies from pens and paper to printers and furniture.',
+                  href: '/catalog/office-stationery',
+                  cta: 'Browse stationery',
+                  bg: 'bg-gradient-to-br from-slate-700 to-slate-900',
+                  image: '/homepage/office.webp',
+                },
+                {
+                  icon: Gem,
+                  title: 'MJ Mining',
+                  desc: 'Responsible diamond and gold sourcing with long-term partnerships.',
+                  href: '/mining',
+                  cta: 'Discover mining',
+                  bg: 'bg-gradient-to-br from-amber-900 to-yellow-900',
+                  image: '/homepage/diamond.webp',
+                },
+              ].map((div: { icon: any; title: string; desc: string; href: string; cta: string; bg: string; image: string }) => (
+                <div
+                  key={div.title}
+                  className={`div-card relative ${div.bg} rounded-2xl p-8 flex flex-col h-full overflow-hidden group`}
+                >
+                  {/* Background image with overlay */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity duration-500"
+                    style={{ backgroundImage: `url('${div.image}')` }}
+                    aria-hidden="true"
+                  />
+                  <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
+                  <div className="relative w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-5">
+                    <div.icon className="w-6 h-6 text-white" strokeWidth={1.8} />
+                  </div>
+                  <h3 className="relative font-display text-xl font-bold text-white mb-3">{div.title}</h3>
+                  <p className="relative text-white/70 text-[13px] leading-relaxed flex-1">{div.desc}</p>
+                  <button
+                    type="button"
+                    onClick={() => navigate(div.href)}
+                    className="relative mt-6 inline-flex items-center gap-2 text-white text-[12px] font-bold cursor-pointer hover:gap-3 transition-all"
+                  >
+                    {div.cta} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-[#071a33] text-white">
-        <div className="mx-auto grid max-w-7xl lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative min-h-[480px] overflow-hidden lg:min-h-[680px]">
-            <motion.img
-              src={IMAGE_URLS.detail}
-              alt="Industrial equipment in a workshop"
-              className="absolute inset-0 h-full w-full object-cover"
-              initial={reduceMotion ? { scale: 1 } : { scale: 1.16 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#071a33] via-transparent to-transparent" />
-            <div className="absolute bottom-8 left-5 right-5 flex items-end justify-between sm:left-8 sm:right-8">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#55b8ff]">The MJ standard</span>
-              <span className="text-6xl font-black tracking-[-0.08em] text-white/25">02</span>
+              ))}
             </div>
           </div>
-          <div className="flex items-center px-5 py-20 sm:px-10 lg:px-20">
-            <motion.div {...revealProps()}>
-              <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-[#55b8ff]">Simple by design</p>
-              <h2 className="max-w-xl text-4xl font-black leading-[0.98] tracking-[-0.05em] sm:text-5xl">
-                Less searching.
-                <span className="block text-[#55b8ff]">More certainty.</span>
+        </section>
+
+        {/* ── CTA BANNER ─────────────────────────────────────────────────── */}
+        <section className="relative py-24 overflow-hidden bg-[#0d1f3c]">
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-20"
+            style={{ backgroundImage: "url('/homepage/cta-bg.webp')" }}
+            aria-hidden="true"
+          />
+          <div className="relative z-10 max-w-[1200px] mx-auto px-6 text-center">
+            <div data-gsap="fade-up">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-5">
+                Ready to Find Your Part?
               </h2>
-              <p className="mt-7 max-w-lg text-base leading-7 text-white/65">
-                Whether you are keeping a vehicle on the road or equipping a growing operation, we make the next step easier to see.
+              <p className="text-white/70 text-[15px] max-w-xl mx-auto mb-10 leading-relaxed">
+                Browse thousands of genuine parts, filter by your vehicle, and get delivered to your door.
               </p>
-              <div className="mt-10 grid gap-5 sm:grid-cols-2">
-                {[
-                  ['01', 'Choose what you need', 'Start with a vehicle, category, or business requirement.'],
-                  ['02', 'Move with confidence', 'Use clear product information and direct support.'],
-                ].map(([number, title, description]) => (
-                  <div key={number} className="border-t border-white/20 pt-4">
-                    <span className="text-xs font-bold text-[#55b8ff]">{number}</span>
-                    <h3 className="mt-3 font-bold">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-white/55">{description}</p>
-                  </div>
-                ))}
+              <div className="flex flex-wrap gap-3 justify-center">
+                <button
+                  type="button"
+                  onClick={() => navigate('/garage')}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0d1f3c] font-bold text-[14px] rounded-xl hover:bg-white/90 transition-all cursor-pointer"
+                >
+                  Select My Vehicle
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/catalog')}
+                  className="inline-flex items-center gap-2 px-8 py-4 glass text-white font-bold text-[14px] rounded-xl cursor-pointer hover:bg-white/20 transition-all"
+                >
+                  Browse Catalog
+                </button>
               </div>
-              <button type="button" onClick={() => navigate('/shop')} className="mt-10 inline-flex items-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-black text-[#071a33] transition-transform hover:-translate-y-1">
-                Find your next part <ArrowUpRight className="h-4 w-4" />
-              </button>
-            </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 lg:px-12 lg:py-36">
-        <motion.div {...revealProps()} className="grid gap-12 lg:grid-cols-[1fr_1.3fr] lg:items-end">
-          <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-[#2e628d]">Why MJ Logistics</p>
-            <h2 className="max-w-lg text-4xl font-black leading-none tracking-[-0.05em] sm:text-5xl">
-              Built around
-              <span className="text-[#2e628d]"> your next move.</span>
-            </h2>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2">
-            {[
-              [Truck, 'Dependable movement', 'Clear steps from selection to delivery.'],
-              [ShieldCheck, 'Better information', 'Fitment, product, and support details in one place.'],
-              [Factory, 'Built for business', 'Solutions that scale from one part to larger requirements.'],
-              [CircleArrowOutUpRight, 'A direct relationship', 'A team that helps you make practical decisions.'],
-            ].map(([Icon, title, text]) => (
-              <div key={title as string} className="border-t border-[#cbd5cb] pt-5">
-                <Icon className="h-6 w-6 text-[#2e628d]" />
-                <h3 className="mt-5 font-bold">{title as string}</h3>
-                <p className="mt-2 text-sm leading-6 text-[#2e628d]">{text as string}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      <section className="bg-[#55b8ff] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
-        <motion.div {...revealProps()} className="mx-auto flex max-w-7xl flex-col justify-between gap-10 lg:flex-row lg:items-end">
-          <div>
-            <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-[#2e628d]">Start here</p>
-            <h2 className="max-w-3xl text-5xl font-black leading-[0.92] tracking-[-0.06em] sm:text-6xl">
-              Ready for the next move?
-            </h2>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <button type="button" onClick={() => navigate('/shop')} className="inline-flex items-center gap-3 rounded-full bg-[#071a33] px-6 py-3.5 text-sm font-black text-white transition-transform hover:-translate-y-1">
-              Visit marketplace <ArrowUpRight className="h-4 w-4" />
-            </button>
-            <button type="button" onClick={() => navigate('/contact')} className="inline-flex items-center gap-3 rounded-full border border-[#071a33]/30 px-6 py-3.5 text-sm font-bold text-[#071a33] transition-colors hover:bg-white/40">
-              Talk to us <ArrowUpRight className="h-4 w-4" />
-            </button>
-          </div>
-        </motion.div>
-      </section>
-    </div>
+      <SiteFooter />
+    </>
   );
 }
