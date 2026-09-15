@@ -183,11 +183,18 @@ export default function HomePage() {
       <main ref={mainRef}>
         {/* ── HERO ───────────────────────────────────────────────────────── */}
         <section className="relative min-h-screen w-full overflow-hidden">
-          {/* Background image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url('/homepage/hero-bg.webp')" }}
+          {/* Background image — loaded as <img> with fetchpriority=high so the browser
+              discovers and fetches it immediately (CSS backgroundImage is invisible to the
+              preload scanner and loads ~300-600ms later). The img is hidden visually and
+              the CSS bg-cover is applied via object-fit on the img itself. */}
+          <img
+            src="/homepage/hero-bg.webp"
+            alt=""
             aria-hidden="true"
+            fetchPriority="high"
+            loading="eager"
+            decoding="sync"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           {/* Overlay gradient */}
           <div className="hero-overlay absolute inset-0" aria-hidden="true" />
@@ -272,7 +279,7 @@ export default function HomePage() {
         </section>
 
         {/* ── CATEGORIES GRID ────────────────────────────────────────────── */}
-        <section className="py-20 bg-white">
+        <section className="below-fold py-20 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div data-gsap="fade-up" className="flex items-end justify-between mb-10">
               <div>
@@ -300,7 +307,10 @@ export default function HomePage() {
                     src={cat.image}
                     alt={cat.title}
                     className="w-20 h-20 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-200"
-                    loading="lazy"
+                    loading="eager"
+                    decoding="async"
+                    width={80}
+                    height={80}
                   />
                   <span className="font-display text-[11px] font-bold text-center leading-tight text-[#0d1f3c]">{cat.title}</span>
                   <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">{cat.count} items</span>

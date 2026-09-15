@@ -261,6 +261,31 @@
 .mega-sub-link:hover::before { width: 10px; }
 .mega-sub-link:hover { padding-left: 14px; }
 
+/* ─── Performance: GPU compositing for interactive elements ─────────────── */
+
+/* Images render crisply without layout jank */
+img {
+  image-rendering: auto;
+  /* prevent layout shift while images load */
+  height: auto;
+}
+
+/* Cards that have hover transforms — hint the GPU upfront */
+.product-card,
+.cat-card {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Sections below the fold — skip paint/layout until near viewport.
+   contain-intrinsic-size prevents scroll-height collapse. */
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
 /* ─── Product card ───────────────────────────────────────────────────────── */
 .product-card {
   transition: transform 0.22s cubic-bezier(0.22,1,0.36,1),

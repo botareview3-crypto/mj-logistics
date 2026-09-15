@@ -70,10 +70,19 @@ function AppLayout({ Component, pageProps }: AppProps) {
   });
 
   React.useEffect(() => {
-    fetch(`${apiBase}/api/site/settings`)
+    // Fetch site settings non-blocking with a short timeout.
+    // If the API is slow or unreachable the page renders immediately
+    // with defaults (no maintenance mode, no announcement).
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 s max
+
+    fetch(`${apiBase}/api/site/settings`, { signal: controller.signal })
       .then(r => r.ok ? r.json() : null)
       .then(s => { if (s) setSiteSettings(s); })
-      .catch(() => undefined);
+      .catch(() => undefined) // silently ignore network errors / aborts
+      .finally(() => clearTimeout(timeoutId));
+
+    return () => { controller.abort(); clearTimeout(timeoutId); };
   }, [apiBase]);
 
   // Maintenance mode guard
