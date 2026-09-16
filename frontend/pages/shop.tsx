@@ -72,22 +72,22 @@ export default function ShopPage() {
             <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
               {/* Search */}
               <form onSubmit={handleSearch} className="flex-1 flex items-center bg-white/95 rounded-xl overflow-hidden shadow-lg">
-                <Search className="w-4 h-4 text-slate-400 ml-4 shrink-0" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search by name, OEM number, or brand…"
-                  className="flex-1 px-3 py-3.5 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 focus:outline-none focus:ring-0 focus:border-none placeholder-slate-400"
+                  className="flex-1 pl-5 pr-3 py-3.5 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 focus:outline-none focus:ring-0 focus:border-none placeholder-slate-400"
                   aria-label="Search parts"
                   style={{ boxShadow: 'none' }}
                 />
                 <button
                   type="submit"
-                  className="px-5 py-3.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-sm font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label="Search"
+                  className="w-10 h-10 mr-2 rounded-full bg-[#0d1f3c] hover:bg-[#1a3560] text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
                 >
-                  Search
+                  <Search className="w-4 h-4" />
                 </button>
               </form>
 
