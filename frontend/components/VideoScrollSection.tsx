@@ -34,16 +34,17 @@ export function VideoScrollSection() {
 
   const [muted, setMuted] = useState(true);
 
-  /* ── Play mobile video when it enters viewport ─────────────────────── */
+  /* ── Play mobile video when it enters viewport (fallback for autoPlay) ── */
   useEffect(() => {
     const vid = videoMobile.current;
     if (!vid) return;
+    // Try immediate play first (autoPlay may be blocked by browser policy)
+    vid.play().catch(() => {});
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) vid.play().catch(() => {});
-        else vid.pause();
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
     obs.observe(vid);
     return () => obs.disconnect();
@@ -135,15 +136,16 @@ export function VideoScrollSection() {
         style={{ minHeight: '420px' }}
         aria-label="MJ Logistics operations"
       >
-        {/* Full-bleed background video */}
+        {/* Full-bleed background video — 2MB mobile-optimised 720p */}
         <video
           ref={videoMobile}
-          src="/logistics-video-web.mp4"
+          src="/logistics-mobile.mp4"
           poster="/aerial-view-container-cargo-ship-sea.webp"
           loop
           muted
           playsInline
-          preload="metadata"
+          autoPlay
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
         />
 
