@@ -101,24 +101,36 @@ export default function CartPage() {
       <Breadcrumbs items={[{ label: 'Shopping Cart' }]} />
 
       {/* Page header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-bold text-[#0d1f3c]">
-            Shopping Cart
-            <span className="ml-2 text-[20px] font-normal text-slate-400">({cartCount})</span>
-          </h1>
-          <p className="text-sm text-slate-500 mt-0.5">Review your parts, quantities, and fitment checks.</p>
+      <section className="relative rounded-3xl overflow-hidden">
+        <img
+          src="/homepage/auto-parts-istock.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/95 via-[#0d1f3c]/80 to-[#0d1f3c]/40" />
+        <div className="relative px-7 py-10 sm:px-10 sm:py-12 flex items-center justify-between gap-6">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/70 text-[11px] font-bold uppercase tracking-wider mb-4">
+              <ShoppingCart className="w-3.5 h-3.5" /> Your order
+            </div>
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
+              Shopping Cart
+              <span className="ml-2 text-xl font-normal text-white/40">({cartCount})</span>
+            </h1>
+            <p className="text-white/55 text-[13px] mt-2">Review your parts, quantities, and fitment checks.</p>
+          </div>
+          {cart.length > 0 && (
+            <button
+              type="button"
+              onClick={() => { if (window.confirm('Clear all items?')) clearCart(); }}
+              className="flex items-center gap-1.5 text-xs text-white/50 hover:text-rose-300 font-semibold transition-colors cursor-pointer shrink-0"
+            >
+              <Trash2 className="w-3.5 h-3.5" /> Clear all
+            </button>
+          )}
         </div>
-        {cart.length > 0 && (
-          <button
-            type="button"
-            onClick={() => { if (window.confirm('Clear all items?')) clearCart(); }}
-            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-rose-600 font-semibold transition-colors cursor-pointer"
-          >
-            <Trash2 className="w-3.5 h-3.5" /> Clear all
-          </button>
-        )}
-      </div>
+      </section>
 
       {cart.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

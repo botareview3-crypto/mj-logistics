@@ -47,7 +47,7 @@ export default function ProductDetailPage() {
 
   const productReviews = part.reviews && part.reviews.length > 0 ? part.reviews : SAMPLE_PART_REVIEWS;
 
-  const tabClass = (tab: string) => `py-3.5 px-6 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === tab ? 'border-[#0077C7] text-[#0077C7] bg-white' : 'border-transparent text-slate-600 hover:text-slate-900'}`;
+  const tabClass = (tab: string) => `py-3.5 px-6 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === tab ? 'border-[#1e4d8c] text-[#1e4d8c] bg-white' : 'border-transparent text-slate-600 hover:text-slate-900'}`;
 
   return (
     <div className="space-y-8 pb-16">
@@ -133,7 +133,7 @@ export default function ProductDetailPage() {
                       <div className="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0"><Car className="w-5 h-5" /></div>
                       <div><div className="text-xs font-bold text-slate-800">Confirm this fits your exact vehicle</div><p className="text-xs text-slate-500">Select your vehicle to verify compatibility before ordering.</p></div>
                     </div>
-                    <button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0077C7] hover:bg-[#0060A1] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shrink-0">Check Fitment</button>
+                    <button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shrink-0">Check Fitment</button>
                   </div>
                 )}
               </div>
@@ -159,16 +159,16 @@ export default function ProductDetailPage() {
                     <span className="w-12 text-center text-sm font-bold text-slate-900 font-mono">{quantity}</span>
                     <button type="button" onClick={() => setQuantity(Math.min(part.stockCount, quantity + 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-100 text-sm font-bold cursor-pointer">+</button>
                   </div>
-                  <button type="button" onClick={handleAddToCart} className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0077C7] hover:bg-[#0060A1] active:bg-[#004B7D] text-white shadow-md'}`}>
+                  <button type="button" onClick={handleAddToCart} className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0d1f3c] hover:bg-[#1a3560] active:bg-[#0a1628] text-white shadow-md'}`}>
                     {justAdded ? <><Check className="w-5 h-5" /><span>Added to Cart!</span></> : <><ShoppingCart className="w-5 h-5" /><span>Add to Cart • ${(part.price * quantity).toFixed(2)}</span></>}
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 pt-1">
-                <div className="flex items-center gap-2"><Truck className="w-4 h-4 text-sky-600 shrink-0" /><span>Next-Day Tracked Delivery</span></div>
-                <div className="flex items-center gap-2"><RotateCcw className="w-4 h-4 text-amber-600 shrink-0" /><span>30-Day Easy Returns</span></div>
-                <div className="flex items-center gap-2"><Award className="w-4 h-4 text-emerald-600 shrink-0" /><span>24-Month Full Warranty</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><Truck className="w-4 h-4 text-[#1e4d8c] shrink-0" /><span>Next-Day Tracked Delivery</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><RotateCcw className="w-4 h-4 text-[#1e4d8c] shrink-0" /><span>30-Day Easy Returns</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><Award className="w-4 h-4 text-emerald-600 shrink-0" /><span>24-Month Full Warranty</span></div>
               </div>
             </div>
           </div>

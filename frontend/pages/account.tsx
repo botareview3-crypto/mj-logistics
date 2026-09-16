@@ -59,13 +59,22 @@ export default function MyAccountPage() {
     <div className="space-y-8 pb-16">
       <Breadcrumbs items={[{ label: 'My Account' }]} />
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0077C7] text-xs font-bold uppercase tracking-wider"><UserCircle2 className="w-3.5 h-3.5" /><span>Account & Preferences</span></div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">My Account</h1>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">Track orders, save delivery addresses and check out faster next time.</p>
+      <section className="relative rounded-3xl overflow-hidden">
+        <img
+          src="/homepage/auto-parts-istock.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/95 via-[#0d1f3c]/80 to-[#0d1f3c]/40" />
+        <div className="relative px-7 py-10 sm:px-10 sm:py-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/70 text-[11px] font-bold uppercase tracking-wider mb-4">
+            <UserCircle2 className="w-3.5 h-3.5" /> Account & Preferences
+          </div>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-white leading-tight">My Account</h1>
+          <p className="text-white/55 text-[13px] mt-2 max-w-lg">Track orders, save delivery addresses and check out faster next time.</p>
         </div>
-      </div>
+      </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
