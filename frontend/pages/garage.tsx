@@ -34,27 +34,36 @@ export default function GaragePage() {
       <Breadcrumbs items={[{ label: 'My Garage' }]} />
 
       {/* ── Header ────────────────────────────────────────────────── */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0d1f3c]/8 text-[#1e4d8c] text-[11px] font-bold uppercase tracking-wider mb-3">
-            <Car className="w-3.5 h-3.5" /> Multi-vehicle management
+      <section className="relative rounded-3xl overflow-hidden">
+        <img
+          src="/homepage/auto-parts-istock.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/95 via-[#0d1f3c]/80 to-[#0d1f3c]/40" />
+        <div className="relative px-7 py-10 sm:px-10 sm:py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/70 text-[11px] font-bold uppercase tracking-wider mb-4">
+              <Car className="w-3.5 h-3.5" /> Multi-vehicle management
+            </div>
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
+              My Garage
+              <span className="ml-2 text-xl font-normal text-white/40">({savedVehicles.length})</span>
+            </h1>
+            <p className="text-white/55 text-[13px] mt-2 max-w-lg leading-relaxed">
+              Save your vehicles, set one as active, and every product page will confirm fitment automatically.
+            </p>
           </div>
-          <h1 className="font-display text-3xl font-bold text-[#0d1f3c]">
-            My Garage
-            <span className="ml-2 text-xl font-normal text-slate-400">({savedVehicles.length})</span>
-          </h1>
-          <p className="text-sm text-slate-500 mt-1 max-w-lg leading-relaxed">
-            Save your vehicles, set one as active, and every product page will confirm fitment automatically.
-          </p>
+          <button
+            type="button"
+            onClick={() => openSelectorModal('vin')}
+            className="flex items-center gap-2 px-5 py-3 bg-white hover:bg-white/90 text-[#0d1f3c] font-bold text-sm rounded-xl transition-colors cursor-pointer shrink-0 shadow-lg"
+          >
+            <Plus className="w-4 h-4" /> Add Vehicle
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => openSelectorModal('vin')}
-          className="flex items-center gap-2 px-5 py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0"
-        >
-          <Plus className="w-4 h-4" /> Add Vehicle
-        </button>
-      </div>
+      </section>
 
       {savedVehicles.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
