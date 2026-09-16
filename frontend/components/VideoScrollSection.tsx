@@ -216,76 +216,93 @@ export function VideoScrollSection() {
             {/* RIGHT TEXT PANEL */}
             <div
               ref={rightPanelRef}
-              className="absolute right-0 top-0 h-full flex items-center px-12 pointer-events-none z-10"
-              style={{ width: '50vw' }}
+              className="absolute right-0 top-0 h-full flex flex-col justify-center pointer-events-none z-10 overflow-hidden"
+              style={{ width: '50vw', paddingLeft: '4vw', paddingRight: '3vw' }}
             >
-              <div className="w-full max-w-md pointer-events-auto">
+              {/* Ghost word — large decorative background text */}
+              <span
+                aria-hidden="true"
+                className="absolute select-none font-black uppercase text-[#0d1f3c] pointer-events-none"
+                style={{
+                  fontSize: 'clamp(6rem, 12vw, 11rem)',
+                  opacity: 0.04,
+                  letterSpacing: '-0.04em',
+                  top: '50%',
+                  left: '2vw',
+                  transform: 'translateY(-50%)',
+                  whiteSpace: 'nowrap',
+                  lineHeight: 1,
+                }}
+              >
+                LOGISTICS
+              </span>
 
-                {/* Eyebrow */}
-                <p
-                  className="text-[9px] font-black uppercase text-[#1e4d8c] mb-5 tracking-[0.5em]"
-                >
-                  Our Operations
-                </p>
+              <div className="relative pointer-events-auto">
 
-                {/* Headline */}
+                {/* Thin accent line + eyebrow inline */}
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="block w-8 h-px bg-[#1e4d8c]" />
+                  <span className="text-[9px] font-black uppercase tracking-[0.45em] text-[#1e4d8c]">
+                    Our Operations
+                  </span>
+                </div>
+
+                {/* Headline — massive, tight leading */}
                 <h2
-                  className="font-bold text-[#0d1f3c] leading-[1.05] mb-5"
-                  style={{ fontSize: 'clamp(2rem, 3.2vw, 3rem)' }}
+                  className="font-black text-[#0d1f3c] leading-[0.95] mb-8 tracking-tight"
+                  style={{ fontSize: 'clamp(2.8rem, 4.5vw, 5rem)' }}
                 >
-                  Logistics at<br />
+                  Logistics<br />
                   <span
-                    className="italic font-normal"
-                    style={{ fontFamily: "'Chopin Trial', serif", color: '#1e4d8c', fontSize: 'clamp(2.2rem, 3.6vw, 3.4rem)' }}
+                    className="italic font-light text-[#1e4d8c]"
+                    style={{ fontFamily: "'Chopin Trial', serif", fontSize: 'clamp(2.4rem, 4vw, 4.4rem)' }}
                   >
-                    Every Scale
+                    at Every Scale
                   </span>
                 </h2>
 
+                {/* Slim divider */}
+                <div className="w-12 h-[2px] bg-[#1e4d8c] mb-6" />
+
                 {/* Body */}
-                <p className="text-slate-500 text-[13.5px] leading-relaxed mb-10 max-w-[340px]">
-                  From port to doorstep — freight, customs clearance,
-                  warehousing, and last-mile delivery.
+                <p className="text-slate-400 text-[13px] leading-[1.75] mb-10" style={{ maxWidth: '30ch' }}>
+                  Port to doorstep — freight forwarding, customs clearance,
+                  warehousing &amp; last-mile delivery.
                 </p>
 
-                {/* Stats — horizontal rule above, numbers flush left */}
-                <div className="border-t border-slate-200 pt-7 mb-9">
-                  <div className="grid grid-cols-4 gap-0">
-                    {[
-                      { value: '15+',  label: 'Years' },
-                      { value: '10k+', label: 'Deliveries' },
-                      { value: '98%',  label: 'On-time' },
-                      { value: '24/7', label: 'Support' },
-                    ].map((s, i) => (
-                      <div
-                        key={s.label}
-                        className={`${i > 0 ? 'border-l border-slate-200 pl-4' : ''}`}
+                {/* Stats — 2×2 grid, numbers huge, labels tiny */}
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5 mb-10">
+                  {[
+                    { value: '15+',  label: 'Years experience' },
+                    { value: '10k+', label: 'Deliveries made'  },
+                    { value: '98%',  label: 'On-time rate'     },
+                    { value: '24/7', label: 'Live support'     },
+                  ].map(s => (
+                    <div key={s.label}>
+                      <p
+                        className="font-black text-[#0d1f3c] leading-none"
+                        style={{ fontSize: 'clamp(1.8rem, 2.8vw, 2.6rem)', fontVariantNumeric: 'tabular-nums' }}
                       >
-                        <p
-                          className="font-black text-[#0d1f3c] leading-none"
-                          style={{ fontSize: 'clamp(1.4rem, 2vw, 1.9rem)', fontVariantNumeric: 'tabular-nums' }}
-                        >
-                          {s.value}
-                        </p>
-                        <p className="text-slate-400 mt-1.5 text-[10px] uppercase tracking-widest font-semibold">
-                          {s.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                        {s.value}
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-semibold mt-1">
+                        {s.label}
+                      </p>
+                    </div>
+                  ))}
                 </div>
 
-                {/* CTA */}
+                {/* CTA — text only with underline sweep */}
                 <a
                   href="/divisions"
-                  className="inline-flex items-center gap-3 group cursor-pointer"
+                  className="inline-flex items-center gap-4 group cursor-pointer"
                 >
-                  <span className="text-[13px] font-bold text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors">
+                  <span
+                    className="relative text-[12px] font-black uppercase tracking-[0.3em] text-[#0d1f3c] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#1e4d8c] after:transition-all after:duration-300 group-hover:after:w-full"
+                  >
                     Our Divisions
                   </span>
-                  <span className="w-8 h-8 rounded-full bg-[#0d1f3c] group-hover:bg-[#1e4d8c] flex items-center justify-center transition-all group-hover:translate-x-1">
-                    <ArrowRight className="w-3.5 h-3.5 text-white" />
-                  </span>
+                  <ArrowRight className="w-4 h-4 text-[#0d1f3c] group-hover:translate-x-1.5 transition-transform duration-200" />
                 </a>
 
               </div>
