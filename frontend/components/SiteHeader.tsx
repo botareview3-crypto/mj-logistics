@@ -42,9 +42,9 @@ const MEGA_SECTIONS: MegaSection[] = [
     image: '/categories/pen-paper.webp',
     imageAlt: 'Office stationery',
     subcategories: [
-      { label: 'Pens & Writing',         href: '/catalog/office-stationery' },
-      { label: 'Paper & Printing',       href: '/catalog/office-stationery' },
-      { label: 'Filing & Organisation',  href: '/catalog/office-stationery' },
+      { label: 'Pens & Writing',         href: '/catalog/office-stationery#pens' },
+      { label: 'Paper & Printing',       href: '/catalog/office-stationery#paper' },
+      { label: 'Filing & Organisation',  href: '/catalog/office-stationery#filing' },
     ],
   },
   {
@@ -53,9 +53,9 @@ const MEGA_SECTIONS: MegaSection[] = [
     image: '/homepage/diamond.webp',
     imageAlt: 'MJ Mining — diamonds & gold',
     subcategories: [
-      { label: 'Diamond Sourcing',        href: '/mining' },
-      { label: 'Gold Sourcing',           href: '/mining' },
-      { label: 'Long-term Partnerships',  href: '/mining' },
+      { label: 'Diamond Sourcing',        href: '/mining#diamonds' },
+      { label: 'Gold Sourcing',           href: '/mining#gold' },
+      { label: 'Long-term Partnerships',  href: '/mining#partnerships' },
     ],
   },
 ];
@@ -353,7 +353,7 @@ export const SiteHeader: React.FC = () => {
                       </p>
                       <ul className="space-y-1">
                         {MEGA_SECTIONS[openSection].subcategories?.map(sub => (
-                          <li key={sub.href}>
+                          <li key={sub.label}>
                             <button
                               type="button"
                               onClick={() => go(sub.href)}
