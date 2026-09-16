@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Head from 'next/head';
 import {
   Search, Car, ChevronRight, TrendingUp, Wrench,
@@ -18,9 +18,9 @@ const iconMap: Record<string, React.ElementType> = {
 export default function ShopPage() {
   const { activeVehicle, openSelectorModal, navigate } = useApp();
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const bestSellers = PARTS_DATABASE.filter(p => p.isBestSeller).slice(0, 8);
-  const featured    = PARTS_DATABASE.filter(p => p.featured).slice(0, 4);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,13 +37,21 @@ export default function ShopPage() {
       <div className="space-y-10 pb-16">
 
         {/* ── Hero search banner ────────────────────────────────────── */}
-        <section className="relative rounded-3xl overflow-hidden bg-[#0d1f3c]">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-15"
-            style={{ backgroundImage: "url('/aerial-view-container-cargo-ship-sea.webp')" }}
+        <section className="relative rounded-3xl overflow-hidden min-h-[320px]">
+
+          {/* Background image — the istock auto parts photo */}
+          <img
+            src="/homepage/auto-parts-istock.jpg"
+            alt=""
             aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
-          <div className="relative px-8 py-12 sm:px-12">
+
+          {/* Dark overlay so text is readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/92 via-[#0d1f3c]/75 to-[#0d1f3c]/40" />
+
+          {/* Content */}
+          <div className="relative px-8 py-12 sm:px-12 sm:py-14">
             {activeVehicle && (
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 border border-emerald-400/30 rounded-full text-emerald-300 text-xs font-semibold mb-5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
@@ -54,27 +62,30 @@ export default function ShopPage() {
 
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3 leading-tight">
               Find Parts That Fit.<br />
-              <span className="italic font-light opacity-80">Every Vehicle. Every System.</span>
+              <span className="italic font-light opacity-75">Every Vehicle. Every System.</span>
             </h1>
-            <p className="text-white/65 text-[15px] mb-8 max-w-lg leading-relaxed">
-              Search by name, brand, or OEM number — then confirm fitment for your vehicle before ordering.
+            <p className="text-white/60 text-[15px] mb-8 max-w-lg leading-relaxed">
+              Search by name, brand, or OEM number — confirm fitment for your vehicle before ordering.
             </p>
 
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            {/* Search + vehicle row */}
+            <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
               {/* Search */}
-              <form onSubmit={handleSearch} className="flex bg-white rounded-xl overflow-hidden shadow-lg">
-                <Search className="w-5 h-5 text-slate-400 my-auto ml-4 shrink-0" />
+              <form onSubmit={handleSearch} className="flex-1 flex items-center bg-white/95 rounded-xl overflow-hidden shadow-lg">
+                <Search className="w-4 h-4 text-slate-400 ml-4 shrink-0" />
                 <input
+                  ref={inputRef}
                   type="text"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search by name, OEM number, or brand…"
-                  className="flex-1 px-3 py-3.5 text-sm text-[#0d1f3c] outline-none"
+                  className="flex-1 px-3 py-3.5 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 focus:outline-none focus:ring-0 focus:border-none placeholder-slate-400"
                   aria-label="Search parts"
+                  style={{ boxShadow: 'none' }}
                 />
                 <button
                   type="submit"
-                  className="px-5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-sm font-bold transition-colors cursor-pointer"
+                  className="px-5 py-3.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-sm font-bold transition-colors cursor-pointer shrink-0"
                 >
                   Search
                 </button>
@@ -84,13 +95,15 @@ export default function ShopPage() {
               <button
                 type="button"
                 onClick={() => openSelectorModal('cascading')}
-                className="flex items-center justify-between gap-3 px-5 py-3.5 glass rounded-xl text-white text-sm font-medium cursor-pointer hover:bg-white/20 transition-all"
+                className="flex items-center gap-2.5 px-5 py-3.5 bg-white/10 border border-white/25 backdrop-blur-sm rounded-xl text-white text-sm font-medium cursor-pointer hover:bg-white/20 transition-all shrink-0"
               >
+                <Car className="w-4 h-4 text-white/70 shrink-0" />
                 <div className="text-left">
-                  <span className="block text-[11px] text-white/60 uppercase tracking-wider">Fitment check</span>
-                  <span className="font-semibold">{activeVehicle ? `${activeVehicle.make} ${activeVehicle.model}` : 'Select your vehicle'}</span>
+                  <span className="block text-[10px] text-white/50 uppercase tracking-wider leading-none mb-0.5">Fitment check</span>
+                  <span className="font-semibold leading-none">
+                    {activeVehicle ? `${activeVehicle.make} ${activeVehicle.model}` : 'Select your vehicle'}
+                  </span>
                 </div>
-                <Car className="w-5 h-5 text-white/70 shrink-0" />
               </button>
             </div>
           </div>
@@ -232,12 +245,13 @@ export default function ShopPage() {
             <button
               type="button"
               onClick={() => openSelectorModal('vin')}
-              className="px-6 py-3 glass text-white font-semibold text-[13px] rounded-xl cursor-pointer hover:bg-white/20 transition-all"
+              className="px-6 py-3 bg-white/10 border border-white/25 text-white font-semibold text-[13px] rounded-xl cursor-pointer hover:bg-white/20 transition-all"
             >
               Add a vehicle
             </button>
           </div>
         </section>
+
       </div>
     </>
   );
