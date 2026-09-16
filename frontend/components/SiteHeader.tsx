@@ -53,9 +53,9 @@ const MEGA_SECTIONS: MegaSection[] = [
     image: '/homepage/diamond.webp',
     imageAlt: 'MJ Mining — diamonds & gold',
     subcategories: [
-      { label: 'Diamond Sourcing',       href: '/mining' },
-      { label: 'Gold Sourcing',          href: '/mining' },
-      { label: 'Long-term Partnerships', href: '/mining' },
+      { label: 'Diamond Sourcing',        href: '/mining' },
+      { label: 'Gold Sourcing',           href: '/mining' },
+      { label: 'Long-term Partnerships',  href: '/mining' },
     ],
   },
 ];
@@ -190,8 +190,8 @@ export const SiteHeader: React.FC = () => {
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setMegaOpen(p => !p)}
-                onMouseEnter={() => setMegaOpen(true)}
+                onClick={() => { setOpenSection(0); setMegaOpen(p => !p); }}
+                onMouseEnter={() => { setOpenSection(0); setMegaOpen(true); }}
                 aria-expanded={megaOpen}
                 aria-haspopup="true"
                 className={`
@@ -322,10 +322,7 @@ export const SiteHeader: React.FC = () => {
                   <div key={section.label}>
                     <button
                       type="button"
-                      onClick={() => {
-                        setOpenSection(i);
-                        go(section.href);
-                      }}
+                      onClick={() => setOpenSection(i)}
                       onMouseEnter={() => setOpenSection(i)}
                       className={`
                         w-full flex items-center justify-between px-5 py-3
@@ -336,11 +333,10 @@ export const SiteHeader: React.FC = () => {
                       `}
                     >
                       <span>{section.label}</span>
-                      {section.subcategories && section.subcategories.length > 0 && (
-                        openSection === i
-                          ? <ChevronDown className="w-4 h-4 shrink-0" strokeWidth={2} />
-                          : <ChevronRight className="w-4 h-4 shrink-0" strokeWidth={2} />
-                      )}
+                      <ChevronRight
+                        className={`w-4 h-4 shrink-0 transition-transform duration-200 ${openSection === i ? 'rotate-90' : ''}`}
+                        strokeWidth={2}
+                      />
                     </button>
                   </div>
                 ))}
@@ -431,27 +427,34 @@ export const SiteHeader: React.FC = () => {
               {mobileProdOpen && (
                 <div className="pl-4 pb-3 space-y-2 animate-fade-in">
                   {MEGA_SECTIONS.map((section, i) => (
-                    <div key={section.label}>
+                    <div key={section.label} className="border-b border-white/10 last:border-0">
                       <button
                         type="button"
-                        onClick={() => setMobileSection(mobileSection === i ? -1 : i)}
-                        className="w-full flex items-center justify-between py-2 text-white/80 font-display text-[15px] cursor-pointer"
+                        onClick={() => setMobileSection(prev => prev === i ? -1 : i)}
+                        className="w-full flex items-center justify-between py-2.5 text-white/85 font-display text-[15px] cursor-pointer"
                       >
                         <span>{section.label}</span>
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileSection === i ? 'rotate-180' : ''}`} />
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileSection === i ? 'rotate-180' : ''}`} />
                       </button>
                       {mobileSection === i && (
-                        <div className="pl-4 space-y-1 animate-fade-in">
+                        <div className="pl-3 pb-2 space-y-0.5">
                           {section.subcategories?.map(sub => (
                             <button
                               key={`${section.label}-${sub.label}`}
                               type="button"
                               onClick={() => go(sub.href)}
-                              className="block py-1.5 text-sm text-white/65 hover:text-white transition-colors cursor-pointer text-left"
+                              className="block w-full text-left py-1.5 text-sm text-white/65 hover:text-white transition-colors cursor-pointer"
                             >
                               {sub.label}
                             </button>
                           ))}
+                          <button
+                            type="button"
+                            onClick={() => go(section.href)}
+                            className="block w-full text-left py-1.5 text-xs font-bold text-white/50 hover:text-white transition-colors cursor-pointer"
+                          >
+                            View all {section.label} →
+                          </button>
                         </div>
                       )}
                     </div>
