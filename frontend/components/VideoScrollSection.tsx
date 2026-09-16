@@ -38,35 +38,44 @@ export function VideoScrollSection() {
   useEffect(() => {
     const vid = videoMobile.current;
     if (!vid) return;
-    // Try immediate play first (autoPlay may be blocked by browser policy)
-    vid.play().catch(() => {});
+    const tryPlay = () => vid.play().catch(() => {});
+    if (vid.readyState >= 3) {
+      tryPlay();
+    } else {
+      vid.addEventListener('canplay', tryPlay, { once: true });
+    }
     const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) vid.play().catch(() => {});
-      },
+      ([entry]) => { if (entry.isIntersecting && vid.paused) tryPlay(); },
       { threshold: 0.1 }
     );
     obs.observe(vid);
-    return () => obs.disconnect();
+    return () => { obs.disconnect(); vid.removeEventListener('canplay', tryPlay); };
+  }, []);
+
+  /* ── Desktop video: play as soon as enough data is loaded ─────────── */
+  useEffect(() => {
+    const vid = videoDesktop.current;
+    if (!vid) return;
+    const tryPlay = () => vid.play().catch(() => {});
+    // Play immediately if already ready
+    if (vid.readyState >= 3) {
+      tryPlay();
+    } else {
+      vid.addEventListener('canplay', tryPlay, { once: true });
+    }
+    // Also retry on intersection in case browser paused it
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && vid.paused) tryPlay(); },
+      { threshold: 0.05 }
+    );
+    obs.observe(vid);
+    return () => { obs.disconnect(); vid.removeEventListener('canplay', tryPlay); };
   }, []);
 
   /* ── GSAP desktop animation ───────────────────────────────────────── */
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!sectionRef.current || !stickyRef.current || !pillRef.current) return;
-
-    // Autoplay desktop video on intersection
-    const vid = videoDesktop.current;
-    let videoObserver: IntersectionObserver | null = null;
-    if (vid) {
-      videoObserver = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && vid.paused) vid.play().catch(() => {});
-        },
-        { threshold: 0.1 }
-      );
-      videoObserver.observe(vid);
-    }
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -78,11 +87,6 @@ export function VideoScrollSection() {
           pin: stickyRef.current,
           pinSpacing: false,
           anticipatePin: 1,
-          onUpdate: (self) => {
-            if (vid && self.progress > 0.08 && vid.paused) {
-              vid.play().catch(() => {});
-            }
-          },
         },
       });
 
@@ -112,7 +116,6 @@ export function VideoScrollSection() {
 
     return () => {
       ctx.revert();
-      videoObserver?.disconnect();
     };
   }, []);
 
@@ -302,7 +305,8 @@ export function VideoScrollSection() {
                 loop
                 muted={muted}
                 playsInline
-                preload="metadata"
+                autoPlay
+                preload="auto"
                 className="absolute inset-0 w-full h-full object-cover"
               />
 
