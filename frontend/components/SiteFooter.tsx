@@ -18,9 +18,9 @@ const FOOTER_LINKS = {
     { label: 'Office Furniture',    href: '/catalog/business-equipment' },
   ],
   'Company': [
-    { label: 'About Us',     href: '/divisions' },
-    { label: 'MJ Mining',   href: '/mining' },
-    { label: 'Contact',     href: '/contact' },
+    { label: 'About Us',      href: '/divisions' },
+    { label: 'MJ Mining',     href: '/mining' },
+    { label: 'Advantages',    href: '/advantages' },
     { label: 'Privacy Policy',href: '/privacy' },
     { label: 'Terms of Sale', href: '/terms' },
   ],

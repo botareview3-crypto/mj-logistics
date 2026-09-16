@@ -183,10 +183,7 @@ export default function HomePage() {
       <main ref={mainRef}>
         {/* ── HERO ───────────────────────────────────────────────────────── */}
         <section className="relative min-h-screen w-full overflow-hidden">
-          {/* Background image — loaded as <img> with fetchpriority=high so the browser
-              discovers and fetches it immediately (CSS backgroundImage is invisible to the
-              preload scanner and loads ~300-600ms later). The img is hidden visually and
-              the CSS bg-cover is applied via object-fit on the img itself. */}
+          {/* Background image */}
           <img
             src="/homepage/hero-bg.webp"
             alt=""
@@ -194,13 +191,13 @@ export default function HomePage() {
             fetchPriority="high"
             loading="eager"
             decoding="sync"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-[60%_center]"
           />
           {/* Overlay gradient */}
           <div className="hero-overlay absolute inset-0" aria-hidden="true" />
 
           {/* Hero content */}
-          <div className="relative z-10 flex flex-col justify-end min-h-screen pb-20 pt-32 px-6 max-w-[1200px] mx-auto">
+          <div className="relative z-10 flex flex-col justify-end min-h-screen pb-16 sm:pb-20 pt-32 px-6 max-w-[1200px] mx-auto">
             <div className="max-w-2xl">
               <p
                 ref={heroTaglineRef}
@@ -212,7 +209,7 @@ export default function HomePage() {
 
               <h1
                 ref={heroH1Ref}
-                className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
+                className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
                 style={{ opacity: 0 }}
               >
                 Parts That Fit.<br />
@@ -221,7 +218,7 @@ export default function HomePage() {
 
               <p
                 ref={heroDescRef}
-                className="text-[16px] text-white/80 leading-relaxed max-w-xl mb-10"
+                className="text-[15px] text-white/80 leading-relaxed max-w-xl mb-8 sm:mb-10"
                 style={{ opacity: 0 }}
               >
                 Your trusted source for genuine auto parts, office stationery, and business equipment — with verified fitment and expert support.
@@ -247,7 +244,7 @@ export default function HomePage() {
                   </button>
 
                   {catalogDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
+                    <div className="absolute bottom-full mb-2 left-0 w-64 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
                       <div className="px-4 py-2 border-b border-slate-100">
                         <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">More Categories</p>
                       </div>
@@ -343,7 +340,7 @@ export default function HomePage() {
                   href: '/shop',
                   cta: 'Shop parts',
                   bg: 'bg-gradient-to-br from-[#0d1f3c] to-[#1a3560]',
-                  image: '/homepage/auto-parts.webp',
+                  image: '/homepage/auto-parts-istock.jpg',
                 },
                 {
                   icon: Package,
@@ -375,8 +372,9 @@ export default function HomePage() {
                     aria-hidden="true"
                   />
                   <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
-                  <div className="relative w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-5">
-                    <div.icon className="w-6 h-6 text-white" strokeWidth={1.8} />
+                  {/* Bare icon — no wrapper box */}
+                  <div className="relative mb-5">
+                    <div.icon className="w-7 h-7 text-white/80" strokeWidth={1.6} />
                   </div>
                   <h3 className="relative font-display text-xl font-bold text-white mb-3">{div.title}</h3>
                   <p className="relative text-white/70 text-[13px] leading-relaxed flex-1">{div.desc}</p>

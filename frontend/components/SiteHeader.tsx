@@ -48,14 +48,14 @@ const MEGA_SECTIONS: MegaSection[] = [
     ],
   },
   {
-    label: 'Business Equipment',
-    href: '/catalog/business-equipment',
-    image: '/categories/pen-paper.webp',
-    imageAlt: 'Business equipment',
+    label: 'MJ Mining',
+    href: '/mining',
+    image: '/homepage/diamond.webp',
+    imageAlt: 'MJ Mining — diamonds & gold',
     subcategories: [
-      { label: 'Printers & Scanners',    href: '/catalog/business-equipment' },
-      { label: 'Computer Accessories',   href: '/catalog/business-equipment' },
-      { label: 'Office Furniture',       href: '/catalog/business-equipment' },
+      { label: 'Diamond Sourcing',       href: '/mining' },
+      { label: 'Gold Sourcing',          href: '/mining' },
+      { label: 'Long-term Partnerships', href: '/mining' },
     ],
   },
 ];
@@ -73,6 +73,7 @@ export const SiteHeader: React.FC = () => {
   const [mobileOpen,     setMobileOpen]     = useState(false);
   const [openSection,    setOpenSection]    = useState<number>(0);   // which accordion section
   const [mobileSection,  setMobileSection]  = useState<number>(-1);
+  const [mobileProdOpen, setMobileProdOpen] = useState<boolean>(false);
   const [searchQuery,    setSearchQuery]    = useState('');
   const [searchVisible,  setSearchVisible]  = useState(false);
 
@@ -118,6 +119,8 @@ export const SiteHeader: React.FC = () => {
   useEffect(() => {
     setMobileOpen(false);
     setMegaOpen(false);
+    setMobileProdOpen(false);
+    setMobileSection(-1);
   }, [currentPath]);
 
   const go = useCallback((href: string) => {
@@ -418,20 +421,20 @@ export const SiteHeader: React.FC = () => {
             <div className="border-b border-white/10">
               <button
                 type="button"
-                onClick={() => setMobileSection(mobileSection === 99 ? -1 : 99)}
+                onClick={() => { setMobileProdOpen(p => !p); setMobileSection(-1); }}
                 className="w-full flex items-center justify-between py-3 text-white font-display text-[16px] font-medium cursor-pointer"
               >
                 <span>Product and Services</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${mobileSection === 99 ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform ${mobileProdOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              {mobileSection === 99 && (
+              {mobileProdOpen && (
                 <div className="pl-4 pb-3 space-y-2 animate-fade-in">
                   {MEGA_SECTIONS.map((section, i) => (
                     <div key={section.label}>
                       <button
                         type="button"
-                        onClick={() => setMobileSection(mobileSection === i ? 99 : i)}
+                        onClick={() => setMobileSection(mobileSection === i ? -1 : i)}
                         className="w-full flex items-center justify-between py-2 text-white/80 font-display text-[15px] cursor-pointer"
                       >
                         <span>{section.label}</span>
@@ -441,7 +444,7 @@ export const SiteHeader: React.FC = () => {
                         <div className="pl-4 space-y-1 animate-fade-in">
                           {section.subcategories?.map(sub => (
                             <button
-                              key={sub.href}
+                              key={`${section.label}-${sub.label}`}
                               type="button"
                               onClick={() => go(sub.href)}
                               className="block py-1.5 text-sm text-white/65 hover:text-white transition-colors cursor-pointer text-left"

@@ -28,11 +28,15 @@ export function VideoScrollSection() {
   const bgRef       = useRef<HTMLDivElement>(null);
 
   const [muted, setMuted] = useState(true);
-  // On mobile we skip the entire heavy scroll animation and video load
-  const [isMobile, setIsMobile] = useState(false);
+  // On mobile/tablet we skip the heavy scroll animation and show a static card.
+  // Initialize to true to avoid SSR/hydration flash (we only know the real value
+  // after mount, so default to the simpler/lighter path).
+  const [isMobile, setIsMobile] = useState(true);
+  const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
+    const mq = window.matchMedia('(max-width: 1023px)');
     setIsMobile(mq.matches);
+    setHydrated(true);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
@@ -47,8 +51,8 @@ export function VideoScrollSection() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    // Skip all GSAP + video work on mobile — the static fallback renders instead
-    if (window.matchMedia('(max-width: 767px)').matches) return;
+    // Skip all GSAP + video work on mobile/tablet — the static fallback renders instead
+    if (window.matchMedia('(max-width: 1023px)').matches) return;
     if (!sectionRef.current || !stickyRef.current || !pillRef.current) return;
 
     // Start video when it enters the viewport
@@ -140,43 +144,52 @@ export function VideoScrollSection() {
 
   return (
     <>
-    {/* ── MOBILE: lightweight static card, no video loaded ───────────── */}
-    {isMobile && (
-      <section className="relative overflow-hidden rounded-3xl bg-[#071a33] px-6 py-14 text-white my-8"
+    {/* ── MOBILE / TABLET: lightweight static card ────────────────────── */}
+    {(isMobile || !hydrated) && (
+      <section className="relative overflow-hidden bg-[#071a33] px-6 py-16 text-white my-0"
         aria-label="MJ Logistics operations">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_0%,rgba(30,77,140,.5),transparent_60%)]" aria-hidden="true" />
-        <div className="relative max-w-sm mx-auto text-center">
-          <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-[#55b8ff] mb-3">Our Operations</p>
-          <h2 className="text-3xl font-bold text-white leading-tight mb-3">
-            Logistics at <span className="italic font-normal text-[#e8c87a]">Every Scale</span>
-          </h2>
-          <p className="text-white/70 text-sm leading-relaxed mb-6">
-            From port to doorstep — MJ Logistics handles freight, customs clearance,
-            warehousing, and last-mile delivery.
-          </p>
-          <div className="grid grid-cols-2 gap-4 mb-6 py-5 border-y border-white/10">
-            {[
-              { value: '15+', label: 'Years experience' },
-              { value: '10k+', label: 'Parts delivered'  },
-              { value: '98%', label: 'On-time rate'      },
-              { value: '24/7', label: 'Support'           },
-            ].map(s => (
-              <div key={s.label}>
-                <p className="text-xl font-bold text-white">{s.value}</p>
-                <p className="text-white/45 text-[10px] uppercase tracking-wider mt-0.5">{s.label}</p>
-              </div>
-            ))}
+
+        <div className="relative max-w-[900px] mx-auto">
+          {/* Two-column on tablet, single-column on phone */}
+          <div className="flex flex-col sm:flex-row gap-10 items-center">
+            {/* Text content */}
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-[#55b8ff] mb-3">Our Operations</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
+                Logistics at <span className="italic font-normal text-[#e8c87a]">Every Scale</span>
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed mb-6">
+                From port to doorstep — MJ Logistics handles freight, customs clearance,
+                warehousing, and last-mile delivery.
+              </p>
+              <a href="/divisions"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0d1f3c] font-bold text-sm rounded-xl hover:bg-white/90 transition-colors">
+                Our Divisions <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-6 sm:gap-5 shrink-0">
+              {[
+                { value: '15+', label: 'Years experience' },
+                { value: '10k+', label: 'Parts delivered'  },
+                { value: '98%', label: 'On-time rate'      },
+                { value: '24/7', label: 'Support'           },
+              ].map(s => (
+                <div key={s.label} className="text-center sm:text-left">
+                  <p className="text-2xl font-bold text-white">{s.value}</p>
+                  <p className="text-white/45 text-[10px] uppercase tracking-wider mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <a href="/divisions"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0d1f3c] font-bold text-sm rounded-xl">
-            Our Divisions <ArrowRight className="w-4 h-4" />
-          </a>
         </div>
       </section>
     )}
 
-    {/* ── DESKTOP: full GSAP scroll-pinned video ──────────────────────── */}
-    {!isMobile && (
+    {/* ── DESKTOP (≥1024px): full GSAP scroll-pinned video ────────────── */}
+    {hydrated && !isMobile && (
     <section
       ref={sectionRef}
       className="video-scroll-section relative"
@@ -203,7 +216,7 @@ export function VideoScrollSection() {
           <div
             ref={rightPanelRef}
             className="absolute right-0 top-0 h-full flex items-center px-10 pointer-events-none z-10"
-            style={{ width: '46vw' }}
+            style={{ width: '48vw' }}
           >
             <div className="w-full max-w-sm pointer-events-auto">
               <div className="bg-white rounded-2xl p-8 shadow-2xl border border-slate-100">
@@ -275,10 +288,10 @@ export function VideoScrollSection() {
             ref={pillRef}
             className="absolute top-1/2 overflow-hidden shadow-2xl video-pill"
             style={{
-              width: '50vw',
-              height: '55vh',
+              width: '48vw',
+              height: '60vh',
               borderRadius: '20px',
-              left: '0px',
+              left: '2vw',
               transform: 'translateY(-50%)',
               willChange: 'width, height, border-radius, left',
             }}
