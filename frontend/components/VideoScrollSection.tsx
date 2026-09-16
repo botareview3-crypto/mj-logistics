@@ -14,8 +14,8 @@
  *   so GSAP never crashes on missing refs.
  */
 
-import React, { useRef, useEffect, useState } from 'react';
-import { Volume2, VolumeX, ArrowRight } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { gsap, ScrollTrigger } from '../lib/gsap';
 
 export function VideoScrollSection() {
@@ -31,8 +31,6 @@ export function VideoScrollSection() {
 
   /* ── Ref for mobile video ─────────────────────────────────────────── */
   const videoMobile   = useRef<HTMLVideoElement>(null);
-
-  const [muted, setMuted] = useState(true);
 
   /* ── Play mobile video when it enters viewport (fallback for autoPlay) ── */
   useEffect(() => {
@@ -119,15 +117,6 @@ export function VideoScrollSection() {
     };
   }, []);
 
-  const toggleMute = () => {
-    setMuted(m => {
-      const next = !m;
-      if (videoDesktop.current) videoDesktop.current.muted = next;
-      if (videoMobile.current)  videoMobile.current.muted  = next;
-      return next;
-    });
-  };
-
   return (
     <>
       {/* ═══════════════════════════════════════════════════════════════
@@ -177,16 +166,7 @@ export function VideoScrollSection() {
                 >
                   Our Divisions <ArrowRight className="w-4 h-4" />
                 </a>
-                <button
-                  type="button"
-                  onClick={toggleMute}
-                  aria-label={muted ? 'Unmute video' : 'Mute video'}
-                  className="video-ctrl-btn"
-                >
-                  {muted
-                    ? <VolumeX className="w-4 h-4 text-white" />
-                    : <Volume2 className="w-4 h-4 text-white" />}
-                </button>
+
               </div>
             </div>
 
@@ -303,7 +283,7 @@ export function VideoScrollSection() {
                 src="/logistics-video-web.mp4"
                 poster="/aerial-view-container-cargo-ship-sea.webp"
                 loop
-                muted={muted}
+                muted
                 playsInline
                 autoPlay
                 preload="auto"
@@ -321,17 +301,7 @@ export function VideoScrollSection() {
                 }}
               />
 
-              {/* Mute toggle */}
-              <button
-                type="button"
-                onClick={toggleMute}
-                aria-label={muted ? 'Unmute' : 'Mute'}
-                className="video-ctrl-btn absolute top-4 right-4 z-20"
-              >
-                {muted
-                  ? <VolumeX className="w-4 h-4 text-white" />
-                  : <Volume2 className="w-4 h-4 text-white" />}
-              </button>
+
 
               {/* Overlay text — fades in when pill is fully expanded */}
               <div
