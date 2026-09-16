@@ -216,52 +216,78 @@ export function VideoScrollSection() {
             {/* RIGHT TEXT PANEL */}
             <div
               ref={rightPanelRef}
-              className="absolute right-0 top-0 h-full flex items-center px-10 pointer-events-none z-10"
-              style={{ width: '48vw' }}
+              className="absolute right-0 top-0 h-full flex items-center px-12 pointer-events-none z-10"
+              style={{ width: '50vw' }}
             >
-              <div className="w-full max-w-sm pointer-events-auto">
-                <div className="bg-white rounded-2xl p-8 shadow-2xl border border-slate-100">
-                  <p
-                    className="text-[9px] font-bold uppercase text-[#1e4d8c] mb-3"
-                    style={{ letterSpacing: '0.4em' }}
-                  >
-                    Our Operations
-                  </p>
-                  <h2
-                    className="font-bold text-[#0d1f3c] leading-[1.1] mb-4"
-                    style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)' }}
-                  >
-                    Logistics at<br />
-                    <span className="italic font-normal" style={{ color: '#1e4d8c' }}>
-                      Every Scale
-                    </span>
-                  </h2>
-                  <p className="text-slate-500 text-[13px] leading-relaxed mb-6">
-                    From port to doorstep — MJ Logistics handles freight,
-                    customs clearance, warehousing, and last-mile delivery.
-                  </p>
+              <div className="w-full max-w-md pointer-events-auto">
 
-                  <div className="grid grid-cols-2 gap-4 mb-6 py-5 border-y border-slate-100">
+                {/* Eyebrow */}
+                <p
+                  className="text-[9px] font-black uppercase text-[#1e4d8c] mb-5 tracking-[0.5em]"
+                >
+                  Our Operations
+                </p>
+
+                {/* Headline */}
+                <h2
+                  className="font-bold text-[#0d1f3c] leading-[1.05] mb-5"
+                  style={{ fontSize: 'clamp(2rem, 3.2vw, 3rem)' }}
+                >
+                  Logistics at<br />
+                  <span
+                    className="italic font-normal"
+                    style={{ fontFamily: "'Chopin Trial', serif", color: '#1e4d8c', fontSize: 'clamp(2.2rem, 3.6vw, 3.4rem)' }}
+                  >
+                    Every Scale
+                  </span>
+                </h2>
+
+                {/* Body */}
+                <p className="text-slate-500 text-[13.5px] leading-relaxed mb-10 max-w-[340px]">
+                  From port to doorstep — freight, customs clearance,
+                  warehousing, and last-mile delivery.
+                </p>
+
+                {/* Stats — horizontal rule above, numbers flush left */}
+                <div className="border-t border-slate-200 pt-7 mb-9">
+                  <div className="grid grid-cols-4 gap-0">
                     {[
-                      { value: '15+',  label: 'Years experience' },
-                      { value: '10k+', label: 'Parts delivered'  },
-                      { value: '98%',  label: 'On-time rate'     },
-                      { value: '24/7', label: 'Support'          },
-                    ].map(s => (
-                      <div key={s.label}>
-                        <p className="font-bold text-[#0d1f3c]" style={{ fontSize: '1.4rem' }}>{s.value}</p>
-                        <p className="text-slate-400 mt-0.5" style={{ fontSize: '9px', letterSpacing: '0.1em' }}>{s.label}</p>
+                      { value: '15+',  label: 'Years' },
+                      { value: '10k+', label: 'Deliveries' },
+                      { value: '98%',  label: 'On-time' },
+                      { value: '24/7', label: 'Support' },
+                    ].map((s, i) => (
+                      <div
+                        key={s.label}
+                        className={`${i > 0 ? 'border-l border-slate-200 pl-4' : ''}`}
+                      >
+                        <p
+                          className="font-black text-[#0d1f3c] leading-none"
+                          style={{ fontSize: 'clamp(1.4rem, 2vw, 1.9rem)', fontVariantNumeric: 'tabular-nums' }}
+                        >
+                          {s.value}
+                        </p>
+                        <p className="text-slate-400 mt-1.5 text-[10px] uppercase tracking-widest font-semibold">
+                          {s.label}
+                        </p>
                       </div>
                     ))}
                   </div>
-
-                  <a
-                    href="/divisions"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0d1f3c] text-white font-bold text-[12px] rounded-xl hover:bg-[#1a3560] transition-colors"
-                  >
-                    Our Divisions <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
                 </div>
+
+                {/* CTA */}
+                <a
+                  href="/divisions"
+                  className="inline-flex items-center gap-3 group cursor-pointer"
+                >
+                  <span className="text-[13px] font-bold text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors">
+                    Our Divisions
+                  </span>
+                  <span className="w-8 h-8 rounded-full bg-[#0d1f3c] group-hover:bg-[#1e4d8c] flex items-center justify-center transition-all group-hover:translate-x-1">
+                    <ArrowRight className="w-3.5 h-3.5 text-white" />
+                  </span>
+                </a>
+
               </div>
             </div>
 
