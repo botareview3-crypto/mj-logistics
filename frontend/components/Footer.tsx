@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, RotateCcw, Truck, Phone, Mail, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { CATEGORY_ROOTS } from '../lib/data/categories';
 
@@ -17,30 +17,6 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[#0d1f3c] text-white">
-
-      {/* ── Trust strip ──────────────────────────────────────────────── */}
-      <div className="border-b border-white/10">
-        <div className="max-w-[1200px] mx-auto px-6 py-5">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-            {[
-              { icon: ShieldCheck, label: '100% Fit Guarantee',  sub: 'VIN & OEM verified',      color: 'text-emerald-400' },
-              { icon: RotateCcw,   label: '30-Day Returns',       sub: 'Hassle-free refunds',     color: 'text-sky-400'     },
-              { icon: Truck,       label: 'Fast Delivery',        sub: 'Tracked local courier',   color: 'text-purple-400'  },
-              { icon: ShieldCheck, label: 'Secure Checkout',      sub: '256-Bit SSL encrypted',   color: 'text-amber-400'   },
-            ].map(item => (
-              <div key={item.label} className="flex items-center gap-3">
-                <div className={`w-9 h-9 rounded-xl bg-white/8 flex items-center justify-center shrink-0 ${item.color}`}>
-                  <item.icon className="w-4.5 h-4.5" strokeWidth={1.8} />
-                </div>
-                <div>
-                  <p className="font-semibold text-white text-[13px]">{item.label}</p>
-                  <p className="text-white/50 text-[11px]">{item.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* ── Main grid ────────────────────────────────────────────────── */}
       <div className="max-w-[1200px] mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">

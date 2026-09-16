@@ -5,7 +5,6 @@ import { useApp } from '../../lib/AppContext';
 import { PARTS_DATABASE, SAMPLE_PART_REVIEWS } from '../../lib/data/parts';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { VehicleFitBadge } from '../../components/VehicleFitBadge';
-import { TrustStrip } from '../../components/TrustStrip';
 import { ProductCard } from '../../components/ProductCard';
 
 export default function ProductDetailPage() {
@@ -287,7 +286,6 @@ export default function ProductDetailPage() {
         </section>
       )}
 
-      <TrustStrip />
     </div>
   );
 }

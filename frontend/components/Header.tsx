@@ -126,21 +126,22 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Search bar */}
-          <form onSubmit={handleSearch} className="flex-1 relative">
+          <form onSubmit={handleSearch} className="flex-1 flex items-center gap-0 min-w-0">
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search parts, brands, OEM numbers…"
-              className="w-full h-10 pl-4 pr-10 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0d1f3c] transition-colors"
+              className="flex-1 h-10 pl-4 pr-3 text-sm bg-slate-50 border border-slate-200 border-r-0 rounded-l-xl focus:outline-none focus:border-[#0d1f3c] focus:bg-white transition-colors"
               aria-label="Search parts"
             />
             <button
               type="submit"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0d1f3c] transition-colors cursor-pointer"
+              className="h-10 px-4 bg-[#0d1f3c] hover:bg-[#1a3560] text-white rounded-r-xl border border-[#0d1f3c] flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
               aria-label="Submit search"
             >
               <Search className="w-4 h-4" />
+              <span className="hidden lg:inline text-sm font-semibold">Search</span>
             </button>
           </form>
 

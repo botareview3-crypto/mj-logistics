@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  ShoppingCart, Trash2, ShieldCheck, Truck, RotateCcw,
+  ShoppingCart, Trash2, Truck,
   CreditCard, ArrowRight, Plus, Minus, CheckCircle2,
   Tag, Car, Lock, Package,
 } from 'lucide-react';
@@ -296,19 +296,7 @@ export default function CartPage() {
                 <p className="text-[11px] text-slate-400 text-center -mt-1">You'll sign in, then come right back.</p>
               )}
 
-              {/* Trust items */}
-              <div className="pt-3 border-t border-slate-100 space-y-2 text-[12px] text-slate-500">
-                {[
-                  { icon: ShieldCheck, color: 'text-emerald-500', label: '256-Bit SSL Encrypted Checkout' },
-                  { icon: RotateCcw,   color: 'text-amber-500',   label: '30-Day Hassle-Free Returns'     },
-                  { icon: Car,         color: 'text-[#1e4d8c]',   label: 'Guaranteed Fitment Verification' },
-                ].map(item => (
-                  <div key={item.label} className="flex items-center gap-2">
-                    <item.icon className={`w-3.5 h-3.5 shrink-0 ${item.color}`} />
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </div>
+
             </div>
           </div>
         </div>
