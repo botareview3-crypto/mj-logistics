@@ -379,16 +379,7 @@ export function VideoScrollSection() {
               </div>
             </div>
 
-            {/* Scroll cue */}
-            <div
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none select-none"
-              style={{ opacity: 0.5 }}
-            >
-              <span className="text-slate-400" style={{ fontSize: '8px', letterSpacing: '0.3em' }}>Scroll</span>
-              <div className="w-5 h-8 rounded-full border border-slate-300/60 flex items-start justify-center pt-1.5">
-                <div className="w-1 h-2.5 rounded-full bg-slate-400/70 animate-bounce" />
-              </div>
-            </div>
+
 
           </div>
         </div>
