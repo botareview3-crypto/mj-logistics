@@ -182,8 +182,11 @@ export default function HomePage() {
 
       <main ref={mainRef}>
         {/* ── HERO ───────────────────────────────────────────────────────── */}
-        <section className="relative w-full overflow-hidden" style={{ minHeight: '100svh' }}>
-          {/* Background image — fills full screen on all devices */}
+        <section
+          className="relative w-full overflow-hidden"
+          style={{ minHeight: '100svh', height: '100svh' }}
+        >
+          {/* Background image — covers the full section on every device */}
           <img
             src="/homepage/hero-bg.webp"
             alt=""
@@ -191,15 +194,15 @@ export default function HomePage() {
             fetchPriority="high"
             loading="eager"
             decoding="sync"
-            className="absolute inset-0 w-full h-full object-cover object-center sm:object-[60%_center]"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
           />
           {/* Overlay gradient */}
           <div className="hero-overlay absolute inset-0" aria-hidden="true" />
 
-          {/* Hero content */}
+          {/* Hero content — sits above the image, text anchored to the bottom */}
           <div
             className="relative z-10 flex flex-col justify-end px-6 max-w-[1200px] mx-auto pb-16 sm:pb-20 pt-28"
-            style={{ minHeight: '100svh' }}
+            style={{ height: '100%', minHeight: '100svh' }}
           >
             <div className="max-w-2xl">
               <p

@@ -138,7 +138,7 @@ export function VideoScrollSection() {
         {/* Full-bleed background video */}
         <video
           ref={videoMobile}
-          src="/hero-video.mp4"
+          src="/logistics-video.mp4"
           poster="/aerial-view-container-cargo-ship-sea.webp"
           loop
           muted
@@ -295,7 +295,7 @@ export function VideoScrollSection() {
             >
               <video
                 ref={videoDesktop}
-                src="/hero-video.mp4"
+                src="/logistics-video.mp4"
                 poster="/aerial-view-container-cargo-ship-sea.webp"
                 loop
                 muted={muted}
