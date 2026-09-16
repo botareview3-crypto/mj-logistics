@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Search, Grid, List, SlidersHorizontal, RotateCcw, Package } from 'lucide-react';
+import { Search, Grid, List, SlidersHorizontal, RotateCcw, Package, Car } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { PARTS_DATABASE } from '../lib/data/parts';
 import { FilterState } from '../lib/types';
@@ -11,10 +11,11 @@ import { ProductCard } from '../components/ProductCard';
 export default function SearchResultsPage() {
   const router = useRouter();
   const query  = (router.query.q as string) || '';
-  const { activeVehicle, isPartCompatibleWithActiveVehicle } = useApp();
+  const { activeVehicle, openSelectorModal, isPartCompatibleWithActiveVehicle, navigate } = useApp();
 
   const [viewMode,           setViewMode]           = useState<'grid' | 'list'>('grid');
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [refineQuery,        setRefineQuery]        = useState('');
   const [filters, setFilters] = useState<FilterState>({
     searchQuery: query, partTypes: [], brands: [], positions: [],
     minPrice: 0, maxPrice: 500,
@@ -23,7 +24,13 @@ export default function SearchResultsPage() {
 
   React.useEffect(() => {
     setFilters(prev => ({ ...prev, searchQuery: query }));
+    setRefineQuery('');
   }, [query]);
+
+  const handleRefineSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (refineQuery.trim()) navigate(`/search?q=${encodeURIComponent(refineQuery.trim())}`);
+  };
 
   const baseMatched = useMemo(() => {
     if (!query.trim()) return PARTS_DATABASE;
@@ -73,23 +80,74 @@ export default function SearchResultsPage() {
     <div className="space-y-6 pb-16">
       <Breadcrumbs items={[{ label: 'Search', path: '/search' }, { label: `"${query}"` }]} />
 
-      {/* ── Results header ────────────────────────────────────────── */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6">
-        <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#1e4d8c] mb-2">
-          <Search className="w-3.5 h-3.5" /> Search Results
+      {/* ── Hero search banner ────────────────────────────────────── */}
+      <section className="relative rounded-3xl overflow-hidden">
+        {/* Background */}
+        <img
+          src="/homepage/auto-parts-istock.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/95 via-[#0d1f3c]/80 to-[#0d1f3c]/50" />
+
+        <div className="relative px-7 py-10 sm:px-10 sm:py-12">
+          {/* Result count pill */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/70 text-[11px] font-semibold mb-4 uppercase tracking-wider">
+            <Search className="w-3 h-3" />
+            {filtered.length} result{filtered.length !== 1 ? 's' : ''}
+            {activeVehicle && filters.onlyFitsVehicle && (
+              <span className="text-emerald-300">· {activeVehicle.make} {activeVehicle.model}</span>
+            )}
+          </div>
+
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-white mb-1 leading-tight">
+            {query ? (
+              <>Results for <span className="italic font-light opacity-80">"{query}"</span></>
+            ) : (
+              'All Parts'
+            )}
+          </h1>
+          <p className="text-white/50 text-[13px] mb-7">
+            Search by name, OEM number, brand, or vehicle make / model.
+          </p>
+
+          {/* Refine search + vehicle selector */}
+          <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
+            <form onSubmit={handleRefineSearch} className="flex-1 flex items-center bg-white/95 rounded-xl overflow-hidden shadow-lg">
+              <input
+                type="text"
+                value={refineQuery}
+                onChange={e => setRefineQuery(e.target.value)}
+                placeholder={query ? `Refine "${query}"…` : 'Search parts, brands, OEM numbers…'}
+                className="flex-1 pl-5 pr-3 py-3 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 placeholder-slate-400 focus:outline-none"
+                style={{ boxShadow: 'none' }}
+              />
+              <button
+                type="submit"
+                aria-label="Search"
+                className="w-9 h-9 mr-2 rounded-full bg-[#0d1f3c] hover:bg-[#1a3560] text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              >
+                <Search className="w-3.5 h-3.5" />
+              </button>
+            </form>
+
+            <button
+              type="button"
+              onClick={() => openSelectorModal('cascading')}
+              className="flex items-center gap-2.5 px-5 py-3 bg-white/10 border border-white/25 backdrop-blur-sm rounded-xl text-white text-sm font-medium cursor-pointer hover:bg-white/20 transition-all shrink-0"
+            >
+              <Car className="w-4 h-4 text-white/60 shrink-0" />
+              <div className="text-left">
+                <span className="block text-[10px] text-white/45 uppercase tracking-wider leading-none mb-0.5">Fitment</span>
+                <span className="font-semibold leading-none text-[13px]">
+                  {activeVehicle ? `${activeVehicle.make} ${activeVehicle.model}` : 'Select vehicle'}
+                </span>
+              </div>
+            </button>
+          </div>
         </div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#0d1f3c]">
-          {query ? `Results for "${query}"` : 'All Parts'}
-        </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Found <strong className="text-[#0d1f3c]">{filtered.length}</strong> parts
-          {activeVehicle && filters.onlyFitsVehicle && (
-            <span className="ml-1 text-emerald-700 font-medium">
-              · filtered for {activeVehicle.make} {activeVehicle.model}
-            </span>
-          )}
-        </p>
-      </div>
+      </section>
 
       {/* ── Two-column layout ─────────────────────────────────────── */}
       <div className="flex flex-col md:flex-row items-start gap-6">
@@ -116,7 +174,6 @@ export default function SearchResultsPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Sort */}
               <div className="flex items-center gap-2 text-xs text-slate-600">
                 <span className="hidden sm:inline font-medium">Sort:</span>
                 <select
@@ -132,7 +189,6 @@ export default function SearchResultsPage() {
                 </select>
               </div>
 
-              {/* View toggle */}
               <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5">
                 <button
                   type="button"
