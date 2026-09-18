@@ -1,114 +1,120 @@
 import React from 'react';
 import Head from 'next/head';
-import { ArrowDownRight, ArrowUpRight, Clock3, Mail, MapPin, MessageCircle } from 'lucide-react';
+import { ArrowRight, Clock3, Mail, MapPin } from 'lucide-react';
 
 const ENQUIRY_TYPES = [
-  ['01', 'Auto parts & fitment', 'Help identifying the right part for a vehicle, system, or OEM number.'],
-  ['02', 'Office supplies', 'Stationery, printing supplies, and equipment for a working team.'],
-  ['03', 'Business enquiries', 'A larger requirement, recurring supply need, or operational question.'],
-  ['04', 'Partnerships', 'A conversation about working together across one of our divisions.'],
+  ['Auto parts', 'Vehicle details, part numbers, fitment, or availability.'],
+  ['Office supplies', 'Stationery, printing supplies, furniture, and equipment.'],
+  ['Business enquiries', 'Recurring supply, sourcing, or operational requirements.'],
+  ['Partnerships', 'A conversation about working together with MJ Logistics.'],
 ];
 
 export default function ContactPage() {
   return (
-    <div className="overflow-hidden bg-[#f5f4ef] text-[#10221d]">
+    <div className="min-h-screen bg-[#f0f4f8] text-[#0d1f3c]">
       <Head>
-        <title>Contact MJ Logistics | Start a conversation</title>
-        <meta name="description" content="Contact MJ Logistics Enterprise for parts, workplace supplies, business enquiries, and partnerships." />
+        <title>Contact MJ Logistics Enterprise</title>
+        <meta
+          name="description"
+          content="Contact MJ Logistics Enterprise for auto parts, office supplies, business enquiries, and partnerships."
+        />
       </Head>
 
       <main>
-        <section className="relative min-h-[650px] bg-[#10221d] text-[#f5f4ef]">
-          <div className="absolute inset-0">
-            <img src="/homepage/office.webp" alt="MJ Logistics workplace operations" className="h-full w-full object-cover opacity-35" />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,34,29,.98)_0%,rgba(16,34,29,.78)_45%,rgba(16,34,29,.22)_100%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(16,34,29,.9)_0%,transparent_60%)]" />
-          </div>
-          <div className="relative mx-auto flex min-h-[650px] max-w-[1320px] flex-col justify-between px-6 pb-12 pt-20 sm:px-10 lg:px-16">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.38em] text-[#d8b46a]">Contact MJ Logistics</p>
-              <span className="text-xs uppercase tracking-[0.2em] text-white/50">We are listening</span>
-            </div>
-            <div className="max-w-4xl">
-              <p className="mb-6 flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[#d8b46a]">
-                <span className="h-px w-10 bg-[#d8b46a]" /> The next step starts here
+        <section className="bg-[#0d1f3c] text-white">
+          <div className="mx-auto grid max-w-[1200px] items-center gap-10 px-6 pb-16 pt-28 sm:px-10 lg:grid-cols-[1fr_.9fr] lg:gap-16 lg:px-10 lg:pb-24 lg:pt-36">
+            <div>
+              <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-white/60">
+                Contact MJ Logistics
               </p>
-              <h1 className="max-w-4xl text-6xl font-semibold leading-[.9] tracking-[-.065em] sm:text-8xl lg:text-[8.5rem]">
-                Bring us<br />the question.
+              <h1 className="max-w-xl text-4xl font-bold leading-tight sm:text-5xl">
+                Let&apos;s find the right way forward.
               </h1>
-              <p className="mt-8 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
-                Tell us what you need, what you are sourcing, or where you want to go.
-                We will help make the next move clear.
+              <p className="mt-6 max-w-lg text-[15px] leading-7 text-white/75">
+                Tell us what you need and our team will help direct your enquiry
+                to the right part of MJ Logistics Enterprise.
               </p>
-              <a href="#enquiry" className="mt-10 inline-flex items-center gap-3 border-b border-[#d8b46a] pb-3 text-sm font-semibold">
-                Find the right channel <ArrowDownRight className="h-4 w-4 text-[#d8b46a]" />
+              <a
+                href="mailto:info@mjlogisticsenterprise.com"
+                className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#0d1f3c] transition hover:bg-slate-100"
+              >
+                Email our team <ArrowRight className="h-4 w-4" />
               </a>
+            </div>
+            <div className="overflow-hidden rounded-2xl bg-white/10">
+              <img
+                src="/homepage/office.webp"
+                alt="MJ Logistics workplace supplies"
+                className="h-[280px] w-full object-cover sm:h-[340px]"
+              />
             </div>
           </div>
         </section>
 
-        <section id="enquiry" className="mx-auto max-w-[1320px] px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
-          <div className="grid gap-12 lg:grid-cols-[.75fr_1.25fr]">
+        <section className="bg-white py-16 sm:py-20">
+          <div className="mx-auto grid max-w-[1200px] gap-10 px-6 sm:px-10 lg:grid-cols-[.8fr_1.2fr] lg:px-10">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9b7430]">Choose your route</p>
-              <h2 className="mt-6 max-w-md text-5xl font-semibold leading-[.92] tracking-[-.06em] sm:text-7xl">A good enquiry has a clear beginning.</h2>
-              <p className="mt-7 max-w-sm text-sm leading-7 text-[#63716b]">
-                You do not need to have every detail ready. Start with what you know
-                and include your timeline if you have one.
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#1e4d8c]">
+                How can we help?
+              </p>
+              <h2 className="mt-3 max-w-md text-3xl font-bold leading-tight sm:text-4xl">
+                Start with what you know.
+              </h2>
+              <p className="mt-4 max-w-sm text-sm leading-6 text-slate-500">
+                You do not need every detail ready. A short description and your timeline are a good place to begin.
               </p>
             </div>
-            <div className="divide-y divide-[#d9d8d0] border-y border-[#d9d8d0]">
-              {ENQUIRY_TYPES.map(([number, title, text]) => (
-                <div key={number} className="grid gap-5 py-7 sm:grid-cols-[55px_1fr]">
-                  <span className="text-sm font-semibold text-[#9b7430]">{number}</span>
-                  <div>
-                    <h3 className="text-2xl font-semibold tracking-[-.04em]">{title}</h3>
-                    <p className="mt-2 max-w-xl text-sm leading-6 text-[#63716b]">{text}</p>
-                  </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {ENQUIRY_TYPES.map(([title, text]) => (
+                <div key={title} className="rounded-xl bg-[#f0f4f8] p-5">
+                  <h3 className="font-bold">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">{text}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-[#d8b46a] px-6 py-20 sm:px-10 lg:px-16 lg:py-28">
-          <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[1fr_.8fr] lg:items-end">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#5d451d]">Direct contact</p>
-              <h2 className="mt-6 max-w-3xl text-5xl font-semibold leading-[.9] tracking-[-.065em] text-[#10221d] sm:text-8xl">
-                No complicated form. Just a clear starting point.
-              </h2>
-              <p className="mt-7 max-w-xl text-base leading-7 text-[#5d451d]">
-                Send a short email with your requirement and our team can direct it
-                to the right part of MJ Logistics Enterprise.
-              </p>
-            </div>
-            <div className="border-t border-[#9b7430] pt-6 text-[#10221d]">
-              <a href="mailto:info@mjlogisticsenterprise.com" className="group flex items-center justify-between border-b border-[#9b7430] py-5 text-sm font-semibold">
-                <span className="flex items-center gap-3"><Mail className="h-5 w-5" /> info@mjlogisticsenterprise.com</span>
-                <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </a>
-              <div className="flex items-center gap-3 border-b border-[#9b7430] py-5 text-sm">
-                <MapPin className="h-5 w-5" /> Addis Ababa, Ethiopia
+        <section className="py-16 sm:py-20">
+          <div className="mx-auto max-w-[1200px] px-6 sm:px-10 lg:px-10">
+            <div className="rounded-2xl bg-[#e8a020] p-7 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-12">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#6d4b0b]">
+                  Direct contact
+                </p>
+                <h2 className="mt-3 text-3xl font-bold leading-tight text-[#0d1f3c] sm:text-4xl">
+                  One clear place to start.
+                </h2>
+                <p className="mt-4 max-w-xl text-sm leading-6 text-[#6d4b0b]">
+                  Send your requirement by email and include product names, vehicle details, quantities, or any relevant timeline.
+                </p>
               </div>
-              <div className="flex items-center gap-3 border-b border-[#9b7430] py-5 text-sm">
-                <Clock3 className="h-5 w-5" /> Monday–Friday · 07:00–20:00
+              <div className="mt-8 min-w-[280px] border-t border-[#b77b14] pt-2 lg:mt-0">
+                <a
+                  href="mailto:info@mjlogisticsenterprise.com"
+                  className="flex items-center justify-between gap-4 border-b border-[#b77b14] py-4 text-sm font-bold text-[#0d1f3c]"
+                >
+                  <span className="flex items-center gap-3"><Mail className="h-5 w-5" /> info@mjlogisticsenterprise.com</span>
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <div className="flex items-center gap-3 border-b border-[#b77b14] py-4 text-sm text-[#0d1f3c]">
+                  <MapPin className="h-5 w-5" /> Addis Ababa, Ethiopia
+                </div>
+                <div className="flex items-center gap-3 py-4 text-sm text-[#0d1f3c]">
+                  <Clock3 className="h-5 w-5" /> Monday–Friday · 07:00–20:00
+                </div>
               </div>
-              <a href="mailto:info@mjlogisticsenterprise.com" className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#10221d] px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:-translate-y-1">
-                Send an enquiry <ArrowUpRight className="h-4 w-4" />
-              </a>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto flex max-w-[1320px] items-center justify-between gap-8 px-6 py-20 sm:px-10 lg:px-16">
-          <div>
-            <MessageCircle className="h-7 w-7 text-[#9b7430]" />
-            <h2 className="mt-5 text-3xl font-semibold tracking-[-.05em] sm:text-5xl">The more context, the better.</h2>
+        <section className="bg-white py-14">
+          <div className="mx-auto flex max-w-[1200px] flex-col gap-3 px-6 sm:px-10 lg:px-10">
+            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400">Before you send</p>
+            <p className="text-lg leading-8 text-slate-600">
+              Include the product or service you need, relevant quantities, vehicle make and model where applicable, and when you need a response.
+            </p>
           </div>
-          <p className="hidden max-w-sm text-sm leading-6 text-[#63716b] sm:block">
-            Include product names, vehicle details, quantities, or the kind of partnership you are considering.
-          </p>
         </section>
       </main>
     </div>

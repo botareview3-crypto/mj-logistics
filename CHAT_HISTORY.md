@@ -553,3 +553,8 @@ transcript, just the gist.
   editorial system: cinematic image-backed heroes, large Chopin typography,
   structured enterprise story sections, division panels, enquiry routes, and
   premium dark/gold contact bands. Confirmed the production build succeeds.
+- Reworked `/divisions` and `/contact` again after feedback that the editorial
+  redesign was too large and dramatic. Both pages now follow the landing page
+  more closely with moderate typography, navy/white/slate surfaces, amber
+  accents, compact image heroes, rounded cards, and simpler practical copy.
+  Confirmed the frontend production build succeeds with 132 static pages.
