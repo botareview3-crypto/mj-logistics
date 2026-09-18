@@ -42,7 +42,6 @@ export default function Document() {
 
         {/* ── Prefetch other images that appear on first scroll ── */}
         <link rel="prefetch" href="/homepage/auto-parts.webp" as="image" />
-        <link rel="prefetch" href="/homepage/office.webp" as="image" />
         <link rel="prefetch" href="/homepage/diamond.webp" as="image" />
         <link rel="prefetch" href="/homepage/cta-bg.webp" as="image" />
 
@@ -52,7 +51,6 @@ export default function Document() {
         <link rel="prefetch" href="/categories/shock-absorber.webp" as="image" />
         <link rel="prefetch" href="/categories/headlight.webp" as="image" />
         <link rel="prefetch" href="/categories/tire.webp" as="image" />
-        <link rel="prefetch" href="/categories/pen-paper.webp" as="image" />
       </Head>
       <body>
         <Main />
