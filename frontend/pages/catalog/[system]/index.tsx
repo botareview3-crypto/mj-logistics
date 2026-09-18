@@ -13,6 +13,26 @@ const iconMap: Record<string, React.ElementType> = {
   Sparkles, Wrench, ShieldCheck,
 };
 
+const CATEGORY_PRESENTATION: Record<string, {
+  image: string;
+  accent: string;
+  eyebrow: string;
+  availability: string;
+}> = {
+  'car-parts': {
+    image: '/homepage/auto-parts-istock.jpg',
+    accent: '#1e4d8c',
+    eyebrow: 'Vehicle systems',
+    availability: 'OE & aftermarket',
+  },
+  'stationery-equipment': {
+    image: '/homepage/office.webp',
+    accent: '#9b7430',
+    eyebrow: 'Workplace essentials',
+    availability: 'Business-ready supplies',
+  },
+};
+
 export default function SystemCategoryPage() {
   const router   = useRouter();
   const systemId = router.query.system as string;
@@ -40,6 +60,10 @@ export default function SystemCategoryPage() {
 
   const Icon        = iconMap[system.iconName] || Wrench;
   const totalItems  = system.subsystems.reduce((t, s) => t + s.itemCount, 0);
+  const presentation = CATEGORY_PRESENTATION[root?.id || ''] || CATEGORY_PRESENTATION['car-parts'];
+  const accentHoverClass = presentation.accent === '#9b7430'
+    ? 'hover:border-[#9b7430] group-hover:text-[#9b7430] group-hover:bg-[#9b7430]'
+    : 'hover:border-[#1e4d8c] group-hover:text-[#1e4d8c] group-hover:bg-[#1e4d8c]';
 
   return (
     <div className="space-y-8 pb-16">
@@ -51,17 +75,21 @@ export default function SystemCategoryPage() {
       {/* ── Hero banner ──────────────────────────────────────────── */}
       <div className="relative rounded-3xl overflow-hidden bg-[#0d1f3c]">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-10"
-          style={{ backgroundImage: "url('/aerial-view-container-cargo-ship-sea.webp')" }}
+          className="absolute inset-0 bg-cover bg-center opacity-25"
+          style={{ backgroundImage: `url('${presentation.image}')` }}
           aria-hidden="true"
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c] via-[#0d1f3c]/90 to-[#0d1f3c]/55" />
         <div className="relative p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+          <div
+            className="w-16 h-16 rounded-2xl border border-white/20 flex items-center justify-center shrink-0"
+            style={{ backgroundColor: `${presentation.accent}66` }}
+          >
             <Icon className="w-8 h-8 text-white/80" strokeWidth={1.5} />
           </div>
           <div className="flex-1">
-            <p className="font-display text-[11px] font-bold uppercase tracking-[0.25em] text-white/50 mb-1">
-              {root?.name}
+            <p className="font-display text-[11px] font-bold uppercase tracking-[0.25em] mb-1" style={{ color: presentation.accent === '#9b7430' ? '#e4c781' : '#8fc5ff' }}>
+              {presentation.eyebrow} · {root?.name}
             </p>
             <h1 className="font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
               {system.name}
@@ -75,7 +103,7 @@ export default function SystemCategoryPage() {
           <div className="bg-white/10 border border-white/15 rounded-2xl px-6 py-4 text-right shrink-0">
             <p className="text-[11px] text-white/50 uppercase tracking-wider font-semibold">Sub-assemblies</p>
             <p className="font-display text-3xl font-bold text-white mt-0.5">{system.subsystems.length}</p>
-            <p className="text-[11px] text-white/50 mt-1">{totalItems.toLocaleString()} parts</p>
+            <p className="text-[11px] text-white/50 mt-1">{totalItems.toLocaleString()} products</p>
           </div>
         </div>
       </div>
@@ -83,8 +111,8 @@ export default function SystemCategoryPage() {
       {/* ── Sub-assembly grid ────────────────────────────────────── */}
       <div className="space-y-4">
         <h2 className="font-display text-xl font-bold text-[#0d1f3c] flex items-center gap-2">
-          <Package className="w-5 h-5 text-[#1e4d8c]" />
-          Select Sub-Assembly
+          <Package className="w-5 h-5" style={{ color: presentation.accent }} />
+          Explore {system.name}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -93,11 +121,11 @@ export default function SystemCategoryPage() {
               key={sub.id}
               type="button"
               onClick={() => navigate(`/catalog/${system.id}/${sub.id}`)}
-              className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#1e4d8c] p-5 text-left flex flex-col gap-3 cursor-pointer group"
+              className={`product-card bg-white rounded-2xl border border-slate-200 ${accentHoverClass} p-5 text-left flex flex-col gap-3 cursor-pointer group`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
-                  <h3 className="font-display text-[16px] font-bold text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors leading-snug">
+                  <h3 className={`font-display text-[16px] font-bold text-[#0d1f3c] ${accentHoverClass.split(' ')[1]} transition-colors leading-snug`}>
                     {sub.name}
                   </h3>
                   {sub.description && (
@@ -106,14 +134,14 @@ export default function SystemCategoryPage() {
                     </p>
                   )}
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-slate-100 group-hover:bg-[#0d1f3c] text-slate-400 group-hover:text-white flex items-center justify-center shrink-0 transition-all">
+                <div className={`w-9 h-9 rounded-xl bg-slate-100 ${accentHoverClass.split(' ')[2]} text-slate-400 group-hover:text-white flex items-center justify-center shrink-0 transition-all`}>
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-[12px]">
-                <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full">
-                  ✓ OE &amp; Aftermarket
+                <span className="inline-flex items-center gap-1 font-semibold px-2 py-0.5 rounded-full" style={{ color: presentation.accent, backgroundColor: `${presentation.accent}12` }}>
+                ✓ {presentation.availability}
                 </span>
                 <span className="text-slate-400 font-mono">{sub.itemCount} items</span>
               </div>

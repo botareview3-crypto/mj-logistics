@@ -533,3 +533,8 @@ transcript, just the gist.
   self-contained mining route and kept the page aligned with the existing
   bundled Chopin Trial typography. Confirmed the frontend production build
   completes successfully.
+- Made a restrained storefront UI pass for auto parts and stationery:
+  category pages now use relevant local auto/office imagery instead of the
+  generic cargo background, stationery category data no longer depends on
+  remote Unsplash images, and the category accent/availability labels adapt
+  to vehicle systems versus workplace supplies.

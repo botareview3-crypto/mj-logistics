@@ -441,7 +441,7 @@ export const CATEGORY_ROOTS: CategoryRoot[] = [
         name: 'Office Stationery',
         iconName: 'Package',
         description: 'Pens, paper, notebooks, and everyday office writing supplies.',
-        image: 'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=600&q=80',
+        image: '/homepage/office.webp',
         subsystems: [
           {
             id: 'pens-writing',
@@ -450,7 +450,7 @@ export const CATEGORY_ROOTS: CategoryRoot[] = [
             iconName: 'Package',
             description: 'Ballpoint pens, markers, highlighters, and pencils.',
             itemCount: 340,
-            image: 'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=400&q=80',
+            image: '/categories/pen-paper.webp',
           },
           {
             id: 'paper-printing',
@@ -459,7 +459,7 @@ export const CATEGORY_ROOTS: CategoryRoot[] = [
             iconName: 'Package',
             description: 'Printer paper, notebooks, envelopes, and sticky notes.',
             itemCount: 260,
-            image: 'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=400&q=80',
+            image: '/categories/pen-paper.webp',
           },
           {
             id: 'filing-organization',
@@ -468,7 +468,7 @@ export const CATEGORY_ROOTS: CategoryRoot[] = [
             iconName: 'Package',
             description: 'Binders, folders, staplers, and desk organizers.',
             itemCount: 190,
-            image: 'https://images.unsplash.com/photo-1568205612837-017257d2310a?auto=format&fit=crop&w=400&q=80',
+            image: '/categories/pen-paper.webp',
           },
         ],
       },
@@ -478,7 +478,7 @@ export const CATEGORY_ROOTS: CategoryRoot[] = [
         name: 'Business & Office Equipment',
         iconName: 'Package',
         description: 'Printers, computer accessories, and office furniture.',
-        image: 'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=600&q=80',
+        image: '/homepage/office.jpg',
         subsystems: [
           {
             id: 'printers-scanners',
@@ -561,5 +561,4 @@ export function getCategoryById(systemId?: string, subsystemId?: string): {
 
   return { root: matchedRoot, system: matchedSys, subsystem: matchedSub };
 }
-
 
