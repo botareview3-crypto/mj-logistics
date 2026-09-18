@@ -11,12 +11,6 @@ const FOOTER_LINKS = {
     { label: 'Tires & Wheels',       href: '/catalog/tires-wheels' },
     { label: 'My Garage',            href: '/garage' },
   ],
-  'Business & Office': [
-    { label: 'Stationery',          href: '/catalog/office-stationery' },
-    { label: 'Business Equipment',  href: '/catalog/business-equipment' },
-    { label: 'Printers & Scanners', href: '/catalog/business-equipment' },
-    { label: 'Office Furniture',    href: '/catalog/business-equipment' },
-  ],
   'Company': [
     { label: 'About Us',      href: '/divisions' },
     { label: 'Contact',       href: '/contact' },
@@ -68,14 +62,14 @@ export const SiteFooter: React.FC = () => {
             </h2>
           </div>
           <p className="text-white/60 text-[13px] leading-relaxed max-w-xs">
-            Your trusted partner for genuine auto parts, office stationery, business equipment, and natural resources.
+            Your trusted partner for genuine auto parts, workshop support, and natural resource solutions.
           </p>
 
           {/* Contact info */}
           <ul className="space-y-2.5 text-[12px] text-white/60">
             <li className="flex items-center gap-2.5">
               <MapPin className="w-4 h-4 text-white/30 shrink-0" />
-              Addis Ababa, Ethiopia
+              Monrovia, Liberia
             </li>
             <li className="flex items-center gap-2.5">
               <Mail className="w-4 h-4 text-white/30 shrink-0" />

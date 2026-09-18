@@ -23,7 +23,7 @@ const HOW_WE_WORK = [
 
 const DIVISIONS = [
   ['Automotive and heavy-equipment parts', '/shop'],
-  ['Industrial supplies and office equipment', '/catalog/office-stationery'],
+  ['Industrial and workshop supplies', '/catalog'],
   ['Mining inputs and support services', '/mining'],
 ];
 

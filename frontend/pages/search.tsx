@@ -1,12 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Search, Grid, List, SlidersHorizontal, RotateCcw, Package, Car } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useApp } from '../lib/AppContext';
 import { PARTS_DATABASE } from '../lib/data/parts';
 import { FilterState } from '../lib/types';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { ProductCard } from '../components/ProductCard';
+import { SPRINGS } from '../lib/springs';
 
 export default function SearchResultsPage() {
   const router = useRouter();
@@ -123,28 +125,32 @@ export default function SearchResultsPage() {
                 className="flex-1 pl-5 pr-3 py-3 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 placeholder-slate-400 focus:outline-none"
                 style={{ boxShadow: 'none' }}
               />
-              <button
+              <motion.button
                 type="submit"
                 aria-label="Search"
-                className="w-9 h-9 mr-2 rounded-full bg-[#0d1f3c] hover:bg-[#1a3560] text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="w-9 h-9 mr-2 rounded-full bg-[#0d1f3c] hover:bg-[#1a3560] text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
+                whileTap={{ scale: 0.88 }}
+                transition={SPRINGS.micro}
               >
                 <Search className="w-3.5 h-3.5" />
-              </button>
+              </motion.button>
             </form>
 
-            <button
+            <motion.button
               type="button"
               onClick={() => openSelectorModal('cascading')}
-              className="flex items-center gap-2.5 px-5 py-3 bg-white/10 border border-white/25 backdrop-blur-sm rounded-xl text-white text-sm font-medium cursor-pointer hover:bg-white/20 transition-all shrink-0"
+              className="flex items-center gap-2.5 px-5 py-3 bg-white/10 border border-white/25 backdrop-blur-sm rounded-xl text-white text-sm font-medium cursor-pointer hover:bg-white/20 transition-colors shrink-0"
+              whileTap={{ scale: 0.97 }}
+              transition={SPRINGS.micro}
             >
               <Car className="w-4 h-4 text-white/60 shrink-0" />
               <div className="text-left">
-                <span className="block text-[10px] text-white/45 uppercase tracking-wider leading-none mb-0.5">Fitment</span>
+                <span className="block text-[10px] text-white/45 uppercase leading-none mb-0.5" style={{ letterSpacing: '0.08em' }}>Fitment</span>
                 <span className="font-semibold leading-none text-[13px]">
                   {activeVehicle ? `${activeVehicle.make} ${activeVehicle.model}` : 'Select vehicle'}
                 </span>
               </div>
-            </button>
+            </motion.button>
           </div>
         </div>
       </section>
@@ -163,13 +169,15 @@ export default function SearchResultsPage() {
           {/* Sort / view bar */}
           <div className="bg-white border border-slate-200 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setIsMobileFilterOpen(true)}
                 className="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#0d1f3c] font-semibold text-xs rounded-xl border border-slate-200 cursor-pointer transition-colors"
+                whileTap={{ scale: 0.97 }}
+                transition={SPRINGS.micro}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
-              </button>
+              </motion.button>
               <span className="text-xs font-semibold text-slate-600">{filtered.length} products</span>
             </div>
 
@@ -190,22 +198,26 @@ export default function SearchResultsPage() {
               </div>
 
               <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-0.5">
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setViewMode('grid')}
                   className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-white text-[#1e4d8c] shadow-sm' : 'text-slate-400'}`}
                   aria-label="Grid view"
+                  whileTap={{ scale: 0.88 }}
+                  transition={SPRINGS.micro}
                 >
                   <Grid className="w-4 h-4" />
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   type="button"
                   onClick={() => setViewMode('list')}
                   className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#1e4d8c] shadow-sm' : 'text-slate-400'}`}
                   aria-label="List view"
+                  whileTap={{ scale: 0.88 }}
+                  transition={SPRINGS.micro}
                 >
                   <List className="w-4 h-4" />
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>
@@ -232,13 +244,15 @@ export default function SearchResultsPage() {
                   Try a different search term, remove filters, or browse by category.
                 </p>
               </div>
-              <button
+              <motion.button
                 type="button"
                 onClick={resetFilters}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold text-sm rounded-xl transition-colors cursor-pointer"
+                whileTap={{ scale: 0.97 }}
+                transition={SPRINGS.micro}
               >
                 <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
-              </button>
+              </motion.button>
             </div>
           )}
         </div>

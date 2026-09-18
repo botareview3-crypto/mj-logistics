@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, ShoppingCart, User, Car, ChevronDown, Menu, X, Wrench, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../lib/AppContext';
+import { SPRINGS } from '../lib/springs';
 
 const CATALOG_ITEMS = [
   { label: 'Braking System',        href: '/catalog/braking-system' },
@@ -11,22 +13,35 @@ const CATALOG_ITEMS = [
   { label: 'Tires & Wheels',        href: '/catalog/tires-wheels' },
   { label: 'Car Care & Detailing',  href: '/catalog/car-care-detailing' },
   { label: 'Tools & Workshop',      href: '/catalog/tools-workshop' },
-  { label: 'Office Supplies',       href: '/catalog/office-stationery' },
-  { label: 'Business Equipment',    href: '/catalog/business-equipment' },
   { label: 'Cooling & Heating',     href: '/catalog/cooling-heating' },
 ];
 
+/* Spring variants for the dropdown panel */
+const dropdownVariants = {
+  hidden:  { opacity: 0, y: -8, scale: 0.97 },
+  visible: { opacity: 1, y: 0,  scale: 1    },
+  exit:    { opacity: 0, y: -6, scale: 0.98 },
+};
+
+/* Spring variants for the mobile drawer */
+const mobileVariants = {
+  hidden:  { opacity: 0, y: -12 },
+  visible: { opacity: 1, y: 0   },
+  exit:    { opacity: 0, y: -8  },
+};
+
 export const Header: React.FC = () => {
   const { navigate, currentUser, cartCount, activeVehicle, openSelectorModal } = useApp();
-  const [searchQuery, setSearchQuery]     = useState('');
-  const [scrolled, setScrolled]           = useState(false);
-  const [mobileOpen, setMobileOpen]       = useState(false);
+  const [searchQuery, setSearchQuery]         = useState('');
+  const [scrolled, setScrolled]               = useState(false);
+  const [mobileOpen, setMobileOpen]           = useState(false);
   const [vehicleMenuOpen, setVehicleMenuOpen] = useState(false);
-  const [catalogOpen, setCatalogOpen]     = useState(false);
+  const [catalogOpen, setCatalogOpen]         = useState(false);
 
   const vehicleRef = useRef<HTMLDivElement>(null);
   const catalogRef = useRef<HTMLDivElement>(null);
 
+  /* Scroll detection — drives the translucent → slightly-more-opaque transition */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -34,15 +49,11 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close dropdowns on outside click
+  /* Close dropdowns on outside click */
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (vehicleRef.current && !vehicleRef.current.contains(e.target as Node)) {
-        setVehicleMenuOpen(false);
-      }
-      if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) {
-        setCatalogOpen(false);
-      }
+      if (vehicleRef.current && !vehicleRef.current.contains(e.target as Node)) setVehicleMenuOpen(false);
+      if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) setCatalogOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
@@ -60,69 +71,104 @@ export const Header: React.FC = () => {
     ? `${activeVehicle.make} ${activeVehicle.model}`
     : 'Select Vehicle';
 
+  /* ── Header material ────────────────────────────────────────────────────
+     Apple spec §12: "Build nav/toolbars as translucent layers — content scrolls under."
+     When scrolled: stronger blur + shadow. At top: lighter glass.          */
+  const headerBg = scrolled
+    ? 'bg-white/85 shadow-sm border-b border-white/40'
+    : 'bg-white/70 border-b border-white/30';
+
   return (
     <header
-      className={`sticky top-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white shadow-md border-b border-slate-200'
-          : 'bg-white border-b border-slate-100'
-      }`}
+      className={`sticky top-0 z-40 backdrop-blur-xl transition-[background-color,box-shadow,border-color] duration-300 ${headerBg}`}
+      style={{
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+      }}
     >
-      {/* ── Main bar ────────────────────────────────────────────────────── */}
+      {/* ── Main bar ──────────────────────────────────────────────────────── */}
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="flex items-center gap-3 h-[64px]">
 
-          {/* Logo */}
-          <button
+          {/* Logo — pointer-down spring feedback via motion.button */}
+          <motion.button
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
             aria-label="MJ Logistics — home"
+            className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
+            whileTap={{ scale: 0.96 }}
+            transition={SPRINGS.micro}
           >
             <div className="w-8 h-8 bg-[#0d1f3c] rounded-lg flex items-center justify-center">
               <Wrench className="w-4 h-4 text-white -rotate-12" />
             </div>
             <div className="hidden sm:block leading-none">
-              <span className="font-display text-[18px] font-bold text-[#0d1f3c] block">MJ</span>
-              <span className="font-display text-[10px] font-medium text-slate-500 uppercase tracking-widest">Logistics</span>
+              <span className="font-display text-[18px] font-bold text-[#0d1f3c] block" style={{ letterSpacing: '-0.02em' }}>MJ</span>
+              <span className="font-display text-[10px] font-medium text-slate-500 uppercase" style={{ letterSpacing: '0.12em' }}>Logistics</span>
             </div>
-          </button>
+          </motion.button>
 
-          {/* Catalog dropdown button */}
+          {/* Catalog dropdown */}
           <div ref={catalogRef} className="relative hidden lg:block shrink-0">
-            <button
+            <motion.button
               type="button"
               onClick={() => setCatalogOpen(p => !p)}
-              className="flex items-center gap-1.5 px-4 h-10 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-[#0d1f3c] hover:border-[#0d1f3c] transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-4 h-10 rounded-xl border border-slate-200/70 bg-white/60 text-sm font-semibold text-[#0d1f3c] hover:border-[#0d1f3c]/40 hover:bg-white/80 transition-colors cursor-pointer whitespace-nowrap"
+              whileTap={{ scale: 0.97 }}
+              transition={SPRINGS.micro}
+              aria-expanded={catalogOpen}
+              aria-haspopup="true"
             >
               Catalog
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${catalogOpen ? 'rotate-180' : ''}`} />
-            </button>
+              <motion.span
+                animate={{ rotate: catalogOpen ? 180 : 0 }}
+                transition={SPRINGS.micro}
+                style={{ display: 'flex' }}
+              >
+                <ChevronDown className="w-3.5 h-3.5" />
+              </motion.span>
+            </motion.button>
 
-            {catalogOpen && (
-              <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
-                {CATALOG_ITEMS.map(item => (
-                  <button
-                    key={item.href}
-                    type="button"
-                    onClick={() => { navigate(item.href); setCatalogOpen(false); }}
-                    className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 hover:text-[#0d1f3c] transition-colors cursor-pointer flex items-center justify-between group"
-                  >
-                    {item.label}
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#0d1f3c] transition-colors" />
-                  </button>
-                ))}
-                <div className="border-t border-slate-100 mt-1 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => { navigate('/catalog'); setCatalogOpen(false); }}
-                    className="w-full text-left px-4 py-2 text-[13px] font-bold text-[#0d1f3c] hover:bg-slate-50 transition-colors cursor-pointer"
-                  >
-                    View All Categories →
-                  </button>
-                </div>
-              </div>
-            )}
+            {/* Dropdown — spring entrance, not CSS keyframe */}
+            <AnimatePresence>
+              {catalogOpen && (
+                <motion.div
+                  key="catalog-dropdown"
+                  variants={dropdownVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={SPRINGS.sheet}
+                  className="absolute top-full left-0 mt-2 w-56 bg-white/92 backdrop-blur-xl rounded-xl border border-white/50 shadow-xl py-2 z-50"
+                  style={{ WebkitBackdropFilter: 'blur(20px)', backdropFilter: 'blur(20px)' }}
+                >
+                  {CATALOG_ITEMS.map(item => (
+                    <motion.button
+                      key={item.href}
+                      type="button"
+                      onClick={() => { navigate(item.href); setCatalogOpen(false); }}
+                      className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50/80 hover:text-[#0d1f3c] transition-colors cursor-pointer flex items-center justify-between group"
+                      whileTap={{ scale: 0.98 }}
+                      transition={SPRINGS.micro}
+                    >
+                      {item.label}
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#0d1f3c] transition-colors" />
+                    </motion.button>
+                  ))}
+                  <div className="border-t border-slate-100 mt-1 pt-1">
+                    <motion.button
+                      type="button"
+                      onClick={() => { navigate('/catalog'); setCatalogOpen(false); }}
+                      className="w-full text-left px-4 py-2 text-[13px] font-bold text-[#0d1f3c] hover:bg-slate-50/80 transition-colors cursor-pointer"
+                      whileTap={{ scale: 0.98 }}
+                      transition={SPRINGS.micro}
+                    >
+                      View All Categories →
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Search bar */}
@@ -132,139 +178,223 @@ export const Header: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search parts, brands, OEM numbers…"
-              className="w-full h-10 pl-4 pr-12 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#0d1f3c] focus:bg-white transition-colors"
+              className="w-full h-10 pl-4 pr-12 text-sm bg-white/70 border border-slate-200/60 rounded-xl focus:outline-none focus:border-[#0d1f3c]/50 focus:bg-white/90 transition-colors"
               aria-label="Search parts"
             />
-            <button
+            <motion.button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-[#0d1f3c] hover:bg-[#1a3560] text-white rounded-full flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-[#0d1f3c] hover:bg-[#1a3560] text-white rounded-full flex items-center justify-center cursor-pointer shrink-0"
               aria-label="Submit search"
+              whileTap={{ scale: 0.88 }}
+              transition={SPRINGS.micro}
             >
               <Search className="w-3.5 h-3.5" />
-            </button>
+            </motion.button>
           </form>
 
           {/* Vehicle selector */}
           <div ref={vehicleRef} className="relative hidden md:block shrink-0">
-            <button
+            <motion.button
               type="button"
               onClick={() => {
                 if (activeVehicle) setVehicleMenuOpen(p => !p);
                 else openSelectorModal?.();
               }}
+              aria-expanded={vehicleMenuOpen}
               className={`
-                flex items-center gap-2 px-4 h-10 rounded-xl border text-sm font-medium transition-all cursor-pointer whitespace-nowrap
+                flex items-center gap-2 px-4 h-10 rounded-xl border text-sm font-medium cursor-pointer whitespace-nowrap
+                transition-colors duration-150
                 ${activeVehicle
                   ? 'bg-[#0d1f3c] text-white border-[#0d1f3c] hover:bg-[#1a3560]'
-                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-[#0d1f3c]'}
+                  : 'bg-white/60 text-slate-600 border-slate-200/60 hover:border-[#0d1f3c]/40'}
               `}
+              whileTap={{ scale: 0.97 }}
+              transition={SPRINGS.micro}
             >
               <Car className="w-4 h-4 shrink-0" />
               <span className="max-w-[130px] truncate">{vehicleLabel}</span>
               {activeVehicle && (
-                <ChevronDown className={`w-3.5 h-3.5 shrink-0 transition-transform ${vehicleMenuOpen ? 'rotate-180' : ''}`} />
+                <motion.span
+                  animate={{ rotate: vehicleMenuOpen ? 180 : 0 }}
+                  transition={SPRINGS.micro}
+                  style={{ display: 'flex' }}
+                >
+                  <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                </motion.span>
               )}
-            </button>
+            </motion.button>
 
-            {vehicleMenuOpen && activeVehicle && (
-              <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
-                <div className="px-4 py-2 border-b border-slate-100">
-                  <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Active vehicle</p>
-                  <p className="text-sm font-semibold text-[#0d1f3c] mt-0.5">{activeVehicle.make} {activeVehicle.model}</p>
-                  {activeVehicle.year && <p className="text-[12px] text-slate-500">{activeVehicle.year}</p>}
-                </div>
-                <button type="button" onClick={() => { navigate('/garage'); setVehicleMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">My Garage</button>
-                <button type="button" onClick={() => { openSelectorModal?.(); setVehicleMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">Change vehicle</button>
-              </div>
-            )}
+            <AnimatePresence>
+              {vehicleMenuOpen && activeVehicle && (
+                <motion.div
+                  key="vehicle-dropdown"
+                  variants={dropdownVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={SPRINGS.sheet}
+                  className="absolute top-full right-0 mt-2 w-52 bg-white/92 backdrop-blur-xl rounded-xl border border-white/50 shadow-xl py-2 z-50"
+                  style={{ WebkitBackdropFilter: 'blur(20px)', backdropFilter: 'blur(20px)' }}
+                >
+                  <div className="px-4 py-2 border-b border-slate-100">
+                    <p className="text-[11px] text-slate-400 uppercase font-semibold" style={{ letterSpacing: '0.08em' }}>Active vehicle</p>
+                    <p className="text-sm font-semibold text-[#0d1f3c] mt-0.5">{activeVehicle.make} {activeVehicle.model}</p>
+                    {activeVehicle.year && <p className="text-[12px] text-slate-500">{activeVehicle.year}</p>}
+                  </div>
+                  {[
+                    { label: 'My Garage',       action: () => { navigate('/garage'); setVehicleMenuOpen(false); } },
+                    { label: 'Change vehicle',  action: () => { openSelectorModal?.(); setVehicleMenuOpen(false); } },
+                  ].map(item => (
+                    <motion.button
+                      key={item.label}
+                      type="button"
+                      onClick={item.action}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50/80 transition-colors cursor-pointer"
+                      whileTap={{ scale: 0.98 }}
+                      transition={SPRINGS.micro}
+                    >
+                      {item.label}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Sign In — desktop, next to vehicle */}
-          <button
+          {/* Sign In */}
+          <motion.button
             type="button"
             onClick={() => navigate(currentUser ? '/account' : '/signin')}
-            className="hidden md:flex items-center gap-1.5 px-3 h-10 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-600 hover:border-[#0d1f3c] hover:text-[#0d1f3c] transition-all cursor-pointer shrink-0"
+            className="hidden md:flex items-center gap-1.5 px-3 h-10 rounded-xl border border-slate-200/60 bg-white/60 text-sm font-medium text-slate-600 hover:border-[#0d1f3c]/40 hover:text-[#0d1f3c] transition-colors cursor-pointer shrink-0"
+            whileTap={{ scale: 0.97 }}
+            transition={SPRINGS.micro}
           >
             <User className="w-4 h-4" />
             {currentUser ? 'Account' : 'Sign In'}
-          </button>
+          </motion.button>
 
           {/* Cart */}
-          <button
+          <motion.button
             type="button"
             onClick={() => navigate('/cart')}
-            className="relative p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-[#0d1f3c] hover:text-white hover:border-[#0d1f3c] transition-all cursor-pointer shrink-0"
+            className="relative p-2.5 rounded-xl bg-white/60 border border-slate-200/60 text-slate-600 hover:bg-[#0d1f3c] hover:text-white hover:border-[#0d1f3c] transition-colors cursor-pointer shrink-0"
             aria-label={`Cart (${cartCount} items)`}
+            whileTap={{ scale: 0.90 }}
+            transition={SPRINGS.micro}
           >
             <ShoppingCart className="w-5 h-5" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#e8a020] text-white text-[9px] font-bold flex items-center justify-center rounded-full">
-                {cartCount > 9 ? '9+' : cartCount}
-              </span>
-            )}
-          </button>
+            <AnimatePresence>
+              {cartCount > 0 && (
+                <motion.span
+                  key="badge"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={SPRINGS.momentum}
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-[#e8a020] text-white text-[9px] font-bold flex items-center justify-center rounded-full"
+                >
+                  {cartCount > 9 ? '9+' : cartCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
 
-          {/* Mobile menu toggle */}
-          <button
+          {/* Mobile toggle */}
+          <motion.button
             type="button"
             onClick={() => setMobileOpen(p => !p)}
             className="md:hidden p-2 text-slate-600 cursor-pointer shrink-0"
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            whileTap={{ scale: 0.90 }}
+            transition={SPRINGS.micro}
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          </motion.button>
         </div>
       </div>
 
-      {/* ── Mobile menu ─────────────────────────────────────────────────── */}
-      {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-slate-200 animate-fade-in-down">
-          <div className="max-w-[1200px] mx-auto px-4 py-4 space-y-3">
-            {/* Vehicle selector */}
-            <button
-              type="button"
-              onClick={() => { openSelectorModal?.(); setMobileOpen(false); }}
-              className="w-full flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 cursor-pointer"
-            >
-              <Car className="w-4 h-4" />
-              {vehicleLabel}
-            </button>
+      {/* ── Mobile menu — spring slide-down ──────────────────────────────── */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            variants={mobileVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={SPRINGS.drawer}
+            className="md:hidden bg-white/92 backdrop-blur-xl border-t border-white/40"
+            style={{ WebkitBackdropFilter: 'blur(20px)', backdropFilter: 'blur(20px)' }}
+          >
+            <div className="max-w-[1200px] mx-auto px-4 py-4 space-y-3">
+              {/* Vehicle selector */}
+              <motion.button
+                type="button"
+                onClick={() => { openSelectorModal?.(); setMobileOpen(false); }}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-white/70 border border-slate-200/60 rounded-xl text-sm font-medium text-slate-700 cursor-pointer"
+                whileTap={{ scale: 0.98 }}
+                transition={SPRINGS.micro}
+              >
+                <Car className="w-4 h-4" />
+                {vehicleLabel}
+              </motion.button>
 
-            {/* Sign in row */}
-            <button
-              type="button"
-              onClick={() => { navigate(currentUser ? '/account' : '/signin'); setMobileOpen(false); }}
-              className="w-full flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 cursor-pointer"
-            >
-              <User className="w-4 h-4" />
-              {currentUser ? 'My Account' : 'Sign In'}
-            </button>
+              {/* Sign in */}
+              <motion.button
+                type="button"
+                onClick={() => { navigate(currentUser ? '/account' : '/signin'); setMobileOpen(false); }}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-white/70 border border-slate-200/60 rounded-xl text-sm font-medium text-slate-700 cursor-pointer"
+                whileTap={{ scale: 0.98 }}
+                transition={SPRINGS.micro}
+              >
+                <User className="w-4 h-4" />
+                {currentUser ? 'My Account' : 'Sign In'}
+              </motion.button>
 
-            {/* Catalog links */}
-            <div className="space-y-1">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1 pt-1">Catalog</p>
-              <div className="grid grid-cols-2 gap-1.5">
-                {CATALOG_ITEMS.map(item => (
-                  <button
-                    key={item.href}
-                    type="button"
-                    onClick={() => { navigate(item.href); setMobileOpen(false); }}
-                    className="px-3 py-2.5 bg-slate-50 rounded-lg text-[12px] text-slate-700 hover:bg-slate-100 text-left cursor-pointer font-medium"
-                  >
-                    {item.label}
-                  </button>
-                ))}
+              {/* Catalog grid */}
+              <div className="space-y-1">
+                <p className="text-[11px] font-bold uppercase text-slate-400 px-1 pt-1" style={{ letterSpacing: '0.08em' }}>Catalog</p>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {CATALOG_ITEMS.map(item => (
+                    <motion.button
+                      key={item.href}
+                      type="button"
+                      onClick={() => { navigate(item.href); setMobileOpen(false); }}
+                      className="px-3 py-2.5 bg-white/70 rounded-lg text-[12px] text-slate-700 hover:bg-white/90 text-left cursor-pointer font-medium border border-slate-200/40"
+                      whileTap={{ scale: 0.97 }}
+                      transition={SPRINGS.micro}
+                    >
+                      {item.label}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-1">
+                <motion.button
+                  type="button"
+                  onClick={() => { navigate('/cart'); setMobileOpen(false); }}
+                  className="flex-1 px-4 py-2.5 bg-[#0d1f3c] text-white text-sm font-semibold rounded-xl cursor-pointer"
+                  whileTap={{ scale: 0.97 }}
+                  transition={SPRINGS.micro}
+                >
+                  Cart {cartCount > 0 ? `(${cartCount})` : ''}
+                </motion.button>
+                <motion.button
+                  type="button"
+                  onClick={() => { navigate('/garage'); setMobileOpen(false); }}
+                  className="flex-1 px-4 py-2.5 bg-slate-100/80 text-slate-700 text-sm font-semibold rounded-xl cursor-pointer"
+                  whileTap={{ scale: 0.97 }}
+                  transition={SPRINGS.micro}
+                >
+                  My Garage
+                </motion.button>
               </div>
             </div>
-
-            {/* Quick links */}
-            <div className="flex gap-2 pt-1">
-              <button type="button" onClick={() => { navigate('/cart'); setMobileOpen(false); }} className="flex-1 px-4 py-2.5 bg-[#0d1f3c] text-white text-sm font-semibold rounded-xl cursor-pointer">Cart {cartCount > 0 ? `(${cartCount})` : ''}</button>
-              <button type="button" onClick={() => { navigate('/garage'); setMobileOpen(false); }} className="flex-1 px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl cursor-pointer">My Garage</button>
-            </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

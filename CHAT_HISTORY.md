@@ -6,6 +6,10 @@ transcript, just the gist.
 
 ---
 
+### 2026-09-18
+- Removed the stationery and office-equipment entries from the auto-store catalog and homepage category list, deleted the seeded office/business products from the marketplace data, and tightened the storefront copy so the shop stays focused on automotive parts.
+- Updated the customer-facing location text from Addis Ababa, Ethiopia to Monrovia, Liberia.
+
 ### 2026-09-12
 - Created `LANDING_PAGE.md` with the recommended professional homepage
   structure, section order, copy direction, calls to action, and quality

@@ -227,7 +227,7 @@ export default function MiningPage() {
                 <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </a>
               <div className="flex items-center gap-3 border-b border-[#9b7430] py-5 text-sm">
-                <MapPin className="h-5 w-5" /> Addis Ababa, Ethiopia
+                <MapPin className="h-5 w-5" /> Monrovia, Liberia
               </div>
               <button
                 type="button"

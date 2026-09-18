@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ─── Chopin Trial — local OTF fonts (no network request) ───────────────── */
+/* ─── Chopin Trial — local OTF fonts ────────────────────────────────────── */
 @font-face { font-family: 'Chopin Trial'; src: url('/fonts/Chopin-Trial-Thin-BF65b1d6921288d.otf') format('opentype'); font-weight: 100; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Chopin Trial'; src: url('/fonts/Chopin-Trial-ThinItalic-BF65b1d6926c1b7.otf') format('opentype'); font-weight: 100; font-style: italic; font-display: swap; }
 @font-face { font-family: 'Chopin Trial'; src: url('/fonts/Chopin-Trial-ExtraLight-BF65b1d69203043.otf') format('opentype'); font-weight: 200; font-style: normal; font-display: swap; }
@@ -19,7 +19,6 @@
 @font-face { font-family: 'Chopin Trial'; src: url('/fonts/Chopin-Trial-ExtraBoldItalic-BF65b1d69278c77.otf') format('opentype'); font-weight: 800; font-style: italic; font-display: swap; }
 @font-face { font-family: 'Chopin Trial'; src: url('/fonts/Chopin-Trial-Black-BF65b1d69136d83.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Chopin Trial'; src: url('/fonts/Chopin-Trial-BlackItalic-BF65b1d6923aa3d.otf') format('opentype'); font-weight: 900; font-style: italic; font-display: swap; }
-/* Variable font fallbacks */
 @font-face { font-family: 'Chopin Trial VF'; src: url('/fonts/Chopin-TrialVF-RomanVF-BF65b1d690f1fee.ttf') format('truetype'); font-weight: 100 900; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Chopin Trial VF'; src: url('/fonts/Chopin-TrialVF-ItalicVF-BF65b1d69313dde.ttf') format('truetype'); font-weight: 100 900; font-style: italic; font-display: swap; }
 
@@ -34,51 +33,97 @@
     --mj-sky-light:   #93c5fd;
     --mj-white:       #ffffff;
     --mj-off-white:   #f0f4f8;
-    --mj-glass-bg:    rgba(180, 200, 220, 0.30);
-    --mj-glass-bg-dark: rgba(13, 31, 60, 0.55);
-    --mj-glass-border: rgba(255, 255, 255, 0.28);
-    --mj-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+
+    /* ── Glass tokens — TRANSLUCENT (not opaque) per Apple spec ──
+       "Build nav/toolbars/sheets as translucent layers… not opaque bars"
+       Light material: 50–60% opacity + blur. Dark material: 70% max.  */
+    --mj-glass-bg:       rgba(240, 246, 252, 0.55);
+    --mj-glass-bg-dark:  rgba(13, 31, 60, 0.72);
+    --mj-glass-border:   rgba(255, 255, 255, 0.32);
+    --mj-glass-shadow:   0 8px 32px rgba(0, 0, 0, 0.14);
+
     --mj-accent:      #e8a020;
     --mj-accent-dark: #c47c0a;
     --mj-text-light:  rgba(255,255,255,0.92);
     --mj-text-muted:  rgba(255,255,255,0.60);
 
-    /* ── Typography — Chopin Trial for EVERYTHING ── */
-    --font-display:   'Chopin Trial', 'Chopin Trial VF', Georgia, 'Times New Roman', serif;
-    --font-body:      'Chopin Trial', 'Chopin Trial VF', Georgia, serif;
+    --font-display: 'Chopin Trial', 'Chopin Trial VF', Georgia, serif;
+    --font-body:    'Chopin Trial', 'Chopin Trial VF', Georgia, serif;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 
   body {
-    font-family: 'Chopin Trial', 'Chopin Trial VF', Georgia, serif;
+    font-family: var(--font-body);
     font-weight: 400;
+    /* Apple: comfortable body leading. Tighten for large display, loosen for small text. */
+    line-height: 1.55;
+    /* Body text: letter-spacing near 0 for legibility */
+    letter-spacing: 0em;
     color: var(--mj-navy);
     background-color: var(--mj-off-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-optical-sizing: auto;
   }
 
-  /* ── Headings: Chopin Trial ExtraBold/Black (the bolder display face) ── */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Chopin Trial', 'Chopin Trial VF', Georgia, serif;
+  /* ── Typography — size-specific tracking & leading (Apple spec §15) ──────
+     "Tracking is size-specific — never one value for all sizes."
+     Large display text → negative tracking (letters too far apart at large sizes).
+     Small/body text → near 0 or slightly positive.
+     Leading: tight on large headings, comfortable on body.                   */
+
+  h1 {
+    font-family: var(--font-display);
     font-weight: 800;
-    letter-spacing: 0.01em;
+    line-height: 1.05;
+    letter-spacing: -0.02em;  /* negative tracking — large display */
+    font-optical-sizing: auto;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    font-optical-sizing: auto;
+  }
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-optical-sizing: auto;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    font-optical-sizing: auto;
   }
 
-  /* ── Body text at regular weight ── */
   p, span, a, li, button, input, textarea, label, td, th {
-    font-family: 'Chopin Trial', 'Chopin Trial VF', Georgia, serif;
+    font-family: var(--font-body);
+  }
+
+  /* Small labels / eyebrows: slightly positive tracking for legibility */
+  .label-small {
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  /* Display utility — for hero text, use clamp + tighter tracking */
+  .text-display {
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
   }
 
   .font-display {
-    font-family: 'Chopin Trial', 'Chopin Trial VF', Georgia, serif !important;
+    font-family: var(--font-display) !important;
     font-weight: 800;
   }
 
@@ -88,160 +133,110 @@
   }
 }
 
-/* ─── Glassmorphism utilities ────────────────────────────────────────────── */
+/* ─── Glassmorphism utilities — TRANSLUCENT per Apple spec ───────────────
+   "Build nav/toolbars/sheets as translucent layers… content scrolls under"
+   Material hierarchy: light surface (glass) < dark surface (glass-dark).
+   Bigger surfaces get stronger blur + deeper shadow.                        */
+
 .glass {
-  background: rgba(180, 200, 220, 0.95);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid var(--mj-glass-border);
-  box-shadow: var(--mj-glass-shadow);
+  /* Light translucent material — 55% opacity, content visible underneath */
+  background: rgba(240, 246, 252, 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  /* Top bright edge — light catching the glass surface */
+  box-shadow: var(--mj-glass-shadow), inset 0 1px 0 rgba(255,255,255,0.45);
 }
 
 .glass-dark {
-  background: rgba(13, 31, 60, 0.95);
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.30);
+  /* Structural dark material — 72% opacity for hierarchy, still translucent */
+  background: rgba(13, 31, 60, 0.72);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.28);
 }
 
 .glass-dropdown {
-  background: rgba(200, 215, 230, 1);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.40);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.20), 0 1px 0 rgba(255,255,255,0.5) inset;
+  /* Dropdown surface — slightly more opaque for legibility over busy backgrounds */
+  background: rgba(248, 251, 255, 0.88);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.55);
 }
 
-/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+/* ─── Scrollbar ───────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #f1f5f9; }
 ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-/* ─── GSAP will-animate base states ─────────────────────────────────────── */
-/* Elements waiting to animate in — GSAP sets opacity/y/x from these */
-[data-gsap="fade-up"] {
-  opacity: 0;
-  transform: translateY(40px);
-  will-change: opacity, transform;
-}
-[data-gsap="fade-left"] {
-  opacity: 0;
-  transform: translateX(-40px);
-  will-change: opacity, transform;
-}
-[data-gsap="fade-right"] {
-  opacity: 0;
-  transform: translateX(40px);
-  will-change: opacity, transform;
-}
-[data-gsap="scale-in"] {
-  opacity: 0;
-  transform: scale(0.92);
-  will-change: opacity, transform;
-}
-[data-gsap="stagger-up"] {
-  opacity: 0;
-  transform: translateY(32px);
-  will-change: opacity, transform;
-}
+/* ─── GSAP will-animate base states ──────────────────────────────────── */
+[data-gsap="fade-up"]    { opacity: 0; transform: translateY(40px);  will-change: opacity, transform; }
+[data-gsap="fade-left"]  { opacity: 0; transform: translateX(-40px); will-change: opacity, transform; }
+[data-gsap="fade-right"] { opacity: 0; transform: translateX(40px);  will-change: opacity, transform; }
+[data-gsap="scale-in"]   { opacity: 0; transform: scale(0.92);       will-change: opacity, transform; }
+[data-gsap="stagger-up"] { opacity: 0; transform: translateY(32px);  will-change: opacity, transform; }
 
-/* ─── GSAP-animated state (added by JS after animation completes) ────────── */
-[data-gsap-done] {
-  will-change: auto;
-}
+/* Release will-change after GSAP finishes — prevents GPU layers stacking up */
+[data-gsap-done] { will-change: auto; }
 
-/* ─── Legacy CSS reveal (fallback / non-JS) ──────────────────────────────── */
+/* ─── Legacy CSS reveal (non-GSAP fallback) ──────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1),
               transform 0.65s cubic-bezier(0.22,1,0.36,1);
 }
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal.from-left  { transform: translateX(-28px); }
-.reveal.from-right { transform: translateX(28px); }
+.reveal.visible            { opacity: 1; transform: translateY(0); }
+.reveal.from-left          { transform: translateX(-28px); }
+.reveal.from-right         { transform: translateX(28px); }
 .reveal.from-left.visible,
 .reveal.from-right.visible { transform: translateX(0); }
 
-/* ─── Animations (kept for non-GSAP uses like toasts, dropdowns) ─────────── */
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ─── CSS keyframes (used only for non-gesture UI: toasts, loaders) ───── */
+@keyframes fadeInDown  { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp    { from { opacity: 0; transform: translateY(28px);  } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn      { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight{ from { opacity: 0; transform: translateX(24px);  } to { opacity: 1; transform: translateX(0); } }
+@keyframes float       { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-14px); } }
+@keyframes shimmer     { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+@keyframes megaDropIn  { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes pulse-ring  {
+  0%   { box-shadow: 0 0 0 0   rgba(255,255,255,0.20); }
+  50%  { box-shadow: 0 0 0 16px rgba(255,255,255,0);    }
+  100% { box-shadow: 0 0 0 0   rgba(255,255,255,0);     }
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.animate-fade-in-down { animation: fadeInDown  0.35s ease both; }
+.animate-fade-in-up   { animation: fadeInUp    0.55s ease both; }
+.animate-fade-in      { animation: fadeIn      0.4s  ease both; }
+.animate-slide-left   { animation: slideInLeft 0.5s  ease both; }
+.animate-slide-right  { animation: slideInRight 0.5s ease both; }
+.animate-float        { animation: float 4s ease-in-out infinite; }
+.animate-mega-drop    { animation: megaDropIn  0.22s cubic-bezier(0.16,1,0.3,1) both; }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-14px); }
-}
-
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
-}
-
-@keyframes megaDropIn {
-  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0   rgba(255, 255, 255, 0.20); }
-  50%  { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0);    }
-  100% { box-shadow: 0 0 0 0   rgba(255, 255, 255, 0);     }
-}
-
-.animate-fade-in-down  { animation: fadeInDown  0.35s ease both; }
-.animate-fade-in-up    { animation: fadeInUp    0.55s ease both; }
-.animate-fade-in       { animation: fadeIn      0.4s ease both; }
-.animate-slide-left    { animation: slideInLeft 0.5s ease both; }
-.animate-slide-right   { animation: slideInRight 0.5s ease both; }
-.animate-float         { animation: float 4s ease-in-out infinite; }
-.animate-mega-drop     { animation: megaDropIn  0.22s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-/* ─── Hero overlay ───────────────────────────────────────────────────────── */
+/* ─── Hero overlay ────────────────────────────────────────────────────── */
 .hero-overlay {
   background: linear-gradient(
     to bottom,
-    rgba(13, 31, 60, 0.08) 0%,
-    rgba(13, 31, 60, 0.04) 40%,
-    rgba(13, 31, 60, 0.45) 75%,
-    rgba(13, 31, 60, 0.75) 100%
+    rgba(13,31,60,0.08) 0%,
+    rgba(13,31,60,0.04) 40%,
+    rgba(13,31,60,0.45) 75%,
+    rgba(13,31,60,0.75) 100%
   );
 }
 
-/* ─── Skeleton shimmer ───────────────────────────────────────────────────── */
+/* ─── Skeleton shimmer ────────────────────────────────────────────────── */
 .skeleton {
   background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
 
-/* ─── Mega menu sub-item hover line ─────────────────────────────────────── */
+/* ─── Mega menu sub-item hover ────────────────────────────────────────── */
 .mega-sub-link {
   position: relative;
   transition: color 0.18s, padding-left 0.18s;
@@ -249,11 +244,9 @@
 .mega-sub-link::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 50%;
+  left: 0; top: 50%;
   transform: translateY(-50%);
-  width: 0;
-  height: 2px;
+  width: 0; height: 2px;
   background: var(--mj-navy);
   border-radius: 2px;
   transition: width 0.18s ease;
@@ -261,16 +254,10 @@
 .mega-sub-link:hover::before { width: 10px; }
 .mega-sub-link:hover { padding-left: 14px; }
 
-/* ─── Performance: GPU compositing for interactive elements ─────────────── */
+/* ─── GPU compositing hints ───────────────────────────────────────────── */
+img { image-rendering: auto; height: auto; }
 
-/* Images render crisply without layout jank */
-img {
-  image-rendering: auto;
-  /* prevent layout shift while images load */
-  height: auto;
-}
-
-/* Cards that have hover transforms — hint the GPU upfront */
+/* Cards that animate on hover — hint GPU upfront */
 .product-card,
 .cat-card {
   will-change: transform;
@@ -279,30 +266,45 @@ img {
   -webkit-backface-visibility: hidden;
 }
 
-/* Sections below the fold — skip paint/layout until near viewport.
-   contain-intrinsic-size prevents scroll-height collapse. */
+/* Below-fold sections — skip paint until near viewport */
 .below-fold {
   content-visibility: auto;
   contain-intrinsic-size: 0 600px;
 }
 
-/* ─── Product card ───────────────────────────────────────────────────────── */
+/* ─── Product card ────────────────────────────────────────────────────── */
+/* Hover uses CSS transition (spring handled by framer-motion in component) */
 .product-card {
-  transition: transform 0.22s cubic-bezier(0.22,1,0.36,1),
-              box-shadow 0.22s ease;
+  transition: box-shadow 0.22s ease;
 }
 .product-card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(13,31,60,0.12);
 }
 
-/* ─── Focus ring ─────────────────────────────────────────────────────────── */
+/* ─── Button pointer-down feedback ───────────────────────────────────────
+   Apple spec §1: "Respond on pointer-down, not on release."
+   The :active pseudo-class fires on pointer-down — instant 97ms feedback.
+   Spring animation layers on top via framer-motion whileTap.              */
+button:active,
+[role="button"]:active,
+a:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease-out;
+}
+/* Reset immediately on release so spring can take over */
+button,
+[role="button"],
+a {
+  transition: transform 0.1s ease-out;
+}
+
+/* ─── Focus ring ──────────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--mj-sky);
   outline-offset: 3px;
 }
 
-/* ─── Video Scroll Section ───────────────────────────────────────────────── */
+/* ─── Video scroll section ────────────────────────────────────────────── */
 .video-pill {
   will-change: width, height, border-radius;
   backface-visibility: hidden;
@@ -314,70 +316,156 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 36px; height: 36px;
   border-radius: 50%;
-  background: rgba(7, 15, 30, 0.55);
+  background: rgba(7,15,30,0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255,255,255,0.18);
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease, transform 0.1s ease-out;
 }
-.video-ctrl-btn:hover {
-  background: rgba(7, 15, 30, 0.80);
-  transform: scale(1.08);
-}
+.video-ctrl-btn:hover  { background: rgba(7,15,30,0.80); }
+.video-ctrl-btn:active { transform: scale(0.92); }
 
 .video-play-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 72px; height: 72px;
   border-radius: 50%;
-  background: rgba(7, 15, 30, 0.55);
+  background: rgba(7,15,30,0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255,255,255,0.35);
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.15);
   cursor: pointer;
   animation: pulse-ring 2.4s ease-in-out infinite;
 }
+.video-play-btn:active { transform: scale(0.93); transition: transform 0.1s ease-out; }
 
-.video-scroll-section {
-  background: #ffffff;
-}
+.video-scroll-section { background: #ffffff; }
 
-/* ─── Lenis smooth scroll ────────────────────────────────────────────────── */
-html.lenis {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
+/* ─── Lenis smooth scroll ─────────────────────────────────────────────── */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
 
-/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY MEDIA QUERIES — Apple spec §14
+   Three independent signals, each handled separately.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Reduced Motion ────────────────────────────────────────────────────
+   Apple rule: replace slides/springs/parallax with SHORT OPACITY CROSS-FADES.
+   Do NOT kill all transitions — that removes useful comprehension feedback.
+   Keep opacity/color changes; remove transforms and elastic/overshoot.     */
 @media (prefers-reduced-motion: reduce) {
+  /* Keyframe animations that move things — disable them */
+  .animate-fade-in-down,
+  .animate-fade-in-up,
+  .animate-slide-left,
+  .animate-slide-right,
+  .animate-float,
+  .animate-mega-drop {
+    animation: fadeIn 0.2s ease both;
+  }
+
+  /* Shimmer/pulse are vestibular-unfriendly — halt them */
+  .skeleton         { animation: none; background: #e2e8f0; }
+  .video-play-btn   { animation: none; }
+
+  /* GSAP base states: prevent the "invisible on load" flash if GSAP doesn't run */
+  [data-gsap="fade-up"],
+  [data-gsap="fade-left"],
+  [data-gsap="fade-right"],
+  [data-gsap="scale-in"],
+  [data-gsap="stagger-up"] {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* Remove transforms from all transitions — leave opacity/color */
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    transition-duration: 200ms !important;
+    /* Prevent transform-based transitions only */
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Flatten video pill — no morph animation */
   .video-pill {
     width: 100vw !important;
     height: 100vh !important;
     border-radius: 0 !important;
     left: 0 !important;
+    will-change: auto;
+  }
+
+  /* Button press: replace scale with opacity dip — no vestibular movement */
+  button:active,
+  [role="button"]:active,
+  a:active {
+    transform: none !important;
+    opacity: 0.7;
+    transition: opacity 0.1s ease !important;
+  }
+}
+
+/* ── 2. Reduced Transparency ──────────────────────────────────────────────
+   Apple rule: make translucent surfaces frostier/solid.
+   Raise background opacity, drop the blur.                                 */
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: rgba(240, 246, 252, 0.97);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: rgba(180, 200, 220, 0.5);
+  }
+  .glass-dark {
+    background: rgba(13, 31, 60, 0.97);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-dropdown {
+    background: rgb(248, 251, 255);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* Header should be fully opaque when transparency is reduced */
+  header {
+    --header-blur: 0px;
+  }
+}
+
+/* ── 3. High Contrast ─────────────────────────────────────────────────────
+   Apple rule: near-solid backgrounds with a defined, contrasting border.
+   Increase text contrast, ensure all interactive elements are clearly bounded. */
+@media (prefers-contrast: more) {
+  .glass,
+  .glass-dark,
+  .glass-dropdown {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-width: 2px;
+  }
+  .glass         { background: #f0f6fc; border-color: #0d1f3c; }
+  .glass-dark    { background: #0d1f3c; border-color: #ffffff; }
+  .glass-dropdown{ background: #ffffff; border-color: #0d1f3c; }
+
+  /* Ensure product cards have visible borders */
+  .product-card,
+  .cat-card {
+    border-width: 2px !important;
+    border-color: #0d1f3c !important;
+  }
+
+  /* Focus ring — thicker in high contrast */
+  :focus-visible {
+    outline-width: 3px;
+    outline-offset: 4px;
   }
 }

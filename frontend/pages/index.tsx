@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { ChevronRight, Wrench, Package, Gem, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../lib/AppContext';
 import { SiteHeader } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
 import { VideoScrollSection } from '../components/VideoScrollSection';
 import { gsap, ScrollTrigger, animateDataGsap } from '../lib/gsap';
+import { SPRINGS } from '../lib/springs';
 
 /* ─── Category cards data ────────────────────────────────────────────────── */
 interface Category {
@@ -52,13 +54,6 @@ const CATEGORIES: Category[] = [
     color: null,
     image: '/categories/tire.webp',
   },
-  {
-    title: 'Office & Stationery',
-    href: '/catalog/office-stationery',
-    count: 34,
-    color: null,
-    image: '/categories/pen-paper.webp',
-  },
 ];
 
 /* ─── Additional categories for dropdown ─────────────────────────────────── */
@@ -67,7 +62,6 @@ const ADDITIONAL_CATEGORIES = [
   { label: 'Car Care & Detailing',  href: '/catalog/car-care-detailing' },
   { label: 'Tools & Workshop',      href: '/catalog/tools-workshop' },
   { label: 'Cooling & Heating',     href: '/catalog/cooling-heating' },
-  { label: 'Business Equipment',   href: '/catalog/business-equipment' },
   { label: 'Filtration',            href: '/catalog/filtration' },
   { label: 'Fuel System',           href: '/catalog/fuel-system' },
   { label: 'Ignition System',       href: '/catalog/ignition-system' },
@@ -173,8 +167,8 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>MJ Logistics — Auto Parts, Stationery &amp; Business Equipment</title>
-        <meta name="description" content="Find genuine auto parts with fitment verification, office stationery, and business equipment. Fast delivery guaranteed." />
+        <title>MJ Logistics — Genuine Auto Parts</title>
+        <meta name="description" content="Find genuine auto parts with fitment verification, workshop essentials, and trusted support for your vehicle. Fast delivery guaranteed." />
       </Head>
 
       {/* Fixed glassmorphic header */}
@@ -227,54 +221,77 @@ export default function HomePage() {
                 className="text-[15px] text-white/80 leading-relaxed max-w-xl mb-8 sm:mb-10"
                 style={{ opacity: 0 }}
               >
-                Your trusted source for genuine auto parts, office stationery, and business equipment — with verified fitment and expert support.
+                Your trusted source for genuine auto parts and workshop essentials — with verified fitment and expert support.
               </p>
 
               <div ref={heroBtnsRef} className="flex flex-wrap gap-3" style={{ opacity: 0 }}>
-                <button
+                <motion.button
                   type="button"
                   onClick={() => navigate('/shop')}
-                  className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-white text-[#0d1f3c] font-bold text-[14px] rounded-xl hover:bg-white/90 transition-all cursor-pointer shadow-lg"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-white text-[#0d1f3c] font-bold text-[14px] rounded-xl hover:bg-white/90 transition-colors cursor-pointer shadow-lg"
+                  whileTap={{ scale: 0.97 }}
+                  transition={SPRINGS.micro}
                 >
                   Shop Parts
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </motion.button>
                 <div ref={dropdownRef} className="relative">
-                  <button
+                  <motion.button
                     type="button"
                     onClick={() => setCatalogDropdownOpen(!catalogDropdownOpen)}
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 glass text-white font-bold text-[14px] rounded-xl hover:bg-white/20 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 glass text-white font-bold text-[14px] rounded-xl hover:bg-white/20 transition-colors cursor-pointer"
+                    whileTap={{ scale: 0.97 }}
+                    transition={SPRINGS.micro}
                   >
                     Browse Catalog
-                    <ChevronRight className={`w-4 h-4 transition-transform ${catalogDropdownOpen ? 'rotate-90' : ''}`} />
-                  </button>
+                    <motion.span
+                      animate={{ rotate: catalogDropdownOpen ? 90 : 0 }}
+                      transition={SPRINGS.micro}
+                      style={{ display: 'flex' }}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </motion.span>
+                  </motion.button>
 
-                  {catalogDropdownOpen && (
-                    <div className="absolute bottom-full mb-2 left-0 w-64 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50 animate-fade-in-down">
-                      <div className="px-4 py-2 border-b border-slate-100">
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">More Categories</p>
-                      </div>
-                      {ADDITIONAL_CATEGORIES.map(cat => (
-                        <button
-                          key={cat.href}
-                          type="button"
-                          onClick={() => { navigate(cat.href); setCatalogDropdownOpen(false); }}
-                          className="w-full text-left px-4 py-2 text-[12px] text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-                        >
-                          {cat.label}
-                        </button>
-                      ))}
-                      <div className="border-t border-slate-100 mt-2 pt-2">
-                        <button
-                          type="button"
-                          onClick={() => { navigate('/catalog'); setCatalogDropdownOpen(false); }}
-                          className="w-full text-left px-4 py-2 text-[12px] font-bold text-[#0d1f3c] hover:bg-slate-50 transition-colors cursor-pointer"
-                        >
-                          View All Categories →
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {catalogDropdownOpen && (
+                      <motion.div
+                        key="catalog-dd"
+                        initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                        transition={SPRINGS.sheet}
+                        className="absolute bottom-full mb-2 left-0 w-64 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50"
+                      >
+                        <div className="px-4 py-2 border-b border-slate-100">
+                          <p className="text-[10px] text-slate-400 uppercase font-bold" style={{ letterSpacing: '0.1em' }}>More Categories</p>
+                        </div>
+                        {ADDITIONAL_CATEGORIES.map(cat => (
+                          <motion.button
+                            key={cat.href}
+                            type="button"
+                            onClick={() => { navigate(cat.href); setCatalogDropdownOpen(false); }}
+                            className="w-full text-left px-4 py-2 text-[12px] text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                            whileTap={{ scale: 0.98 }}
+                            transition={SPRINGS.micro}
+                          >
+                            {cat.label}
+                          </motion.button>
+                        ))}
+                        <div className="border-t border-slate-100 mt-2 pt-2">
+                          <motion.button
+                            type="button"
+                            onClick={() => { navigate('/catalog'); setCatalogDropdownOpen(false); }}
+                            className="w-full text-left px-4 py-2 text-[12px] font-bold text-[#0d1f3c] hover:bg-slate-50 transition-colors cursor-pointer"
+                            whileTap={{ scale: 0.98 }}
+                            transition={SPRINGS.micro}
+                          >
+                            View All Categories →
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -289,35 +306,42 @@ export default function HomePage() {
                 <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-2">Browse by category</p>
                 <h2 className="font-display text-4xl font-bold text-[#0d1f3c]">Shop by System</h2>
               </div>
-              <button
+              <motion.button
                 type="button"
                 onClick={() => navigate('/catalog')}
                 className="hidden sm:flex items-center gap-1.5 text-[13px] font-bold text-[#1e4d8c] hover:text-[#0d1f3c] transition-colors cursor-pointer"
+                whileTap={{ scale: 0.97 }}
+                transition={SPRINGS.micro}
               >
                 All categories <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               {CATEGORIES.map((cat) => (
-                <button
+                <motion.button
                   key={cat.title}
                   type="button"
                   onClick={() => navigate(cat.href)}
-                  className="cat-card relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer bg-transparent flex flex-col items-center justify-center gap-2 p-4 transition-all duration-200 hover:scale-[1.04] hover:shadow-xl group"
+                  className="cat-card relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer bg-transparent flex flex-col items-center justify-center gap-2 p-4 group"
+                  whileHover={{ scale: 1.04, boxShadow: '0 16px 40px rgba(13,31,60,0.14)' }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={SPRINGS.default}
                 >
-                  <img
+                  <motion.img
                     src={cat.image}
                     alt={cat.title}
-                    className="w-20 h-20 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-200"
+                    className="w-20 h-20 object-contain drop-shadow-lg"
                     loading="eager"
                     decoding="async"
                     width={80}
                     height={80}
+                    whileHover={{ scale: 1.1 }}
+                    transition={SPRINGS.default}
                   />
                   <span className="font-display text-[11px] font-bold text-center leading-tight text-[#0d1f3c]">{cat.title}</span>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">{cat.count} items</span>
-                </button>
+                  <span className="text-[9px] font-bold uppercase text-slate-500" style={{ letterSpacing: '0.08em' }}>{cat.count} items</span>
+                </motion.button>
               ))}
             </div>
           </div>
@@ -352,8 +376,8 @@ export default function HomePage() {
                   icon: Package,
                   title: 'Office & Stationery',
                   desc: 'Complete office supplies from pens and paper to printers and furniture.',
-                  href: '/catalog/office-stationery',
-                  cta: 'Browse stationery',
+                  href: '/shop',
+                  cta: 'Shop auto parts',
                   bg: 'bg-gradient-to-br from-slate-700 to-slate-900',
                   image: '/homepage/office.webp',
                 },
@@ -384,13 +408,15 @@ export default function HomePage() {
                   </div>
                   <h3 className="relative font-display text-xl font-bold text-white mb-3">{div.title}</h3>
                   <p className="relative text-white/70 text-[13px] leading-relaxed flex-1">{div.desc}</p>
-                  <button
+                  <motion.button
                     type="button"
                     onClick={() => navigate(div.href)}
-                    className="relative mt-6 inline-flex items-center gap-2 text-white text-[12px] font-bold cursor-pointer hover:gap-3 transition-all"
+                    className="relative mt-6 inline-flex items-center gap-2 text-white text-[12px] font-bold cursor-pointer"
+                    whileTap={{ scale: 0.97 }}
+                    transition={SPRINGS.micro}
                   >
                     {div.cta} <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </motion.button>
                 </div>
               ))}
             </div>
@@ -411,13 +437,16 @@ export default function HomePage() {
                   or a wider enterprise requirement. We&apos;ll help direct your enquiry.
                 </p>
               </div>
-              <button
+              <motion.button
                 type="button"
                 onClick={() => navigate('/contact')}
-                className="inline-flex w-fit items-center gap-2.5 rounded-xl bg-[#10221d] px-7 py-3.5 text-[14px] font-bold text-white transition-transform hover:-translate-y-1 cursor-pointer"
+                className="inline-flex w-fit items-center gap-2.5 rounded-xl bg-[#10221d] px-7 py-3.5 text-[14px] font-bold text-white cursor-pointer"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                transition={SPRINGS.default}
               >
                 Contact our team <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             </div>
           </div>
         </section>
@@ -438,21 +467,25 @@ export default function HomePage() {
                 Browse thousands of genuine parts, filter by your vehicle, and get delivered to your door.
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
-                <button
+                <motion.button
                   type="button"
                   onClick={() => navigate('/garage')}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0d1f3c] font-bold text-[14px] rounded-xl hover:bg-white/90 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#0d1f3c] font-bold text-[14px] rounded-xl hover:bg-white/90 transition-colors cursor-pointer"
+                  whileTap={{ scale: 0.97 }}
+                  transition={SPRINGS.micro}
                 >
                   Select My Vehicle
                   <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   type="button"
                   onClick={() => navigate('/catalog')}
-                  className="inline-flex items-center gap-2 px-8 py-4 glass text-white font-bold text-[14px] rounded-xl cursor-pointer hover:bg-white/20 transition-all"
+                  className="inline-flex items-center gap-2 px-8 py-4 glass text-white font-bold text-[14px] rounded-xl cursor-pointer hover:bg-white/20 transition-colors"
+                  whileTap={{ scale: 0.97 }}
+                  transition={SPRINGS.micro}
                 >
                   Browse Catalog
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Star, ShieldCheck, Truck, RotateCcw, ShoppingCart, Check, CheckCircle2, XCircle, Copy, Search, Car, Award, Sparkles, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../../lib/AppContext';
 import { PARTS_DATABASE, SAMPLE_PART_REVIEWS } from '../../lib/data/parts';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { VehicleFitBadge } from '../../components/VehicleFitBadge';
 import { ProductCard } from '../../components/ProductCard';
+import { SPRINGS } from '../../lib/springs';
 
 export default function ProductDetailPage() {
   const router = useRouter();
@@ -47,7 +49,7 @@ export default function ProductDetailPage() {
 
   const productReviews = part.reviews && part.reviews.length > 0 ? part.reviews : SAMPLE_PART_REVIEWS;
 
-  const tabClass = (tab: string) => `py-3.5 px-6 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === tab ? 'border-[#1e4d8c] text-[#1e4d8c] bg-white' : 'border-transparent text-slate-600 hover:text-slate-900'}`;
+  const tabClass = (tab: string) => `relative py-3.5 px-6 font-bold text-xs sm:text-sm cursor-pointer shrink-0 transition-colors ${activeTab === tab ? 'text-[#1e4d8c]' : 'text-slate-600 hover:text-slate-900'}`;
 
   return (
     <div className="space-y-8 pb-16">
@@ -107,25 +109,33 @@ export default function ProductDetailPage() {
               {/* Fitment banner */}
               <div className="pt-2">
                 {activeVehicle && fits === true && (
-                  <div className="bg-emerald-50 border-2 border-emerald-500/80 rounded-xl p-4 flex items-start gap-3.5 shadow-xs">
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                    transition={SPRINGS.default}
+                    className="bg-emerald-50 border-2 border-emerald-500/80 rounded-xl p-4 flex items-start gap-3.5 shadow-xs"
+                  >
                     <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs"><CheckCircle2 className="w-6 h-6" /></div>
                     <div className="flex-1">
-                      <div className="text-xs font-black uppercase tracking-wider text-emerald-800">100% Guaranteed Fitment Verified</div>
+                      <div className="text-xs font-black uppercase text-emerald-800" style={{ letterSpacing: '0.08em' }}>100% Guaranteed Fitment Verified</div>
                       <h4 className="text-sm sm:text-base font-bold text-emerald-950 mt-0.5">Guaranteed to fit your {activeVehicle.year} {activeVehicle.make} {activeVehicle.model} ({activeVehicle.generation})</h4>
                       <p className="text-xs text-emerald-700 mt-0.5">Matched against your active engine specification: <strong>{activeVehicle.engine}</strong></p>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
                 {activeVehicle && fits === false && (
-                  <div className="bg-rose-50 border-2 border-rose-400 rounded-xl p-4 flex items-start gap-3.5 shadow-xs">
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                    transition={SPRINGS.default}
+                    className="bg-rose-50 border-2 border-rose-400 rounded-xl p-4 flex items-start gap-3.5 shadow-xs"
+                  >
                     <div className="w-10 h-10 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-xs"><XCircle className="w-6 h-6" /></div>
                     <div className="flex-1">
-                      <div className="text-xs font-black uppercase tracking-wider text-rose-800">Fitment Incompatible</div>
+                      <div className="text-xs font-black uppercase text-rose-800" style={{ letterSpacing: '0.08em' }}>Fitment Incompatible</div>
                       <h4 className="text-sm sm:text-base font-bold text-rose-950 mt-0.5">This part does NOT fit your active {activeVehicle.make} {activeVehicle.model}</h4>
                       <p className="text-xs text-rose-700 mt-0.5">Do not purchase for this vehicle. Check the compatibility table below or switch your vehicle.</p>
-                      <button type="button" onClick={() => openSelectorModal('vin')} className="mt-2 text-xs font-bold text-[#0077C7] hover:underline flex items-center gap-1 cursor-pointer"><span>Change active vehicle</span><ArrowRight className="w-3 h-3" /></button>
+                      <motion.button type="button" onClick={() => openSelectorModal('vin')} className="mt-2 text-xs font-bold text-[#0077C7] hover:underline flex items-center gap-1 cursor-pointer" whileTap={{ scale: 0.97 }} transition={SPRINGS.micro}><span>Change active vehicle</span><ArrowRight className="w-3 h-3" /></motion.button>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
                 {!activeVehicle && (
                   <div className="bg-slate-100 border border-slate-300 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
@@ -133,7 +143,7 @@ export default function ProductDetailPage() {
                       <div className="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0"><Car className="w-5 h-5" /></div>
                       <div><div className="text-xs font-bold text-slate-800">Confirm this fits your exact vehicle</div><p className="text-xs text-slate-500">Select your vehicle to verify compatibility before ordering.</p></div>
                     </div>
-                    <button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shrink-0">Check Fitment</button>
+                    <motion.button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-xs font-bold rounded-lg cursor-pointer shrink-0 transition-colors" whileTap={{ scale: 0.97 }} transition={SPRINGS.micro}>Check Fitment</motion.button>
                   </div>
                 )}
               </div>
@@ -155,13 +165,33 @@ export default function ProductDetailPage() {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <div className="flex items-center border border-slate-300 rounded-lg bg-white overflow-hidden shrink-0">
-                    <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-100 text-sm font-bold cursor-pointer">-</button>
+                    <motion.button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-100 text-sm font-bold cursor-pointer" whileTap={{ scale: 0.88 }} transition={SPRINGS.micro}>-</motion.button>
                     <span className="w-12 text-center text-sm font-bold text-slate-900 font-mono">{quantity}</span>
-                    <button type="button" onClick={() => setQuantity(Math.min(part.stockCount, quantity + 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-100 text-sm font-bold cursor-pointer">+</button>
+                    <motion.button type="button" onClick={() => setQuantity(Math.min(part.stockCount, quantity + 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-100 text-sm font-bold cursor-pointer" whileTap={{ scale: 0.88 }} transition={SPRINGS.micro}>+</motion.button>
                   </div>
-                  <button type="button" onClick={handleAddToCart} className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0d1f3c] hover:bg-[#1a3560] active:bg-[#0a1628] text-white shadow-md'}`}>
-                    {justAdded ? <><Check className="w-5 h-5" /><span>Added to Cart!</span></> : <><ShoppingCart className="w-5 h-5" /><span>Add to Cart • ${(part.price * quantity).toFixed(2)}</span></>}
-                  </button>
+                  <motion.button
+                    type="button"
+                    onClick={handleAddToCart}
+                    className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0d1f3c] hover:bg-[#1a3560] text-white'}`}
+                    whileTap={{ scale: 0.97 }}
+                    transition={SPRINGS.micro}
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {justAdded ? (
+                        <motion.span key="added" className="flex items-center gap-2"
+                          initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                          transition={SPRINGS.momentum}>
+                          <Check className="w-5 h-5" /><span>Added to Cart!</span>
+                        </motion.span>
+                      ) : (
+                        <motion.span key="add" className="flex items-center gap-2"
+                          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                          transition={SPRINGS.micro}>
+                          <ShoppingCart className="w-5 h-5" /><span>Add to Cart • ${(part.price * quantity).toFixed(2)}</span>
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
                 </div>
               </div>
 
@@ -177,11 +207,35 @@ export default function ProductDetailPage() {
 
       {/* Tabs */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="flex border-b border-slate-200 bg-slate-50 overflow-x-auto">
-          <button type="button" onClick={() => setActiveTab('specs')} className={tabClass('specs')}>Technical Specifications ({Object.keys(part.specs).length})</button>
-          <button type="button" onClick={() => setActiveTab('fitment')} className={tabClass('fitment')}>Vehicle Compatibility ({part.fitsVehicles.length} Models)</button>
-          <button type="button" onClick={() => setActiveTab('oem')} className={tabClass('oem')}>OEM Cross-Reference ({part.oemNumbers.length})</button>
-          <button type="button" onClick={() => setActiveTab('reviews')} className={tabClass('reviews')}>Customer Reviews ({productReviews.length})</button>
+        <div className="flex border-b border-slate-200 bg-slate-50 overflow-x-auto relative">
+          {(['specs', 'fitment', 'oem', 'reviews'] as const).map(tab => {
+            const labels: Record<string, string> = {
+              specs:   `Technical Specifications (${Object.keys(part.specs).length})`,
+              fitment: `Vehicle Compatibility (${part.fitsVehicles.length} Models)`,
+              oem:     `OEM Cross-Reference (${part.oemNumbers.length})`,
+              reviews: `Customer Reviews (${productReviews.length})`,
+            };
+            return (
+              <motion.button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={tabClass(tab)}
+                whileTap={{ scale: 0.98 }}
+                transition={SPRINGS.micro}
+              >
+                {labels[tab]}
+                {/* Spring-animated underline indicator */}
+                {activeTab === tab && (
+                  <motion.span
+                    layoutId="tab-indicator"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1e4d8c]"
+                    transition={SPRINGS.snappy}
+                  />
+                )}
+              </motion.button>
+            );
+          })}
         </div>
 
         {activeTab === 'specs' && (

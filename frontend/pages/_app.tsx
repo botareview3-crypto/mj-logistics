@@ -176,11 +176,11 @@ export default function App(props: AppProps) {
   return (
     <>
       <Head>
-        <title>MJ Logistics — Auto Parts, Stationery &amp; Business Equipment</title>
+        <title>MJ Logistics — Genuine Auto Parts</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Your trusted source for genuine auto parts with fitment verification, office stationery, and business equipment."
+          content="Your trusted source for genuine auto parts with fitment verification, workshop essentials, and dependable support."
         />
       </Head>
       <AppProvider>

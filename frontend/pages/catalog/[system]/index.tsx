@@ -4,9 +4,11 @@ import {
   Disc, Gauge, Sliders, Flame, Zap, Thermometer,
   Sparkles, Wrench, ShieldCheck, ChevronRight, Package, ArrowRight,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useApp } from '../../../lib/AppContext';
 import { getCategoryById, CATEGORY_ROOTS } from '../../../lib/data/categories';
 import { Breadcrumbs } from '../../../components/Breadcrumbs';
+import { SPRINGS } from '../../../lib/springs';
 
 const iconMap: Record<string, React.ElementType> = {
   Disc, Gauge, Sliders, Flame, Zap, Thermometer,
@@ -24,12 +26,6 @@ const CATEGORY_PRESENTATION: Record<string, {
     accent: '#1e4d8c',
     eyebrow: 'Vehicle systems',
     availability: 'OE & aftermarket',
-  },
-  'stationery-equipment': {
-    image: '/homepage/office.webp',
-    accent: '#9b7430',
-    eyebrow: 'Workplace essentials',
-    availability: 'Business-ready supplies',
   },
 };
 
@@ -117,11 +113,14 @@ export default function SystemCategoryPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {system.subsystems.map(sub => (
-            <button
+            <motion.button
               key={sub.id}
               type="button"
               onClick={() => navigate(`/catalog/${system.id}/${sub.id}`)}
-              className={`product-card bg-white rounded-2xl border border-slate-200 ${accentHoverClass} p-5 text-left flex flex-col gap-3 cursor-pointer group`}
+              className={`product-card bg-white rounded-2xl border border-slate-200 p-5 text-left flex flex-col gap-3 cursor-pointer group`}
+              whileHover={{ y: -3, borderColor: presentation.accent, boxShadow: '0 12px 32px rgba(13,31,60,0.10)' }}
+              whileTap={{ scale: 0.98 }}
+              transition={SPRINGS.default}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
@@ -145,21 +144,23 @@ export default function SystemCategoryPage() {
                 </span>
                 <span className="text-slate-400 font-mono">{sub.itemCount} items</span>
               </div>
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>
 
       {/* ── Back link ────────────────────────────────────────────── */}
       <div className="pt-2">
-        <button
+        <motion.button
           type="button"
           onClick={() => navigate('/catalog')}
           className="flex items-center gap-1 text-[13px] font-semibold text-[#1e4d8c] hover:text-[#0d1f3c] transition-colors cursor-pointer"
+          whileTap={{ scale: 0.97 }}
+          transition={SPRINGS.micro}
         >
           <ArrowRight className="w-3.5 h-3.5 rotate-180" />
           Back to all categories
-        </button>
+        </motion.button>
       </div>
     </div>
   );

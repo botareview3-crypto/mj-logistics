@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
             <h2 className="font-display text-3xl font-bold text-white leading-none">MJ Logistics</h2>
           </div>
           <p className="text-white/60 text-[13px] leading-relaxed max-w-xs">
-            Genuine auto parts with fitment verification, accessories, tools, and office equipment — all under one roof.
+            Genuine auto parts with fitment verification, accessories, tools, and workshop essentials — all under one roof.
           </p>
 
           <div className="space-y-2.5 text-[13px] text-white/60">
