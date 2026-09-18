@@ -52,7 +52,7 @@ const CATEGORIES: Category[] = [
     href: '/catalog/tires-wheels',
     count: 29,
     color: null,
-    image: '/categories/tire.webp',
+    image: '/categories/tires-wheels-custom.png',
   },
 ];
 
