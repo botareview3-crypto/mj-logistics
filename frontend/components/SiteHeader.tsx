@@ -62,6 +62,7 @@ const MEGA_SECTIONS: MegaSection[] = [
 
 const NAV_LINKS = [
   { label: 'About',   href: '/divisions' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 /* ─── Component ──────────────────────────────────────────────────────────── */

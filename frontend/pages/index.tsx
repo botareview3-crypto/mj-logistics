@@ -397,6 +397,31 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── CONTACT STRIP ─────────────────────────────────────────────── */}
+        <section className="bg-[#f5f4ef] py-20">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div className="rounded-3xl bg-[#d8b46a] p-8 sm:p-12 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+              <div className="max-w-2xl">
+                <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-[#5d451d] mb-3">Questions, sourcing, or support?</p>
+                <h2 className="font-display text-4xl sm:text-5xl font-bold text-[#10221d] leading-[.95]">
+                  Let&apos;s make your next move easier.
+                </h2>
+                <p className="mt-5 max-w-xl text-[14px] leading-7 text-[#5d451d]">
+                  Talk to MJ Logistics about auto parts, office supplies, business equipment,
+                  or a wider enterprise requirement. We&apos;ll help direct your enquiry.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/contact')}
+                className="inline-flex w-fit items-center gap-2.5 rounded-xl bg-[#10221d] px-7 py-3.5 text-[14px] font-bold text-white transition-transform hover:-translate-y-1 cursor-pointer"
+              >
+                Contact our team <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* ── CTA BANNER ─────────────────────────────────────────────────── */}
         <section className="relative py-24 overflow-hidden bg-[#0d1f3c]">
           <div

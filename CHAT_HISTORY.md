@@ -546,3 +546,6 @@ transcript, just the gist.
   page. Legal pages now use the corporate chrome, placeholder contact details
   were removed, email branding was standardized, and the unavailable email
   auth form is clearly marked as coming soon.
+- Added a visible contact section to the homepage and added Contact to the
+  enterprise header navigation. Expanded `/contact` with enquiry categories,
+  business hours, response guidance, and a fuller contact-details panel.
