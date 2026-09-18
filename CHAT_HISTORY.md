@@ -549,3 +549,7 @@ transcript, just the gist.
 - Added a visible contact section to the homepage and added Contact to the
   enterprise header navigation. Expanded `/contact` with enquiry categories,
   business hours, response guidance, and a fuller contact-details panel.
+- Fully redesigned `/divisions` (About) and `/contact` to match the MJ Mining
+  editorial system: cinematic image-backed heroes, large Chopin typography,
+  structured enterprise story sections, division panels, enquiry routes, and
+  premium dark/gold contact bands. Confirmed the production build succeeds.
