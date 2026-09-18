@@ -302,15 +302,6 @@ img {
   outline-offset: 3px;
 }
 
-/* Remove all focus styling from plain text inputs inside search bars */
-input[type="text"]:focus,
-input[type="search"]:focus,
-input[type="email"]:focus {
-  outline: none !important;
-  box-shadow: none !important;
-  ring: 0 !important;
-}
-
 /* ─── Video Scroll Section ───────────────────────────────────────────────── */
 .video-pill {
   will-change: width, height, border-radius;

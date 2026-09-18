@@ -134,7 +134,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try { localStorage.setItem('autoparts_garage', JSON.stringify(updated)); } catch { /* ignore */ }
       return updated;
     });
-    setActiveVehicleState(prev => prev?.id === id ? null : prev);
+    setActiveVehicleState(prev => {
+      if (prev?.id !== id) return prev;
+      try { localStorage.removeItem('autoparts_active_vehicle'); } catch { /* ignore */ }
+      return null;
+    });
   }, []);
 
   const updateSavedVehicleNickname = useCallback((id: string, nickname: string) => {

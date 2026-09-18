@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Mail, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { CATEGORY_ROOTS } from '../lib/data/categories';
 
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
         {/* Brand col */}
         <div className="lg:col-span-2 space-y-5">
           <div>
-            <p className="font-display text-[10px] uppercase tracking-[0.3em] text-white/40 mb-1">Auto Parts Shop</p>
+            <p className="font-display text-[10px] uppercase tracking-[0.3em] text-white/40 mb-1">MJ Logistics Enterprise</p>
             <h2 className="font-display text-3xl font-bold text-white leading-none">MJ Logistics</h2>
           </div>
           <p className="text-white/60 text-[13px] leading-relaxed max-w-xs">
@@ -32,9 +32,8 @@ export const Footer: React.FC = () => {
           </p>
 
           <div className="space-y-2.5 text-[13px] text-white/60">
-            <div className="flex items-center gap-2.5"><Phone className="w-3.5 h-3.5 text-white/30 shrink-0" /> +251 XX XXX XXXX</div>
             <div className="flex items-center gap-2.5"><Clock className="w-3.5 h-3.5 text-white/30 shrink-0" /> Mon–Fri 07:00–20:00 · Sat 08:00–16:00</div>
-            <div className="flex items-center gap-2.5"><Mail className="w-3.5 h-3.5 text-white/30 shrink-0" /> orders@mjlogisticsenterprise.com</div>
+            <div className="flex items-center gap-2.5"><Mail className="w-3.5 h-3.5 text-white/30 shrink-0" /> info@mjlogisticsenterprise.com</div>
           </div>
 
           {/* Newsletter */}

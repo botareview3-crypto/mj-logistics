@@ -26,11 +26,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
   if (viewMode === 'list') {
     return (
       <div
-        onClick={goToDetail}
-        className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#1e4d8c] p-4 flex flex-col sm:flex-row items-center gap-4 cursor-pointer group"
+        className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#1e4d8c] p-4 flex flex-col sm:flex-row items-center gap-4 group"
       >
         {/* Image */}
-        <div className="w-full sm:w-[100px] h-[90px] bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden p-2">
+        <div className="relative w-full sm:w-[100px] h-[90px] bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden p-2">
           <img
             src={part.images[0]}
             alt={part.name}
@@ -47,9 +46,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
         {/* Info */}
         <div className="flex-1 space-y-1.5 min-w-0">
           <p className="text-[11px] font-bold uppercase tracking-wider text-[#1e4d8c]">{part.brand}</p>
-          <h3 className="font-display text-[15px] font-semibold text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors leading-snug line-clamp-1">
+          <button
+            type="button"
+            onClick={goToDetail}
+            className="font-display text-[15px] font-semibold text-[#0d1f3c] hover:text-[#1e4d8c] transition-colors leading-snug line-clamp-1 text-left cursor-pointer"
+          >
             {part.name}
-          </h3>
+          </button>
           <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
             <span className="font-mono bg-slate-100 px-2 py-0.5 rounded-md">SKU: {part.sku}</span>
             {part.position && (
@@ -98,10 +101,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
 
   /* ── Grid mode ─────────────────────────────────────────────────────── */
   return (
-    <div
-      onClick={goToDetail}
-      className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#1e4d8c] flex flex-col cursor-pointer group overflow-hidden"
-    >
+    <div className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#1e4d8c] flex flex-col group overflow-hidden">
       {/* Image area */}
       <div className="relative bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center h-44 overflow-hidden">
         <img
@@ -139,9 +139,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
               <span className="font-semibold text-slate-600">{part.rating}</span>
             </div>
           </div>
-          <h3 className="font-display text-[14px] font-semibold text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors line-clamp-2 leading-snug">
+          <button
+            type="button"
+            onClick={goToDetail}
+            className="font-display text-[14px] font-semibold text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors line-clamp-2 leading-snug text-left cursor-pointer"
+          >
             {part.name}
-          </h3>
+          </button>
           {part.position && (
             <span className="inline-block mt-1 text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md font-medium">
               {part.position}

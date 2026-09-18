@@ -126,15 +126,15 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({ availableParts, fi
       {/* Price */}
       <div className="border-b border-slate-200 pb-3">
         <button type="button" onClick={() => toggle('price')} className="w-full flex items-center justify-between text-xs font-bold text-slate-900 py-1 cursor-pointer">
-          <span>Price Range ($)</span>{collapsed.price ? <ChevronDown className="w-3.5 h-3.5 text-slate-400" /> : <ChevronUp className="w-3.5 h-3.5 text-slate-400" />}
+          <span>Price Range (€)</span>{collapsed.price ? <ChevronDown className="w-3.5 h-3.5 text-slate-400" /> : <ChevronUp className="w-3.5 h-3.5 text-slate-400" />}
         </button>
         {!collapsed.price && <div className="mt-2 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="flex-1"><span className="text-[10px] text-slate-400 block">Min ($)</span><input type="number" min="0" max={filters.maxPrice} value={filters.minPrice} onChange={e => onFilterChange({ ...filters, minPrice: Number(e.target.value) || 0 })} className="w-full px-2 py-1 text-xs border border-slate-300 rounded-md bg-slate-50 focus:bg-white" /></div>
+            <div className="flex-1"><span className="text-[10px] text-slate-400 block">Min (€)</span><input type="number" min="0" max={filters.maxPrice} value={filters.minPrice} onChange={e => onFilterChange({ ...filters, minPrice: Number(e.target.value) || 0 })} className="w-full px-2 py-1 text-xs border border-slate-300 rounded-md bg-slate-50 focus:bg-white" /></div>
             <span className="text-slate-400 mt-3">—</span>
-            <div className="flex-1"><span className="text-[10px] text-slate-400 block">Max ($)</span><input type="number" min={filters.minPrice} max="1000" value={filters.maxPrice} onChange={e => onFilterChange({ ...filters, maxPrice: Number(e.target.value) || 500 })} className="w-full px-2 py-1 text-xs border border-slate-300 rounded-md bg-slate-50 focus:bg-white" /></div>
+            <div className="flex-1"><span className="text-[10px] text-slate-400 block">Max (€)</span><input type="number" min={filters.minPrice} max="500" value={filters.maxPrice} onChange={e => onFilterChange({ ...filters, maxPrice: Number(e.target.value) || 500 })} className="w-full px-2 py-1 text-xs border border-slate-300 rounded-md bg-slate-50 focus:bg-white" /></div>
           </div>
-          <input type="range" min="0" max="250" step="5" value={filters.maxPrice} onChange={e => onFilterChange({ ...filters, maxPrice: Number(e.target.value) })} className="w-full accent-[#1e4d8c] cursor-pointer" />
+          <input type="range" min="0" max="500" step="5" value={filters.maxPrice} onChange={e => onFilterChange({ ...filters, maxPrice: Number(e.target.value) })} className="w-full accent-[#1e4d8c] cursor-pointer" />
         </div>}
       </div>
 

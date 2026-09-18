@@ -64,8 +64,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     body: (
       <p>
         Questions about this policy or your data? Email us at{' '}
-        <a href="mailto:orders@mjlogisticsenterprise.com" className="text-[#0077C7] font-semibold hover:underline">
-          orders@mjlogisticsenterprise.com
+        <a href="mailto:info@mjlogisticsenterprise.com" className="text-[#0077C7] font-semibold hover:underline">
+          info@mjlogisticsenterprise.com
         </a>
         .
       </p>

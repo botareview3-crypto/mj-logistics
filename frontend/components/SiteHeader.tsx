@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Menu, X, ChevronRight, ChevronDown, Search, ShoppingCart, User, Phone } from 'lucide-react';
+import { Menu, X, ChevronRight, ChevronDown, Search, ShoppingCart, User, Mail } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { gsap } from '../lib/gsap';
 
@@ -42,9 +42,9 @@ const MEGA_SECTIONS: MegaSection[] = [
     image: '/categories/pen-paper.webp',
     imageAlt: 'Office stationery',
     subcategories: [
-      { label: 'Pens & Writing',         href: '/catalog/office-stationery#pens' },
-      { label: 'Paper & Printing',       href: '/catalog/office-stationery#paper' },
-      { label: 'Filing & Organisation',  href: '/catalog/office-stationery#filing' },
+      { label: 'Pens & Writing',         href: '/catalog/office-stationery' },
+      { label: 'Paper & Printing',       href: '/catalog/office-stationery' },
+      { label: 'Filing & Organisation',  href: '/catalog/office-stationery' },
     ],
   },
   {
@@ -53,16 +53,15 @@ const MEGA_SECTIONS: MegaSection[] = [
     image: '/homepage/diamond.webp',
     imageAlt: 'MJ Mining — diamonds & gold',
     subcategories: [
-      { label: 'Diamond Sourcing',        href: '/mining#diamonds' },
-      { label: 'Gold Sourcing',           href: '/mining#gold' },
-      { label: 'Long-term Partnerships',  href: '/mining#partnerships' },
+      { label: 'Diamond Sourcing',        href: '/mining#focus' },
+      { label: 'Gold Sourcing',           href: '/mining#focus' },
+      { label: 'Long-term Partnerships',  href: '/mining#contact' },
     ],
   },
 ];
 
 const NAV_LINKS = [
   { label: 'About',   href: '/divisions' },
-  { label: 'Contact', href: '/contact' },
 ];
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
@@ -492,8 +491,8 @@ export const SiteHeader: React.FC = () => {
                 <ShoppingCart className="w-4 h-4" /> Cart {cartCount > 0 && <span className="bg-[#e8a020] text-white text-xs px-1.5 py-0.5 rounded-full">{cartCount}</span>}
               </button>
               <div className="flex items-center gap-1.5 text-sm text-white/60 ml-auto">
-                <Phone className="w-3.5 h-3.5" />
-                <span>+251 XX XXX XXXX</span>
+                <Mail className="w-3.5 h-3.5" />
+                <span>info@mjlogisticsenterprise.com</span>
               </div>
             </div>
           </div>

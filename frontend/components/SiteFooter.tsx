@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Mail, MapPin, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 
 const FOOTER_LINKS = {
@@ -19,6 +19,7 @@ const FOOTER_LINKS = {
   ],
   'Company': [
     { label: 'About Us',      href: '/divisions' },
+    { label: 'Contact',       href: '/contact' },
     { label: 'MJ Mining',     href: '/mining' },
     { label: 'Advantages',    href: '/advantages' },
     { label: 'Privacy Policy',href: '/privacy' },
@@ -74,11 +75,7 @@ export const SiteFooter: React.FC = () => {
           <ul className="space-y-2.5 text-[12px] text-white/60">
             <li className="flex items-center gap-2.5">
               <MapPin className="w-4 h-4 text-white/30 shrink-0" />
-              [Office Address]
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Phone className="w-4 h-4 text-white/30 shrink-0" />
-              +251 XX XXX XXXX
+              Addis Ababa, Ethiopia
             </li>
             <li className="flex items-center gap-2.5">
               <Mail className="w-4 h-4 text-white/30 shrink-0" />

@@ -54,8 +54,8 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     body: (
       <p>
         Questions about these terms? Email{' '}
-        <a href="mailto:orders@mjlogisticsenterprise.com" className="text-[#0077C7] font-semibold hover:underline">
-          orders@mjlogisticsenterprise.com
+        <a href="mailto:info@mjlogisticsenterprise.com" className="text-[#0077C7] font-semibold hover:underline">
+          info@mjlogisticsenterprise.com
         </a>
         .
       </p>

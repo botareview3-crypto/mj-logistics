@@ -538,3 +538,11 @@ transcript, just the gist.
   generic cargo background, stationery category data no longer depends on
   remote Unsplash images, and the category accent/availability labels adapt
   to vehicle systems versus workplace supplies.
+- Completed a frontend-wide UI audit and fixed shared issues: restored
+  keyboard focus visibility, made product-card navigation button-based,
+  cleared removed vehicles from active browser storage, added Escape/dialog
+  behavior to the vehicle selector, corrected euro price filter labels and
+  range limits, removed dead mega-menu anchors, and added a real `/contact`
+  page. Legal pages now use the corporate chrome, placeholder contact details
+  were removed, email branding was standardized, and the unavailable email
+  auth form is clearly marked as coming soon.

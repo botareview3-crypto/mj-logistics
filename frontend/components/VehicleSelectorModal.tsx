@@ -177,16 +177,34 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
 
 export const VehicleSelectorModal: React.FC = () => {
   const { isSelectorModalOpen, closeSelectorModal } = useApp();
+  useEffect(() => {
+    if (!isSelectorModalOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeSelectorModal();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isSelectorModalOpen, closeSelectorModal]);
+
   if (!isSelectorModalOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200" onClick={e => { if (e.target === e.currentTarget) closeSelectorModal(); }}>
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden relative animate-in zoom-in-95 duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
+      role="presentation"
+      onClick={e => { if (e.target === e.currentTarget) closeSelectorModal(); }}
+    >
+      <div
+        className="w-full max-w-2xl max-h-[calc(100vh-1.5rem)] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-slate-200 relative animate-in zoom-in-95 duration-200"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="vehicle-selector-title"
+      >
         <div className="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#0077C7] flex items-center justify-center text-white"><Car className="w-5 h-5" /></div>
-            <div><h2 className="text-base sm:text-lg font-bold">Select your vehicle</h2><p className="text-xs text-slate-300">Use your vehicle details to check part compatibility</p></div>
+            <div><h2 id="vehicle-selector-title" className="text-base sm:text-lg font-bold">Select your vehicle</h2><p className="text-xs text-slate-300">Use your vehicle details to check part compatibility</p></div>
           </div>
-          <button type="button" onClick={closeSelectorModal} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"><X className="w-5 h-5" /></button>
+          <button type="button" onClick={closeSelectorModal} aria-label="Close vehicle selector" className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"><X className="w-5 h-5" /></button>
         </div>
         <VehicleSelectorWidget isEmbedded={false} />
       </div>

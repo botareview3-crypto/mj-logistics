@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { LogIn, UserPlus, Mail, Lock, Package, MapPin, Bell } from 'lucide-react';
+import { LogIn, UserPlus, Package, MapPin, Bell } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { startOAuth, POST_LOGIN_REDIRECT_KEY } from '../lib/auth';
 
@@ -25,11 +25,9 @@ function AppleIcon({ className = 'w-4 h-4' }: { className?: string }) {
 }
 
 export default function SignInPage() {
-  const { navigate, showToast, currentUser, isAuthLoading } = useApp();
+  const { navigate, currentUser, isAuthLoading } = useApp();
   const router = useRouter();
   const [mode,     setMode]     = useState<'signin' | 'create'>('signin');
-  const [email,    setEmail]    = useState('');
-  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -46,11 +44,6 @@ export default function SignInPage() {
     navigate(redirect);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthLoading, currentUser]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    showToast('Email sign-in is not yet available — try Google or Apple above.', 'info');
-  };
 
   if (currentUser) return null;
 
@@ -129,55 +122,12 @@ export default function SignInPage() {
                 </button>
               </div>
 
-              {/* Divider */}
-              <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-slate-100" />
-                <span className="text-[11px] font-bold text-slate-300 uppercase tracking-widest">or email</span>
-                <div className="h-px flex-1 bg-slate-100" />
+              <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-4 text-center">
+                <p className="text-sm font-semibold text-[#0d1f3c]">Email access is coming soon.</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  Use Google or Apple above to {mode === 'signin' ? 'sign in' : 'create your account'} today.
+                </p>
               </div>
-
-              {/* Email form */}
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-300 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm text-[#0d1f3c] placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-300 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 text-sm text-[#0d1f3c] placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-bold text-sm rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2"
-                >
-                  {mode === 'signin'
-                    ? <><LogIn className="w-4 h-4" /> Sign In</>
-                    : <><UserPlus className="w-4 h-4" /> Create Account</>
-                  }
-                </button>
-              </form>
             </div>
           </div>
 
