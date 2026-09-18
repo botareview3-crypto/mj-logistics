@@ -37,6 +37,20 @@ const MEGA_SECTIONS: MegaSection[] = [
     defaultOpen: true,
   },
   {
+    label: 'Stationery',
+    href: '/stationery',
+    image: '/categories/pen-paper.webp',
+    imageAlt: 'Stationery — pens & paper',
+    subcategories: [
+      { label: 'Pens & Writing',       href: '/stationery#writing' },
+      { label: 'Paper & Notebooks',    href: '/stationery#paper' },
+      { label: 'Office Supplies',      href: '/stationery#office' },
+      { label: 'Filing & Storage',     href: '/stationery#filing' },
+      { label: 'Printing & Ink',       href: '/stationery#printing' },
+      { label: 'Desk Accessories',     href: '/stationery#desk' },
+    ],
+  },
+  {
     label: 'MJ Mining',
     href: '/mining',
     image: '/homepage/diamond.webp',
