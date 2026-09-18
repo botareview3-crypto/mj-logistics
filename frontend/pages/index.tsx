@@ -357,11 +357,11 @@ export default function HomePage() {
               <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-3">Our Divisions</p>
               <h2 className="font-display text-4xl font-bold text-[#0d1f3c]">Everything You Need</h2>
               <p className="mt-3 text-slate-500 max-w-lg mx-auto text-[14px] leading-relaxed">
-                From auto parts to office supplies and natural resources — MJ Logistics covers it all.
+                From genuine auto parts to natural resource solutions — MJ Logistics covers it all.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
                 {
                   icon: Wrench,
@@ -371,15 +371,6 @@ export default function HomePage() {
                   cta: 'Shop parts',
                   bg: 'bg-gradient-to-br from-[#0d1f3c] to-[#1a3560]',
                   image: '/homepage/auto-parts-istock.jpg',
-                },
-                {
-                  icon: Package,
-                  title: 'Office & Stationery',
-                  desc: 'Complete office supplies from pens and paper to printers and furniture.',
-                  href: '/shop',
-                  cta: 'Shop auto parts',
-                  bg: 'bg-gradient-to-br from-slate-700 to-slate-900',
-                  image: '/homepage/office.webp',
                 },
                 {
                   icon: Gem,
@@ -433,7 +424,7 @@ export default function HomePage() {
                   Let&apos;s make your next move easier.
                 </h2>
                 <p className="mt-5 max-w-xl text-[14px] leading-7 text-[#5d451d]">
-                  Talk to MJ Logistics about auto parts, office supplies, business equipment,
+                  Talk to MJ Logistics about auto parts, business equipment,
                   or a wider enterprise requirement. We&apos;ll help direct your enquiry.
                 </p>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { LogIn, UserPlus, Package, MapPin, Bell } from 'lucide-react';
+import { LogIn, UserPlus, Package, MapPin, Bell, Mail, Eye, EyeOff } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { startOAuth, POST_LOGIN_REDIRECT_KEY } from '../lib/auth';
 
@@ -24,10 +24,18 @@ function AppleIcon({ className = 'w-4 h-4' }: { className?: string }) {
   );
 }
 
+type AuthTab = 'signin' | 'create';
+type SignInMethod = 'oauth' | 'email';
+
 export default function SignInPage() {
-  const { navigate, currentUser, isAuthLoading } = useApp();
+  const { navigate, currentUser, isAuthLoading, showToast } = useApp();
   const router = useRouter();
-  const [mode,     setMode]     = useState<'signin' | 'create'>('signin');
+  const [mode, setMode]           = useState<AuthTab>('signin');
+  const [method, setMethod]       = useState<SignInMethod>('oauth');
+  const [email, setEmail]         = useState('');
+  const [password, setPassword]   = useState('');
+  const [showPass, setShowPass]   = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -46,6 +54,21 @@ export default function SignInPage() {
   }, [isAuthLoading, currentUser]);
 
   if (currentUser) return null;
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError('');
+    if (!email || !email.includes('@')) {
+      setEmailError('Please enter a valid email address.');
+      return;
+    }
+    if (password.length < 8) {
+      setEmailError('Password must be at least 8 characters.');
+      return;
+    }
+    // Placeholder — wire up to real auth backend when ready
+    showToast('Email sign-in is coming soon. Please use Google or Apple for now.', 'info');
+  };
 
   return (
     <div className="min-h-screen bg-[#f0f4f8] flex flex-col">
@@ -79,19 +102,19 @@ export default function SignInPage() {
             <p className="text-slate-500 text-sm mt-2">
               {mode === 'signin'
                 ? 'Sign in to pick up right where you left off.'
-                : 'Takes a few seconds with Google or Apple.'}
+                : 'Join MJ Logistics — takes just a few seconds.'}
             </p>
           </div>
 
           {/* Card */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            {/* Tab bar */}
+            {/* Tab bar: Sign In / Create Account */}
             <div className="flex border-b border-slate-100">
               {(['signin', 'create'] as const).map(m => (
                 <button
                   key={m}
                   type="button"
-                  onClick={() => setMode(m)}
+                  onClick={() => { setMode(m); setEmailError(''); }}
                   className={`flex-1 py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
                     mode === m
                       ? 'text-[#0d1f3c] border-b-2 border-[#0d1f3c] font-bold'
@@ -104,30 +127,126 @@ export default function SignInPage() {
             </div>
 
             <div className="p-7 space-y-5">
-              {/* OAuth buttons */}
-              <div className="space-y-2.5">
+              {/* Method toggle: Social / Email */}
+              <div className="flex rounded-xl border border-slate-200 overflow-hidden">
                 <button
                   type="button"
-                  onClick={() => startOAuth('google')}
-                  className="w-full h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold text-[#0d1f3c] flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                  onClick={() => { setMethod('oauth'); setEmailError(''); }}
+                  className={`flex-1 py-2 text-[13px] font-semibold transition-colors cursor-pointer ${
+                    method === 'oauth'
+                      ? 'bg-[#0d1f3c] text-white'
+                      : 'bg-white text-slate-500 hover:bg-slate-50'
+                  }`}
                 >
-                  <GoogleIcon /> Continue with Google
+                  Social
                 </button>
                 <button
                   type="button"
-                  onClick={() => startOAuth('apple')}
-                  className="w-full h-11 rounded-xl bg-[#0d1f3c] hover:bg-[#1a3560] text-sm font-semibold text-white flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                  onClick={() => { setMethod('email'); setEmailError(''); }}
+                  className={`flex-1 py-2 text-[13px] font-semibold transition-colors cursor-pointer ${
+                    method === 'email'
+                      ? 'bg-[#0d1f3c] text-white'
+                      : 'bg-white text-slate-500 hover:bg-slate-50'
+                  }`}
                 >
-                  <AppleIcon /> Continue with Apple
+                  Email
                 </button>
               </div>
 
-              <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-4 text-center">
-                <p className="text-sm font-semibold text-[#0d1f3c]">Email access is coming soon.</p>
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                  Use Google or Apple above to {mode === 'signin' ? 'sign in' : 'create your account'} today.
-                </p>
-              </div>
+              {method === 'oauth' ? (
+                /* ── Social sign-in buttons ── */
+                <div className="space-y-2.5">
+                  <button
+                    type="button"
+                    onClick={() => startOAuth('google')}
+                    className="w-full h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold text-[#0d1f3c] flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                  >
+                    <GoogleIcon /> Continue with Google
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => startOAuth('apple')}
+                    className="w-full h-11 rounded-xl bg-[#0d1f3c] hover:bg-[#1a3560] text-sm font-semibold text-white flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                  >
+                    <AppleIcon /> Continue with Apple
+                  </button>
+                  <p className="text-center text-[11px] text-slate-400 pt-1">
+                    Works with any Google or Apple account — including{' '}
+                    <span className="font-semibold">Gmail, Yahoo, Outlook</span> linked via Google.
+                  </p>
+                </div>
+              ) : (
+                /* ── Email / password form ── */
+                <form onSubmit={handleEmailSubmit} className="space-y-3" noValidate>
+                  <div>
+                    <label htmlFor="signin-email" className="block text-[12px] font-semibold text-[#0d1f3c] mb-1">
+                      Email address
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        id="signin-email"
+                        type="email"
+                        autoComplete="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        className="w-full h-11 pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-sm text-[#0d1f3c] placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#1e4d8c]/30 focus:border-[#1e4d8c] transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="signin-password" className="block text-[12px] font-semibold text-[#0d1f3c] mb-1">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="signin-password"
+                        type={showPass ? 'text' : 'password'}
+                        autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder={mode === 'create' ? 'Min. 8 characters' : '••••••••'}
+                        className="w-full h-11 pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-[#0d1f3c] placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#1e4d8c]/30 focus:border-[#1e4d8c] transition"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPass(v => !v)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                        aria-label={showPass ? 'Hide password' : 'Show password'}
+                      >
+                        {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {emailError && (
+                    <p className="text-[12px] text-red-500 font-medium">{emailError}</p>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="w-full h-11 rounded-xl bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer mt-1"
+                  >
+                    {mode === 'signin' ? <><LogIn className="w-4 h-4" /> Sign in with Email</> : <><UserPlus className="w-4 h-4" /> Create Account</>}
+                  </button>
+
+                  {mode === 'signin' && (
+                    <div className="text-center">
+                      <button type="button" className="text-[12px] text-[#1e4d8c] hover:underline cursor-pointer">
+                        Forgot your password?
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-center">
+                    <p className="text-[11px] text-slate-500 leading-5">
+                      Email sign-in is currently in preview. Full activation coming soon.
+                    </p>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
 
