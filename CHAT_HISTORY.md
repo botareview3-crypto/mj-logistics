@@ -558,3 +558,16 @@ transcript, just the gist.
   more closely with moderate typography, navy/white/slate surfaces, amber
   accents, compact image heroes, rounded cards, and simpler practical copy.
   Confirmed the frontend production build succeeds with 132 static pages.
+- Simplified the About and Contact pages further based on the requested
+  Liberia/West Africa logistics positioning. About now uses a white-space-first
+  statement layout, the supplied warehouse truck image, sourcing/import/
+  delivery steps, handled-supplies links, and no invented statistics.
+  Contact now uses a nearly image-free layout with Monrovia details, split
+  sales/general emails, enquiry form, mailto submission, map embed, and FAQs.
+  Confirmed the supplied image is available at `frontend/public/images.jpg`
+  and the production build succeeds with 132 static pages.
+- Removed unsupported business details after clarification. About and Contact
+  now avoid invented locations, regions, addresses, hours, emails, maps,
+  registration information, and response promises. The contact form remains
+  as a neutral layout placeholder until official contact details and a
+  submission destination are provided.
