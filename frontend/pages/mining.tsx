@@ -23,7 +23,7 @@ export default function MiningPage() {
   return (
     <div className="pb-16">
       {/* Hero */}
-      <section className="rounded-2xl text-white relative overflow-hidden min-h-[420px]">
+      <section className="text-white relative overflow-hidden min-h-[420px]">
         {/* Real mining hero image */}
         <div
           className="absolute inset-0 bg-cover bg-center"

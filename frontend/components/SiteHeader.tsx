@@ -322,7 +322,7 @@ export const SiteHeader: React.FC = () => {
                   <div key={section.label}>
                     <button
                       type="button"
-                      onClick={() => setOpenSection(i)}
+                      onClick={() => { setOpenSection(i); go(section.href); setMegaOpen(false); }}
                       onMouseEnter={() => setOpenSection(i)}
                       className={`
                         w-full flex items-center justify-between px-5 py-3
@@ -428,14 +428,23 @@ export const SiteHeader: React.FC = () => {
                 <div className="pl-4 pb-3 space-y-2 animate-fade-in">
                   {MEGA_SECTIONS.map((section, i) => (
                     <div key={section.label} className="border-b border-white/10 last:border-0">
-                      <button
-                        type="button"
-                        onClick={() => setMobileSection(prev => prev === i ? -1 : i)}
-                        className="w-full flex items-center justify-between py-2.5 text-white/85 font-display text-[15px] cursor-pointer"
-                      >
-                        <span>{section.label}</span>
-                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileSection === i ? 'rotate-180' : ''}`} />
-                      </button>
+                      <div className="flex items-center justify-between py-2.5">
+                        <button
+                          type="button"
+                          onClick={() => { go(section.href); setMobileProdOpen(false); setMobileSection(-1); }}
+                          className="flex-1 text-left text-white/85 font-display text-[15px] cursor-pointer hover:text-white transition-colors"
+                        >
+                          {section.label}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setMobileSection(prev => prev === i ? -1 : i)}
+                          className="p-1 cursor-pointer"
+                          aria-label={`Expand ${section.label}`}
+                        >
+                          <ChevronDown className={`w-3.5 h-3.5 text-white/60 transition-transform duration-200 ${mobileSection === i ? 'rotate-180' : ''}`} />
+                        </button>
+                      </div>
                       {mobileSection === i && (
                         <div className="pl-3 pb-2 space-y-0.5">
                           {section.subcategories?.map(sub => (
