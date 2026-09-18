@@ -522,3 +522,14 @@ transcript, just the gist.
   all placeholder text as before, untouched this session; email/password
   sign-in is still just a "not available yet" placeholder on the new
   `/signin` page, same as it was on `/account` before.
+
+### 2026-09-18
+- Fully redesigned `frontend/pages/mining.tsx` as a premium editorial MJ
+  Mining page: cinematic hero, new resource-focused copy, gold/diamond
+  feature panels, a three-part operating approach, and a clearer inquiry
+  section. Removed the repetitive card layout, generic stats, fake form, and
+  placeholder-heavy text.
+- Added the corporate `SiteHeader` and `SiteFooter` to the previously
+  self-contained mining route and kept the page aligned with the existing
+  bundled Chopin Trial typography. Confirmed the frontend production build
+  completes successfully.
