@@ -127,16 +127,16 @@ export default function MiningPage() {
         <section id="story" className="mx-auto grid max-w-[1320px] gap-12 px-6 py-24 sm:px-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-24 lg:px-16 lg:py-36">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9b7430]">The point of view</p>
-            <h2 className="mt-6 max-w-lg text-4xl font-semibold leading-[.98] tracking-[-.05em] sm:text-6xl">
+            <h2 className="mt-6 max-w-lg text-4xl font-semibold leading-[.98] tracking-[-.05em] text-[#10221d] sm:text-6xl">
               Serious about the ground beneath us.
             </h2>
           </div>
           <div className="max-w-2xl">
-            <p className="text-xl leading-8 text-[#284038] sm:text-2xl sm:leading-9">
+            <p className="text-xl leading-8 text-[#10221d] sm:text-2xl sm:leading-9">
               Mining is more than what comes out of the ground. It is what gets built around it:
               confidence, capability, and a future people can participate in.
             </p>
-            <p className="mt-8 max-w-xl text-sm leading-7 text-[#63716b]">
+            <p className="mt-8 max-w-xl text-sm leading-7 text-[#3a4a42]">
               MJ Mining brings an enterprise mindset to natural-resource work. We look for
               opportunities where careful exploration, clear governance, and strong local
               relationships can create lasting value — from first assessment to final partnership.
@@ -192,15 +192,15 @@ export default function MiningPage() {
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9b7430]">How we move</p>
-              <h2 className="mt-6 max-w-sm text-5xl font-semibold leading-[.92] tracking-[-.06em] sm:text-7xl">A slower look. A stronger result.</h2>
+              <h2 className="mt-6 max-w-sm text-5xl font-semibold leading-[.92] tracking-[-.06em] text-[#10221d] sm:text-7xl">A slower look. A stronger result.</h2>
             </div>
             <div className="divide-y divide-[#d9d8d0] border-y border-[#d9d8d0]">
               {APPROACH.map(({ number, title, text, icon: Icon }) => (
                 <article key={number} className="grid gap-5 py-8 sm:grid-cols-[70px_1fr_40px] sm:items-start">
                   <span className="text-sm font-semibold text-[#9b7430]">{number}</span>
                   <div>
-                    <h3 className="text-2xl font-semibold tracking-[-.04em]">{title}</h3>
-                    <p className="mt-3 max-w-xl text-sm leading-7 text-[#63716b]">{text}</p>
+                    <h3 className="text-2xl font-semibold tracking-[-.04em] text-[#10221d]">{title}</h3>
+                    <p className="mt-3 max-w-xl text-sm leading-7 text-[#3a4a42]">{text}</p>
                   </div>
                   <Icon className="hidden h-6 w-6 text-[#9b7430] sm:block" />
                 </article>
