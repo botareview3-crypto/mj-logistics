@@ -84,8 +84,8 @@ export default function MiningPage() {
               className="h-full w-full object-cover object-center opacity-65 pointer-events-none select-none"
               draggable="false"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,34,29,.98)_0%,rgba(16,34,29,.82)_35%,rgba(16,34,29,.18)_100%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(16,34,29,.9)_0%,transparent_45%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,34,29,.99)_0%,rgba(16,34,29,.9)_45%,rgba(16,34,29,.4)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(16,34,29,.96)_0%,rgba(16,34,29,.15)_60%,rgba(16,34,29,.25)_100%)]" />
           </div>
 
           <div className="relative z-10 mx-auto flex min-h-[720px] max-w-[1320px] flex-col justify-between px-6 pb-10 pt-24 sm:px-10 lg:px-16">
@@ -126,7 +126,7 @@ export default function MiningPage() {
           </div>
         </section>
 
-        <section id="story" className="bg-white px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
+        <section id="story" className="relative z-10 isolate bg-white px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
           <div className="mx-auto max-w-[1120px]">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9b7430]">Our point of view</p>
@@ -164,7 +164,7 @@ export default function MiningPage() {
           </div>
         </section>
 
-        <section id="focus" className="bg-[#10221d] px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
+        <section id="focus" className="relative z-10 isolate bg-[#10221d] px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
           <div className="mx-auto max-w-[1120px]">
             <div className="max-w-2xl">
               <div>
@@ -205,7 +205,7 @@ export default function MiningPage() {
           </div>
         </section>
 
-        <section id="approach" className="mx-auto max-w-[1320px] px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
+        <section id="approach" className="relative z-10 isolate mx-auto max-w-[1320px] bg-[#f5f4ef] px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9b7430]">How we move</p>
