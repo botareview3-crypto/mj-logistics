@@ -76,17 +76,19 @@ export default function MiningPage() {
 
       <main>
         <section className="relative min-h-[720px] bg-[#10221d] text-[#f5f4ef]">
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 pointer-events-none select-none">
             <img
               src="/images/mining/hero.avif"
-              alt="Aerial view of a mineral-rich landscape"
-              className="h-full w-full object-cover object-center opacity-65"
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-cover object-center opacity-65 pointer-events-none select-none"
+              draggable="false"
             />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,34,29,.98)_0%,rgba(16,34,29,.82)_35%,rgba(16,34,29,.18)_100%)]" />
             <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(16,34,29,.9)_0%,transparent_45%)]" />
           </div>
 
-          <div className="relative mx-auto flex min-h-[720px] max-w-[1320px] flex-col justify-between px-6 pb-10 pt-24 sm:px-10 lg:px-16">
+          <div className="relative z-10 mx-auto flex min-h-[720px] max-w-[1320px] flex-col justify-between px-6 pb-10 pt-24 sm:px-10 lg:px-16">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-semibold uppercase tracking-[0.38em] text-[#d8b46a]">
                 A division of MJ Logistics Enterprise
@@ -107,7 +109,7 @@ export default function MiningPage() {
               <p className="mb-6 flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[#d8b46a]">
                 <span className="h-px w-10 bg-[#d8b46a]" /> Mineral opportunity, considered
               </p>
-              <h1 className="max-w-3xl text-6xl font-semibold leading-[.9] tracking-[-.065em] sm:text-8xl lg:text-[9.5rem]">
+              <h1 className="max-w-3xl text-6xl font-semibold leading-[.9] tracking-[-.065em] sm:text-8xl lg:text-[7rem]">
                 Wealth in the earth.
               </h1>
               <p className="mt-8 max-w-xl text-base leading-7 text-white/70 sm:text-lg">
