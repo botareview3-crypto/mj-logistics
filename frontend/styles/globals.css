@@ -457,8 +457,7 @@ html.lenis { height: auto; }
   .glass-dropdown{ background: #ffffff; border-color: #0d1f3c; }
 
   /* Ensure product cards have visible borders */
-  .product-card,
-  .cat-card {
+  .product-card {
     border-width: 2px !important;
     border-color: #0d1f3c !important;
   }

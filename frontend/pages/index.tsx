@@ -323,21 +323,19 @@ export default function HomePage() {
                   key={cat.title}
                   type="button"
                   onClick={() => navigate(cat.href)}
-                  className="cat-card relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer bg-transparent flex flex-col items-center justify-center gap-2 p-4 group"
-                  whileHover={{ scale: 1.04, boxShadow: '0 16px 40px rgba(13,31,60,0.14)' }}
-                  whileTap={{ scale: 0.97 }}
+                  className="cat-card relative w-full cursor-pointer bg-transparent border-none outline-none flex flex-col items-center justify-center gap-3 p-4 group"
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.96 }}
                   transition={SPRINGS.default}
                 >
-                  <motion.img
+                  <img
                     src={cat.image}
                     alt={cat.title}
-                    className="w-20 h-20 object-contain drop-shadow-lg"
+                    className="w-24 h-24 object-contain drop-shadow-xl"
                     loading="eager"
                     decoding="async"
-                    width={80}
-                    height={80}
-                    whileHover={{ scale: 1.1 }}
-                    transition={SPRINGS.default}
+                    width={96}
+                    height={96}
                   />
                   <span className="font-display text-[11px] font-bold text-center leading-tight text-[#0d1f3c]">{cat.title}</span>
                   <span className="text-[9px] font-bold uppercase text-slate-500" style={{ letterSpacing: '0.08em' }}>{cat.count} items</span>
