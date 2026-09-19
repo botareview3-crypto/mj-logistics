@@ -126,66 +126,62 @@ export default function MiningPage() {
           </div>
         </section>
 
-        <section id="story" className="mx-auto grid max-w-[1320px] gap-12 px-6 py-24 sm:px-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-24 lg:px-16 lg:py-36">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9b7430]">The point of view</p>
-            <h2 className="mt-6 max-w-lg text-4xl font-semibold leading-[.98] tracking-[-.05em] text-[#10221d] sm:text-6xl">
-              Serious about the ground beneath us.
-            </h2>
-          </div>
-          <div className="max-w-2xl">
-            <p className="text-xl leading-8 text-[#10221d] sm:text-2xl sm:leading-9">
-              Mining is more than what comes out of the ground. It is what gets built around it:
-              confidence, capability, and a future people can participate in.
-            </p>
-            <p className="mt-8 max-w-xl text-sm leading-7 text-[#3a4a42]">
-              MJ Mining brings an enterprise mindset to natural-resource work. We look for
-              opportunities where careful exploration, clear governance, and strong local
-              relationships can create lasting value — from first assessment to final partnership.
-            </p>
-            <div className="mt-10 flex items-center gap-4 text-sm font-semibold text-[#10221d]">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#b9aa87] text-[#9b7430]">
-                <Gem className="h-5 w-5" />
-              </span>
-              Gold and diamond opportunities, approached with intent.
+        <section id="story" className="bg-white px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
+          <div className="mx-auto max-w-[1320px] grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-24">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9b7430]">The point of view</p>
+              <h2 className="mt-6 max-w-lg text-4xl font-semibold leading-tight tracking-tight text-[#10221d] sm:text-5xl">
+                Serious about the ground beneath us.
+              </h2>
+            </div>
+            <div>
+              <p className="text-lg leading-8 text-[#10221d] font-medium">
+                Mining is more than what comes out of the ground. It is what gets built around it:
+                confidence, capability, and a future people can participate in.
+              </p>
+              <p className="mt-6 text-base leading-7 text-[#374040]">
+                MJ Mining brings an enterprise mindset to natural-resource work. We look for
+                opportunities where careful exploration, clear governance, and strong local
+                relationships can create lasting value — from first assessment to final partnership.
+              </p>
+              <div className="mt-8 flex items-center gap-3 text-sm font-semibold text-[#10221d] border-t border-[#e0ddd4] pt-8">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5f0e4] text-[#9b7430]">
+                  <Gem className="h-5 w-5" />
+                </span>
+                Gold and diamond opportunities, approached with intent.
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="focus" className="bg-[#10221d] px-6 py-24 text-[#f5f4ef] sm:px-10 lg:px-16 lg:py-36">
+        <section id="focus" className="bg-[#10221d] px-6 py-24 sm:px-10 lg:px-16 lg:py-36">
           <div className="mx-auto max-w-[1320px]">
-            <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
+            <div className="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-end mb-16">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#d8b46a]">Our focus</p>
-                <h2 className="mt-6 text-5xl font-semibold leading-[.92] tracking-[-.06em] sm:text-7xl">
+                <h2 className="mt-5 text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl">
                   Two resources.<br />One standard.
                 </h2>
               </div>
-              <p className="max-w-xl text-base leading-7 text-white/55">
+              <p className="text-base leading-7 text-white/80">
                 We keep our focus clear so our standards stay high. Every project is evaluated
                 through the same lens: potential, responsibility, and the quality of the relationship around it.
               </p>
             </div>
 
-            <div className="mt-16 grid gap-5 lg:grid-cols-2">
-              <article className="group relative min-h-[500px] overflow-hidden bg-[#c7a45b]">
-                <img src="/images/mining/gold.webp" alt="Gold ore and mineral texture" className="absolute inset-0 h-full w-full object-cover mix-blend-multiply opacity-75 transition duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#2c2110]/90 via-[#5d451d]/25 to-transparent" />
-                <div className="relative flex min-h-[500px] flex-col justify-end p-7 sm:p-10">
-                  <span className="text-xs uppercase tracking-[0.28em] text-white/70">01 / Gold</span>
-                  <h3 className="mt-4 text-5xl font-semibold tracking-[-.06em] text-white sm:text-6xl">A measured<br />store of value.</h3>
-                  <p className="mt-5 max-w-sm text-sm leading-6 text-white/75">Exploring opportunities with an eye for quality, traceability, and a supply chain built on trust.</p>
-                </div>
-              </article>
-              <article className="group relative min-h-[500px] overflow-hidden bg-[#cbd4d2]">
-                <img src="/images/mining/diamonds.webp" alt="Diamond texture and light" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#132722]/90 via-[#132722]/10 to-transparent" />
-                <div className="relative flex min-h-[500px] flex-col justify-end p-7 sm:p-10">
-                  <span className="text-xs uppercase tracking-[0.28em] text-white/70">02 / Diamonds</span>
-                  <h3 className="mt-4 text-5xl font-semibold tracking-[-.06em] text-white sm:text-6xl">Clarity<br />from the rough.</h3>
-                  <p className="mt-5 max-w-sm text-sm leading-6 text-white/75">Creating a more considered route from discovery to opportunity through patience and precision.</p>
-                </div>
-              </article>
+            <div className="grid gap-5 lg:grid-cols-2">
+              {/* Gold card */}
+              <div className="rounded-xl bg-[#1e3020] p-8 sm:p-10 flex flex-col gap-4">
+                <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d8b46a]">01 / Gold</span>
+                <h3 className="text-3xl font-semibold tracking-tight text-white">A measured store of value.</h3>
+                <p className="text-sm leading-6 text-white/80">Exploring opportunities with an eye for quality, traceability, and a supply chain built on trust.</p>
+              </div>
+              {/* Diamonds card */}
+              <div className="rounded-xl bg-[#1a2d2b] p-8 sm:p-10 flex flex-col gap-4">
+                <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d8b46a]">02 / Diamonds</span>
+                <h3 className="text-3xl font-semibold tracking-tight text-white">Clarity from the rough.</h3>
+                <p className="text-sm leading-6 text-white/80">Creating a more considered route from discovery to opportunity through patience and precision.</p>
+              </div>
             </div>
           </div>
         </section>
