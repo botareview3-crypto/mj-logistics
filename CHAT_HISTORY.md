@@ -6,6 +6,9 @@ transcript, just the gist.
 
 ---
 
+### 2026-09-19
+- Simplified the MJ Mining page's point-of-view and focus sections so the message is easier to scan: shorter copy, clearer headings, three concise principles, and cleaner gold/diamond cards with stronger visual hierarchy.
+
 ### 2026-09-18
 - Removed the stationery and office-equipment entries from the auto-store catalog and homepage category list, deleted the seeded office/business products from the marketplace data, and tightened the storefront copy so the shop stays focused on automotive parts.
 - Updated the customer-facing location text from Addis Ababa, Ethiopia to Monrovia, Liberia.
