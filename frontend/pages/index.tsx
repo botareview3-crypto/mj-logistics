@@ -317,13 +317,14 @@ export default function HomePage() {
               </motion.button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
               {CATEGORIES.map((cat) => (
                 <motion.button
                   key={cat.title}
                   type="button"
                   onClick={() => navigate(cat.href)}
-                  className="cat-card relative w-full cursor-pointer bg-transparent border-none outline-none flex flex-col items-center justify-center gap-3 p-4 group"
+                  className="cat-card cursor-pointer bg-transparent border-none outline-none flex flex-col items-center justify-start gap-3 p-4 group"
+                  style={{ width: 'clamp(100px, 14vw, 160px)' }}
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.96 }}
                   transition={SPRINGS.default}
@@ -331,14 +332,14 @@ export default function HomePage() {
                   <img
                     src={cat.image}
                     alt={cat.title}
-                    className="w-24 h-24 object-contain drop-shadow-xl"
+                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-xl mx-auto"
                     loading="eager"
                     decoding="async"
                     width={96}
                     height={96}
                   />
-                  <span className="font-display text-[11px] font-bold text-center leading-tight text-[#0d1f3c]">{cat.title}</span>
-                  <span className="text-[9px] font-bold uppercase text-slate-500" style={{ letterSpacing: '0.08em' }}>{cat.count} items</span>
+                  <span className="font-display text-[11px] font-bold text-center leading-tight text-[#0d1f3c] w-full">{cat.title}</span>
+                  <span className="text-[9px] font-bold uppercase text-slate-500 w-full text-center" style={{ letterSpacing: '0.08em' }}>{cat.count} items</span>
                 </motion.button>
               ))}
             </div>
