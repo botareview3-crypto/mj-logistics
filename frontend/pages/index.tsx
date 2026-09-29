@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
-import { ChevronRight, Wrench, Package, Gem, ArrowRight } from 'lucide-react';
+import { ChevronRight, Wrench, Package, Gem, ArrowRight, FlaskConical, Sun, Workflow } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../lib/AppContext';
 import { SiteHeader } from '../components/SiteHeader';
@@ -8,6 +8,9 @@ import { SiteFooter } from '../components/SiteFooter';
 import { VideoScrollSection } from '../components/VideoScrollSection';
 import { gsap, ScrollTrigger, animateDataGsap } from '../lib/gsap';
 import { SPRINGS } from '../lib/springs';
+import { SERVICES } from '../lib/data/services';
+
+const SERVICE_ICONS = { FlaskConical, Sun, Workflow } as const;
 
 /* ─── Category cards data ────────────────────────────────────────────────── */
 interface Category {
@@ -413,6 +416,41 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── SERVICES ───────────────────────────────────────────────────── */}
+        <section className="bg-[#f0f4f8] py-20">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div data-gsap="fade-up" className="text-center mb-12">
+              <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-3">Also from MJ Logistics</p>
+              <h2 className="font-display text-4xl font-bold text-[#0d1f3c]">More Services</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {SERVICES.map((service) => {
+                const Icon = SERVICE_ICONS[service.icon];
+                return (
+                  <div
+                    key={service.id}
+                    className="div-card flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-8"
+                  >
+                    <Icon className="w-7 h-7 text-[#1e4d8c]" strokeWidth={1.6} />
+                    <h3 className="font-display mt-5 text-lg font-bold text-[#0d1f3c]">{service.title}</h3>
+                    <p className="mt-3 flex-1 text-[13px] leading-relaxed text-slate-500">{service.short}</p>
+                    <motion.button
+                      type="button"
+                      onClick={() => navigate(`/services#${service.id}`)}
+                      className="mt-6 inline-flex items-center gap-2 text-[12px] font-bold text-[#1e4d8c] cursor-pointer"
+                      whileTap={{ scale: 0.97 }}
+                      transition={SPRINGS.micro}
+                    >
+                      Learn more <ArrowRight className="w-4 h-4" />
+                    </motion.button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* ── CONTACT STRIP ─────────────────────────────────────────────── */}
         <section className="bg-[#f5f4ef] py-20">
           <div className="max-w-[1200px] mx-auto px-6">
@@ -424,7 +462,7 @@ export default function HomePage() {
                 </h2>
                 <p className="mt-5 max-w-xl text-[14px] leading-7 text-[#5d451d]">
                   Talk to MJ Logistics about auto parts, business equipment,
-                  or a wider enterprise requirement. We&apos;ll help direct your enquiry.
+                  laboratory, solar or consultancy needs, or a wider enterprise requirement. We&apos;ll help direct your enquiry.
                 </p>
               </div>
               <motion.button

@@ -6,6 +6,9 @@ const ENQUIRY_OPTIONS = [
   'Request a quote',
   'Bulk or contract supply',
   'Mining division',
+  'Laboratory equipment or space logistics',
+  'Solar energy systems',
+  'Consultancy',
   'Existing order',
   'Other',
 ];

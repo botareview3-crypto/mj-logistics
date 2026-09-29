@@ -61,6 +61,15 @@ const MEGA_SECTIONS: MegaSection[] = [
       { label: 'Long-term Partnerships',  href: '/mining#contact' },
     ],
   },
+  {
+    label: 'Services',
+    href: '/services',
+    subcategories: [
+      { label: 'Space Logistics, Laboratory Equipment & Services', href: '/services#space-logistics-laboratory' },
+      { label: 'Solar Energy Systems & Equipment',                 href: '/services#solar-energy' },
+      { label: 'Supply Chain & Project Management Consultancy',   href: '/services#consultancy' },
+    ],
+  },
 ];
 
 const NAV_LINKS = [

@@ -25,6 +25,9 @@ const DIVISIONS = [
   ['Automotive and heavy-equipment parts', '/shop'],
   ['Industrial and workshop supplies', '/catalog'],
   ['Mining inputs and support services', '/mining'],
+  ['Space logistics, laboratory equipment supply and services', '/services#space-logistics-laboratory'],
+  ['Solar energy system and equipment supply', '/services#solar-energy'],
+  ['Consultancy for supply chain management and project management', '/services#consultancy'],
 ];
 
 export default function DivisionsPage() {
