@@ -9,7 +9,7 @@ export interface ServiceLine {
   short: string; // one-line description for cards
   summary: string;
   items: string[];
-  icon: 'FlaskConical' | 'Sun' | 'Workflow';
+  icon: 'FlaskConical' | 'Workflow';
 }
 
 export const SERVICES: ServiceLine[] = [
@@ -25,15 +25,6 @@ export const SERVICES: ServiceLine[] = [
       'Laboratory services',
     ],
     icon: 'FlaskConical',
-  },
-  {
-    id: 'solar-energy',
-    title: 'Solar Energy System and Equipment Supply',
-    short: 'Solar energy systems and equipment supplied to order.',
-    summary:
-      'We supply solar energy systems and the equipment that goes with them, sourced to suit the requirements of each client.',
-    items: ['Solar energy systems', 'Solar equipment supply'],
-    icon: 'Sun',
   },
   {
     id: 'consultancy',

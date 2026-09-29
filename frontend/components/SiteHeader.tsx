@@ -62,11 +62,18 @@ const MEGA_SECTIONS: MegaSection[] = [
     ],
   },
   {
+    label: 'Solar Energy',
+    href: '/solar',
+    subcategories: [
+      { label: 'Solar Energy Systems', href: '/solar#systems' },
+      { label: 'Solar Equipment Supply', href: '/solar#equipment' },
+    ],
+  },
+  {
     label: 'Services',
     href: '/services',
     subcategories: [
       { label: 'Space Logistics, Laboratory Equipment & Services', href: '/services#space-logistics-laboratory' },
-      { label: 'Solar Energy Systems & Equipment',                 href: '/services#solar-energy' },
       { label: 'Supply Chain & Project Management Consultancy',   href: '/services#consultancy' },
     ],
   },

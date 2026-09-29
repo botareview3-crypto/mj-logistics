@@ -10,7 +10,7 @@ import { gsap, ScrollTrigger, animateDataGsap } from '../lib/gsap';
 import { SPRINGS } from '../lib/springs';
 import { SERVICES } from '../lib/data/services';
 
-const SERVICE_ICONS = { FlaskConical, Sun, Workflow } as const;
+const SERVICE_ICONS = { FlaskConical, Workflow } as const;
 
 /* ─── Category cards data ────────────────────────────────────────────────── */
 interface Category {
@@ -363,7 +363,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
                   icon: Wrench,
@@ -383,17 +383,28 @@ export default function HomePage() {
                   bg: 'bg-gradient-to-br from-amber-900 to-yellow-900',
                   image: '/homepage/diamond.webp',
                 },
+                {
+                  icon: Sun,
+                  title: 'Solar Energy',
+                  desc: 'Solar energy systems and equipment supplied to order.',
+                  href: '/solar',
+                  cta: 'View solar supply',
+                  bg: 'bg-gradient-to-br from-sky-800 to-[#0d1f3c]',
+                  image: '',
+                },
               ].map((div: { icon: any; title: string; desc: string; href: string; cta: string; bg: string; image: string }) => (
                 <div
                   key={div.title}
                   className={`div-card relative ${div.bg} rounded-2xl p-8 flex flex-col h-full overflow-hidden group`}
                 >
                   {/* Background image with overlay */}
-                  <div
-                    className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity duration-500"
-                    style={{ backgroundImage: `url('${div.image}')` }}
-                    aria-hidden="true"
-                  />
+                  {div.image && (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity duration-500"
+                      style={{ backgroundImage: `url('${div.image}')` }}
+                      aria-hidden="true"
+                    />
+                  )}
                   <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
                   {/* Bare icon — no wrapper box */}
                   <div className="relative mb-5">
@@ -424,7 +435,7 @@ export default function HomePage() {
               <h2 className="font-display text-4xl font-bold text-[#0d1f3c]">More Services</h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
               {SERVICES.map((service) => {
                 const Icon = SERVICE_ICONS[service.icon];
                 return (

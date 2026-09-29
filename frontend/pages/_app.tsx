@@ -133,7 +133,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   }
 
   // Marketing pages — SiteHeader / SiteFooter
-  const MARKETING = ['/divisions', '/advantages', '/contact', '/privacy', '/terms', '/services'];
+  const MARKETING = ['/divisions', '/advantages', '/contact', '/privacy', '/terms', '/services', '/solar'];
   if (MARKETING.includes(pathname)) {
     return (
       <div className="min-h-screen bg-white flex flex-col font-sans antialiased">

@@ -1,12 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
-import { ArrowRight, FlaskConical, Sun, Workflow } from 'lucide-react';
+import { ArrowRight, FlaskConical, Workflow } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { SERVICES } from '../lib/data/services';
 
 const ICONS = {
   FlaskConical,
-  Sun,
   Workflow,
 } as const;
 
@@ -19,7 +18,7 @@ export default function ServicesPage() {
         <title>Services — MJ Logistics Enterprise</title>
         <meta
           name="description"
-          content="Space logistics, laboratory equipment supply and services, solar energy systems and equipment supply, and supply chain and project management consultancy from MJ Logistics Enterprise."
+          content="Space logistics, laboratory equipment supply and services, and supply chain and project management consultancy from MJ Logistics Enterprise."
         />
       </Head>
 
@@ -34,8 +33,8 @@ export default function ServicesPage() {
                 More ways we can supply and support your business.
               </h1>
               <p className="mt-6 text-base leading-8 text-slate-600 sm:text-lg">
-                Alongside auto parts, stationery and mining, MJ Logistics
-                Enterprise also provides the services below. Tell us what you
+                Alongside our supply divisions, MJ Logistics Enterprise also
+                provides the services below. Tell us what you
                 need and we will point your enquiry to the right people.
               </p>
             </div>

@@ -580,19 +580,18 @@ transcript, just the gist.
   submission destination are provided.
 
 ### 2026-09-29
-- Added three new service lines requested by management: (1) space
-  logistics, laboratory equipment supply and services; (2) solar energy
-  system and equipment supply; (3) consultancy for all supply chain
-  management services and project management.
-- New `/services` page (`frontend/pages/services.tsx`) with one section per
-  service, driven by a single data file (`frontend/lib/data/services.ts`) so
-  wording is edited in one place. Copy is deliberately neutral: no invented
-  stats, locations, certifications or claims.
-- Linked the services everywhere divisions already appear: a "Services"
-  section in the header mega menu (desktop + mobile), a "More Services" card
-  row on the homepage, the About page's "What we handle" list, the footer
-  Company links, and new options in the contact enquiry dropdown. `/services`
-  was added to `MARKETING` in `_app.tsx` so it gets the corporate chrome.
+- Added three new lines requested by management: (1) space logistics,
+  laboratory equipment supply and services and (3) consultancy for all supply
+  chain management services and project management, both under a new
+  `/services` page; and (2) solar energy system and equipment supply, which
+  is a supply line (not a service), so it is its own division with its own
+  `/solar` page, homepage division card, header menu section and footer link.
+- Service wording lives in one data file (`frontend/lib/data/services.ts`).
+  Copy is deliberately neutral: no invented stats, locations, certifications
+  or claims.
+- Also linked from the About page's "What we handle" list and the contact
+  enquiry dropdown. `/services` and `/solar` were added to `MARKETING` in
+  `_app.tsx` so they get the corporate chrome.
 - Note: "Space logistics" is kept exactly as written in the request; it may
   need rewording once confirmed with management. Confirmed the production
   build succeeds.

@@ -26,7 +26,7 @@ const DIVISIONS = [
   ['Industrial and workshop supplies', '/catalog'],
   ['Mining inputs and support services', '/mining'],
   ['Space logistics, laboratory equipment supply and services', '/services#space-logistics-laboratory'],
-  ['Solar energy system and equipment supply', '/services#solar-energy'],
+  ['Solar energy system and equipment supply', '/solar'],
   ['Consultancy for supply chain management and project management', '/services#consultancy'],
 ];
 

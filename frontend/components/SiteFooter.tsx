@@ -15,6 +15,7 @@ const FOOTER_LINKS = {
     { label: 'About Us',      href: '/divisions' },
     { label: 'Contact',       href: '/contact' },
     { label: 'MJ Mining',     href: '/mining' },
+    { label: 'Solar Energy',  href: '/solar' },
     { label: 'Services',      href: '/services' },
     { label: 'Advantages',    href: '/advantages' },
     { label: 'Privacy Policy',href: '/privacy' },
