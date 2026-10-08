@@ -10,11 +10,8 @@ import { SiteFooter } from '../components/SiteFooter';
 import { VehicleSelectorModal } from '../components/VehicleSelectorModal';
 import { CheckCircle2, AlertCircle, Info, X, Wrench } from 'lucide-react';
 import { useSmoothScroll } from '../lib/useLenis';
-import { Preloader } from '../components/fx/Preloader';
-import { PageTransition } from '../components/fx/PageTransition';
-import { Cursor } from '../components/fx/Cursor';
 
-/* Corporate pages: full-bleed, SiteHeader/SiteFooter, preloader + curtain.
+/* Corporate pages: full-bleed, with SiteHeader/SiteFooter.
    Legal pages share the chrome but keep a readable contained column. */
 const MARKETING_PATHS = ['/', '/mining', '/solar', '/services', '/divisions', '/advantages', '/contact', '/stationery'];
 const LEGAL_PATHS = ['/privacy', '/terms'];
@@ -119,9 +116,6 @@ function AppLayout({ Component, pageProps }: AppProps) {
     return (
       <div className="min-h-screen bg-paper font-sans text-ink antialiased">
         {announcementBar}
-        <Preloader />
-        <PageTransition paths={MARKETING_PATHS} />
-        <Cursor />
         <SiteHeader />
         {legal ? (
           <main className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-32 sm:px-8">

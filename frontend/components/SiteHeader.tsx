@@ -5,7 +5,6 @@ import { useApp } from '../lib/AppContext';
 import { gsap } from '../lib/gsap';
 import { getLenis } from '../lib/useLenis';
 import { LogoLockup } from './fx/Logo';
-import { Magnetic } from './fx/Magnetic';
 
 /* ─── Navigation data ────────────────────────────────────────────────────── */
 const NAV_LINKS = [
@@ -22,8 +21,8 @@ const MENU_LINKS = [
   { label: 'Auto Parts',         href: '/shop',       image: '/images/homepage/detail.webp',           note: 'Genuine parts, verified fit' },
   { label: 'Stationery & Office',href: '/stationery', image: '/homepage/office.webp',                  note: 'Workplace supplies' },
   { label: 'MJ Mining',          href: '/mining',     image: '/images/mining/gold.webp',               note: 'Gold & diamonds' },
-  { label: 'Solar Energy',       href: '/solar',      image: '/images/site/solar-art.svg',            note: 'Systems & equipment' },
-  { label: 'Services',           href: '/services',   image: '/images/site/warehouse-racks.webp',     note: 'Laboratory & consultancy' },
+  { label: 'Solar Energy',       href: '/solar',      image: '/images/site/solar-panels.webp',        note: 'Systems & equipment' },
+  { label: 'Services',           href: '/services',   image: '/images/site/laboratory.webp',         note: 'Laboratory & consultancy' },
   { label: 'About',              href: '/divisions',  image: '/images/homepage/industrial.webp',       note: 'How we work' },
   { label: 'Contact',            href: '/contact',    image: '/images/site/forklift.webp',             note: 'Start an enquiry' },
 ];
@@ -114,7 +113,7 @@ export const SiteHeader: React.FC = () => {
     navigate(`/search?q=${encodeURIComponent(q)}`);
   }, [navigate, query]);
 
-  const onDarkBg = menuOpen || (darkHero && atTop);
+  const onDarkBg = !menuOpen && darkHero && atTop;
   const solid = !atTop && !menuOpen;
   const isActive = (href: string) => (href === '/' ? currentPath === '/' : currentPath.startsWith(href));
 
@@ -187,13 +186,9 @@ export const SiteHeader: React.FC = () => {
               )}
             </Link>
 
-            <span className="ml-1 hidden md:block">
-              <Magnetic strength={0.25}>
-                <Link href="/contact" className="btn btn-signal !h-11 !px-5 !text-[14px]">
-                  Get a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
-                </Link>
-              </Magnetic>
-            </span>
+            <Link href="/contact" className="btn btn-signal ml-1 hidden !h-11 !px-5 !text-[14px] md:inline-flex">
+              Get a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
+            </Link>
 
             <button
               ref={menuBtnRef}
@@ -223,7 +218,7 @@ export const SiteHeader: React.FC = () => {
         role="dialog"
         aria-modal="true"
         aria-label="Site menu"
-        className="grain fixed inset-0 z-[110] overflow-y-auto bg-ink text-paper"
+        className="fixed inset-0 z-[110] overflow-y-auto bg-paper text-ink"
         style={{ visibility: 'hidden' }}
         data-lenis-prevent
       >
@@ -231,7 +226,7 @@ export const SiteHeader: React.FC = () => {
           <nav aria-label="Site sections">
             <ul>
               {MENU_LINKS.map((link, i) => (
-                <li key={link.href} className="overflow-hidden border-b border-paper/10">
+                <li key={link.href} className="overflow-hidden border-b border-ink/10">
                   <Link
                     href={link.href}
                     data-menu-item
@@ -240,15 +235,15 @@ export const SiteHeader: React.FC = () => {
                     onClick={() => setMenuOpen(false)}
                     className="group flex items-baseline gap-4 py-2.5 sm:gap-6 sm:py-3"
                   >
-                    <span className="w-7 shrink-0 text-xs font-semibold tabular-nums text-mint/60">0{i + 1}</span>
+                    <span className="w-7 shrink-0 text-xs font-semibold tabular-nums text-sage">0{i + 1}</span>
                     <span
-                      className={`font-display text-[clamp(1.7rem,4.4vw,3.6rem)] font-extrabold leading-none tracking-[-.035em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-signal ${
+                      className={`font-display text-[clamp(1.6rem,3.6vw,3rem)] font-semibold leading-none tracking-[-.03em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-signal ${
                         isActive(link.href) ? 'text-signal' : ''
                       }`}
                     >
                       {link.label}
                     </span>
-                    <span className="ml-auto hidden text-sm text-paper/45 sm:block">{link.note}</span>
+                    <span className="ml-auto hidden text-sm text-ink/45 sm:block">{link.note}</span>
                   </Link>
                 </li>
               ))}
@@ -268,19 +263,19 @@ export const SiteHeader: React.FC = () => {
                   }`}
                 />
               ))}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
               <p className="absolute bottom-5 left-6 eyebrow text-paper">{MENU_LINKS[preview].note}</p>
             </div>
 
             <form data-menu-fade onSubmit={handleSearch} className="relative" role="search">
-              <label htmlFor="menu-search" className="eyebrow mb-3 block text-mint/70">Search the catalogue</label>
+              <label htmlFor="menu-search" className="eyebrow mb-3 block text-sage">Search the catalogue</label>
               <input
                 id="menu-search"
                 ref={searchRef}
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Brake pads, oil filter, OEM number…"
-                className="h-14 w-full rounded-full border border-paper/20 bg-white/5 pl-6 pr-16 text-[15px] text-paper placeholder:text-paper/40 outline-none transition focus:border-signal"
+                className="h-14 w-full rounded-full border border-ink/15 bg-white pl-6 pr-16 text-[15px] text-ink placeholder:text-ink/40 outline-none transition focus:border-signal"
               />
               <button type="submit" aria-label="Search" className="absolute bottom-1.5 right-1.5 grid h-11 w-11 place-items-center rounded-full bg-signal text-white">
                 <Search className="h-4 w-4" />
@@ -288,16 +283,16 @@ export const SiteHeader: React.FC = () => {
             </form>
 
             <div data-menu-fade className="grid grid-cols-2 gap-3 text-sm">
-              <Link href={currentUser ? '/account' : '/signin'} onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-paper/15 px-4 py-3.5 transition hover:border-signal hover:text-signal">
+              <Link href={currentUser ? '/account' : '/signin'} onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-ink/15 bg-white px-4 py-3.5 transition hover:border-signal hover:text-signal">
                 <User className="h-4 w-4" /> {currentUser ? 'My account' : 'Sign in'}
               </Link>
-              <Link href="/cart" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-paper/15 px-4 py-3.5 transition hover:border-signal hover:text-signal">
+              <Link href="/cart" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-ink/15 bg-white px-4 py-3.5 transition hover:border-signal hover:text-signal">
                 <ShoppingBag className="h-4 w-4" /> Cart{cartCount > 0 ? ` (${cartCount})` : ''}
               </Link>
             </div>
 
-            <div data-menu-fade className="mt-auto flex flex-wrap items-end justify-between gap-4 border-t border-paper/10 pt-6 text-sm text-paper/55">
-              <a href="mailto:info@mjlogisticsenterprise.com" className="link-draw text-paper/80">info@mjlogisticsenterprise.com</a>
+            <div data-menu-fade className="mt-auto flex flex-wrap items-end justify-between gap-4 border-t border-ink/10 pt-6 text-sm text-ink/55">
+              <a href="mailto:info@mjlogisticsenterprise.com" className="link-draw text-ink/80">info@mjlogisticsenterprise.com</a>
               <span>Parts that fit. Delivered fast.</span>
             </div>
           </div>

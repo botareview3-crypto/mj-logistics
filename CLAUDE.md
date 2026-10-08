@@ -144,8 +144,7 @@ CHAT_HISTORY.md is the log.
   manual URL copy-pasting between the two services.
 - `pages/_app.tsx` picks page chrome by route. `MARKETING_PATHS` (`/`,
   `/mining`, `/solar`, `/services`, `/divisions`, `/advantages`, `/contact`,
-  `/stationery`) render full-bleed with `<SiteHeader>`/`<SiteFooter>` plus
-  the preloader, page-transition curtain and cursor follower; `LEGAL_PATHS`
+  `/stationery`) render full-bleed with `<SiteHeader>`/`<SiteFooter>`; `LEGAL_PATHS`
   (`/privacy`, `/terms`) share that chrome in a contained column; the shop
   (catalog, cart, garage, parts, search…) keeps the search/vehicle-selector
   `<Header>` but now also uses `<SiteFooter>`. Pages must NOT render their own
@@ -153,18 +152,27 @@ CHAT_HISTORY.md is the log.
 - Brand system (Oct 2026 redesign, from `logo/MJ-Logistics-Logo`): colours
   are Tailwind tokens in `styles/globals.css` `@theme` — `ink` #04261D,
   `forest` #0A4A3A, `moss`, `sage` #4F7268, `mint` #A9CFC2, `signal`
-  #FF6A2B, `paper` #F3F1EA, `bone`. Type is Archivo Expanded for display
-  (local TTFs in `public/fonts/archivo`) + Archivo (Google Fonts) for body.
-  The old Chopin Trial font was removed (trial licence). Logo files used by
-  the site live in `public/brand/`.
+  #FF6A2B, `paper` #F3F1EA, `bone`. Type is Archivo (Google Fonts) for
+  everything — headings at weight 600. The old Chopin Trial font was removed
+  (trial licence). Logo files used by the site live in `public/brand/`.
+- Client feedback (2026-10-08): keep it light and simple. Sections are
+  paper/white; only the home hero (video) and the footer (forest) are dark.
+  Inner pages use the shared `<PageHero>` (light hero + photo). Do NOT bring
+  back the preloader, page curtain, orange cursor follower, "Explore" cursor
+  labels, magnetic buttons, marquees (especially the tilted one), spinning
+  logos or pinned horizontal scroll — the client found them annoying and the
+  curtain caused a stuck-on-logo bug. The home hero scroll effect (footage
+  drifts down/zooms, frame rounds, copy rises) is wanted — keep it scrubbed.
 - Animation: Lenis smooth scroll (`lib/useLenis.ts`) driven by the GSAP
   ticker; declarative scroll FX in `lib/fx.ts` via data attributes
   (`data-split` from `<SplitText>`, `data-reveal`, `data-clip`,
-  `data-parallax`, `data-scrub` from `<ScrubText>`, `data-intro` to wait for
-  the preloader/curtain). Call `useScrollFx(ref)` once per page; page-specific
-  GSAP goes in a `gsap.context` that is reverted on unmount (don't kill all
-  ScrollTriggers globally — the footer's must survive route changes).
-  Primitives live in `components/fx/`.
+  `data-parallax`, `data-scrub` from `<ScrubText>`, `data-intro` for
+  above-the-fold items). Call `useScrollFx(ref)` once per page. Reveals use
+  IntersectionObserver plus a safety pass that snaps any on-screen element to
+  visible; the CSS hidden states only apply to `:not([data-shown])`, so never
+  rely on inline styles to keep something visible. Page-specific GSAP goes in
+  a `gsap.context` reverted on unmount. `.btn` styles live in
+  `@layer components` so utilities like `hidden md:inline-flex` win.
 - Videos (`*.mp4`) are gitignored: the home hero uses `public/hero-video.mp4`
   (desktop) and `public/logistics-mobile.mp4` (phones) and falls back to the
   poster `public/images/site/hero-poster.webp` when they're missing — make

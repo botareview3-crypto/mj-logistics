@@ -40,13 +40,12 @@ waits on the API. Only `/admin` and sign-in talk to the backend.
 
 ## Highlights
 
-**A brand-led, animated company site**
+**A clean, light company site with subtle motion**
 - Smooth scrolling with [Lenis](https://github.com/darkroomengineering/lenis), driven by GSAP's ticker so it stays in sync with ScrollTrigger
-- A first-visit preloader where the logo pieces fly together, and an emerald curtain between pages
-- Headlines that rise word by word, statements that light up as you scroll, images that wipe open and drift, and marquees that speed up with scrolling
-- A pinned sideways-scrolling strip of the divisions, stacking process cards, and an image that expands to full screen
-- Magnetic buttons, a cursor follower, and a full-screen menu with image previews and catalogue search
-- Everything respects `prefers-reduced-motion`, and no content is hidden if JavaScript doesn't run
+- A scroll-linked hero: the footage drifts down and zooms as the frame eases into a rounded card
+- Headlines that rise word by word, statements that light up as you scroll, and images that wipe open and drift gently
+- A full-screen menu with image previews and catalogue search
+- Reveals fail open: IntersectionObserver triggers plus a safety pass mean content can never stay hidden, and everything respects `prefers-reduced-motion`
 
 **A store built to sell**
 - Vehicle-first catalogue: System → Subsystem → part list, with fitment checks against the saved vehicle
@@ -56,12 +55,12 @@ waits on the API. Only `/admin` and sign-in talk to the backend.
 
 <table>
   <tr>
-    <td><img src="docs/screenshots/divisions.jpg" alt="Pinned horizontal division rail"></td>
-    <td><img src="docs/screenshots/process.jpg" alt="Stacking process cards"></td>
+    <td><img src="docs/screenshots/divisions.jpg" alt="Division cards"></td>
+    <td><img src="docs/screenshots/process.jpg" alt="Source-to-site process steps"></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/expanding.jpg" alt="Scroll-expanding image section"></td>
-    <td><img src="docs/screenshots/products.jpg" alt="In-stock products and garage call to action"></td>
+    <td><img src="docs/screenshots/services.jpg" alt="Services page"></td>
+    <td><img src="docs/screenshots/products.jpg" alt="In-stock products with add to cart"></td>
   </tr>
   <tr>
     <td><img src="docs/screenshots/mining.jpg" alt="MJ Mining division page"></td>
@@ -84,7 +83,7 @@ waits on the API. Only `/admin` and sign-in talk to the backend.
 ## Tech stack
 
 - **Frontend:** Next.js 14 (Pages Router, `output: 'export'`), React 18, TypeScript, Tailwind CSS 4
-- **Motion:** GSAP 3 + ScrollTrigger, Lenis, Motion (Framer Motion)
+- **Motion:** GSAP 3 + ScrollTrigger, Lenis, IntersectionObserver reveals, Motion (Framer Motion) in the shop
 - **Backend:** FastAPI, SQLAlchemy and Postgres (accounts), Authlib (Google and Apple OAuth), Cloudinary (part images)
 - **Hosting:** Hostinger (static storefront), Render (API and database, set up in `render.yaml`)
 
@@ -95,7 +94,7 @@ mj-logistics/
 ├── frontend/
 │   ├── pages/              # routes: company pages, shop, catalog, parts, admin
 │   ├── components/
-│   │   ├── fx/             # motion primitives: SplitText, Marquee, Magnetic, Preloader, …
+│   │   ├── fx/             # SplitText, PageHero, Logo
 │   │   ├── SiteHeader.tsx  # company-site header and full-screen menu
 │   │   ├── SiteFooter.tsx  # shared footer
 │   │   └── Header.tsx      # store header (search and vehicle selector)
@@ -154,8 +153,7 @@ The frontend expects the API at `http://localhost:8000` unless you set `NEXT_PUB
 | `signal` | `#FF6A2B` | Signal Orange, for calls to action and highlights |
 | `paper` | `#F3F1EA` | Page background |
 
-Type: **Archivo Expanded** for headings (from the logo kit) and **Archivo** for body text, both under
-the SIL Open Font License. The full logo kit is in [`logo/`](logo/).
+Type: **Archivo** throughout (SIL Open Font License); the logo itself uses Archivo Expanded. The full logo kit is in [`logo/`](logo/).
 
 ## Project notes
 

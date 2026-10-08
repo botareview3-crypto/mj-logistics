@@ -622,4 +622,16 @@ transcript, just the gist.
 - Removed unverified stationery stats; contact details unchanged. Production
   build passes (all static pages) and was checked in headless Chrome at
   desktop and phone widths.
-
+- Follow-up after client feedback ("pages sometimes open showing only the
+  logo", too dark, cursor/marquee annoying): removed the preloader, page
+  transition curtain (its cover promise could hang on double navigation,
+  leaving the logo screen up and the hero hidden), orange cursor follower,
+  magnetic buttons, marquees and pinned horizontal scroll. Rewrote `lib/fx.ts`
+  to fail open (IntersectionObserver, safety pass, CSS hidden states scoped to
+  `:not([data-shown])` — the earlier version re-hid content when tweens
+  cleared their styles). Lightened every section, simplified type to Archivo
+  semibold, added a shared `<PageHero>`, and added Unsplash photos for Solar
+  (field, aerial farm, inverter/storage, installer) and Services (laboratory,
+  consultancy). Kept and fixed the home hero scroll effect. Fixed a mobile
+  bug where the menu button was pushed off-screen (`.btn` beat `hidden`).
+  Verified with a headless navigation/scroll stress test: no hidden content.

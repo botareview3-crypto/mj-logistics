@@ -1,12 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, CheckCircle2, Mail, MapPin } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
-import { gsap } from '../lib/gsap';
-import { useIsoLayoutEffect, prefersReducedMotion } from '../lib/fx';
 import { scrollToTarget } from '../lib/useLenis';
-import { LogoMark } from './fx/Logo';
-import { Magnetic } from './fx/Magnetic';
+import { LogoLockup } from './fx/Logo';
 
 const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   Divisions: [
@@ -36,24 +33,6 @@ export const SiteFooter: React.FC = () => {
   const { showToast } = useApp();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
-  const ref = useRef<HTMLElement>(null);
-
-  // Giant wordmark rises letter by letter as the footer scrolls in.
-  useIsoLayoutEffect(() => {
-    const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo('[data-foot-letter]', { yPercent: 100 }, {
-        yPercent: 0, ease: 'expo.out', duration: 1.4, stagger: 0.04,
-        scrollTrigger: { trigger: '[data-foot-word]', start: 'top 98%' },
-      });
-      gsap.fromTo('[data-foot-mark]', { rotate: -120, scale: 0.4, opacity: 0 }, {
-        rotate: 0, scale: 1, opacity: 1, ease: 'expo.out', duration: 1.6,
-        scrollTrigger: { trigger: '[data-foot-cta]', start: 'top 80%' },
-      });
-    }, el);
-    return () => ctx.revert();
-  }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,38 +42,33 @@ export const SiteFooter: React.FC = () => {
   };
 
   return (
-    <footer ref={ref} className="grain relative overflow-hidden bg-ink text-paper" data-theme="dark">
+    <footer className="bg-forest text-paper">
       {/* ── Closing CTA ─────────────────────────────────────────────────── */}
-      <div data-foot-cta className="mx-auto max-w-[1440px] px-5 pt-24 sm:px-8 lg:pt-32">
-        <div className="flex flex-col gap-10 border-b border-paper/10 pb-16 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <p className="eyebrow mb-6 flex items-center gap-3 text-mint/70">
-              <span data-foot-mark className="inline-block"><LogoMark tone="light" className="h-6 w-6" /></span>
-              Have something to move?
-            </p>
-            <h2 className="t-xl font-extrabold">
-              Tell us what you need.<br />
-              <span className="text-signal">We&apos;ll handle the rest.</span>
+      <div className="mx-auto max-w-[1440px] px-5 pt-20 sm:px-8">
+        <div className="flex flex-col gap-8 border-b border-paper/15 pb-14 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="eyebrow mb-4 text-mint">Have something to move?</p>
+            <h2 className="t-xl">
+              Tell us what you need. <span className="text-signal">We&apos;ll handle the rest.</span>
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Magnetic>
-              <Link href="/contact" className="btn btn-signal">
-                Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
-              </Link>
-            </Magnetic>
+            <Link href="/contact" className="btn btn-signal">
+              Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
+            </Link>
             <Link href="/shop" className="btn btn-ghost">Shop auto parts</Link>
           </div>
         </div>
 
         {/* ── Links grid ────────────────────────────────────────────────── */}
-        <div className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="max-w-sm space-y-6">
-            <p className="text-[15px] leading-7 text-paper/65">
-              One partner for genuine auto parts, workplace supplies, mining and solar energy —
+            <LogoLockup variant="reversed" className="h-9 w-auto" />
+            <p className="text-[15px] leading-7 text-paper/75">
+              One partner for genuine auto parts, workplace supplies, mining, solar energy and more —
               sourced, cleared and delivered by MJ Logistics Enterprise.
             </p>
-            <ul className="space-y-2.5 text-sm text-paper/65">
+            <ul className="space-y-2.5 text-sm text-paper/75">
               <li className="flex items-center gap-2.5"><MapPin className="h-4 w-4 text-signal" /> Monrovia, Liberia</li>
               <li className="flex items-center gap-2.5">
                 <Mail className="h-4 w-4 text-signal" />
@@ -102,7 +76,7 @@ export const SiteFooter: React.FC = () => {
               </li>
             </ul>
             <div>
-              <p className="eyebrow mb-3 text-mint/60">Stay updated</p>
+              <p className="eyebrow mb-3 text-mint">Stay updated</p>
               {subscribed ? (
                 <p className="flex items-center gap-2 text-sm text-mint"><CheckCircle2 className="h-4 w-4" /> Subscribed! Thank you.</p>
               ) : (
@@ -114,7 +88,7 @@ export const SiteFooter: React.FC = () => {
                     placeholder="your@email.com"
                     required
                     aria-label="Email address"
-                    className="h-12 w-full rounded-full border border-paper/15 bg-white/5 pl-5 pr-14 text-sm text-paper placeholder:text-paper/35 outline-none transition focus:border-signal"
+                    className="h-12 w-full rounded-full border border-paper/20 bg-white/10 pl-5 pr-14 text-sm text-paper placeholder:text-paper/50 outline-none transition focus:border-signal"
                   />
                   <button type="submit" aria-label="Subscribe" className="absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-full bg-paper text-ink transition hover:bg-signal hover:text-white">
                     <ArrowRight className="h-4 w-4" />
@@ -126,12 +100,11 @@ export const SiteFooter: React.FC = () => {
 
           {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
             <div key={heading}>
-              <h3 className="eyebrow mb-5 font-sans text-mint/60" style={{ fontStretch: '100%' }}>{heading}</h3>
+              <h3 className="eyebrow mb-5 text-mint">{heading}</h3>
               <ul className="space-y-3">
                 {links.map(link => (
                   <li key={link.href}>
-                    <Link href={link.href} className="group inline-flex items-center gap-2 text-[15px] text-paper/75 transition-colors hover:text-paper">
-                      <span className="h-px w-0 bg-signal transition-all duration-500 group-hover:w-4" />
+                    <Link href={link.href} className="text-[15px] text-paper/80 transition-colors hover:text-signal">
                       {link.label}
                     </Link>
                   </li>
@@ -142,18 +115,9 @@ export const SiteFooter: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Giant wordmark ─────────────────────────────────────────────── */}
-      <div data-foot-word className="relative select-none px-3 sm:px-6" aria-hidden="true">
-        <p className="font-display flex justify-between overflow-hidden text-[10.6vw] font-extrabold leading-[.82] tracking-[-.05em] text-paper/[.07]">
-          {'MJLOGISTICS'.split('').map((ch, i) => (
-            <span key={i} data-foot-letter className={`inline-block ${i < 2 ? 'text-signal/80' : ''}`}>{ch}</span>
-          ))}
-        </p>
-      </div>
-
       {/* ── Bottom bar ─────────────────────────────────────────────────── */}
-      <div className="relative border-t border-paper/10">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-3 px-5 py-6 text-xs text-paper/45 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <div className="border-t border-paper/15">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-3 px-5 py-6 text-xs text-paper/60 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <span>© {new Date().getFullYear()} MJ Logistics Enterprise. All rights reserved.</span>
           <button type="button" onClick={() => scrollToTarget(0)} className="inline-flex items-center gap-2 self-start hover:text-paper sm:self-auto">
             Back to top <ArrowUpRight className="h-3.5 w-3.5 -rotate-45" />

@@ -1,12 +1,5 @@
 @import "tailwindcss";
 
-/* ─── Brand display face — Archivo Expanded (from the MJ logo kit, OFL) ───
-   Body copy uses the variable Archivo family loaded from Google Fonts in
-   _document.tsx. Display falls back to Archivo stretched to 125% if the
-   local files fail, so headings keep the expanded brand shape.            */
-@font-face { font-family: 'MJ Display'; src: url('/fonts/archivo/ArchivoSB-Exp.ttf') format('truetype'); font-weight: 500 650; font-style: normal; font-display: swap; }
-@font-face { font-family: 'MJ Display'; src: url('/fonts/archivo/ArchivoXB-Exp.ttf') format('truetype'); font-weight: 651 900; font-style: normal; font-display: swap; }
-
 /* ─── Design tokens ─────────────────────────────────────────────────────── */
 @theme {
   /* Logo kit: Deep Emerald #0A4A3A · Signal Orange #FF6A2B · Sage #4F7268 · Paper #F3F1EA */
@@ -20,7 +13,7 @@
   --color-paper:   #F3F1EA;
   --color-bone:    #E4E0D3;   /* hairlines on paper */
 
-  --font-display: 'MJ Display', 'Archivo', system-ui, sans-serif;
+  --font-display: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-sans:    'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -53,34 +46,27 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-stretch: 125%;
-    font-weight: 800;
-    line-height: 1.02;
+    font-weight: 600;
+    line-height: 1.08;
     letter-spacing: -0.025em;
   }
-  h3, h4, h5, h6 { font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+  h3, h4, h5, h6 { line-height: 1.2; letter-spacing: -0.015em; }
 
-  .font-display {
-    font-family: var(--font-display) !important;
-    font-stretch: 125%;
-  }
+  .font-display { font-family: var(--font-display) !important; }
 
   ::selection { background: var(--color-signal); color: #fff; }
 }
 
 /* ─── Type scale helpers ────────────────────────────────────────────────── */
-.t-mega   { font-size: clamp(3.1rem, 10.5vw, 11rem); line-height: .88; letter-spacing: -0.045em; }
-.t-hero   { font-size: clamp(2.6rem, 7.4vw, 7.6rem); line-height: .92; letter-spacing: -0.04em; }
-.t-xl     { font-size: clamp(2.2rem, 5vw, 5rem);     line-height: .98; letter-spacing: -0.035em; }
-.t-lg     { font-size: clamp(1.8rem, 3.4vw, 3.3rem); line-height: 1.04; letter-spacing: -0.03em; }
-.t-lead   { font-size: clamp(1.35rem, 2.5vw, 2.4rem); line-height: 1.22; letter-spacing: -0.02em; }
+.t-hero   { font-size: clamp(2.4rem, 5.4vw, 5rem);    line-height: 1.04; letter-spacing: -0.035em; }
+.t-xl     { font-size: clamp(2rem, 3.8vw, 3.4rem);    line-height: 1.08; letter-spacing: -0.03em; }
+.t-lg     { font-size: clamp(1.6rem, 2.6vw, 2.4rem);  line-height: 1.12; letter-spacing: -0.025em; }
+.t-lead   { font-size: clamp(1.25rem, 2vw, 1.85rem);  line-height: 1.35; letter-spacing: -0.015em; }
 .eyebrow  {
   font-family: var(--font-sans);
   font-size: 12px; font-weight: 600;
   letter-spacing: .22em; text-transform: uppercase;
 }
-.text-outline { color: transparent; -webkit-text-stroke: 1.5px currentColor; }
-@supports not (-webkit-text-stroke: 1px black) { .text-outline { color: inherit; } }
 
 /* ─── Motion base states ────────────────────────────────────────────────────
    `html.fx` is set by an inline script in _document before first paint (and
@@ -89,68 +75,47 @@
 .split-line  { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
 .split-word  { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
 .split-inner { display: inline-block; will-change: transform; }
-html.fx .split-inner           { transform: translateY(110%); }
-html.fx [data-reveal]          { opacity: 0; transform: translateY(36px); }
-html.fx [data-reveal="fade"]   { transform: none; }
-html.fx [data-reveal="scale"]  { transform: scale(.94); }
-html.fx [data-clip]            { clip-path: inset(100% 0 0 0); }
-.scrub-word { transition: none; }
-html.fx .scrub-word { opacity: .14; }
+/* Only elements that haven't been revealed yet are hidden — once lib/fx.ts
+   marks an element `data-shown`, these rules stop applying for good. */
+html.fx [data-split]:not([data-shown]) .split-inner { transform: translateY(105%); }
+html.fx [data-reveal]:not([data-shown])             { opacity: 0; transform: translateY(28px); }
+html.fx [data-reveal="fade"]:not([data-shown])      { transform: none; }
+html.fx [data-reveal="scale"]:not([data-shown])     { transform: scale(.94); }
+html.fx [data-clip]:not([data-shown])               { clip-path: inset(100% 0 0 0); }
 
-/* ─── Buttons ─────────────────────────────────────────────────────────────── */
-.btn {
-  position: relative; display: inline-flex; align-items: center; gap: .65rem;
-  height: 3.25rem; padding: 0 1.6rem; border-radius: 999px;
-  font-family: var(--font-sans); font-size: 15px; font-weight: 600; letter-spacing: -.005em;
-  overflow: hidden; isolation: isolate; cursor: pointer; white-space: nowrap;
-  transition: color .45s var(--ease-out-expo), background-color .3s, border-color .3s;
+/* ─── Buttons ─────────────────────────────────────────────────────────────
+   In the components layer so Tailwind utilities (hidden, sm:inline-flex,
+   !h-11 …) can override them. */
+@layer components {
+  .btn {
+    position: relative; display: inline-flex; align-items: center; gap: .65rem;
+    height: 3.25rem; padding: 0 1.6rem; border-radius: 999px;
+    font-family: var(--font-sans); font-size: 15px; font-weight: 600; letter-spacing: -.005em;
+    overflow: hidden; isolation: isolate; cursor: pointer; white-space: nowrap;
+    transition: color .45s var(--ease-out-expo), background-color .3s, border-color .3s;
+  }
+  .btn::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+    transform: translateY(101%); transition: transform .55s var(--ease-out-expo);
+  }
+  .btn:hover::before { transform: translateY(0); }
+  .btn-signal        { background: var(--color-signal); color: #fff; }
+  .btn-signal::before{ background: var(--color-ink); }
+  .btn-ink           { background: var(--color-ink); color: #fff; }
+  .btn-ink::before   { background: var(--color-signal); }
+  .btn-ghost         { border: 1px solid currentColor; color: inherit; }
+  .btn-ghost::before { background: #fff; }
+  .btn-ghost:hover   { color: var(--color-ink); border-color: #fff; }
+  .btn-ghost-dark          { border: 1px solid rgba(4,38,29,.25); color: var(--color-ink); }
+  .btn-ghost-dark::before  { background: var(--color-ink); }
+  .btn-ghost-dark:hover    { color: #fff; border-color: var(--color-ink); }
+  .btn .btn-arrow    { transition: transform .45s var(--ease-out-expo); }
+  .btn:hover .btn-arrow { transform: translateX(4px) rotate(-45deg); }
 }
-.btn::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
-  transform: translateY(101%); transition: transform .55s var(--ease-out-expo);
-}
-.btn:hover::before { transform: translateY(0); }
-.btn-signal        { background: var(--color-signal); color: #fff; }
-.btn-signal::before{ background: var(--color-ink); }
-.btn-ink           { background: var(--color-ink); color: #fff; }
-.btn-ink::before   { background: var(--color-signal); }
-.btn-ghost         { border: 1px solid currentColor; color: inherit; }
-.btn-ghost::before { background: #fff; }
-.btn-ghost:hover   { color: var(--color-ink); border-color: #fff; }
-.btn-ghost-dark          { border: 1px solid rgba(4,38,29,.25); color: var(--color-ink); }
-.btn-ghost-dark::before  { background: var(--color-ink); }
-.btn-ghost-dark:hover    { color: #fff; border-color: var(--color-ink); }
-.btn .btn-arrow    { transition: transform .45s var(--ease-out-expo); }
-.btn:hover .btn-arrow { transform: translateX(4px) rotate(-45deg); }
 
 /* Underline link that draws in on hover */
 .link-draw { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease-out-expo); }
 .link-draw:hover { background-size: 100% 1px; }
-
-/* ─── Grain overlay for dark sections ───────────────────────────────────── */
-.grain::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* ─── Marquee ───────────────────────────────────────────────────────────── */
-.marquee       { display: flex; overflow: hidden; user-select: none; }
-.marquee-track { display: flex; flex-shrink: 0; align-items: center; will-change: transform; }
-
-/* ─── Custom cursor follower (desktop, fine pointers only) ──────────────── */
-.cursor-dot {
-  position: fixed; top: 0; left: 0; z-index: 300; pointer-events: none;
-  width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 999px;
-  background: var(--color-signal);
-  display: flex; align-items: center; justify-content: center;
-  font: 600 11px/1 var(--font-sans); letter-spacing: .08em; text-transform: uppercase; color: #fff;
-  transition: width .4s var(--ease-out-expo), height .4s var(--ease-out-expo), margin .4s var(--ease-out-expo), opacity .3s;
-}
-.cursor-dot.is-label { width: 88px; height: 88px; margin: -44px 0 0 -44px; }
-.cursor-dot .cursor-label { opacity: 0; transition: opacity .2s; }
-.cursor-dot.is-label .cursor-label { opacity: 1; }
-.cursor-dot.is-hidden { opacity: 0; }
-@media (hover: none), (pointer: coarse) { .cursor-dot { display: none; } }
 
 /* ─── Glassmorphism utilities (used by shop chrome) ─────────────────────── */
 .glass {
@@ -190,7 +155,6 @@ html.fx .scrub-word { opacity: .14; }
 @keyframes float       { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-14px); } }
 @keyframes shimmer     { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
 @keyframes megaDropIn  { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes spin-slow   { to { transform: rotate(360deg); } }
 @keyframes scroll-cue  { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 
 .animate-fade-in-down { animation: fadeInDown  0.35s ease both; }
@@ -200,7 +164,6 @@ html.fx .scrub-word { opacity: .14; }
 .animate-slide-right  { animation: slideInRight 0.5s ease both; }
 .animate-float        { animation: float 4s ease-in-out infinite; }
 .animate-mega-drop    { animation: megaDropIn  0.22s cubic-bezier(0.16,1,0.3,1) both; }
-.animate-spin-slow    { animation: spin-slow 28s linear infinite; }
 .animate-scroll-cue   { animation: scroll-cue 2.2s cubic-bezier(.65,0,.35,1) infinite; }
 
 /* ─── Skeleton shimmer ──────────────────────────────────────────────────── */
@@ -249,8 +212,7 @@ html.lenis, html.lenis body { height: auto; }
   .animate-slide-right, .animate-float, .animate-mega-drop {
     animation: fadeIn 0.2s ease both;
   }
-  .animate-spin-slow, .animate-scroll-cue, .skeleton { animation: none; }
-  .marquee-track { transform: none !important; }
+  .animate-scroll-cue, .skeleton { animation: none; }
   *, *::before, *::after {
     transition-duration: 200ms !important;
     animation-iteration-count: 1 !important;
