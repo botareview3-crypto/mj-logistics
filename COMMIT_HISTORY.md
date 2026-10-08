@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-08** `c7d672e` Simplify and lighten the site; fix pages stuck on the logo screen
+- **2026-10-08** `4f785d4` Update commit history
 - **2026-10-08** `473eec5` Merge services and solar additions into the redesign
 - **2026-10-08** `af94b48` Redesign site with new MJ brand, scroll animations and MJ Solar page
 - **2026-09-29** `2ee7827` Add services page, solar energy supply division, lab equipment and consultancy
