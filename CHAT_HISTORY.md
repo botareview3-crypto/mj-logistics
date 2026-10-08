@@ -580,6 +580,23 @@ transcript, just the gist.
   as a neutral layout placeholder until official contact details and a
   submission destination are provided.
 
+### 2026-09-29
+- Added three new lines requested by management: (1) space logistics,
+  laboratory equipment supply and services and (3) consultancy for all supply
+  chain management services and project management, both under a new
+  `/services` page; and (2) solar energy system and equipment supply, which
+  is a supply line (not a service), so it is its own division with its own
+  `/solar` page, homepage division card, header menu section and footer link.
+- Service wording lives in one data file (`frontend/lib/data/services.ts`).
+  Copy is deliberately neutral: no invented stats, locations, certifications
+  or claims.
+- Also linked from the About page's "What we handle" list and the contact
+  enquiry dropdown. `/services` and `/solar` were added to `MARKETING` in
+  `_app.tsx` so they get the corporate chrome.
+- Note: "Space logistics" is kept exactly as written in the request; it may
+  need rewording once confirmed with management. Confirmed the production
+  build succeeds.
+
 ### 2026-10-08
 - Full visual redesign after client feedback that the site looked
   unattractive and didn't sell. Adopted the new logo kit (`logo/`) as the
@@ -593,9 +610,15 @@ transcript, just the gist.
 - Rebuilt home (video hero, pinned horizontal divisions, shop-by-system list
   with floating part cut-outs, stacking process cards, expanding image,
   in-stock products with add-to-cart, garage CTA), Mining, About, Contact,
-  Advantages and Stationery; added a new `/solar` page for the MJ Solar
-  division from the logo kit (copy is general — confirm with the client).
-  Shop pages re-skinned to the new palette and use the new footer.
+  Advantages and Stationery. Shop pages re-skinned to the new palette and
+  use the new footer.
+- Merged Zemen's 2026-09-29 additions into the redesign: `/solar` and
+  `/services` rebuilt in the new design keeping the agreed neutral wording
+  (solar copy and `#systems`/`#equipment` anchors as written; services still
+  read from `lib/data/services.ts`), plus header/menu, footer, homepage
+  services section, About list and contact enquiry options.
+- Rewrote README.md (screenshots in `docs/screenshots/`) and fixed the
+  `.gitignore` `images/` rule, which was ignoring `frontend/public/images/`.
 - Removed unverified stationery stats; contact details unchanged. Production
   build passes (all static pages) and was checked in headless Chrome at
   desktop and phone widths.

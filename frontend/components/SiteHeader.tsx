@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { label: 'Auto Parts', href: '/shop' },
   { label: 'Mining',     href: '/mining' },
   { label: 'Solar',      href: '/solar' },
+  { label: 'Services',   href: '/services' },
   { label: 'About',      href: '/divisions' },
   { label: 'Contact',    href: '/contact' },
 ];
@@ -21,7 +22,8 @@ const MENU_LINKS = [
   { label: 'Auto Parts',         href: '/shop',       image: '/images/homepage/detail.webp',           note: 'Genuine parts, verified fit' },
   { label: 'Stationery & Office',href: '/stationery', image: '/homepage/office.webp',                  note: 'Workplace supplies' },
   { label: 'MJ Mining',          href: '/mining',     image: '/images/mining/gold.webp',               note: 'Gold & diamonds' },
-  { label: 'MJ Solar',           href: '/solar',      image: '/images/site/solar-art.svg',            note: 'Energy systems' },
+  { label: 'Solar Energy',       href: '/solar',      image: '/images/site/solar-art.svg',            note: 'Systems & equipment' },
+  { label: 'Services',           href: '/services',   image: '/images/site/warehouse-racks.webp',     note: 'Laboratory & consultancy' },
   { label: 'About',              href: '/divisions',  image: '/images/homepage/industrial.webp',       note: 'How we work' },
   { label: 'Contact',            href: '/contact',    image: '/images/site/forklift.webp',             note: 'Start an enquiry' },
 ];
@@ -144,7 +146,7 @@ export const SiteHeader: React.FC = () => {
           </Link>
 
           {/* Desktop links */}
-          <nav className={`hidden items-center gap-1 lg:flex ${menuOpen ? 'invisible' : ''}`} aria-label="Main navigation">
+          <nav className={`hidden items-center gap-1 xl:flex ${menuOpen ? 'invisible' : ''}`} aria-label="Main navigation">
             {NAV_LINKS.map(link => (
               <Link
                 key={link.href}
@@ -236,11 +238,11 @@ export const SiteHeader: React.FC = () => {
                     onMouseEnter={() => setPreview(i)}
                     onFocus={() => setPreview(i)}
                     onClick={() => setMenuOpen(false)}
-                    className="group flex items-baseline gap-4 py-3 sm:gap-6 sm:py-4"
+                    className="group flex items-baseline gap-4 py-2.5 sm:gap-6 sm:py-3"
                   >
                     <span className="w-7 shrink-0 text-xs font-semibold tabular-nums text-mint/60">0{i + 1}</span>
                     <span
-                      className={`font-display text-[clamp(1.9rem,5vw,4.2rem)] font-extrabold leading-none tracking-[-.035em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-signal ${
+                      className={`font-display text-[clamp(1.7rem,4.4vw,3.6rem)] font-extrabold leading-none tracking-[-.035em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-signal ${
                         isActive(link.href) ? 'text-signal' : ''
                       }`}
                     >

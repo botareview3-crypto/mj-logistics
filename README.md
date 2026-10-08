@@ -8,7 +8,7 @@
 ### Parts that fit. Delivered fast.
 
 The website and online store for **MJ Logistics Enterprise**: genuine auto parts with verified
-fitment, plus office supplies, mining and solar energy. One company sources, imports and
+fitment, plus office supplies, mining, solar energy, laboratory equipment and consultancy. One company sources, imports and
 delivers all of it.
 
 [**mjlogisticsenterprise.com**](https://mjlogisticsenterprise.com)
@@ -65,7 +65,7 @@ waits on the API. Only `/admin` and sign-in talk to the backend.
   </tr>
   <tr>
     <td><img src="docs/screenshots/mining.jpg" alt="MJ Mining division page"></td>
-    <td><img src="docs/screenshots/solar.jpg" alt="MJ Solar division page"></td>
+    <td><img src="docs/screenshots/solar.jpg" alt="Solar energy page"></td>
   </tr>
 </table>
 
@@ -78,7 +78,8 @@ waits on the API. Only `/admin` and sign-in talk to the backend.
 | Auto Parts | `/shop`, `/catalog` | Genuine parts with verified fitment |
 | Stationery & Office | `/stationery` | Writing, paper, filing, printing and desk supplies |
 | MJ Mining | `/mining` | Responsible gold and diamond opportunity |
-| MJ Solar | `/solar` | Panels, inverters, storage and mounting |
+| Solar Energy | `/solar` | Solar energy systems and equipment, supplied to order |
+| Services | `/services` | Space logistics and laboratory equipment; supply chain and project management consultancy |
 
 ## Tech stack
 

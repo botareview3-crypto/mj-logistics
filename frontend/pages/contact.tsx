@@ -9,7 +9,9 @@ const ENQUIRY_OPTIONS = [
   'Request a quote',
   'Bulk or contract supply',
   'Mining division',
-  'Solar energy',
+  'Laboratory equipment or space logistics',
+  'Solar energy systems',
+  'Consultancy',
   'Existing order',
   'Other',
 ];
@@ -24,7 +26,8 @@ const FIELDS: [name: string, label: string, type: string, required: boolean][] =
 const ROUTES = [
   { title: 'Auto parts', text: 'Prefer to browse? Every part lists its fitment and OEM references.', href: '/shop', cta: 'Shop parts' },
   { title: 'Mining', text: 'Partnership, supply or investment enquiries for MJ Mining.', href: '/mining', cta: 'MJ Mining' },
-  { title: 'Solar', text: 'Panels, inverters and storage matched into one system.', href: '/solar', cta: 'MJ Solar' },
+  { title: 'Solar', text: 'Solar energy systems and equipment, supplied to order.', href: '/solar', cta: 'Solar energy' },
+  { title: 'Services', text: 'Space logistics, laboratory equipment, and supply chain or project management consultancy.', href: '/services', cta: 'Our services' },
 ];
 
 export default function ContactPage() {
@@ -128,7 +131,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <p className="eyebrow mb-5 text-sage">Or go straight there</p>
           <SplitText className="t-xl mb-14 font-extrabold" text={'Know what you\n*need already?*'} />
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {ROUTES.map((r, i) => (
               <Link
                 key={r.href}

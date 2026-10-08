@@ -16,7 +16,7 @@ import { Cursor } from '../components/fx/Cursor';
 
 /* Corporate pages: full-bleed, SiteHeader/SiteFooter, preloader + curtain.
    Legal pages share the chrome but keep a readable contained column. */
-const MARKETING_PATHS = ['/', '/mining', '/solar', '/divisions', '/advantages', '/contact', '/stationery'];
+const MARKETING_PATHS = ['/', '/mining', '/solar', '/services', '/divisions', '/advantages', '/contact', '/stationery'];
 const LEGAL_PATHS = ['/privacy', '/terms'];
 
 /* ─── Toast overlay ────────────────────────────────────────────────────── */

@@ -19,7 +19,9 @@ const DIVISIONS = [
   { title: 'Automotive & heavy-equipment parts', href: '/shop',       image: '/images/homepage/detail.webp' },
   { title: 'Stationery & office supplies',       href: '/stationery', image: '/homepage/office.webp' },
   { title: 'Mining inputs & support services',   href: '/mining',     image: '/images/mining/hero.webp' },
-  { title: 'Solar energy systems',               href: '/solar',      image: '/images/site/solar-art.svg' },
+  { title: 'Solar energy system and equipment supply', href: '/solar', image: '/images/site/solar-art.svg' },
+  { title: 'Space logistics, laboratory equipment supply and services', href: '/services#space-logistics-laboratory', image: '/images/site/warehouse-racks.webp' },
+  { title: 'Consultancy for supply chain management and project management', href: '/services#consultancy', image: '/images/homepage/industrial.webp' },
 ];
 
 export default function DivisionsPage() {

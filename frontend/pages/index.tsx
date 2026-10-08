@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Plus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, FlaskConical, Plus, Workflow } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { gsap } from '../lib/gsap';
 import { useScrollFx, useIsoLayoutEffect, prefersReducedMotion } from '../lib/fx';
 import { CATEGORY_ROOTS } from '../lib/data/categories';
 import { PARTS_DATABASE } from '../lib/data/parts';
+import { SERVICES } from '../lib/data/services';
 import { SplitText, ScrubText } from '../components/fx/SplitText';
 import { Marquee } from '../components/fx/Marquee';
 import { Magnetic } from '../components/fx/Magnetic';
@@ -33,10 +34,10 @@ const DIVISIONS = [
     tags: ['Gold', 'Diamonds', 'Partnerships'],
   },
   {
-    no: '04', name: 'MJ Solar', href: '/solar', cta: 'Explore solar',
+    no: '04', name: 'Solar Energy', href: '/solar', cta: 'View solar supply',
     image: '/images/site/solar-art.svg',
-    text: 'Solar energy systems — panels, inverters and storage — sourced and delivered through the same trusted network.',
-    tags: ['Panels', 'Inverters', 'Storage'],
+    text: 'Solar energy systems and equipment, supplied to order through the same trusted network.',
+    tags: ['Systems', 'Equipment', 'Sourced to order'],
   },
 ];
 
@@ -48,6 +49,8 @@ const SYSTEM_ART: Record<string, string> = {
   'tires-wheels': '/categories/tire.webp',
   'exhaust-system': '/images/categories/exhaust.webp',
 };
+
+const SERVICE_ICONS = { FlaskConical, Workflow } as const;
 
 const STEPS = [
   { no: '01', title: 'Source', image: '/images/homepage/industrial.webp', bg: 'bg-white text-ink',
@@ -479,6 +482,47 @@ export default function HomePage() {
                 <p className="mt-3 text-[15px] leading-7 text-paper/65">{p.text}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SERVICES ─────────────────────────────────────────────────────── */}
+      <section className="relative bg-paper pt-24 sm:pt-32">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
+          <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="eyebrow mb-5 text-sage">Also from MJ Logistics</p>
+              <SplitText className="t-xl font-extrabold" text={'More *services.*'} />
+            </div>
+            <Link href="/services" className="btn btn-ghost-dark self-start lg:self-auto">All services <ArrowRight className="btn-arrow h-4 w-4" /></Link>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {SERVICES.map((s, i) => {
+              const Icon = SERVICE_ICONS[s.icon];
+              return (
+                <Link
+                  key={s.id}
+                  href={`/services#${s.id}`}
+                  data-reveal
+                  data-delay={String(i * 0.08)}
+                  className="group relative flex min-h-[300px] flex-col justify-between overflow-hidden rounded-[28px] bg-white p-8 sm:p-10"
+                >
+                  <span className="absolute inset-0 origin-bottom scale-y-0 bg-forest transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-y-100" />
+                  <div className="relative flex items-start justify-between">
+                    <span className="grid h-14 w-14 place-items-center rounded-2xl bg-signal/10 text-signal transition-colors duration-500 group-hover:bg-signal group-hover:text-white">
+                      <Icon className="h-6 w-6" strokeWidth={1.8} />
+                    </span>
+                    <span className="grid h-12 w-12 place-items-center rounded-full border border-ink/15 transition-all duration-500 group-hover:rotate-45 group-hover:border-signal group-hover:bg-signal group-hover:text-white">
+                      <ArrowUpRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                  <div className="relative transition-colors duration-500 group-hover:text-paper">
+                    <h3 className="text-[clamp(1.4rem,2.2vw,2rem)]">{s.title}</h3>
+                    <p className="mt-3 max-w-md text-[15px] leading-7 opacity-70">{s.short}</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -143,7 +143,7 @@ CHAT_HISTORY.md is the log.
   (backend) to each other automatically via `RENDER_EXTERNAL_URL` — no
   manual URL copy-pasting between the two services.
 - `pages/_app.tsx` picks page chrome by route. `MARKETING_PATHS` (`/`,
-  `/mining`, `/solar`, `/divisions`, `/advantages`, `/contact`,
+  `/mining`, `/solar`, `/services`, `/divisions`, `/advantages`, `/contact`,
   `/stationery`) render full-bleed with `<SiteHeader>`/`<SiteFooter>` plus
   the preloader, page-transition curtain and cursor follower; `LEGAL_PATHS`
   (`/privacy`, `/terms`) share that chrome in a contained column; the shop

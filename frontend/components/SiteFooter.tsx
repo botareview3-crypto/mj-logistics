@@ -13,7 +13,8 @@ const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
     { label: 'Auto Parts',          href: '/shop' },
     { label: 'Stationery & Office', href: '/stationery' },
     { label: 'MJ Mining',           href: '/mining' },
-    { label: 'MJ Solar',            href: '/solar' },
+    { label: 'Solar Energy',        href: '/solar' },
+    { label: 'Services',            href: '/services' },
   ],
   Shop: [
     { label: 'Browse catalogue',      href: '/catalog' },
