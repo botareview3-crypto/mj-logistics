@@ -1,507 +1,306 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Menu, X, ChevronRight, ChevronDown, Search, ShoppingCart, User, Mail } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { ArrowUpRight, Search, ShoppingBag, User } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { gsap } from '../lib/gsap';
+import { getLenis } from '../lib/useLenis';
+import { LogoLockup } from './fx/Logo';
+import { Magnetic } from './fx/Magnetic';
 
-/* ─── Types ──────────────────────────────────────────────────────────────── */
-interface SubCategory {
-  label: string;
-  href: string;
-}
-
-interface MegaSection {
-  label: string;
-  href: string;
-  image?: string;
-  imageAlt?: string;
-  subcategories?: SubCategory[];
-  defaultOpen?: boolean;
-}
-
-/* ─── Data ───────────────────────────────────────────────────────────────── */
-const MEGA_SECTIONS: MegaSection[] = [
-  {
-    label: 'Auto Parts',
-    href: '/catalog',
-    image: '/categories/auto-parts.webp',
-    imageAlt: 'Auto Parts — brake disc',
-    subcategories: [
-      { label: 'Braking System',         href: '/catalog/braking-system' },
-      { label: 'Engine & Transmission',  href: '/catalog/engine-transmission' },
-      { label: 'Suspension & Steering',  href: '/catalog/suspension-steering' },
-      { label: 'Electrical & Lighting',  href: '/catalog/electrical-lighting' },
-      { label: 'Cooling & Heating',      href: '/catalog/cooling-heating' },
-      { label: 'Tires & Wheels',         href: '/catalog/tires-wheels' },
-      { label: 'Exhaust System',         href: '/catalog/exhaust-system' },
-    ],
-    defaultOpen: true,
-  },
-  {
-    label: 'Stationery',
-    href: '/stationery',
-    image: '/categories/pen-paper.webp',
-    imageAlt: 'Stationery — pens & paper',
-    subcategories: [
-      { label: 'Pens & Writing',       href: '/stationery#writing' },
-      { label: 'Paper & Notebooks',    href: '/stationery#paper' },
-      { label: 'Office Supplies',      href: '/stationery#office' },
-      { label: 'Filing & Storage',     href: '/stationery#filing' },
-      { label: 'Printing & Ink',       href: '/stationery#printing' },
-      { label: 'Desk Accessories',     href: '/stationery#desk' },
-    ],
-  },
-  {
-    label: 'MJ Mining',
-    href: '/mining',
-    image: '/homepage/diamond.webp',
-    imageAlt: 'MJ Mining — diamonds & gold',
-    subcategories: [
-      { label: 'Diamond Sourcing',        href: '/mining#focus' },
-      { label: 'Gold Sourcing',           href: '/mining#focus' },
-      { label: 'Long-term Partnerships',  href: '/mining#contact' },
-    ],
-  },
+/* ─── Navigation data ────────────────────────────────────────────────────── */
+const NAV_LINKS = [
+  { label: 'Auto Parts', href: '/shop' },
+  { label: 'Mining',     href: '/mining' },
+  { label: 'Solar',      href: '/solar' },
+  { label: 'About',      href: '/divisions' },
+  { label: 'Contact',    href: '/contact' },
 ];
 
-const NAV_LINKS = [
-  { label: 'About',   href: '/divisions' },
-  { label: 'Contact', href: '/contact' },
+const MENU_LINKS = [
+  { label: 'Home',               href: '/',           image: '/images/site/hero-poster.webp',          note: 'MJ Logistics Enterprise' },
+  { label: 'Auto Parts',         href: '/shop',       image: '/images/homepage/detail.webp',           note: 'Genuine parts, verified fit' },
+  { label: 'Stationery & Office',href: '/stationery', image: '/homepage/office.webp',                  note: 'Workplace supplies' },
+  { label: 'MJ Mining',          href: '/mining',     image: '/images/mining/gold.webp',               note: 'Gold & diamonds' },
+  { label: 'MJ Solar',           href: '/solar',      image: '/images/site/solar-art.svg',            note: 'Energy systems' },
+  { label: 'About',              href: '/divisions',  image: '/images/homepage/industrial.webp',       note: 'How we work' },
+  { label: 'Contact',            href: '/contact',    image: '/images/site/forklift.webp',             note: 'Start an enquiry' },
 ];
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
 export const SiteHeader: React.FC = () => {
   const { navigate, currentPath, currentUser, cartCount } = useApp();
-  const [scrolled,       setScrolled]       = useState(false);
-  const [megaOpen,       setMegaOpen]       = useState(false);
-  const [mobileOpen,     setMobileOpen]     = useState(false);
-  const [openSection,    setOpenSection]    = useState<number>(0);   // which accordion section
-  const [mobileSection,  setMobileSection]  = useState<number>(-1);
-  const [mobileProdOpen, setMobileProdOpen] = useState<boolean>(false);
-  const [searchQuery,    setSearchQuery]    = useState('');
-  const [searchVisible,  setSearchVisible]  = useState(false);
+  const [atTop, setAtTop] = useState(true);
+  const [hidden, setHidden] = useState(false);
+  const [darkHero, setDarkHero] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [preview, setPreview] = useState(0);
+  const [query, setQuery] = useState('');
 
-  const megaRef   = useRef<HTMLDivElement>(null);
-  const navRef    = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const focusSearchOnOpen = useRef(false);
 
-  /* ── GSAP entrance animation (slides header down from top) ─── */
+  /* Which theme sits under the header at the top of this page? */
   useEffect(() => {
-    if (!navRef.current) return;
-    gsap.fromTo(
-      navRef.current,
-      { y: -80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.1, clearProps: 'transform,opacity' }
-    );
-  }, []);
+    const id = requestAnimationFrame(() => setDarkHero(!!document.querySelector('[data-hero="dark"]')));
+    return () => cancelAnimationFrame(id);
+  }, [currentPath]);
 
-  /* scroll detection */
+  /* Hide on scroll down, reveal on scroll up */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setAtTop(y < 40);
+      if (Math.abs(y - last) > 6) {
+        setHidden(y > last && y > 160);
+        last = y;
+      }
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* close mega on outside click */
+  /* Close on route change */
+  useEffect(() => { setMenuOpen(false); }, [currentPath]);
+
+  /* Menu open/close animation, scroll lock, Escape */
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setMegaOpen(false);
+    const el = menuRef.current;
+    if (!el) return;
+    const lenis = getLenis();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (menuOpen) {
+      lenis?.stop();
+      document.body.style.overflow = 'hidden';
+      el.style.visibility = 'visible';
+      const tl = gsap.timeline();
+      if (reduce) {
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.2 });
+      } else {
+        tl.fromTo(el, { clipPath: 'circle(0% at 100% 0%)' }, { clipPath: 'circle(150% at 100% 0%)', duration: 0.9, ease: 'expo.inOut' })
+          .fromTo(el.querySelectorAll('[data-menu-item]'), { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: 'expo.out', stagger: 0.05 }, 0.35)
+          .fromTo(el.querySelectorAll('[data-menu-fade]'), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06 }, 0.5);
       }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  /* focus search input when revealed */
-  useEffect(() => {
-    if (searchVisible) searchRef.current?.focus();
-  }, [searchVisible]);
-
-  /* close mobile menu on route change */
-  useEffect(() => {
-    setMobileOpen(false);
-    setMegaOpen(false);
-    setMobileProdOpen(false);
-    setMobileSection(-1);
-  }, [currentPath]);
-
-  const go = useCallback((href: string) => {
-    setMobileOpen(false);
-    setMegaOpen(false);
-    navigate(href);
-  }, [navigate]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      go(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-      setSearchVisible(false);
+      if (focusSearchOnOpen.current) {
+        focusSearchOnOpen.current = false;
+        window.setTimeout(() => searchRef.current?.focus(), 450);
+      }
+      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenuOpen(false); };
+      window.addEventListener('keydown', onKey);
+      return () => { window.removeEventListener('keydown', onKey); tl.kill(); };
     }
-  };
+    lenis?.start();
+    document.body.style.overflow = '';
+    if (el.style.visibility === 'visible') {
+      const tl = gsap.to(el, reduce
+        ? { opacity: 0, duration: 0.2, onComplete: () => { el.style.visibility = 'hidden'; } }
+        : { clipPath: 'circle(0% at 100% 0%)', duration: 0.7, ease: 'expo.inOut', onComplete: () => { el.style.visibility = 'hidden'; } });
+      menuBtnRef.current?.focus();
+      return () => { tl.kill(); };
+    }
+  }, [menuOpen]);
 
-  /* header background: transparent when on hero page and not scrolled */
-  const isHeroPage  = currentPath === '/';
-  const isTransparent = isHeroPage && !scrolled && !megaOpen && !mobileOpen;
+  const handleSearch = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    setQuery('');
+    setMenuOpen(false);
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+  }, [navigate, query]);
 
-  const headerBase = isTransparent
-    ? 'glass'
-    : scrolled
-      ? 'bg-white/95 shadow-md backdrop-blur-md border-b border-slate-200/60'
-      : 'bg-white/90 backdrop-blur-sm border-b border-slate-200/40';
+  const onDarkBg = menuOpen || (darkHero && atTop);
+  const solid = !atTop && !menuOpen;
+  const isActive = (href: string) => (href === '/' ? currentPath === '/' : currentPath.startsWith(href));
 
-  const textColor  = isTransparent ? 'text-white' : 'text-[#0d1f3c]';
-  const logoColor  = isTransparent ? 'text-white'  : 'text-[#0d1f3c]';
-  const iconColor  = isTransparent ? 'text-white/80 hover:text-white' : 'text-slate-600 hover:text-[#0d1f3c]';
+  const iconBtn = `relative grid h-11 w-11 place-items-center rounded-full transition-colors ${
+    onDarkBg ? 'text-paper hover:bg-white/10' : 'text-ink hover:bg-ink/5'
+  }`;
 
   return (
-    <header
-      ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBase}`}
-      style={{ borderRadius: isTransparent ? '0 0 0 0' : undefined }}
-    >
-      {/* ── Main bar ─────────────────────────────────────────────────────── */}
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-        <div className="flex items-center justify-between h-[68px]">
-
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-[120] transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+          hidden && !menuOpen ? '-translate-y-[120%]' : 'translate-y-0'
+        }`}
+      >
+        <div className={`transition-[padding] duration-500 ${solid ? 'px-3 pt-3 sm:px-4' : 'px-0 pt-0'}`}>
+        <div
+          className={`mx-auto flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+            solid
+              ? 'h-16 max-w-[1320px] rounded-full border border-ink/5 bg-paper/85 px-3 pl-5 shadow-[0_10px_40px_-12px_rgba(4,38,29,.25)] backdrop-blur-xl'
+              : 'h-20 max-w-[1440px] px-5 sm:px-8'
+          }`}
+        >
           {/* Logo */}
-          <button
-            type="button"
-            onClick={() => go('/')}
-            className={`flex flex-col leading-none cursor-pointer group shrink-0 ${logoColor}`}
-            aria-label="MJ Logistics — home"
-          >
-            <span
-              className="font-display text-[9px] font-bold uppercase opacity-70"
-              style={{ letterSpacing: '0.35em', fontFamily: "'Chopin Trial', serif" }}
-            >
-              ENTERPRISE
+          <Link href="/" className="relative z-10 shrink-0" aria-label="MJ Logistics Enterprise — home">
+            <span className="relative block h-8 w-[170px] sm:h-9 sm:w-[190px]">
+              <LogoLockup variant="color" className={`absolute inset-0 h-full w-auto transition-opacity duration-300 ${onDarkBg ? 'opacity-0' : 'opacity-100'}`} />
+              <LogoLockup variant="reversed" className={`absolute inset-0 h-full w-auto transition-opacity duration-300 ${onDarkBg ? 'opacity-100' : 'opacity-0'}`} />
             </span>
-            <span
-              className="font-display font-bold text-[20px] leading-none"
-              style={{ fontFamily: "'Chopin Trial', serif", letterSpacing: '0.05em' }}
-            >
-              MJ Logistics
-            </span>
-          </button>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-2" aria-label="Main navigation">
-
-            {/* Products & Services with mega dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => { setOpenSection(0); setMegaOpen(p => !p); }}
-                onMouseEnter={() => { setOpenSection(0); setMegaOpen(true); }}
-                aria-expanded={megaOpen}
-                aria-haspopup="true"
-                className={`
-                  flex items-center gap-1.5 px-4 py-2 rounded-lg text-[15px] font-medium
-                  transition-colors duration-150 cursor-pointer select-none
-                  ${textColor}
-                  ${megaOpen
-                    ? (isTransparent ? 'bg-white/90' : 'bg-slate-100')
-                    : 'hover:bg-white/90 lg:hover:bg-slate-100'}
-                `}
-              >
-                <span className="font-display text-[16px]">Product and Services</span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${megaOpen ? 'rotate-180' : ''}`}
-                  strokeWidth={2}
-                />
-              </button>
-            </div>
-
-            {/* Other links */}
+          {/* Desktop links */}
+          <nav className={`hidden items-center gap-1 lg:flex ${menuOpen ? 'invisible' : ''}`} aria-label="Main navigation">
             {NAV_LINKS.map(link => (
-              <button
+              <Link
                 key={link.href}
-                type="button"
-                onClick={() => go(link.href)}
-                className={`
-                  px-4 py-2 rounded-lg text-[15px] font-medium font-display
-                  transition-colors duration-150 cursor-pointer
-                  hover:bg-white/90 lg:hover:bg-slate-100
-                  ${textColor}
-                  ${currentPath.startsWith(link.href) ? 'font-semibold' : ''}
-                `}
+                href={link.href}
+                className={`group relative rounded-full px-4 py-2 text-[14.5px] font-medium transition-colors ${
+                  onDarkBg ? 'text-paper/85 hover:text-paper' : 'text-ink/75 hover:text-ink'
+                }`}
               >
                 {link.label}
-              </button>
+                <span
+                  className={`absolute bottom-1 left-4 right-4 h-px origin-left bg-signal transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+                    isActive(link.href) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                  }`}
+                />
+              </Link>
             ))}
           </nav>
 
-          {/* Right icons */}
-          <div className="hidden lg:flex items-center gap-1">
-            {/* Search toggle */}
-            <div className="relative">
-              {searchVisible ? (
-                <form onSubmit={handleSearch} className="flex items-center">
-                  <input
-                    ref={searchRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search parts…"
-                    className="w-48 px-3 py-1.5 text-sm bg-white/90 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] text-[#0d1f3c]"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setSearchVisible(false)}
-                    className="ml-1 p-1.5 cursor-pointer text-slate-400 hover:text-slate-700"
-                    aria-label="Close search"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </form>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setSearchVisible(true)}
-                  className={`p-2 rounded-lg transition-colors cursor-pointer ${iconColor}`}
-                  aria-label="Open search"
-                >
-                  <Search className="w-5 h-5" />
-                </button>
-              )}
-            </div>
-
-            {/* Account */}
+          {/* Right cluster */}
+          <div className="relative z-10 flex items-center gap-1">
             <button
               type="button"
-              onClick={() => go(currentUser ? '/account' : '/signin')}
-              className={`p-2 rounded-lg transition-colors cursor-pointer ${iconColor}`}
-              aria-label={currentUser ? 'My Account' : 'Sign In'}
+              className={`${iconBtn} hidden sm:grid`}
+              aria-label="Search parts"
+              onClick={() => { focusSearchOnOpen.current = true; setMenuOpen(true); }}
             >
-              <User className="w-5 h-5" />
+              <Search className="h-[18px] w-[18px]" />
             </button>
-
-            {/* Cart */}
-            <button
-              type="button"
-              onClick={() => go('/cart')}
-              className={`relative p-2 rounded-lg transition-colors cursor-pointer ${iconColor}`}
-              aria-label={`Cart (${cartCount} items)`}
-            >
-              <ShoppingCart className="w-5 h-5" />
+            <Link href={currentUser ? '/account' : '/signin'} className={`${iconBtn} hidden sm:grid`} aria-label={currentUser ? 'My account' : 'Sign in'}>
+              <User className="h-[18px] w-[18px]" />
+            </Link>
+            <Link href="/cart" className={iconBtn} aria-label={`Cart (${cartCount} items)`}>
+              <ShoppingBag className="h-[18px] w-[18px]" />
               {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#e8a020] text-white text-[9px] font-bold flex items-center justify-center rounded-full">
+                <span className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-signal px-1 text-[10px] font-bold text-white">
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
+            </Link>
+
+            <span className="ml-1 hidden md:block">
+              <Magnetic strength={0.25}>
+                <Link href="/contact" className="btn btn-signal !h-11 !px-5 !text-[14px]">
+                  Get a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
+                </Link>
+              </Magnetic>
+            </span>
+
+            <button
+              ref={menuBtnRef}
+              type="button"
+              onClick={() => setMenuOpen(o => !o)}
+              aria-expanded={menuOpen}
+              aria-controls="site-menu"
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              className={`ml-1 grid h-11 w-11 place-items-center rounded-full transition-colors ${
+                onDarkBg ? 'bg-paper text-ink' : 'bg-ink text-paper'
+              }`}
+            >
+              <span className="relative block h-3 w-5">
+                <span className={`absolute left-0 h-[1.5px] w-5 bg-current transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${menuOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0'}`} />
+                <span className={`absolute left-0 h-[1.5px] bg-current transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${menuOpen ? 'top-1/2 w-5 -translate-y-1/2 -rotate-45' : 'bottom-0 w-3'}`} />
+              </span>
             </button>
           </div>
-
-          {/* Mobile hamburger */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen(p => !p)}
-            aria-expanded={mobileOpen}
-            aria-label="Toggle menu"
-            className={`lg:hidden p-2 rounded-lg cursor-pointer ${iconColor}`}
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
-      </div>
+        </div>
+      </header>
 
-      {/* ── Mega Dropdown ─────────────────────────────────────────────────── */}
-      {megaOpen && (
-        <div
-          ref={megaRef}
-          className="hidden lg:block absolute left-1/2 -translate-x-1/2 mt-1"
-          style={{ top: '100%', width: 'min(860px, calc(100vw - 48px))' }}
-          onMouseLeave={() => setMegaOpen(false)}
-          role="dialog"
-          aria-label="Products & Services menu"
-        >
-          <div className="glass-dropdown rounded-2xl overflow-hidden animate-mega-drop">
-            <div className="flex">
-              {/* Sections accordion */}
-              <div className="w-[220px] shrink-0 border-r border-white/30 py-4">
-                {MEGA_SECTIONS.map((section, i) => (
-                  <div key={section.label}>
-                    <button
-                      type="button"
-                      onClick={() => { setOpenSection(i); go(section.href); setMegaOpen(false); }}
-                      onMouseEnter={() => setOpenSection(i)}
-                      className={`
-                        w-full flex items-center justify-between px-5 py-3
-                        text-[14px] font-semibold font-display transition-colors cursor-pointer
-                        ${openSection === i
-                          ? 'text-[#0d1f3c] bg-white/90'
-                          : 'text-[#1a3560] hover:bg-white/70'}
-                      `}
+      {/* ── Full-screen menu ──────────────────────────────────────────────── */}
+      <div
+        id="site-menu"
+        ref={menuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        className="grain fixed inset-0 z-[110] overflow-y-auto bg-ink text-paper"
+        style={{ visibility: 'hidden' }}
+        data-lenis-prevent
+      >
+        <div className="mx-auto grid min-h-full max-w-[1440px] gap-10 px-5 pb-10 pt-28 sm:px-8 lg:grid-cols-[1.25fr_.75fr] lg:gap-16 lg:pt-32">
+          <nav aria-label="Site sections">
+            <ul>
+              {MENU_LINKS.map((link, i) => (
+                <li key={link.href} className="overflow-hidden border-b border-paper/10">
+                  <Link
+                    href={link.href}
+                    data-menu-item
+                    onMouseEnter={() => setPreview(i)}
+                    onFocus={() => setPreview(i)}
+                    onClick={() => setMenuOpen(false)}
+                    className="group flex items-baseline gap-4 py-3 sm:gap-6 sm:py-4"
+                  >
+                    <span className="w-7 shrink-0 text-xs font-semibold tabular-nums text-mint/60">0{i + 1}</span>
+                    <span
+                      className={`font-display text-[clamp(1.9rem,5vw,4.2rem)] font-extrabold leading-none tracking-[-.035em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-signal ${
+                        isActive(link.href) ? 'text-signal' : ''
+                      }`}
                     >
-                      <span>{section.label}</span>
-                      <ChevronRight
-                        className={`w-4 h-4 shrink-0 transition-transform duration-200 ${openSection === i ? 'rotate-90' : ''}`}
-                        strokeWidth={2}
-                      />
-                    </button>
-                  </div>
-                ))}
-              </div>
+                      {link.label}
+                    </span>
+                    <span className="ml-auto hidden text-sm text-paper/45 sm:block">{link.note}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-              {/* Subcategories panel */}
-              <div className="flex-1 flex min-h-[260px]">
-                {MEGA_SECTIONS[openSection] && (
-                  <>
-                    {/* Links list */}
-                    <div className="flex-1 py-5 px-6">
-                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 mb-3">
-                        {MEGA_SECTIONS[openSection].label}
-                      </p>
-                      <ul className="space-y-1">
-                        {MEGA_SECTIONS[openSection].subcategories?.map(sub => (
-                          <li key={sub.label}>
-                            <button
-                              type="button"
-                              onClick={() => go(sub.href)}
-                              className="mega-sub-link w-full text-left text-[14px] font-medium text-[#0d1f3c] py-1.5 cursor-pointer"
-                            >
-                              {sub.label}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Product image */}
-                    {MEGA_SECTIONS[openSection].image && (
-                      <div className="w-[200px] shrink-0 flex flex-col items-center justify-center py-6 px-4 border-l border-white/25">
-                        <div className="w-[140px] h-[140px] flex items-center justify-center">
-                          <img
-                            src={MEGA_SECTIONS[openSection].image}
-                            alt={MEGA_SECTIONS[openSection].imageAlt}
-                            className="max-w-full max-h-full object-contain drop-shadow-lg"
-                            loading="lazy"
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => go(MEGA_SECTIONS[openSection].href)}
-                          className="mt-4 text-xs font-semibold text-[#0d1f3c] underline underline-offset-2 cursor-pointer hover:opacity-70 transition-opacity"
-                        >
-                          View all →
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+          <div className="flex flex-col gap-8">
+            <div data-menu-fade className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl lg:block">
+              {MENU_LINKS.map((link, i) => (
+                <img
+                  key={link.href}
+                  src={link.image}
+                  alt=""
+                  loading="lazy"
+                  className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] ${
+                    preview === i ? 'scale-100 opacity-100' : 'scale-110 opacity-0'
+                  }`}
+                />
+              ))}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
+              <p className="absolute bottom-5 left-6 eyebrow text-paper">{MENU_LINKS[preview].note}</p>
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* ── Mobile Menu ───────────────────────────────────────────────────── */}
-      {mobileOpen && (
-        <div className="lg:hidden glass-dark border-t border-white/10 animate-fade-in">
-          <div className="max-w-[1200px] mx-auto px-6 py-4 space-y-1">
-
-            {/* Mobile search */}
-            <form onSubmit={handleSearch} className="flex gap-2 mb-4">
+            <form data-menu-fade onSubmit={handleSearch} className="relative" role="search">
+              <label htmlFor="menu-search" className="eyebrow mb-3 block text-mint/70">Search the catalogue</label>
               <input
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search parts…"
-                className="flex-1 px-3 py-2 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
+                id="menu-search"
+                ref={searchRef}
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Brake pads, oil filter, OEM number…"
+                className="h-14 w-full rounded-full border border-paper/20 bg-white/5 pl-6 pr-16 text-[15px] text-paper placeholder:text-paper/40 outline-none transition focus:border-signal"
               />
-              <button type="submit" className="px-4 py-2 bg-white/20 text-white text-sm rounded-lg cursor-pointer hover:bg-white/30 transition-colors">
-                Go
+              <button type="submit" aria-label="Search" className="absolute bottom-1.5 right-1.5 grid h-11 w-11 place-items-center rounded-full bg-signal text-white">
+                <Search className="h-4 w-4" />
               </button>
             </form>
 
-            {/* Products & Services accordion */}
-            <div className="border-b border-white/10">
-              <button
-                type="button"
-                onClick={() => { setMobileProdOpen(p => !p); setMobileSection(-1); }}
-                className="w-full flex items-center justify-between py-3 text-white font-display text-[16px] font-medium cursor-pointer"
-              >
-                <span>Product and Services</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${mobileProdOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {mobileProdOpen && (
-                <div className="pl-4 pb-3 space-y-2 animate-fade-in">
-                  {MEGA_SECTIONS.map((section, i) => (
-                    <div key={section.label} className="border-b border-white/10 last:border-0">
-                      <div className="flex items-center justify-between py-2.5">
-                        <button
-                          type="button"
-                          onClick={() => { go(section.href); setMobileProdOpen(false); setMobileSection(-1); }}
-                          className="flex-1 text-left text-white/85 font-display text-[15px] cursor-pointer hover:text-white transition-colors"
-                        >
-                          {section.label}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setMobileSection(prev => prev === i ? -1 : i)}
-                          className="p-1 cursor-pointer"
-                          aria-label={`Expand ${section.label}`}
-                        >
-                          <ChevronDown className={`w-3.5 h-3.5 text-white/60 transition-transform duration-200 ${mobileSection === i ? 'rotate-180' : ''}`} />
-                        </button>
-                      </div>
-                      {mobileSection === i && (
-                        <div className="pl-3 pb-2 space-y-0.5">
-                          {section.subcategories?.map(sub => (
-                            <button
-                              key={`${section.label}-${sub.label}`}
-                              type="button"
-                              onClick={() => go(sub.href)}
-                              className="block w-full text-left py-1.5 text-sm text-white/65 hover:text-white transition-colors cursor-pointer"
-                            >
-                              {sub.label}
-                            </button>
-                          ))}
-                          <button
-                            type="button"
-                            onClick={() => go(section.href)}
-                            className="block w-full text-left py-1.5 text-xs font-bold text-white/50 hover:text-white transition-colors cursor-pointer"
-                          >
-                            View all {section.label} →
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div data-menu-fade className="grid grid-cols-2 gap-3 text-sm">
+              <Link href={currentUser ? '/account' : '/signin'} onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-paper/15 px-4 py-3.5 transition hover:border-signal hover:text-signal">
+                <User className="h-4 w-4" /> {currentUser ? 'My account' : 'Sign in'}
+              </Link>
+              <Link href="/cart" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-paper/15 px-4 py-3.5 transition hover:border-signal hover:text-signal">
+                <ShoppingBag className="h-4 w-4" /> Cart{cartCount > 0 ? ` (${cartCount})` : ''}
+              </Link>
             </div>
 
-            {NAV_LINKS.map(link => (
-              <button
-                key={link.href}
-                type="button"
-                onClick={() => go(link.href)}
-                className="w-full text-left py-3 border-b border-white/10 text-white font-display text-[16px] font-medium cursor-pointer"
-              >
-                {link.label}
-              </button>
-            ))}
-
-            {/* Mobile utility row */}
-            <div className="flex items-center gap-4 pt-3">
-              <button type="button" onClick={() => go(currentUser ? '/account' : '/signin')} className="flex items-center gap-2 text-sm text-white/80 cursor-pointer hover:text-white">
-                <User className="w-4 h-4" /> {currentUser ? 'Account' : 'Sign In'}
-              </button>
-              <button type="button" onClick={() => go('/cart')} className="flex items-center gap-2 text-sm text-white/80 cursor-pointer hover:text-white">
-                <ShoppingCart className="w-4 h-4" /> Cart {cartCount > 0 && <span className="bg-[#e8a020] text-white text-xs px-1.5 py-0.5 rounded-full">{cartCount}</span>}
-              </button>
-              <div className="flex items-center gap-1.5 text-sm text-white/60 ml-auto">
-                <Mail className="w-3.5 h-3.5" />
-                <span>info@mjlogisticsenterprise.com</span>
-              </div>
+            <div data-menu-fade className="mt-auto flex flex-wrap items-end justify-between gap-4 border-t border-paper/10 pt-6 text-sm text-paper/55">
+              <a href="mailto:info@mjlogisticsenterprise.com" className="link-draw text-paper/80">info@mjlogisticsenterprise.com</a>
+              <span>Parts that fit. Delivered fast.</span>
             </div>
           </div>
         </div>
-      )}
-    </header>
+      </div>
+    </>
   );
 };

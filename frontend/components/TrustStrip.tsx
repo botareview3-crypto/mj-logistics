@@ -6,7 +6,7 @@ export const TrustStrip: React.FC<{ className?: string }> = ({ className = '' })
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
       {[
         { Icon: Award, bg: 'bg-green-50', color: 'text-[#22C55E]', title: '2-Year Warranty', sub: 'On all OE & aftermarket parts' },
-        { Icon: RotateCcw, bg: 'bg-blue-50', color: 'text-[#0077C7]', title: '30-Day Returns', sub: 'Hassle-free parts return & refund' },
+        { Icon: RotateCcw, bg: 'bg-mint/20', color: 'text-[#0A4A3A]', title: '30-Day Returns', sub: 'Hassle-free parts return & refund' },
         { Icon: ShieldCheck, bg: 'bg-amber-50', color: 'text-amber-500', title: 'Secure Checkout', sub: '100% Fitment guarantee & SSL' },
         { Icon: Truck, bg: 'bg-purple-50', color: 'text-purple-500', title: 'Fast Delivery', sub: 'Dispatched same day locally' },
       ].map(({ Icon, bg, color, title, sub }) => (

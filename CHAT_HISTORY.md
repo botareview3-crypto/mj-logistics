@@ -8,6 +8,7 @@ transcript, just the gist.
 
 ### 2026-09-19
 - Simplified the MJ Mining page's point-of-view and focus sections so the message is easier to scan: shorter copy, clearer headings, three concise principles, and cleaner gold/diamond cards with stronger visual hierarchy.
+- Fixed wide-screen readability on the mining page by strengthening the hero image overlay and explicitly isolating the white/content sections above the hero imagery.
 
 ### 2026-09-18
 - Removed the stationery and office-equipment entries from the auto-store catalog and homepage category list, deleted the seeded office/business products from the marketplace data, and tightened the storefront copy so the shop stays focused on automotive parts.
@@ -578,3 +579,24 @@ transcript, just the gist.
   registration information, and response promises. The contact form remains
   as a neutral layout placeholder until official contact details and a
   submission destination are provided.
+
+### 2026-10-08
+- Full visual redesign after client feedback that the site looked
+  unattractive and didn't sell. Adopted the new logo kit (`logo/`) as the
+  brand: Deep Emerald / Signal Orange / Sage / Paper palette and Archivo
+  Expanded type; removed the trial-licensed Chopin font and navy/gold scheme.
+- Added a motion system inspired by apc-pallets.nl / tunnelcraft.co.uk and
+  Awwwards-style sites: Lenis smooth scroll, first-visit preloader (logo
+  shards assemble), page-transition curtain, split-text headline reveals,
+  scroll-scrubbed statements, clip/parallax images, velocity marquees,
+  magnetic buttons, cursor follower, full-screen menu with image previews.
+- Rebuilt home (video hero, pinned horizontal divisions, shop-by-system list
+  with floating part cut-outs, stacking process cards, expanding image,
+  in-stock products with add-to-cart, garage CTA), Mining, About, Contact,
+  Advantages and Stationery; added a new `/solar` page for the MJ Solar
+  division from the logo kit (copy is general — confirm with the client).
+  Shop pages re-skinned to the new palette and use the new footer.
+- Removed unverified stationery stats; contact details unchanged. Production
+  build passes (all static pages) and was checked in headless Chrome at
+  desktop and phone widths.
+

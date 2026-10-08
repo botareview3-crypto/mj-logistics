@@ -16,9 +16,9 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const ROOT_ACCENT: Record<number, string> = {
-  0: '#1e4d8c',
-  1: '#1a3560',
-  2: '#243d6a',
+  0: '#0A4A3A',
+  1: '#0A4A3A',
+  2: '#136650',
 };
 
 export default function CatalogIndexPage() {
@@ -38,7 +38,7 @@ export default function CatalogIndexPage() {
       <Breadcrumbs items={[{ label: 'Catalog' }]} />
 
       {/* ── Hero banner ──────────────────────────────────────────────── */}
-      <div className="relative rounded-3xl overflow-hidden bg-[#0d1f3c]">
+      <div className="relative rounded-3xl overflow-hidden bg-[#04261D]">
         <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('/aerial-view-container-cargo-ship-sea.webp')" }} />
         <div className="relative px-8 py-12 sm:px-12">
           <p className="font-display text-[11px] font-bold uppercase tracking-[0.3em] text-white/50 mb-3">
@@ -68,7 +68,7 @@ export default function CatalogIndexPage() {
 
       {/* ── Category roots ───────────────────────────────────────────── */}
       {filteredRoots.map((root, idx) => {
-        const accent = ROOT_ACCENT[idx] ?? '#1e4d8c';
+        const accent = ROOT_ACCENT[idx] ?? '#0A4A3A';
         return (
           <section key={root.id} className="space-y-5">
             {/* Section heading */}
@@ -78,7 +78,7 @@ export default function CatalogIndexPage() {
                   className="w-1 h-7 rounded-full"
                   style={{ background: accent }}
                 />
-                <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">{root.name}</h2>
+                <h2 className="font-display text-2xl font-bold text-[#04261D]">{root.name}</h2>
               </div>
               <span className="text-xs text-slate-400 font-medium hidden sm:block">
                 {root.systems.length} systems
@@ -94,7 +94,7 @@ export default function CatalogIndexPage() {
                   <motion.div
                     key={system.id}
                     className="product-card bg-white rounded-2xl border border-slate-200 p-5 flex flex-col gap-4"
-                    whileHover={{ y: -3, borderColor: accent, boxShadow: '0 16px 40px rgba(13,31,60,0.10)' }}
+                    whileHover={{ y: -3, borderColor: accent, boxShadow: '0 16px 40px rgba(4,38,29,0.10)' }}
                     transition={SPRINGS.default}
                   >
                     {/* Header */}
@@ -109,7 +109,7 @@ export default function CatalogIndexPage() {
                         <button
                           type="button"
                           onClick={() => navigate(`/catalog/${system.id}`)}
-                          className="font-display text-[16px] font-bold text-[#0d1f3c] hover:text-[#1e4d8c] transition-colors cursor-pointer text-left leading-tight"
+                          className="font-display text-[16px] font-bold text-[#04261D] hover:text-[#0A4A3A] transition-colors cursor-pointer text-left leading-tight"
                         >
                           {system.name}
                         </button>
@@ -126,7 +126,7 @@ export default function CatalogIndexPage() {
                           key={sub.id}
                           type="button"
                           onClick={() => navigate(`/catalog/${system.id}/${sub.id}`)}
-                          className="px-2.5 py-1 text-[11px] font-medium bg-slate-50 hover:bg-[#0d1f3c] hover:text-white text-slate-600 rounded-lg border border-slate-200 hover:border-[#0d1f3c] transition-colors cursor-pointer"
+                          className="px-2.5 py-1 text-[11px] font-medium bg-slate-50 hover:bg-[#04261D] hover:text-white text-slate-600 rounded-lg border border-slate-200 hover:border-[#04261D] transition-colors cursor-pointer"
                           whileTap={{ scale: 0.96 }}
                           transition={SPRINGS.micro}
                         >
@@ -163,7 +163,7 @@ export default function CatalogIndexPage() {
         <div className="text-center py-20 text-slate-400">
           <Package className="w-12 h-12 mx-auto mb-4 opacity-30" />
           <p className="font-display text-xl font-semibold">No systems match &ldquo;{query}&rdquo;</p>
-          <button type="button" onClick={() => setQuery('')} className="mt-3 text-sm text-[#1e4d8c] underline cursor-pointer">Clear filter</button>
+          <button type="button" onClick={() => setQuery('')} className="mt-3 text-sm text-[#0A4A3A] underline cursor-pointer">Clear filter</button>
         </div>
       )}
     </div>

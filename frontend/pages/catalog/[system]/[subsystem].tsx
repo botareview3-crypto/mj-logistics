@@ -71,11 +71,11 @@ export default function SubsystemPage() {
 
       {/* Vehicle banner */}
       {activeVehicle ? (
-        <div className="bg-sky-50 border border-sky-200 rounded-xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+        <div className="bg-mint/20 border border-mint rounded-xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-white border border-sky-200 text-[#0077C7] flex items-center justify-center shrink-0"><CheckCircle2 className="w-5 h-5 text-[#0077C7]" /></div>
+            <div className="w-9 h-9 rounded-lg bg-white border border-mint text-[#0A4A3A] flex items-center justify-center shrink-0"><CheckCircle2 className="w-5 h-5 text-[#0A4A3A]" /></div>
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-[#0060A1]">Fitment Guaranteed for:</div>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-[#0A4A3A]">Fitment Guaranteed for:</div>
               <div className="text-sm font-black text-slate-900">{activeVehicle.year} {activeVehicle.make} {activeVehicle.model} ({activeVehicle.engine})</div>
               <div className="text-[11px] text-slate-600 font-mono">{activeVehicle.regNumber ? `Plate: ${activeVehicle.regNumber} • ` : ''}Engine Code: {activeVehicle.engineCode || 'OE'}</div>
             </div>
@@ -86,12 +86,12 @@ export default function SubsystemPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-gradient-to-r from-sky-50 to-slate-50 border border-sky-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+        <div className="bg-gradient-to-r from-mint/20 to-slate-50 border border-mint rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
           <div className="flex items-start sm:items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#0077C7] text-white flex items-center justify-center shrink-0 shadow-xs"><Car className="w-5 h-5" /></div>
+            <div className="w-9 h-9 rounded-lg bg-[#0A4A3A] text-white flex items-center justify-center shrink-0 shadow-xs"><Car className="w-5 h-5" /></div>
             <div><h3 className="text-xs sm:text-sm font-bold text-slate-900">Not sure which part fits your vehicle?</h3><p className="text-xs text-slate-600 mt-0.5">Select your vehicle to see compatible parts in this category.</p></div>
           </div>
-          <button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0077C7] hover:bg-[#0060A1] text-white font-bold text-xs rounded-lg shadow-xs transition-colors cursor-pointer shrink-0">Select Vehicle Now</button>
+          <button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0A4A3A] hover:bg-[#0A4A3A] text-white font-bold text-xs rounded-lg shadow-xs transition-colors cursor-pointer shrink-0">Select Vehicle Now</button>
         </div>
       )}
 
@@ -104,12 +104,12 @@ export default function SubsystemPage() {
             <div className="flex items-center gap-2">
               <button type="button" onClick={() => setIsMobileFilterOpen(true)} className="md:hidden px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-lg border border-slate-300 flex items-center gap-1.5 cursor-pointer"><SlidersHorizontal className="w-3.5 h-3.5" /><span>Filters</span></button>
               <span className="text-xs font-semibold text-slate-700">Showing <strong className="text-slate-900 font-black">{filteredParts.length}</strong> {filteredParts.length === 1 ? 'part' : 'parts'}</span>
-              {filters.onlyFitsVehicle && activeVehicle &&               <span className="hidden sm:inline-block px-2 py-0.5 bg-sky-100 text-[#0060A1] text-[10px] font-bold rounded-sm">✓ Verified Compatible Only</span>}
+              {filters.onlyFitsVehicle && activeVehicle &&               <span className="hidden sm:inline-block px-2 py-0.5 bg-mint/40 text-[#0A4A3A] text-[10px] font-bold rounded-sm">✓ Verified Compatible Only</span>}
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 text-xs text-slate-600">
                 <span className="hidden sm:inline font-medium">Sort by:</span>
-                <select value={filters.sortBy} onChange={e => setFilters({ ...filters, sortBy: e.target.value as FilterState['sortBy'] })} className="px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0077C7] cursor-pointer">
+                <select value={filters.sortBy} onChange={e => setFilters({ ...filters, sortBy: e.target.value as FilterState['sortBy'] })} className="px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0A4A3A] cursor-pointer">
                   <option value="popularity">Most Popular</option>
                   <option value="price-asc">Price: Low to High</option>
                   <option value="price-desc">Price: High to Low</option>
@@ -118,8 +118,8 @@ export default function SubsystemPage() {
                 </select>
               </div>
               <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden p-0.5 bg-slate-50">
-                <button type="button" onClick={() => setViewMode('grid')} className={`p-1.5 rounded-sm transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-white text-[#0077C7] shadow-xs' : 'text-slate-400 hover:text-slate-700'}`}><Grid className="w-4 h-4" /></button>
-                <button type="button" onClick={() => setViewMode('list')} className={`p-1.5 rounded-sm transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#0077C7] shadow-xs' : 'text-slate-400 hover:text-slate-700'}`}><List className="w-4 h-4" /></button>
+                <button type="button" onClick={() => setViewMode('grid')} className={`p-1.5 rounded-sm transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-white text-[#0A4A3A] shadow-xs' : 'text-slate-400 hover:text-slate-700'}`}><Grid className="w-4 h-4" /></button>
+                <button type="button" onClick={() => setViewMode('list')} className={`p-1.5 rounded-sm transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#0A4A3A] shadow-xs' : 'text-slate-400 hover:text-slate-700'}`}><List className="w-4 h-4" /></button>
               </div>
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function SubsystemPage() {
                 <h3 className="text-base font-bold text-slate-900">No parts match your current filters</h3>
                 <p className="text-xs text-slate-500 max-w-md mx-auto">{filters.onlyFitsVehicle && activeVehicle ? `No ${subsystem?.name || 'parts'} found matching ${activeVehicle.make} ${activeVehicle.model}. Try disabling the vehicle filter.` : 'Try resetting your price or brand filters to see more parts.'}</p>
               </div>
-              <button type="button" onClick={handleResetFilters} className="px-4 py-2 bg-[#0077C7] hover:bg-[#0060A1] text-white font-bold text-xs rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5"><RotateCcw className="w-3.5 h-3.5" /><span>Reset All Filters</span></button>
+              <button type="button" onClick={handleResetFilters} className="px-4 py-2 bg-[#0A4A3A] hover:bg-[#0A4A3A] text-white font-bold text-xs rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5"><RotateCcw className="w-3.5 h-3.5" /><span>Reset All Filters</span></button>
             </div>
           )}
         </div>

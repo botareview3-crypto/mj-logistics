@@ -68,7 +68,7 @@ export default function CartPage() {
           <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 mb-3">
             Order Placed
           </span>
-          <h1 className="font-display text-3xl font-bold text-[#0d1f3c]">Thank You!</h1>
+          <h1 className="font-display text-3xl font-bold text-[#04261D]">Thank You!</h1>
           <p className="text-slate-500 text-sm mt-2 leading-relaxed">
             Order #AP-88421 is confirmed. Parts are verified for fitment and prepared for dispatch.
           </p>
@@ -81,14 +81,14 @@ export default function CartPage() {
           ].map(row => (
             <div key={row.label} className="flex justify-between">
               <span className="text-slate-500">{row.label}</span>
-              <span className="font-semibold text-[#0d1f3c]">{row.value}</span>
+              <span className="font-semibold text-[#04261D]">{row.value}</span>
             </div>
           ))}
         </div>
         <button
           type="button"
           onClick={() => { setOrderComplete(false); navigate('/shop'); }}
-          className="px-7 py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold rounded-xl cursor-pointer transition-colors inline-flex items-center gap-2"
+          className="px-7 py-3 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-semibold rounded-xl cursor-pointer transition-colors inline-flex items-center gap-2"
         >
           Continue Shopping <ArrowRight className="w-4 h-4" />
         </button>
@@ -108,7 +108,7 @@ export default function CartPage() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/95 via-[#0d1f3c]/80 to-[#0d1f3c]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#04261D]/95 via-[#04261D]/80 to-[#04261D]/40" />
         <div className="relative px-7 py-10 sm:px-10 sm:py-12 flex items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/70 text-[11px] font-bold uppercase tracking-wider mb-4">
@@ -138,15 +138,15 @@ export default function CartPage() {
           {/* ── Cart items ─────────────────────────────────────────── */}
           <div className="lg:col-span-8 space-y-4">
             {/* Free shipping progress */}
-            <div className="flex items-center gap-3 px-4 py-3 bg-sky-50 border border-sky-200 rounded-xl text-xs">
-              <Truck className="w-4 h-4 text-[#1e4d8c] shrink-0" />
+            <div className="flex items-center gap-3 px-4 py-3 bg-mint/20 border border-mint rounded-xl text-xs">
+              <Truck className="w-4 h-4 text-[#0A4A3A] shrink-0" />
               {cartSubtotal >= 75
-                ? <span className="font-semibold text-[#0d1f3c]">✓ You've unlocked <strong className="text-emerald-700">Free Delivery!</strong></span>
-                : <span className="text-slate-700">Add <strong className="text-[#1e4d8c]">€{(75 - cartSubtotal).toFixed(2)}</strong> more for free delivery</span>
+                ? <span className="font-semibold text-[#04261D]">✓ You've unlocked <strong className="text-emerald-700">Free Delivery!</strong></span>
+                : <span className="text-slate-700">Add <strong className="text-[#0A4A3A]">€{(75 - cartSubtotal).toFixed(2)}</strong> more for free delivery</span>
               }
               <div className="ml-auto w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden hidden sm:block">
                 <div
-                  className="h-full bg-[#1e4d8c] rounded-full transition-all"
+                  className="h-full bg-[#0A4A3A] rounded-full transition-all"
                   style={{ width: `${Math.min(100, (cartSubtotal / 75) * 100)}%` }}
                 />
               </div>
@@ -160,7 +160,7 @@ export default function CartPage() {
                   <button
                     type="button"
                     onClick={() => navigate(`/parts/${part.id}`)}
-                    className="w-full sm:w-20 h-20 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center p-2 shrink-0 hover:border-[#1e4d8c] transition-colors cursor-pointer"
+                    className="w-full sm:w-20 h-20 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center p-2 shrink-0 hover:border-[#0A4A3A] transition-colors cursor-pointer"
                   >
                     <img src={part.images[0]} alt={part.name} className="max-h-full max-w-full object-contain" loading="lazy" />
                   </button>
@@ -168,14 +168,14 @@ export default function CartPage() {
                   {/* Info */}
                   <div className="flex-1 space-y-1 min-w-0">
                     <div className="flex items-center gap-2 text-[11px]">
-                      <span className="font-bold text-[#1e4d8c] uppercase">{part.brand}</span>
+                      <span className="font-bold text-[#0A4A3A] uppercase">{part.brand}</span>
                       <span className="text-slate-300">·</span>
                       <span className="font-mono text-slate-400">SKU: {part.sku}</span>
                     </div>
                     <button
                       type="button"
                       onClick={() => navigate(`/parts/${part.id}`)}
-                      className="font-display text-[15px] font-semibold text-[#0d1f3c] hover:text-[#1e4d8c] transition-colors cursor-pointer text-left leading-snug"
+                      className="font-display text-[15px] font-semibold text-[#04261D] hover:text-[#0A4A3A] transition-colors cursor-pointer text-left leading-snug"
                     >
                       {part.name}
                     </button>
@@ -194,7 +194,7 @@ export default function CartPage() {
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="w-8 text-center text-sm font-bold text-[#0d1f3c] font-mono">{quantity}</span>
+                      <span className="w-8 text-center text-sm font-bold text-[#04261D] font-mono">{quantity}</span>
                       <button
                         type="button"
                         onClick={() => updateCartQuantity(part.id, quantity + 1)}
@@ -208,7 +208,7 @@ export default function CartPage() {
                     {/* Line price + remove */}
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <p className="font-display font-bold text-[18px] text-[#0d1f3c]">€{(part.price * quantity).toFixed(2)}</p>
+                        <p className="font-display font-bold text-[18px] text-[#04261D]">€{(part.price * quantity).toFixed(2)}</p>
                         <p className="text-[11px] text-slate-400">€{part.price.toFixed(2)} each</p>
                       </div>
                       <button
@@ -228,7 +228,7 @@ export default function CartPage() {
             <button
               type="button"
               onClick={() => navigate('/catalog')}
-              className="text-[13px] font-semibold text-[#1e4d8c] hover:text-[#0d1f3c] transition-colors cursor-pointer"
+              className="text-[13px] font-semibold text-[#0A4A3A] hover:text-[#04261D] transition-colors cursor-pointer"
             >
               ← Continue browsing catalog
             </button>
@@ -237,7 +237,7 @@ export default function CartPage() {
           {/* ── Order summary ──────────────────────────────────────── */}
           <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
             <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5">
-              <h2 className="font-display text-xl font-bold text-[#0d1f3c] pb-3 border-b border-slate-100">
+              <h2 className="font-display text-xl font-bold text-[#04261D] pb-3 border-b border-slate-100">
                 Order Summary
               </h2>
 
@@ -245,7 +245,7 @@ export default function CartPage() {
               <div className="space-y-2.5 text-sm">
                 <div className="flex justify-between text-slate-600">
                   <span>Subtotal ({cartCount} items)</span>
-                  <span className="font-semibold text-[#0d1f3c]">€{cartSubtotal.toFixed(2)}</span>
+                  <span className="font-semibold text-[#04261D]">€{cartSubtotal.toFixed(2)}</span>
                 </div>
                 {discountPercent > 0 && (
                   <div className="flex justify-between text-emerald-700 font-semibold">
@@ -255,17 +255,17 @@ export default function CartPage() {
                 )}
                 <div className="flex justify-between text-slate-600">
                   <span>Delivery</span>
-                  <span className={`font-semibold ${shippingCost === 0 ? 'text-emerald-700' : 'text-[#0d1f3c]'}`}>
+                  <span className={`font-semibold ${shippingCost === 0 ? 'text-emerald-700' : 'text-[#04261D]'}`}>
                     {shippingCost === 0 ? 'FREE' : `€${shippingCost.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-600">
                   <span>VAT (8%)</span>
-                  <span className="font-semibold text-[#0d1f3c]">€{estimatedVat.toFixed(2)}</span>
+                  <span className="font-semibold text-[#04261D]">€{estimatedVat.toFixed(2)}</span>
                 </div>
                 <div className="pt-3 border-t border-slate-100 flex justify-between items-baseline">
-                  <span className="font-bold text-[#0d1f3c]">Total</span>
-                  <span className="font-display text-2xl font-bold text-[#0d1f3c]">€{grandTotal.toFixed(2)}</span>
+                  <span className="font-bold text-[#04261D]">Total</span>
+                  <span className="font-display text-2xl font-bold text-[#04261D]">€{grandTotal.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -278,10 +278,10 @@ export default function CartPage() {
                     value={promoCode}
                     onChange={e => setPromoCode(e.target.value)}
                     placeholder="Promo code"
-                    className="w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] focus:bg-white transition-all"
+                    className="w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl uppercase font-mono focus:outline-none focus:ring-2 focus:ring-[#0A4A3A] focus:bg-white transition-all"
                   />
                 </div>
-                <button type="submit" className="px-4 py-2.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors">
+                <button type="submit" className="px-4 py-2.5 bg-[#04261D] hover:bg-[#0A4A3A] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors">
                   Apply
                 </button>
               </form>
@@ -294,7 +294,7 @@ export default function CartPage() {
                 type="button"
                 disabled={isCheckingOut || isAuthLoading}
                 onClick={handleCheckout}
-                className="w-full py-4 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {isCheckingOut ? (
                   <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Processing…</span></>
@@ -319,13 +319,13 @@ export default function CartPage() {
             <ShoppingCart className="w-8 h-8" />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">Your Cart is Empty</h2>
+            <h2 className="font-display text-2xl font-bold text-[#04261D]">Your Cart is Empty</h2>
             <p className="text-sm text-slate-500 mt-1 leading-relaxed">Select your vehicle or browse categories to find guaranteed-fit parts.</p>
           </div>
           <button
             type="button"
             onClick={() => navigate('/catalog')}
-            className="inline-flex items-center gap-2 px-7 py-3 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold rounded-xl transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-7 py-3 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-semibold rounded-xl transition-colors cursor-pointer"
           >
             <Package className="w-4 h-4" /> Browse Catalog
           </button>

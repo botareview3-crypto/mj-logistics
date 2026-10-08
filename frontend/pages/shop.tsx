@@ -48,7 +48,7 @@ export default function ShopPage() {
           />
 
           {/* Dark overlay so text is readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/92 via-[#0d1f3c]/75 to-[#0d1f3c]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#04261D]/92 via-[#04261D]/75 to-[#04261D]/40" />
 
           {/* Content */}
           <div className="relative px-8 py-12 sm:px-12 sm:py-14">
@@ -78,14 +78,14 @@ export default function ShopPage() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search by name, OEM number, or brand…"
-                  className="flex-1 pl-5 pr-3 py-3.5 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 focus:outline-none focus:ring-0 focus:border-none placeholder-slate-400"
+                  className="flex-1 pl-5 pr-3 py-3.5 text-sm text-[#04261D] bg-transparent outline-none border-none ring-0 focus:outline-none focus:ring-0 focus:border-none placeholder-slate-400"
                   aria-label="Search parts"
                   style={{ boxShadow: 'none' }}
                 />
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="w-10 h-10 mr-2 rounded-full bg-[#0d1f3c] hover:bg-[#1a3560] text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  className="w-10 h-10 mr-2 rounded-full bg-[#04261D] hover:bg-[#0A4A3A] text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
                 >
                   <Search className="w-4 h-4" />
                 </button>
@@ -114,12 +114,12 @@ export default function ShopPage() {
           <div className="flex items-end justify-between">
             <div>
               <p className="font-display text-[11px] font-bold uppercase tracking-[0.25em] text-slate-400 mb-1">Browse by system</p>
-              <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">Shop by Category</h2>
+              <h2 className="font-display text-2xl font-bold text-[#04261D]">Shop by Category</h2>
             </div>
             <button
               type="button"
               onClick={() => navigate('/catalog')}
-              className="hidden sm:flex items-center gap-1 text-[13px] font-semibold text-[#1e4d8c] hover:text-[#0d1f3c] transition-colors cursor-pointer"
+              className="hidden sm:flex items-center gap-1 text-[13px] font-semibold text-[#0A4A3A] hover:text-[#04261D] transition-colors cursor-pointer"
             >
               All categories <ChevronRight className="w-4 h-4" />
             </button>
@@ -133,12 +133,12 @@ export default function ShopPage() {
                   key={system.id}
                   type="button"
                   onClick={() => navigate(`/catalog/${system.id}`)}
-                  className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#1e4d8c] p-4 flex flex-col items-center justify-center gap-2.5 group cursor-pointer aspect-square"
+                  className="product-card bg-white rounded-2xl border border-slate-200 hover:border-[#0A4A3A] p-4 flex flex-col items-center justify-center gap-2.5 group cursor-pointer aspect-square"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-slate-50 group-hover:bg-[#0d1f3c] text-[#1e4d8c] group-hover:text-white flex items-center justify-center transition-all">
+                  <div className="w-11 h-11 rounded-xl bg-slate-50 group-hover:bg-[#04261D] text-[#0A4A3A] group-hover:text-white flex items-center justify-center transition-all">
                     <Icon className="w-5 h-5" strokeWidth={1.8} />
                   </div>
-                  <span className="font-display text-[12px] font-semibold text-[#0d1f3c] group-hover:text-[#1e4d8c] text-center leading-tight line-clamp-2 transition-colors">
+                  <span className="font-display text-[12px] font-semibold text-[#04261D] group-hover:text-[#0A4A3A] text-center leading-tight line-clamp-2 transition-colors">
                     {system.name}
                   </span>
                 </button>
@@ -153,18 +153,18 @@ export default function ShopPage() {
               className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white rounded-2xl border border-slate-200 p-5"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#0d1f3c] text-white flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-[#04261D] text-white flex items-center justify-center shrink-0">
                   <Package className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-display text-[16px] font-bold text-[#0d1f3c]">{root.name}</h3>
+                  <h3 className="font-display text-[16px] font-bold text-[#04261D]">{root.name}</h3>
                   <p className="text-[12px] text-slate-500">{root.description}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => navigate(`/catalog/${root.systems[0]?.id ?? ''}`)}
-                className="px-5 py-2.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white text-[13px] font-semibold rounded-xl transition-colors cursor-pointer shrink-0 flex items-center gap-2"
+                className="px-5 py-2.5 bg-[#04261D] hover:bg-[#0A4A3A] text-white text-[13px] font-semibold rounded-xl transition-colors cursor-pointer shrink-0 flex items-center gap-2"
               >
                 Browse {root.name} <ChevronRight className="w-4 h-4" />
               </button>
@@ -176,15 +176,15 @@ export default function ShopPage() {
         <section className="space-y-5">
           <div className="flex items-end justify-between">
             <div>
-              <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#e8a020] mb-1">
+              <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#FF6A2B] mb-1">
                 <TrendingUp className="w-3.5 h-3.5" /> High volume replacements
               </div>
-              <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">Best-Selling Parts</h2>
+              <h2 className="font-display text-2xl font-bold text-[#04261D]">Best-Selling Parts</h2>
             </div>
             <button
               type="button"
               onClick={() => navigate('/catalog/braking-system')}
-              className="hidden sm:flex items-center gap-1 text-[13px] font-semibold text-[#1e4d8c] hover:text-[#0d1f3c] cursor-pointer"
+              className="hidden sm:flex items-center gap-1 text-[13px] font-semibold text-[#0A4A3A] hover:text-[#04261D] cursor-pointer"
             >
               View catalog <ChevronRight className="w-4 h-4" />
             </button>
@@ -201,7 +201,7 @@ export default function ShopPage() {
         <section className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 space-y-5">
           <div className="text-center">
             <p className="font-display text-[11px] font-bold uppercase tracking-[0.25em] text-slate-400 mb-2">Authorised distributor</p>
-            <h2 className="font-display text-2xl font-bold text-[#0d1f3c]">Top Brands</h2>
+            <h2 className="font-display text-2xl font-bold text-[#04261D]">Top Brands</h2>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-2">
             {POPULAR_BRANDS.map(brand => (
@@ -209,9 +209,9 @@ export default function ShopPage() {
                 key={brand.name}
                 type="button"
                 onClick={() => navigate(`/search?q=${encodeURIComponent(brand.name)}`)}
-                className="p-3 rounded-xl border border-slate-100 hover:border-[#1e4d8c] hover:bg-slate-50 transition-all cursor-pointer flex flex-col items-center gap-0.5 group"
+                className="p-3 rounded-xl border border-slate-100 hover:border-[#0A4A3A] hover:bg-slate-50 transition-all cursor-pointer flex flex-col items-center gap-0.5 group"
               >
-                <span className="font-display font-bold text-[13px] text-[#0d1f3c] group-hover:text-[#1e4d8c] transition-colors">
+                <span className="font-display font-bold text-[13px] text-[#04261D] group-hover:text-[#0A4A3A] transition-colors">
                   {brand.name}
                 </span>
                 <span className="text-[10px] text-slate-400">{brand.highlight}</span>
@@ -221,7 +221,7 @@ export default function ShopPage() {
         </section>
 
         {/* ── Garage promo ──────────────────────────────────────────── */}
-        <section className="relative rounded-3xl overflow-hidden bg-[#0d1f3c] p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <section className="relative rounded-3xl overflow-hidden bg-[#04261D] p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
           <div className="relative space-y-2 max-w-xl">
             <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-white/50">
@@ -238,7 +238,7 @@ export default function ShopPage() {
             <button
               type="button"
               onClick={() => navigate('/garage')}
-              className="px-6 py-3 bg-white hover:bg-slate-100 text-[#0d1f3c] font-bold text-[13px] rounded-xl transition-colors cursor-pointer"
+              className="px-6 py-3 bg-white hover:bg-slate-100 text-[#04261D] font-bold text-[13px] rounded-xl transition-colors cursor-pointer"
             >
               Open My Garage
             </button>

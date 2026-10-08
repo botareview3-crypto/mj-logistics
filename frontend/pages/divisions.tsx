@@ -1,124 +1,142 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import Head from 'next/head';
-import { ArrowRight, Box, ClipboardList, Truck } from 'lucide-react';
-import { useApp } from '../lib/AppContext';
+import Link from 'next/link';
+import { ArrowUpRight, Box, ClipboardList, Truck } from 'lucide-react';
+import { useScrollFx } from '../lib/fx';
+import { SplitText, ScrubText } from '../components/fx/SplitText';
+import { Magnetic } from '../components/fx/Magnetic';
 
 const HOW_WE_WORK = [
-  {
-    title: 'Sourcing',
-    text: 'We buy direct from manufacturers and verified suppliers, so pricing and part authenticity are traceable.',
-    icon: ClipboardList,
-  },
-  {
-    title: 'Import & clearance',
-    text: 'Freight booking, documentation, and customs are handled in-house. Clients do not chase brokers.',
-    icon: Box,
-  },
-  {
-    title: 'Delivery',
-    text: '    Delivery and fulfilment help connect suppliers with the places where materials are needed.',
-    icon: Truck,
-  },
+  { title: 'Sourcing', icon: ClipboardList, image: '/images/homepage/industrial.webp',
+    text: 'We buy direct from manufacturers and verified suppliers, so pricing and part authenticity are traceable.' },
+  { title: 'Import & clearance', icon: Box, image: '/images/site/containers.webp',
+    text: 'Freight booking, documentation, and customs are handled in-house. Clients do not chase brokers.' },
+  { title: 'Delivery', icon: Truck, image: '/images/site/forklift.webp',
+    text: 'Delivery and fulfilment connect suppliers with the places where materials are needed.' },
 ];
 
 const DIVISIONS = [
-  ['Automotive and heavy-equipment parts', '/shop'],
-  ['Industrial and workshop supplies', '/catalog'],
-  ['Mining inputs and support services', '/mining'],
+  { title: 'Automotive & heavy-equipment parts', href: '/shop',       image: '/images/homepage/detail.webp' },
+  { title: 'Stationery & office supplies',       href: '/stationery', image: '/homepage/office.webp' },
+  { title: 'Mining inputs & support services',   href: '/mining',     image: '/images/mining/hero.webp' },
+  { title: 'Solar energy systems',               href: '/solar',      image: '/images/site/solar-art.svg' },
 ];
 
 export default function DivisionsPage() {
-  const { navigate } = useApp();
+  const pageRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  useScrollFx(pageRef);
 
   return (
-    <div className="min-h-screen bg-white text-[#0d1f3c]">
+    <div ref={pageRef} className="overflow-x-clip bg-paper">
       <Head>
         <title>About MJ Logistics Enterprise</title>
-        <meta
-          name="description"
-          content="Learn what MJ Logistics Enterprise does and how we source, import, warehouse, and deliver for businesses."
-        />
+        <meta name="description" content="Learn what MJ Logistics Enterprise does and how we source, import, warehouse, and deliver for businesses." />
       </Head>
 
-      <main>
-        <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto max-w-[1200px] px-6 pb-14 pt-28 sm:px-10 lg:px-10 lg:pb-20 lg:pt-36">
-            <div className="max-w-2xl">
-              <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-[#1e4d8c]">
-                About MJ Logistics
-              </p>
-              <h1 className="text-4xl font-bold leading-tight sm:text-5xl">What we do</h1>
-              <p className="mt-6 text-base leading-8 text-slate-600 sm:text-lg">
-                MJ Logistics Enterprise helps businesses source, move, and
-                manage the parts, equipment, and materials they need. We bring
-                practical services together so clients have one clear place to
-                start.
-              </p>
-            </div>
-            <div className="mt-12 overflow-hidden rounded-xl">
-              <img
-                src="/images.jpg"
-                alt="Warehouse truck and forklift loading a delivery"
-                className="h-[240px] w-full object-cover sm:h-[390px]"
-              />
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <section data-hero="dark" className="grain relative overflow-hidden bg-ink pb-16 pt-40 text-paper sm:pb-24 sm:pt-48">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
+          <p data-reveal data-intro="0.05" className="eyebrow mb-8 flex items-center gap-3 text-mint">
+            <span className="h-px w-10 bg-signal" /> About MJ Logistics
+          </p>
+          <SplitText as="h1" intro={0.1} className="t-hero max-w-[16ch] font-extrabold" text={'One partner from\nsource to *site.*'} />
+          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <p data-reveal data-intro="0.5" className="max-w-xl text-[17px] leading-8 text-paper/75">
+              MJ Logistics Enterprise helps businesses source, move, and manage the parts, equipment, and
+              materials they need. We bring practical services together so clients have one clear place to start.
+            </p>
+            <div data-reveal data-intro="0.65">
+              <Magnetic>
+                <Link href="/contact" className="btn btn-signal">Talk to our team <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+              </Magnetic>
             </div>
           </div>
-        </section>
-
-        <section className="bg-white py-16 sm:py-20">
-          <div className="mx-auto max-w-[1200px] px-6 sm:px-10 lg:px-10">
-            <div className="max-w-xl">
-              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#1e4d8c]">
-                How we work
-              </p>
-              <h2 className="mt-3 text-3xl font-bold sm:text-4xl">One operation, three steps.</h2>
+        </div>
+        <div className="mx-auto mt-16 max-w-[1440px] px-5 sm:px-8">
+          <div data-clip data-intro="0.4" className="relative h-[52vh] min-h-[320px] overflow-hidden rounded-[28px]">
+            <div className="absolute -inset-y-[12%] inset-x-0" data-parallax="0.08">
+              <img src="/images/site/warehouse-racks.webp" alt="Warehouse racking stocked with palletised goods" className="h-full w-full object-cover" />
             </div>
-            <div className="mt-10 grid gap-10 border-t border-slate-200 pt-8 md:grid-cols-3 md:gap-8">
-              {HOW_WE_WORK.map(({ title, text, icon: Icon }, index) => (
-                <div key={title} className="relative">
-                  <div className="flex items-center gap-3">
-                    <Icon className="h-5 w-5 text-[#1e4d8c]" strokeWidth={1.8} />
-                    <span className="text-xs font-bold text-slate-400">0{index + 1}</span>
-                  </div>
-                  <h3 className="mt-5 text-xl font-bold">{title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{text}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── STATEMENT ────────────────────────────────────────────────────── */}
+      <section className="bg-paper py-24 sm:py-36">
+        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[220px_1fr]">
+          <p className="eyebrow text-sage">What we do</p>
+          <ScrubText
+            className="t-lead max-w-[30ch] font-display font-semibold"
+            text="We support everyday operating needs and specialist requirements — so the right part, supply or material arrives *where* *it’s* *needed,* without the run-around."
+          />
+        </div>
+      </section>
+
+      {/* ── HOW WE WORK ──────────────────────────────────────────────────── */}
+      <section className="bg-paper pb-24 sm:pb-32">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
+          <div className="mb-14">
+            <p className="eyebrow mb-5 text-sage">How we work</p>
+            <SplitText className="t-xl font-extrabold" text={'One operation,\n*three steps.*'} />
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {HOW_WE_WORK.map(({ title, text, icon: Icon, image }, i) => (
+              <article key={title} data-reveal data-delay={String(i * 0.1)} className="group overflow-hidden rounded-[28px] bg-white">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-110" />
+                  <span className="absolute left-5 top-5 rounded-full bg-paper px-3 py-1 font-display text-xs font-semibold text-ink">0{i + 1}</span>
                 </div>
-              ))}
-            </div>
+                <div className="p-7">
+                  <Icon className="h-6 w-6 text-signal" strokeWidth={1.8} />
+                  <h3 className="mt-5 text-2xl">{title}</h3>
+                  <p className="mt-3 text-[15px] leading-7 text-ink/65">{text}</p>
+                </div>
+              </article>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="border-y border-slate-200 bg-[#f0f4f8] py-16 sm:py-20">
-          <div className="mx-auto grid max-w-[1200px] gap-10 px-6 sm:px-10 lg:grid-cols-[.75fr_1.25fr] lg:px-10">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#1e4d8c]">
-                What we handle
-              </p>
-              <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Supply that keeps business moving.</h2>
-            </div>
-            <div>
-              <div className="divide-y divide-slate-300 border-y border-slate-300">
-                {DIVISIONS.map(([title, href]) => (
-                  <button
-                    key={title}
-                    type="button"
-                    onClick={() => navigate(href)}
-                    className="group flex w-full items-center justify-between gap-5 py-5 text-left"
+      {/* ── WHAT WE HANDLE ───────────────────────────────────────────────── */}
+      <section data-theme="dark" className="grain relative bg-forest py-24 text-paper sm:py-32">
+        <div className="mx-auto grid max-w-[1440px] gap-14 px-5 sm:px-8 lg:grid-cols-[1fr_.8fr] lg:items-center">
+          <div>
+            <p className="eyebrow mb-5 text-mint/70">What we handle</p>
+            <SplitText className="t-xl font-extrabold" text={'Supply that keeps\nbusiness *moving.*'} />
+            <ul className="mt-12 border-t border-paper/15">
+              {DIVISIONS.map((d, i) => (
+                <li key={d.href} data-reveal data-delay={String(i * 0.06)}>
+                  <Link
+                    href={d.href}
+                    onMouseEnter={() => setActive(i)}
+                    onFocus={() => setActive(i)}
+                    className="group flex items-center justify-between gap-5 border-b border-paper/15 py-6"
                   >
-                    <span className="text-lg font-bold">{title}</span>
-                    <ArrowRight className="h-5 w-5 shrink-0 text-[#1e4d8c] transition-transform group-hover:translate-x-1" />
-                  </button>
-                ))}
-              </div>
-              <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">
-              We support everyday operating needs and specialist requirements
-              across the divisions shown above.
-              </p>
-            </div>
+                    <span className={`font-display text-[clamp(1.2rem,2vw,1.8rem)] font-semibold leading-tight transition-all duration-500 group-hover:translate-x-2 ${active === i ? 'text-signal' : ''}`}>
+                      {d.title}
+                    </span>
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-paper/25 transition-all duration-500 group-hover:rotate-45 group-hover:border-signal group-hover:bg-signal">
+                      <ArrowUpRight className="h-4 w-4" />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-        </section>
-
-      </main>
+          <div data-reveal="scale" className="relative hidden aspect-[4/5] overflow-hidden rounded-[28px] lg:block">
+            {DIVISIONS.map((d, i) => (
+              <img
+                key={d.href}
+                src={d.image}
+                alt=""
+                loading="lazy"
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-[cubic-bezier(.16,1,.3,1)] ${active === i ? 'scale-100 opacity-100' : 'scale-110 opacity-0'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

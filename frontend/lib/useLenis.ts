@@ -1,97 +1,74 @@
 /**
  * lib/useLenis.ts
  * ─────────────────────────────────────────────────────────────────────────
- * Smooth-scroll hook using GSAP's built-in momentum scrolling via
- * normalizeScroll + ScrollSmoother (or a lightweight RAF-based approach
- * that integrates with ScrollTrigger).
+ * Site-wide smooth scrolling with Lenis, driven by GSAP's ticker so Lenis
+ * and ScrollTrigger always agree on the scroll position. Touch devices keep
+ * native scrolling (Lenis' default), and reduced-motion visitors skip it.
  *
- * Since Lenis is not installed, we use a proven GSAP-only smooth scroll
- * technique: intercepting the wheel event, animating the window scroll
- * position with gsap.to(), and syncing ScrollTrigger on every frame.
- *
- * Result: buttery smooth 60fps scroll that eliminates the laggy feel
- * from raw scroll events.
+ * `getLenis()` exposes the instance so the menu overlay can stop/start
+ * scrolling and anchor links can glide to their targets.
  */
 
 import { useEffect } from 'react';
+import Lenis from 'lenis';
 import { gsap, ScrollTrigger } from './gsap';
 
-let currentY = 0;
-let targetY  = 0;
-let rafId    = 0;
-let active   = false;
+let lenis: Lenis | null = null;
 
-function clamp(v: number, lo: number, hi: number) {
-  return Math.max(lo, Math.min(hi, v));
+export function getLenis() {
+  return lenis;
 }
 
-function smoothScrollTick() {
-  const maxScroll = document.body.scrollHeight - window.innerHeight;
-  targetY = clamp(targetY, 0, maxScroll);
-
-  // Ease toward target — 0.1 = smooth, higher = snappier
-  currentY += (targetY - currentY) * 0.1;
-
-  // Stop the loop when close enough
-  if (Math.abs(targetY - currentY) < 0.5) {
-    currentY = targetY;
-    active = false;
-    window.scrollTo(0, currentY);
-    ScrollTrigger.update();
+/** Smoothly scroll to an element/selector/offset, falling back to native. */
+export function scrollToTarget(target: string | HTMLElement | number, offset = 0) {
+  if (lenis) {
+    lenis.scrollTo(target, { offset, duration: 1.4 });
     return;
   }
-
-  window.scrollTo(0, currentY);
-  ScrollTrigger.update();
-  rafId = requestAnimationFrame(smoothScrollTick);
-}
-
-function onWheel(e: WheelEvent) {
-  // Skip if user is inside a scrollable sub-element
-  const target = e.target as HTMLElement | null;
-  if (target) {
-    let el: HTMLElement | null = target;
-    while (el && el !== document.body) {
-      const style = window.getComputedStyle(el);
-      const overflow = style.overflow + style.overflowY;
-      if (/auto|scroll/.test(overflow) && el.scrollHeight > el.clientHeight) {
-        return; // let the inner scroller handle it
-      }
-      el = el.parentElement;
-    }
-  }
-
-  e.preventDefault();
-
-  // Accumulate delta
-  targetY += e.deltaY * 1.2;
-
-  if (!active) {
-    currentY = window.scrollY;
-    active = true;
-    cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(smoothScrollTick);
+  if (typeof target === 'number') window.scrollTo({ top: target, behavior: 'smooth' });
+  else {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    el?.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
 export function useSmoothScroll() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // Sync internal state with current scroll on mount
-    currentY = window.scrollY;
-    targetY  = window.scrollY;
+    // Re-measure trigger positions whenever the page height changes
+    // (images loading, accordions, route changes) — debounced.
+    let refreshTimer = 0;
+    let lastHeight = document.body.scrollHeight;
+    const ro = new ResizeObserver(() => {
+      const h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) < 2) return;
+      lastHeight = h;
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+    });
+    ro.observe(document.body);
 
-    window.addEventListener('wheel', onWheel, { passive: false });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return () => { ro.disconnect(); window.clearTimeout(refreshTimer); };
+    }
 
-    // Tell ScrollTrigger we're managing scroll position
-    ScrollTrigger.normalizeScroll(false);
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 1,
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    const tick = (time: number) => lenis?.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      window.removeEventListener('wheel', onWheel);
-      cancelAnimationFrame(rafId);
-      active = false;
+      ro.disconnect();
+      window.clearTimeout(refreshTimer);
+      gsap.ticker.remove(tick);
+      lenis?.destroy();
+      lenis = null;
     };
   }, []);
 }

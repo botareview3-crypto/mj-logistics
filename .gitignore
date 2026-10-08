@@ -17,7 +17,7 @@ build/
 *.webm
 
 # Root-level images folder
-images/
+/images/
 
 # Generated files
 frontend/tsconfig.tsbuildinfo

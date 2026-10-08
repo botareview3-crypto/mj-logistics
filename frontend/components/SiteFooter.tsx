@@ -1,30 +1,58 @@
-import React, { useState } from 'react';
-import { Mail, MapPin, ArrowRight, CheckCircle2 } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import Link from 'next/link';
+import { ArrowRight, ArrowUpRight, CheckCircle2, Mail, MapPin } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
+import { gsap } from '../lib/gsap';
+import { useIsoLayoutEffect, prefersReducedMotion } from '../lib/fx';
+import { scrollToTarget } from '../lib/useLenis';
+import { LogoMark } from './fx/Logo';
+import { Magnetic } from './fx/Magnetic';
 
-const FOOTER_LINKS = {
-  'Auto Parts': [
-    { label: 'Shop the Marketplace', href: '/shop' },
-    { label: 'Browse Catalog',       href: '/catalog' },
-    { label: 'Braking System',       href: '/catalog/braking-system' },
-    { label: 'Engine & Transmission',href: '/catalog/engine-transmission' },
-    { label: 'Tires & Wheels',       href: '/catalog/tires-wheels' },
-    { label: 'My Garage',            href: '/garage' },
+const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
+  Divisions: [
+    { label: 'Auto Parts',          href: '/shop' },
+    { label: 'Stationery & Office', href: '/stationery' },
+    { label: 'MJ Mining',           href: '/mining' },
+    { label: 'MJ Solar',            href: '/solar' },
   ],
-  'Company': [
-    { label: 'About Us',      href: '/divisions' },
-    { label: 'Contact',       href: '/contact' },
-    { label: 'MJ Mining',     href: '/mining' },
-    { label: 'Advantages',    href: '/advantages' },
-    { label: 'Privacy Policy',href: '/privacy' },
-    { label: 'Terms of Sale', href: '/terms' },
+  Shop: [
+    { label: 'Browse catalogue',      href: '/catalog' },
+    { label: 'Braking system',        href: '/catalog/braking-system' },
+    { label: 'Engine & transmission', href: '/catalog/engine-transmission' },
+    { label: 'Tyres & wheels',        href: '/catalog/tires-wheels' },
+    { label: 'My garage',             href: '/garage' },
+  ],
+  Company: [
+    { label: 'About us',       href: '/divisions' },
+    { label: 'Why MJ',         href: '/advantages' },
+    { label: 'Contact',        href: '/contact' },
+    { label: 'Privacy policy', href: '/privacy' },
+    { label: 'Terms of sale',  href: '/terms' },
   ],
 };
 
 export const SiteFooter: React.FC = () => {
-  const { navigate, showToast } = useApp();
-  const [email, setEmail]           = useState('');
+  const { showToast } = useApp();
+  const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+
+  // Giant wordmark rises letter by letter as the footer scrolls in.
+  useIsoLayoutEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo('[data-foot-letter]', { yPercent: 100 }, {
+        yPercent: 0, ease: 'expo.out', duration: 1.4, stagger: 0.04,
+        scrollTrigger: { trigger: '[data-foot-word]', start: 'top 98%' },
+      });
+      gsap.fromTo('[data-foot-mark]', { rotate: -120, scale: 0.4, opacity: 0 }, {
+        rotate: 0, scale: 1, opacity: 1, ease: 'expo.out', duration: 1.6,
+        scrollTrigger: { trigger: '[data-foot-cta]', start: 'top 80%' },
+      });
+    }, el);
+    return () => ctx.revert();
+  }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,138 +62,101 @@ export const SiteFooter: React.FC = () => {
   };
 
   return (
-    <footer
-      className="bg-[#0d1f3c] text-white"
-      style={{ fontFamily: "'Chopin Trial', Georgia, serif" }}
-    >
-      {/* ── Main footer grid ──────────────────────────────────────────── */}
-      <div className="max-w-[1200px] mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-
-        {/* Brand column */}
-        <div className="lg:col-span-2 space-y-5">
-          <div>
-            <p
-              className="text-[9px] font-bold uppercase text-white/40 mb-1"
-              style={{ letterSpacing: '0.35em', fontFamily: "'Chopin Trial', serif" }}
-            >
-              Enterprise
+    <footer ref={ref} className="grain relative overflow-hidden bg-ink text-paper" data-theme="dark">
+      {/* ── Closing CTA ─────────────────────────────────────────────────── */}
+      <div data-foot-cta className="mx-auto max-w-[1440px] px-5 pt-24 sm:px-8 lg:pt-32">
+        <div className="flex flex-col gap-10 border-b border-paper/10 pb-16 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="eyebrow mb-6 flex items-center gap-3 text-mint/70">
+              <span data-foot-mark className="inline-block"><LogoMark tone="light" className="h-6 w-6" /></span>
+              Have something to move?
             </p>
-            <h2
-              className="font-bold text-white leading-none"
-              style={{
-                fontFamily: "'Chopin Trial', serif",
-                fontSize: '1.75rem',
-                letterSpacing: '0.04em',
-              }}
-            >
-              MJ Logistics
+            <h2 className="t-xl font-extrabold">
+              Tell us what you need.<br />
+              <span className="text-signal">We&apos;ll handle the rest.</span>
             </h2>
           </div>
-          <p className="text-white/60 text-[13px] leading-relaxed max-w-xs">
-            Your trusted partner for genuine auto parts, workshop support, and natural resource solutions.
-          </p>
-
-          {/* Contact info */}
-          <ul className="space-y-2.5 text-[12px] text-white/60">
-            <li className="flex items-center gap-2.5">
-              <MapPin className="w-4 h-4 text-white/30 shrink-0" />
-              Monrovia, Liberia
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-white/30 shrink-0" />
-              info@mjlogisticsenterprise.com
-            </li>
-          </ul>
-
-          {/* Newsletter */}
-          <div className="pt-2">
-            <p
-              className="text-[10px] font-bold uppercase text-white/50 mb-3"
-              style={{ letterSpacing: '0.2em' }}
-            >
-              Stay Updated
-            </p>
-            {subscribed ? (
-              <div className="flex items-center gap-2 text-[12px] text-emerald-400">
-                <CheckCircle2 className="w-4 h-4" /> Subscribed! Thank you.
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className="flex-1 px-3 py-2 text-[12px] bg-white/10 border border-white/15 rounded-lg text-white placeholder-white/35 focus:outline-none focus:ring-2 focus:ring-white/25 focus:bg-white/15 transition-all"
-                  style={{ fontFamily: "'Chopin Trial', serif" }}
-                />
-                <button
-                  type="submit"
-                  className="p-2.5 bg-white text-[#0d1f3c] rounded-lg hover:bg-white/90 transition-colors cursor-pointer"
-                  aria-label="Subscribe"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
-            )}
+          <div className="flex flex-wrap gap-3">
+            <Magnetic>
+              <Link href="/contact" className="btn btn-signal">
+                Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
+              </Link>
+            </Magnetic>
+            <Link href="/shop" className="btn btn-ghost">Shop auto parts</Link>
           </div>
         </div>
 
-        {/* Link columns */}
-        {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
-          <div key={heading} className="space-y-4">
-            <h3
-              className="text-[11px] font-bold uppercase text-white/50"
-              style={{
-                fontFamily: "'Chopin Trial', serif",
-                letterSpacing: '0.2em',
-              }}
-            >
-              {heading}
-            </h3>
-            <ul className="space-y-2.5">
-              {links.map(link => (
-                <li key={link.label}>
-                  <button
-                    type="button"
-                    onClick={() => navigate(link.href)}
-                    className="text-[12px] text-white/60 hover:text-white transition-colors cursor-pointer text-left"
-                    style={{ fontFamily: "'Chopin Trial', serif" }}
-                  >
-                    {link.label}
-                  </button>
-                </li>
-              ))}
+        {/* ── Links grid ────────────────────────────────────────────────── */}
+        <div className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="max-w-sm space-y-6">
+            <p className="text-[15px] leading-7 text-paper/65">
+              One partner for genuine auto parts, workplace supplies, mining and solar energy —
+              sourced, cleared and delivered by MJ Logistics Enterprise.
+            </p>
+            <ul className="space-y-2.5 text-sm text-paper/65">
+              <li className="flex items-center gap-2.5"><MapPin className="h-4 w-4 text-signal" /> Monrovia, Liberia</li>
+              <li className="flex items-center gap-2.5">
+                <Mail className="h-4 w-4 text-signal" />
+                <a href="mailto:info@mjlogisticsenterprise.com" className="link-draw">info@mjlogisticsenterprise.com</a>
+              </li>
             </ul>
+            <div>
+              <p className="eyebrow mb-3 text-mint/60">Stay updated</p>
+              {subscribed ? (
+                <p className="flex items-center gap-2 text-sm text-mint"><CheckCircle2 className="h-4 w-4" /> Subscribed! Thank you.</p>
+              ) : (
+                <form onSubmit={handleSubscribe} className="relative">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    required
+                    aria-label="Email address"
+                    className="h-12 w-full rounded-full border border-paper/15 bg-white/5 pl-5 pr-14 text-sm text-paper placeholder:text-paper/35 outline-none transition focus:border-signal"
+                  />
+                  <button type="submit" aria-label="Subscribe" className="absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-full bg-paper text-ink transition hover:bg-signal hover:text-white">
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
-        ))}
+
+          {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
+            <div key={heading}>
+              <h3 className="eyebrow mb-5 font-sans text-mint/60" style={{ fontStretch: '100%' }}>{heading}</h3>
+              <ul className="space-y-3">
+                {links.map(link => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="group inline-flex items-center gap-2 text-[15px] text-paper/75 transition-colors hover:text-paper">
+                      <span className="h-px w-0 bg-signal transition-all duration-500 group-hover:w-4" />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ── Bottom bar ────────────────────────────────────────────────── */}
-      <div className="border-t border-white/10">
-        <div className="max-w-[1200px] mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/35">
-          <span style={{ fontFamily: "'Chopin Trial', serif" }}>
-            © {new Date().getFullYear()} MJ Logistics Enterprise. All rights reserved.
-          </span>
-          <div className="flex items-center gap-5">
-            <button
-              type="button"
-              onClick={() => navigate('/privacy')}
-              className="hover:text-white transition-colors cursor-pointer"
-              style={{ fontFamily: "'Chopin Trial', serif" }}
-            >
-              Privacy Policy
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/terms')}
-              className="hover:text-white transition-colors cursor-pointer"
-              style={{ fontFamily: "'Chopin Trial', serif" }}
-            >
-              Terms of Sale
-            </button>
-          </div>
+      {/* ── Giant wordmark ─────────────────────────────────────────────── */}
+      <div data-foot-word className="relative select-none px-3 sm:px-6" aria-hidden="true">
+        <p className="font-display flex justify-between overflow-hidden text-[10.6vw] font-extrabold leading-[.82] tracking-[-.05em] text-paper/[.07]">
+          {'MJLOGISTICS'.split('').map((ch, i) => (
+            <span key={i} data-foot-letter className={`inline-block ${i < 2 ? 'text-signal/80' : ''}`}>{ch}</span>
+          ))}
+        </p>
+      </div>
+
+      {/* ── Bottom bar ─────────────────────────────────────────────────── */}
+      <div className="relative border-t border-paper/10">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-3 px-5 py-6 text-xs text-paper/45 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <span>© {new Date().getFullYear()} MJ Logistics Enterprise. All rights reserved.</span>
+          <button type="button" onClick={() => scrollToTarget(0)} className="inline-flex items-center gap-2 self-start hover:text-paper sm:self-auto">
+            Back to top <ArrowUpRight className="h-3.5 w-3.5 -rotate-45" />
+          </button>
         </div>
       </div>
     </footer>

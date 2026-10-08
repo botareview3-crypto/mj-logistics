@@ -91,7 +91,7 @@ export default function SearchResultsPage() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f3c]/95 via-[#0d1f3c]/80 to-[#0d1f3c]/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#04261D]/95 via-[#04261D]/80 to-[#04261D]/50" />
 
         <div className="relative px-7 py-10 sm:px-10 sm:py-12">
           {/* Result count pill */}
@@ -122,13 +122,13 @@ export default function SearchResultsPage() {
                 value={refineQuery}
                 onChange={e => setRefineQuery(e.target.value)}
                 placeholder={query ? `Refine "${query}"…` : 'Search parts, brands, OEM numbers…'}
-                className="flex-1 pl-5 pr-3 py-3 text-sm text-[#0d1f3c] bg-transparent outline-none border-none ring-0 placeholder-slate-400 focus:outline-none"
+                className="flex-1 pl-5 pr-3 py-3 text-sm text-[#04261D] bg-transparent outline-none border-none ring-0 placeholder-slate-400 focus:outline-none"
                 style={{ boxShadow: 'none' }}
               />
               <motion.button
                 type="submit"
                 aria-label="Search"
-                className="w-9 h-9 mr-2 rounded-full bg-[#0d1f3c] hover:bg-[#1a3560] text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
+                className="w-9 h-9 mr-2 rounded-full bg-[#04261D] hover:bg-[#0A4A3A] text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
                 whileTap={{ scale: 0.88 }}
                 transition={SPRINGS.micro}
               >
@@ -172,7 +172,7 @@ export default function SearchResultsPage() {
               <motion.button
                 type="button"
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#0d1f3c] font-semibold text-xs rounded-xl border border-slate-200 cursor-pointer transition-colors"
+                className="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-[#04261D] font-semibold text-xs rounded-xl border border-slate-200 cursor-pointer transition-colors"
                 whileTap={{ scale: 0.97 }}
                 transition={SPRINGS.micro}
               >
@@ -187,7 +187,7 @@ export default function SearchResultsPage() {
                 <select
                   value={filters.sortBy}
                   onChange={e => setFilters({ ...filters, sortBy: e.target.value as FilterState['sortBy'] })}
-                  className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-[#0d1f3c] focus:outline-none focus:ring-2 focus:ring-[#1e4d8c] cursor-pointer"
+                  className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-[#04261D] focus:outline-none focus:ring-2 focus:ring-[#0A4A3A] cursor-pointer"
                 >
                   <option value="popularity">Most Popular</option>
                   <option value="price-asc">Price: Low → High</option>
@@ -201,7 +201,7 @@ export default function SearchResultsPage() {
                 <motion.button
                   type="button"
                   onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-white text-[#1e4d8c] shadow-sm' : 'text-slate-400'}`}
+                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-white text-[#0A4A3A] shadow-sm' : 'text-slate-400'}`}
                   aria-label="Grid view"
                   whileTap={{ scale: 0.88 }}
                   transition={SPRINGS.micro}
@@ -211,7 +211,7 @@ export default function SearchResultsPage() {
                 <motion.button
                   type="button"
                   onClick={() => setViewMode('list')}
-                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#1e4d8c] shadow-sm' : 'text-slate-400'}`}
+                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-white text-[#0A4A3A] shadow-sm' : 'text-slate-400'}`}
                   aria-label="List view"
                   whileTap={{ scale: 0.88 }}
                   transition={SPRINGS.micro}
@@ -239,7 +239,7 @@ export default function SearchResultsPage() {
                 <Package className="w-7 h-7" />
               </div>
               <div>
-                <h3 className="font-display text-xl font-bold text-[#0d1f3c]">No parts found</h3>
+                <h3 className="font-display text-xl font-bold text-[#04261D]">No parts found</h3>
                 <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                   Try a different search term, remove filters, or browse by category.
                 </p>
@@ -247,7 +247,7 @@ export default function SearchResultsPage() {
               <motion.button
                 type="button"
                 onClick={resetFilters}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#0d1f3c] hover:bg-[#1a3560] text-white font-semibold text-sm rounded-xl transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-semibold text-sm rounded-xl transition-colors cursor-pointer"
                 whileTap={{ scale: 0.97 }}
                 transition={SPRINGS.micro}
               >
