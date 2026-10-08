@@ -2,6 +2,90 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-08** `473eec5` Merge services and solar additions into the redesign
+- **2026-10-08** `af94b48` Redesign site with new MJ brand, scroll animations and MJ Solar page
+- **2026-09-29** `2ee7827` Add services page, solar energy supply division, lab equipment and consultancy
+- **2026-09-29** `62b2a32` Add space logistics/lab equipment, solar, and consultancy services
+- **2026-09-19** `5066554` fix: mining page - stronger hero overlay, section z-index isolation
+- **2026-09-19** `5100f2d` bla bla
+- **2026-09-19** `69fb4b9` fix: mining story/focus sections - solid backgrounds, high contrast text, no image overlays
+- **2026-09-19** `208fa57` fix: mining hero - image no longer intercepts mouse, text always on top
+- **2026-09-19** `8ea28a9` fix: boost text contrast on mining page light sections
+- **2026-09-19** `5afe099` fix: category cards - remove box background, center with flex-wrap, grow on hover
+- **2026-09-19** `af83f08` vla vla vla
+- **2026-09-19** `81842c7` Force redeploy: stationery dropdown + tires image fixes
+- **2026-09-19** `02c47e3` bla bla bla
+- **2026-09-19** `c3fc109` bla bla bla
+- **2026-09-18** `8f0a47a` Remove stationery image prefetch hints from _document.tsx
+- **2026-09-18** `9085f0d` Remove stationery from catalog; add email sign-in option
+- **2026-09-18** `8e0dd24` bla bla bla
+- **2026-09-18** `e1a2d34` Add logistics image assets
+- **2026-09-18** `76789a3` Simplify About and Contact pages
+- **2026-09-18** `9a0cb56` bla bla bla
+- **2026-09-18** `bc5e27e` bla bla bla
+- **2026-09-18** `086db20` bla bla bla
+- **2026-09-18** `1a7e133` bla bla bla
+- **2026-09-18** `46684cb` bla bla bla
+- **2026-09-18** `f10c469` Add istock auto parts image
+- **2026-09-18** `b2b5f09` Redesign MJ Mining page - new editorial layout
+- **2026-09-18** `23e20d8` Dropdown section labels navigate to their pages; remove rounded corners from mining hero
+- **2026-09-16** `f5eaaa8` Polish all pages: hero banners on cart/account, fix divisions images/labels, clean mining copy, fix product detail colors
+- **2026-09-16** `c82967c` Garage: replace plain header with dark hero banner, consistent with shop/search
+- **2026-09-16** `3fd3f82` Search page: hero banner with refine search bar + vehicle selector
+- **2026-09-16** `391dde3` Shop page: search button -> circle icon, remove Search text label
+- **2026-09-16** `f3cff6f` Fix mega dropdown: unique sub keys so all items render, MJ Mining shows only diamonds/gold/partnerships
+- **2026-09-16** `fe1cead` Redesign video text panel: bold split layout, ghost word, 2x2 stats, underline CTA
+- **2026-09-16** `82ff8d9` Remove scroll cue from video section
+- **2026-09-16** `581b7ff` Redesign video text panel: remove box, open typographic layout with stats
+- **2026-09-16** `9533196` Fix mega dropdown: MJ Mining shows correct subs, sections don't bunch up
+- **2026-09-16** `85cf84b` Remove mute/unmute icon from video - always muted, no sound
+- **2026-09-16** `62660a7` Fix video always playing: preload=auto, canplay listener, remove race conditions
+- **2026-09-16** `e3c8c09` Search button: circle icon style
+- **2026-09-16** `f0fd08b` Remove trust strip from all pages; fix header search button
+- **2026-09-16** `a78787c` fix(shop): new header without top bar, Catalog dropdown, istock hero bg, no focus ring, trust strip removed
+- **2026-09-16** `d98e995` docs: add AI handoff notes with page progress and key file reference
+- **2026-09-16** `f1f026a` fix: use 2MB 720p mobile video, autoPlay for immediate playback
+- **2026-09-16** `05bacbd` fix: use compressed 1080p web-optimized logistics video for mobile and desktop
+- **2026-09-16** `6db1f35` fix: hero image fills full screen on mobile, switch to correct logistics video
+- **2026-09-16** `ca41a72` fix: video section on mobile/desktop, hero image fills screen on mobile
+- **2026-09-16** `5245aed` fix(homepage): dropdown MJ Mining, accordion bug, hero image, video tablet, divisions icon/image, footer links
+- **2026-09-15** `e7362b6` perf: faster image and page loading
+- **2026-09-15** `fcf7cd3` chore: remove large media/build files from git tracking
+- **2026-09-15** `349965d` Remove unused markdown files
+- **2026-09-15** `d6aacd9` everything bla bla bla
+- **2026-09-12** `187e2e6` fixing bla bla bla
+- **2026-09-12** `9285028` another fix bla bla bla
+- **2026-09-12** `38cdbbb` the landing page fixed
+- **2026-09-12** `072f67e` Redesign website with professional layout and unified color scheme
+- **2026-09-11** `f8699f2` Add standalone /signin page, refactor account page to dashboard-only, wire all Sign In links
+- **2026-09-10** `c1dc708` Add dedicated /login page, wire Sign In button from landing page
+- **2026-09-10** `14bc10f` Add MJ Logistics Enterprise landing page, move shop home to /shop, gate checkout on sign-in, fix AutoParts branding
+- **2026-09-09** `1c1a502` Verify and replace MJ Mining page photos with confirmed-license images
+- **2026-09-09** `02ac874` Add stats strip and process section to MJ Mining page
+- **2026-09-09** `1ee88cc` Add real products to Stationery and Equipment shop
+- **2026-09-09** `64a0b8d` Add real products to Exhaust System and Cooling & Heating categories
+- **2026-09-09** `b7bc2a0` Add Kia, Mitsubishi, Honda to vehicle picker
+- **2026-09-09** `d85d9a6` Add MJ Mining corporate info page
+- **2026-09-08** `7a6f4af` Use real product photos for Michelin Primacy 4 and Continental AllSeasonContact tires
+- **2026-09-08** `3d24be5` Fix tire fitment filter: relabel universal Primacy 4 and Continental tires as Passenger Car Tire
+- **2026-09-08** `ca161da` Fix mismatched product images: generate per-subsystem icons instead of reused stock photos
+- **2026-09-08** `27a238c` Fix duplicate part IDs and vehicle-filtered facet counts
+- **2026-09-08** `819a7d9` Expand vehicle and parts catalog: 6 new makes, more models, 45 new parts
+- **2026-09-08** `b96ec02` Fix missing Package import in homepage iconMap
+- **2026-09-08** `ea50c6a` Add Stationery and Equipment shop as a third catalog root
+- **2026-09-08** `6e0aa29` Add Hyundai, Nissan, Isuzu, Suzuki to vehicle picker
+- **2026-09-08** `4f48ab1` Add Tires and Wheels category with 4 demo products
+- **2026-09-07** `e61a4ba` Add live catalog export script for WordPress migration
+- **2026-09-06** `f82fa90` Add rating/discount/warranty/delivery/featured fields to parts
+- **2026-09-06** `971fb75` Hide storefront header/footer on admin page
+- **2026-09-04** `a10381e` Fix hero vehicle box not reflecting selected vehicle
+- **2026-09-04** `9f52907` Add expandable About Us section to maintenance screen
+- **2026-09-04** `5f37e36` Add hidden Ctrl+Shift+A shortcut to reach admin console
+- **2026-09-04** `316cb3f` Hide storefront header/footer on admin route
+- **2026-09-04** `bc46a24` Fill out admin Overview tab with quick actions, low stock, and site settings
+- **2026-09-04** `01f3263` Add edit-part modal to admin console
+- **2026-09-04** `78d9e23` Add photo upload UI to admin parts list
+- **2026-09-04** `ac08bc5` Update commit history
 - **2026-09-04** `c59c821` Include images field in part serialization
 - **2026-09-04** `40ed8b9` Update commit history
 - **2026-09-04** `014a430` Add Cloudinary image upload for parts
