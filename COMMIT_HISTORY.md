@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-15** `375788e` Add Oil & Gas division page and link it across the site
+- **2026-10-08** `84dcdab` Update commit history
 - **2026-10-08** `c7d672e` Simplify and lighten the site; fix pages stuck on the logo screen
 - **2026-10-08** `4f785d4` Update commit history
 - **2026-10-08** `473eec5` Merge services and solar additions into the redesign
