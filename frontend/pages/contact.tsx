@@ -12,6 +12,7 @@ const ENQUIRY_OPTIONS = [
   'Mining division',
   'Laboratory equipment or space logistics',
   'Solar energy systems',
+  'Oil & gas',
   'Consultancy',
   'Existing order',
   'Other',
@@ -28,6 +29,7 @@ const ROUTES = [
   { title: 'Auto parts', text: 'Prefer to browse? Every part lists its fitment and OEM references.', href: '/shop', cta: 'Shop parts' },
   { title: 'Mining', text: 'Partnership, supply or investment enquiries for MJ Mining.', href: '/mining', cta: 'MJ Mining' },
   { title: 'Solar', text: 'Solar energy systems and equipment, supplied to order.', href: '/solar', cta: 'Solar energy' },
+  { title: 'Oil & gas', text: 'Supply, equipment and logistics support for the oil and gas sector.', href: '/oil-gas', cta: 'Oil & gas' },
   { title: 'Services', text: 'Space logistics, laboratory equipment, and supply chain or project management consultancy.', href: '/services', cta: 'Our services' },
 ];
 
@@ -113,7 +115,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <p className="eyebrow mb-4 text-sage">Or go straight there</p>
           <SplitText className="t-xl mb-12" text={'Know what you *need already?*'} />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {ROUTES.map((r, i) => (
               <Link
                 key={r.href}

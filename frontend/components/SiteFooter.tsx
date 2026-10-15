@@ -11,6 +11,7 @@ const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
     { label: 'Stationery & Office', href: '/stationery' },
     { label: 'MJ Mining',           href: '/mining' },
     { label: 'Solar Energy',        href: '/solar' },
+    { label: 'Oil & Gas',           href: '/oil-gas' },
     { label: 'Services',            href: '/services' },
   ],
   Shop: [
@@ -65,7 +66,7 @@ export const SiteFooter: React.FC = () => {
           <div className="max-w-sm space-y-6">
             <LogoLockup variant="reversed" className="h-9 w-auto" />
             <p className="text-[15px] leading-7 text-paper/75">
-              One partner for genuine auto parts, workplace supplies, mining, solar energy and more —
+              One partner for genuine auto parts, workplace supplies, mining, solar energy, oil & gas and more —
               sourced, cleared and delivered by MJ Logistics Enterprise.
             </p>
             <ul className="space-y-2.5 text-sm text-paper/75">

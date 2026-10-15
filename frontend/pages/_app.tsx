@@ -13,7 +13,7 @@ import { useSmoothScroll } from '../lib/useLenis';
 
 /* Corporate pages: full-bleed, with SiteHeader/SiteFooter.
    Legal pages share the chrome but keep a readable contained column. */
-const MARKETING_PATHS = ['/', '/mining', '/solar', '/services', '/divisions', '/advantages', '/contact', '/stationery'];
+const MARKETING_PATHS = ['/', '/mining', '/solar', '/oil-gas', '/services', '/divisions', '/advantages', '/contact', '/stationery'];
 const LEGAL_PATHS = ['/privacy', '/terms'];
 
 /* ─── Toast overlay ────────────────────────────────────────────────────── */
@@ -164,7 +164,7 @@ export default function App(props: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="MJ Logistics Enterprise — genuine auto parts with verified fitment, workplace supplies, mining and solar energy, sourced and delivered by one partner."
+          content="MJ Logistics Enterprise — genuine auto parts with verified fitment, workplace supplies, mining, solar energy and oil & gas, sourced and delivered by one partner."
         />
       </Head>
       <AppProvider>

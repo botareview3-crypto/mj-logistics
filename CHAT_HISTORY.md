@@ -635,3 +635,19 @@ transcript, just the gist.
   consultancy). Kept and fixed the home hero scroll effect. Fixed a mobile
   bug where the menu button was pushed off-screen (`.btn` beat `hidden`).
   Verified with a headless navigation/scroll stress test: no hidden content.
+
+### 2026-10-15 (Oil & Gas division)
+- Boss feedback: the business is also entering oil and gas, so the site needs
+  it added. New `/oil-gas` page (`pages/oil-gas.tsx`) in the Solar-page layout
+  with neutral copy (no invented claims) - supply, equipment & spares, freight
+  & delivery, plus a quote CTA. Photos reuse existing site images until real
+  oil & gas photography is supplied.
+- Wired in: `/oil-gas` added to `MARKETING_PATHS` in `_app.tsx`; header nav and
+  full-screen menu; footer Divisions list; homepage now "Five divisions"
+  (fifth card spans full width); About "What we handle" list; contact enquiry
+  option and quick-link (grid now 5 columns). No dedicated Oil & Gas logo or
+  `oilgas@` mailbox exists yet - enquiries go to the main contact form.
+- Open: management to confirm exact scope of the oil & gas business so the
+  copy can be made specific.
+- Note: first delivery was built against a newer snapshot than the local repo
+  and had to be reset; re-delivered as small targeted edits.

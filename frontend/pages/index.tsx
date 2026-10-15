@@ -32,6 +32,11 @@ const DIVISIONS = [
     image: '/images/site/solar-panels.webp', alt: 'Solar panels under a blue sky',
     text: 'Solar energy systems and equipment, supplied to order through the same trusted network.',
   },
+  {
+    no: '05', name: 'Oil & Gas', href: '/oil-gas',
+    image: '/images/homepage/industrial.webp', alt: 'Industrial plant and storage tanks',
+    text: 'Supply, equipment and logistics support for the oil and gas sector, sourced and delivered by the same network.',
+  },
 ];
 
 const SYSTEM_ART: Record<string, string> = {
@@ -122,7 +127,7 @@ export default function HomePage() {
     <div ref={pageRef} className="overflow-x-clip bg-paper">
       <Head>
         <title>MJ Logistics Enterprise — Parts that fit. Delivered fast.</title>
-        <meta name="description" content="Genuine auto parts with verified fitment, workplace supplies, mining, solar energy and more — sourced, cleared and delivered by MJ Logistics Enterprise." />
+        <meta name="description" content="Genuine auto parts with verified fitment, workplace supplies, mining, solar energy, oil & gas and more — sourced, cleared and delivered by MJ Logistics Enterprise." />
       </Head>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
@@ -174,7 +179,7 @@ export default function HomePage() {
               </div>
               <div data-reveal data-delay="0.08" className="flex gap-4">
                 <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-white"><Check className="h-4 w-4" /></span>
-                <p className="text-[15px] leading-7 text-ink/70"><strong className="text-ink">One partner, many needs.</strong> Parts, office supplies, mining, solar and services — handled by the same accountable team.</p>
+                <p className="text-[15px] leading-7 text-ink/70"><strong className="text-ink">One partner, many needs.</strong> Parts, office supplies, mining, solar, oil &amp; gas and services — handled by the same accountable team.</p>
               </div>
             </div>
           </div>
@@ -187,7 +192,7 @@ export default function HomePage() {
           <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="eyebrow mb-4 text-sage">Our divisions</p>
-              <SplitText className="t-xl" text={'Four divisions. *One partner.*'} />
+              <SplitText className="t-xl" text={'Five divisions. *One partner.*'} />
             </div>
             <Link href="/divisions" className="btn btn-ghost-dark self-start lg:self-auto">About MJ <ArrowRight className="btn-arrow h-4 w-4" /></Link>
           </div>
@@ -198,7 +203,7 @@ export default function HomePage() {
                 href={d.href}
                 data-reveal
                 data-delay={String((i % 2) * 0.08)}
-                className="group overflow-hidden rounded-3xl border border-ink/10 bg-paper transition-shadow duration-500 hover:shadow-[0_24px_60px_-30px_rgba(4,38,29,.35)]"
+                className="group overflow-hidden rounded-3xl border border-ink/10 bg-paper transition-shadow md:[&:last-child:nth-child(odd)]:col-span-2 duration-500 hover:shadow-[0_24px_60px_-30px_rgba(4,38,29,.35)]"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img src={d.image} alt={d.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
