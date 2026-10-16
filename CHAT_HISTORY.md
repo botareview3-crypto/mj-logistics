@@ -662,3 +662,14 @@ transcript, just the gist.
 - Limits: it cannot wake a service that is already asleep, and one always-on
   free service uses ~744 of Render's 750 free hours/month. An external monitor
   (e.g. UptimeRobot on /api/health) is the optional backup.
+
+### 2026-10-16 (Neon database)
+- Render's free Postgres (mj-logistics-db-7crs) expired, which crashed the
+  backend on boot ("could not translate host name") and blocked sign-in.
+  Moved accounts to an external free Neon Postgres: removed the `databases:`
+  block from render.yaml and made `DATABASE_URL` a manual env var
+  (`sync: false`); `app/db.py` now uses `pool_pre_ping`/`pool_recycle` (Neon
+  drops idle connections) and accepts `postgres://` URLs; AUTH-SETUP.md updated.
+- Old accounts were lost with the expired database; users re-sign-in.
+- Render had two Blueprints on this repo (mj-rfq-backend owns the real
+  services; mj-logistics created -7crs-7crs duplicates). Keep mj-rfq-backend.

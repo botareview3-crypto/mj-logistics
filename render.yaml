@@ -1,14 +1,6 @@
-databases:
-  # Free Render Postgres — this is what makes user accounts survive a
-  # redeploy. Free-tier Postgres on Render expires after 90 days and needs
-  # to be recreated (and DATABASE_URL below reconnected); fine for now,
-  # upgrade to a paid plan before this matters in production.
-  - name: mj-logistics-db-7crs
-    plan: free
-
 services:
   # FastAPI backend — powers /admin AND now sign-in (email/session storage
-  # for Google + Apple accounts lives in mj-logistics-db-7crs, see app/db.py).
+  # for Google + Apple accounts lives in Neon Postgres via DATABASE_URL, see app/db.py).
   # Free tier: sleeps after 15 min idle (cold start ~30-60s). app/keepalive.py
   # pings /api/health every 10 min to stop that; set KEEP_ALIVE=false to disable.
   - type: web
@@ -28,10 +20,11 @@ services:
           name: mj-logistics-frontend
           type: web
           envVarKey: RENDER_EXTERNAL_URL
+      # Neon Postgres (free, doesn't expire). Set manually in the Render
+      # dashboard (Environment tab) to the Neon connection string - see
+      # AUTH-SETUP.md. Render's own free Postgres expires after 90 days.
       - key: DATABASE_URL
-        fromDatabase:
-          name: mj-logistics-db-7crs
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: SESSION_SECRET
