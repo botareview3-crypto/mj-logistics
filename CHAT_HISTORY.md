@@ -651,3 +651,14 @@ transcript, just the gist.
   copy can be made specific.
 - Note: first delivery was built against a newer snapshot than the local repo
   and had to be reset; re-delivered as small targeted edits.
+
+### 2026-10-16 (Render keep-alive)
+- Signing in showed Render's "service waking up" screen because the free backend
+  sleeps after 15 min idle. Added a self-ping (`backend/app/keepalive.py`, wired
+  through `lifespan` in `app/main.py`) that hits the backend's own public
+  `/api/health` every 10 min while it is awake. Uses `BACKEND_URL` /
+  `RENDER_EXTERNAL_URL` (already set by render.yaml); `KEEP_ALIVE=false`
+  disables it, `KEEP_ALIVE_SECONDS` changes the gap.
+- Limits: it cannot wake a service that is already asleep, and one always-on
+  free service uses ~744 of Render's 750 free hours/month. An external monitor
+  (e.g. UptimeRobot on /api/health) is the optional backup.

@@ -9,7 +9,8 @@ databases:
 services:
   # FastAPI backend — powers /admin AND now sign-in (email/session storage
   # for Google + Apple accounts lives in mj-logistics-db-7crs, see app/db.py).
-  # Free tier: sleeps after 15 min idle (cold start ~30-60s).
+  # Free tier: sleeps after 15 min idle (cold start ~30-60s). app/keepalive.py
+  # pings /api/health every 10 min to stop that; set KEEP_ALIVE=false to disable.
   - type: web
     name: mj-logistics-backend-7crs
     runtime: python
