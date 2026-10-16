@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-16** `2c2fd38` Add How it works and enquiry checklist sections to Oil & Gas page
+- **2026-10-16** `36d3764` Update commit history
 - **2026-10-16** `0f5b179` Update commit history
 - **2026-10-16** `e13ba9e` Add order system, saved addresses, stock alerts and cart/garage account sync
 - **2026-10-16** `1970194` Update commit history
