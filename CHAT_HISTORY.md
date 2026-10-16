@@ -705,3 +705,14 @@ transcript, just the gist.
 - Not verified here: no network in the sandbox, so `next build` and the
   backend were not run — only syntax-checked. Run both before relying on it.
 
+### 2026-10-16 (Oil & Gas page content)
+- Client said the Oil & Gas page needed more content. Added two sections to
+  `pages/oil-gas.tsx`: "How it works" (four steps, enquiry to delivery) and
+  "What to include" in an enquiry (what, how much, where, when), each with a
+  Request a quote button. Copy only describes how to work with us - still no
+  invented stats, locations, licences or claims.
+- Open: still waiting on management to confirm the real scope of the oil & gas
+  business (products, regions, any certifications) and to supply photos. Once
+  confirmed, the offer cards, a "who we serve" section and an FAQ can be made
+  specific.
+

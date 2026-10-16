@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowDownRight, ArrowUpRight, Fuel, Truck, Wrench } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, ClipboardList, Fuel, MapPin, Truck, Wrench, Boxes, FileText, CalendarClock, Ruler } from 'lucide-react';
 import { useScrollFx } from '../lib/fx';
 import { scrollToTarget } from '../lib/useLenis';
 import { SplitText, ScrubText } from '../components/fx/SplitText';
@@ -28,6 +28,23 @@ const OFFER = [
     alt: 'Stacked shipping containers at a port',
     text: 'Freight, documentation, clearance and delivery are handled through the same network that moves every MJ Logistics order.',
   },
+];
+
+/* Process + enquiry checklist: describes how to work with us, nothing more.
+   No claims about licences, locations, lead times or volumes — add those only
+   once management confirms them. */
+const STEPS = [
+  { no: '01', icon: ClipboardList, title: 'Tell us what you need', text: 'Send your requirement through the quote form — what you need, how much, and where it has to go.' },
+  { no: '02', icon: Boxes,         title: 'We source it',         text: 'We source the products, equipment or spares to match your requirement.' },
+  { no: '03', icon: FileText,      title: 'We quote and arrange', text: 'You receive a quote, and we arrange freight, documentation and clearance for the shipment.' },
+  { no: '04', icon: MapPin,        title: 'Delivered to you',     text: 'Your order is delivered to the location you gave us.' },
+];
+
+const INCLUDE = [
+  { icon: Ruler,         title: 'What you need',   text: 'The product, equipment or part, with its specification, part number or standard if you have one.' },
+  { icon: Boxes,         title: 'How much',        text: 'The quantity, and whether it is a one-off order or a repeat requirement.' },
+  { icon: MapPin,        title: 'Where to',        text: 'The delivery location, so freight and clearance can be planned from the start.' },
+  { icon: CalendarClock, title: 'When',            text: 'The date you need it by, so we can tell you early if the timing is tight.' },
 ];
 
 export default function OilGasPage() {
@@ -85,6 +102,51 @@ export default function OilGasPage() {
                     Request a quote <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
+      <section id="process" className="scroll-mt-24 bg-paper py-24 sm:py-32">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
+          <div className="mb-12">
+            <p className="eyebrow mb-4 text-sage">How it works</p>
+            <SplitText className="t-xl" text={'From enquiry *to delivery.*'} />
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map(({ no, icon: Icon, title, text }, i) => (
+              <article key={no} data-reveal data-delay={String(i * 0.08)} className="rounded-3xl border border-ink/10 bg-white p-6 sm:p-8">
+                <div className="flex items-center justify-between">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-signal"><Icon className="h-6 w-6" /></span>
+                  <span className="font-display text-sm font-semibold text-sage">{no}</span>
+                </div>
+                <h3 className="mt-6 text-[clamp(1.2rem,1.6vw,1.45rem)]">{title}</h3>
+                <p className="mt-3 text-[16px] leading-7 text-ink/65">{text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHAT TO INCLUDE ──────────────────────────────────────────────── */}
+      <section id="enquiry" className="scroll-mt-24 bg-white py-24 sm:py-32">
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-[.8fr_1.2fr]">
+          <div>
+            <p className="eyebrow mb-4 text-sage">Your enquiry</p>
+            <SplitText className="t-xl" text={'What to *include.*'} />
+            <p className="mt-6 max-w-md text-[16px] leading-7 text-ink/65">
+              The more we know up front, the faster we can come back with a quote. If you are not sure of every detail, send what you have and we will follow up.
+            </p>
+            <Link href="/contact" className="btn btn-signal mt-8">Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {INCLUDE.map(({ icon: Icon, title, text }, i) => (
+              <article key={title} data-reveal data-delay={String(i * 0.08)} className="rounded-3xl border border-ink/10 bg-paper p-6 sm:p-8">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-signal"><Icon className="h-6 w-6" /></span>
+                <h3 className="mt-6 text-[clamp(1.2rem,1.6vw,1.45rem)]">{title}</h3>
+                <p className="mt-3 text-[16px] leading-7 text-ink/65">{text}</p>
               </article>
             ))}
           </div>
