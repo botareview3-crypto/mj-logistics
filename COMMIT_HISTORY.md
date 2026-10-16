@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-16** `fafd6e0` Move accounts database from expired Render Postgres to Neon
+- **2026-10-16** `fc661ef` Update commit history
 - **2026-10-16** `4748455` Add Render keep-alive self-ping so sign-in doesn't hit a cold start
 - **2026-10-15** `44fc50b` Update commit history
 - **2026-10-15** `375788e` Add Oil & Gas division page and link it across the site
