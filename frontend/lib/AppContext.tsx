@@ -1,8 +1,13 @@
 'use client';
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import Router from 'next/router';
 import { Vehicle, Part, CartItem } from './types';
 import { AuthUser, getStoredToken, storeToken, clearToken, fetchCurrentUser } from './auth';
+import { accountApi, SyncedCartLine } from './accountApi';
+
+// Remembers which account this device's cart/garage were last synced with, so
+// a later sign-in can tell "my own data" from "a guest's / someone else's".
+const SYNC_USER_KEY = 'mj_sync_user';
 
 interface Toast {
   id: string;
@@ -53,6 +58,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeVehicle, setActiveVehicleState] = useState<Vehicle | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
+  // Account sync (see the effects further down): which user the in-memory
+  // cart/garage have been reconciled with, and what the server last held.
+  const [syncedUserId, setSyncedUserId] = useState<string | null>(null);
+  const lastSynced = useRef({ cart: '', garage: '' });
+  const cartRef = useRef<CartItem[]>([]);
+  const savedVehiclesRef = useRef<Vehicle[]>([]);
+  const activeVehicleRef = useRef<Vehicle | null>(null);
 
   const [isSelectorModalOpen, setIsSelectorModalOpen] = useState(false);
   const [selectorInitialTab, setSelectorInitialTab] = useState<'vin' | 'cascading'>('vin');
@@ -68,9 +80,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentUser(user);
   }, []);
 
+  // Cart and garage belong to the account once signed in, so signing out
+  // clears this device's copy (it comes back on the next sign-in). That also
+  // keeps one person's cart from leaking into the next person's account on a
+  // shared computer.
   const logout = useCallback(() => {
     clearToken();
     setCurrentUser(null);
+    setCart([]);
+    setSavedVehicles([]);
+    setActiveVehicleState(null);
+    try {
+      localStorage.removeItem('autoparts_garage');
+      localStorage.removeItem('autoparts_active_vehicle');
+      localStorage.removeItem('autoparts_cart');
+      localStorage.removeItem(SYNC_USER_KEY);
+    } catch { /* ignore */ }
   }, []);
 
   useEffect(() => {
@@ -99,6 +124,98 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setHasLoadedStorage(true);
     }
   }, []);
+
+  cartRef.current = cart;
+  savedVehiclesRef.current = savedVehicles;
+  activeVehicleRef.current = activeVehicle;
+
+  // ── Sign-in: reconcile this device with the account, once per sign-in ────
+  // First time this device meets the account (no marker yet): keep whatever a
+  // guest already collected and merge it with what the account holds (bigger
+  // quantity wins per part). Any later load: the account is the source of
+  // truth, so an item removed on another device doesn't come back.
+  useEffect(() => {
+    if (!hasLoadedStorage || isAuthLoading) return;
+    if (!currentUser) { setSyncedUserId(null); return; }
+    if (syncedUserId === currentUser.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const [serverCart, serverGarage, partsModule] = await Promise.all([
+          accountApi.getCart(), accountApi.getGarage(), import('./data/parts'),
+        ]);
+        if (cancelled) return;
+        const partsById = new Map(partsModule.PARTS_DATABASE.map(p => [p.id, p] as const));
+
+        let marker: string | null = null;
+        try { marker = localStorage.getItem(SYNC_USER_KEY); } catch { /* ignore */ }
+        const adoptGuestData = !marker; // only a never-synced device has guest data worth merging
+
+        // Cart
+        const merged = new Map<string, CartItem>();
+        if (adoptGuestData) cartRef.current.forEach(i => merged.set(i.part.id, i));
+        for (const line of serverCart.items) {
+          const part = partsById.get(line.partId);
+          if (!part) continue; // part no longer exists in the catalog
+          const local = merged.get(line.partId);
+          merged.set(line.partId, local
+            ? { ...local, quantity: Math.max(local.quantity, line.quantity) }
+            : { part, quantity: line.quantity, addedForVehicle: line.addedForVehicle ?? null });
+        }
+        setCart(Array.from(merged.values()));
+
+        // Garage
+        let vehicles = serverGarage.vehicles;
+        let active: Vehicle | null = vehicles.find(v => v.id === serverGarage.activeVehicleId) ?? null;
+        if (adoptGuestData) {
+          const local = savedVehiclesRef.current;
+          const extra = vehicles.filter(sv => !local.some(lv => lv.id === sv.id || (lv.vin && lv.vin === sv.vin)));
+          vehicles = [...local, ...extra];
+          active = activeVehicleRef.current ?? active;
+        }
+        setSavedVehicles(vehicles);
+        setActiveVehicleState(active);
+        try {
+          localStorage.setItem('autoparts_garage', JSON.stringify(vehicles));
+          if (active) localStorage.setItem('autoparts_active_vehicle', JSON.stringify(active));
+          else localStorage.removeItem('autoparts_active_vehicle');
+          localStorage.setItem(SYNC_USER_KEY, currentUser.id);
+        } catch { /* ignore */ }
+
+        // Baseline = what the server holds right now, so the push effect below
+        // uploads the merged result only if it actually differs.
+        lastSynced.current = {
+          cart: JSON.stringify(serverCart.items.map(l => ({ partId: l.partId, quantity: l.quantity, addedForVehicle: l.addedForVehicle ?? null }))),
+          garage: JSON.stringify({ v: serverGarage.vehicles, a: serverGarage.activeVehicleId }),
+        };
+        setSyncedUserId(currentUser.id);
+      } catch {
+        // Backend asleep/unreachable: keep working from this device and try
+        // again on the next load. Nothing is uploaded until a sync succeeds,
+        // so a stale local copy can never overwrite the account.
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasLoadedStorage, isAuthLoading, currentUser, syncedUserId]);
+
+  // ── While signed in: save changes to the account shortly after they happen ─
+  useEffect(() => {
+    if (!currentUser || syncedUserId !== currentUser.id) return;
+    const lines: SyncedCartLine[] = cart.map(i => ({ partId: i.part.id, quantity: i.quantity, addedForVehicle: i.addedForVehicle ?? null }));
+    const cartJson = JSON.stringify(lines);
+    const garageJson = JSON.stringify({ v: savedVehicles, a: activeVehicle?.id ?? '' });
+    if (cartJson === lastSynced.current.cart && garageJson === lastSynced.current.garage) return;
+    const timer = setTimeout(() => {
+      if (cartJson !== lastSynced.current.cart) {
+        accountApi.putCart(lines).then(() => { lastSynced.current.cart = cartJson; }).catch(() => { /* retried on next change */ });
+      }
+      if (garageJson !== lastSynced.current.garage) {
+        accountApi.putGarage(savedVehicles, activeVehicle?.id ?? '').then(() => { lastSynced.current.garage = garageJson; }).catch(() => { /* retried on next change */ });
+      }
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [currentUser, syncedUserId, cart, savedVehicles, activeVehicle]);
 
   // Keep app chrome in sync with real Next.js route transitions.
   useEffect(() => {

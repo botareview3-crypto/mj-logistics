@@ -681,3 +681,27 @@ transcript, just the gist.
   system or account sync yet, so the copy now says "Coming soon" and "yet".
 - Open: sign-in page pills ("Track orders", "Saved addresses", "Stock alerts")
   promise features that do not exist yet.
+
+### 2026-10-16 (Orders, saved addresses, stock alerts, cart/garage sync)
+- Built what the sign-in page promised and the account page marked "coming
+  soon": a real order system, saved addresses, stock alerts, and cart/garage
+  syncing across devices. Resolves the open item about the "Track orders",
+  "Saved addresses" and "Stock alerts" pills.
+- Backend: new tables (orders, addresses, user_carts, user_garages,
+  stock_alerts) in `db_models.py`; `routers/account.py` for the signed-in
+  customer, `routers/admin_orders.py` for staff (list orders, change status,
+  stock-alert demand). Totals recomputed server-side; `client_ref` makes order
+  placement retry-safe.
+- Frontend: `lib/accountApi.ts`; sync in `AppContext.tsx`; checkout in
+  `cart.tsx` now picks an address and places a real order (the fake
+  "AP-88421" confirmation is gone); account page gets Orders (tracking
+  timeline, cancel while received/confirmed), Saved Addresses and Stock Alerts
+  panels; part page shows Out of stock + "Notify me"; `/admin` gets an Orders
+  tab.
+- Decisions/limits: no payment and no emails yet; item prices come from the
+  browser at checkout; signing out clears the device's cart/garage; no part is
+  currently out of stock in `parts.ts`, so the Notify button only appears once
+  one is marked `inStock: false`.
+- Not verified here: no network in the sandbox, so `next build` and the
+  backend were not run — only syntax-checked. Run both before relying on it.
+

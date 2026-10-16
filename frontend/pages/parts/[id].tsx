@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Star, ShieldCheck, Truck, RotateCcw, ShoppingCart, Check, CheckCircle2, XCircle, Copy, Search, Car, Award, Sparkles, ArrowRight } from 'lucide-react';
+import { Star, ShieldCheck, Truck, RotateCcw, ShoppingCart, Check, CheckCircle2, XCircle, Copy, Search, Car, Award, Sparkles, ArrowRight, Bell, BellRing } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../../lib/AppContext';
 import { PARTS_DATABASE, SAMPLE_PART_REVIEWS } from '../../lib/data/parts';
@@ -8,6 +8,7 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 import { VehicleFitBadge } from '../../components/VehicleFitBadge';
 import { ProductCard } from '../../components/ProductCard';
 import { SPRINGS } from '../../lib/springs';
+import { useStockAlert } from '../../lib/useStockAlert';
 
 export default function ProductDetailPage() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function ProductDetailPage() {
   const [fitmentSearch, setFitmentSearch] = useState('');
   const [copiedOem, setCopiedOem] = useState<string | null>(null);
 
+  const stockAlert = useStockAlert(part.id, part.name, part.sku);
   const fits = isPartCompatibleWithActiveVehicle(part);
   const relatedParts = PARTS_DATABASE.filter(p => p.id !== part.id && (p.systemId === part.systemId || p.brand === part.brand)).slice(0, 4);
 
@@ -159,10 +161,18 @@ export default function ProductDetailPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs font-bold text-emerald-700 flex items-center justify-end gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" /><span>In Stock ({part.stockCount} units)</span></div>
-                    <span className="text-[11px] text-slate-500">Dispatched within 24 hours</span>
+                    {part.inStock ? (
+                      <>
+                        <div className="text-xs font-bold text-emerald-700 flex items-center justify-end gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" /><span>In Stock ({part.stockCount} units)</span></div>
+                        <span className="text-[11px] text-slate-500">Dispatched within 24 hours</span>
+                      </>
+                    ) : (
+                      <div className="text-xs font-bold text-rose-700 flex items-center justify-end gap-1.5"><span className="w-2 h-2 rounded-full bg-rose-500" /><span>Out of stock</span></div>
+                    )}
                   </div>
                 </div>
+                {part.inStock ? (
+                  <>
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <div className="flex items-center border border-slate-300 rounded-lg bg-white overflow-hidden shrink-0">
                     <motion.button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-100 text-sm font-bold cursor-pointer" whileTap={{ scale: 0.88 }} transition={SPRINGS.micro}>-</motion.button>
@@ -193,6 +203,22 @@ export default function ProductDetailPage() {
                     </AnimatePresence>
                   </motion.button>
                 </div>
+                  </>
+                ) : (
+                  <div className="pt-2 space-y-2">
+                    <motion.button
+                      type="button"
+                      onClick={stockAlert.toggle}
+                      disabled={stockAlert.busy}
+                      className={`w-full py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-60 ${stockAlert.watching ? 'bg-emerald-600 text-white' : 'bg-[#04261D] hover:bg-[#0A4A3A] text-white'}`}
+                      whileTap={{ scale: 0.97 }}
+                      transition={SPRINGS.micro}
+                    >
+                      {stockAlert.watching ? <><BellRing className="w-5 h-5" /><span>Watching — tap to stop</span></> : <><Bell className="w-5 h-5" /><span>Notify me when back in stock</span></>}
+                    </motion.button>
+                    <p className="text-[11px] text-slate-500 text-center">We&apos;ll flag this part in My Account as soon as it&apos;s available again.</p>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 pt-1">

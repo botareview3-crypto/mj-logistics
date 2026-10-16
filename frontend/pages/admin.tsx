@@ -17,6 +17,7 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import Head from 'next/head';
 import { adminApi, AdminOverview, AdminPart } from '../lib/adminApi';
+import { AdminOrders } from '../components/admin/AdminOrders';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -159,7 +160,7 @@ export default function AdminPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [tab, setTab] = useState<'overview' | 'parts' | 'add'>('overview');
+  const [tab, setTab] = useState<'overview' | 'parts' | 'add' | 'orders'>('overview');
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── Image management ────────────────────────────────────────────────────────
@@ -474,7 +475,7 @@ export default function AdminPage() {
 
         {/* Tab bar */}
         <nav className="bg-white border-b px-6 flex gap-1 text-sm">
-          {(['overview', 'parts', 'add'] as const).map(t => (
+          {(['overview', 'parts', 'add', 'orders'] as const).map(t => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -484,7 +485,7 @@ export default function AdminPage() {
                   : 'border-transparent text-gray-500 hover:text-gray-800'
               }`}
             >
-              {t === 'add' ? 'Add Product' : t === 'parts' ? 'Parts List' : 'Overview'}
+              {t === 'add' ? 'Add Product' : t === 'parts' ? 'Parts List' : t === 'orders' ? 'Orders' : 'Overview'}
             </button>
           ))}
         </nav>
@@ -686,6 +687,9 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {/* ── Orders ─────────────────────────────────────────────────────── */}
+          {tab === 'orders' && <AdminOrders token={token} />}
 
           {/* ── Add Product form ───────────────────────────────────────────── */}
           {tab === 'add' && (

@@ -4,6 +4,9 @@ import { UserCircle2, Car, ShoppingCart, Package, ShieldCheck, ArrowRight, LogOu
 import { useApp } from '../lib/AppContext';
 import { POST_LOGIN_REDIRECT_KEY } from '../lib/auth';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { OrdersPanel } from '../components/account/OrdersPanel';
+import { AddressesPanel } from '../components/account/AddressesPanel';
+import { StockAlertsPanel } from '../components/account/StockAlertsPanel';
 
 // This page is now a dashboard for people who are ALREADY signed in — the
 // sign-in / create-account UI itself lives on its own page at /signin,
@@ -98,6 +101,13 @@ export default function MyAccountPage() {
               </div>
             </div>
           )}
+          {currentUser && (
+            <>
+              <OrdersPanel />
+              <AddressesPanel />
+              <StockAlertsPanel />
+            </>
+          )}
         </div>
 
         {/* Quick access sidebar */}
@@ -118,17 +128,18 @@ export default function MyAccountPage() {
               </div>
               <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#0A4A3A] transition-colors shrink-0" />
             </button>
-            <div className="w-full p-3 rounded-xl flex items-center justify-between gap-3 opacity-60 cursor-not-allowed">
+            <button type="button" onClick={() => document.getElementById('orders')?.scrollIntoView({ behavior: 'smooth' })} className="w-full p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between gap-3 transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center shrink-0"><Package className="w-5 h-5" /></div>
-                <div className="text-left"><div className="text-sm font-bold text-slate-900">Order History</div><div className="text-[11px] text-slate-500">Coming soon</div></div>
+                <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center shrink-0"><Package className="w-5 h-5" /></div>
+                <div className="text-left"><div className="text-sm font-bold text-slate-900">Order History</div><div className="text-[11px] text-slate-500">Track your orders</div></div>
               </div>
-            </div>
+              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#0A4A3A] transition-colors shrink-0" />
+            </button>
           </div>
 
           <div className="bg-slate-900 text-white rounded-2xl p-5 space-y-2 shadow-xs">
-            <div className="flex items-center gap-2 text-mint"><ShieldCheck className="w-4 h-4 shrink-0" /><span className="text-xs font-bold uppercase tracking-wider">Your Data, Your Device</span></div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">Your garage and cart are currently stored on this device only, so they won&apos;t follow you to another browser yet. Syncing them to your account is planned.</p>
+            <div className="flex items-center gap-2 text-mint"><ShieldCheck className="w-4 h-4 shrink-0" /><span className="text-xs font-bold uppercase tracking-wider">Saved to your account</span></div>
+            <p className="text-[11px] text-slate-400 leading-relaxed">Your garage and cart are saved to your account, so they follow you to any browser or phone you sign in on. Signing out clears them from this device.</p>
           </div>
         </div>
       </div>

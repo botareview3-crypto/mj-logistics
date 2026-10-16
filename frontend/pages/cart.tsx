@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ShoppingCart, Trash2, Truck,
   CreditCard, ArrowRight, Plus, Minus, CheckCircle2,
@@ -7,6 +7,8 @@ import {
 import { useApp } from '../lib/AppContext';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { VehicleFitBadge } from '../components/VehicleFitBadge';
+import { AddressForm, formatAddressLines } from '../components/account/AddressForm';
+import { accountApi, newClientRef, Order, SavedAddress, AddressInput } from '../lib/accountApi';
 
 export default function CartPage() {
   const {
@@ -18,47 +20,103 @@ export default function CartPage() {
   const [promoCode,       setPromoCode]       = useState('');
   const [discountPercent, setDiscountPercent] = useState(0);
   const [promoApplied,    setPromoApplied]    = useState(false);
+  const [appliedCode,     setAppliedCode]     = useState(''); // the code that was actually applied (the input can be edited afterwards)
   const [isCheckingOut,   setIsCheckingOut]   = useState(false);
-  const [orderComplete,   setOrderComplete]   = useState(false);
+  const [placedOrder,     setPlacedOrder]     = useState<Order | null>(null);
+
+  // Checkout step: after "Proceed to Checkout" the customer picks where it's going.
+  const [step,            setStep]            = useState<'cart' | 'address'>('cart');
+  const [addresses,       setAddresses]       = useState<SavedAddress[] | null>(null);
+  const [addressError,    setAddressError]    = useState('');
+  const [addressId,       setAddressId]       = useState('');
+  const [addingAddress,   setAddingAddress]   = useState(false);
+  // One reference per checkout attempt: if the request is retried (slow
+  // server, double click) the backend returns the same order, not a second.
+  const clientRef = useRef(newClientRef());
 
   const shippingCost    = cartSubtotal >= 75 || cartSubtotal === 0 ? 0 : 9.99;
   const discountAmount  = (cartSubtotal * discountPercent) / 100;
   const estimatedVat    = (cartSubtotal - discountAmount) * 0.08;
   const grandTotal      = cartSubtotal - discountAmount + shippingCost + (cartSubtotal > 0 ? estimatedVat : 0);
 
+  useEffect(() => {
+    if (step !== 'address' || !currentUser) return;
+    accountApi.listAddresses()
+      .then(list => {
+        setAddresses(list);
+        setAddressError('');
+        setAddingAddress(list.length === 0);
+        setAddressId(prev => prev || list.find(a => a.is_default)?.id || list[0]?.id || '');
+      })
+      .catch(err => setAddressError(err instanceof Error ? err.message : 'Could not load your addresses.'));
+  }, [step, currentUser]);
+
+  const saveCheckoutAddress = async (input: AddressInput) => {
+    const created = await accountApi.createAddress(input);
+    setAddresses(prev => [...(prev ?? []), created]);
+    setAddressId(created.id);
+    setAddingAddress(false);
+  };
+
   const handleApplyPromo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!promoCode.trim()) return;
     const code = promoCode.toUpperCase();
     if (code === 'AUTOPRO10' || code === 'PROMO10') {
-      setDiscountPercent(10); setPromoApplied(true);
+      setDiscountPercent(10); setPromoApplied(true); setAppliedCode(code);
       showToast('10% discount applied!', 'success');
     } else if (code === 'FREESHIP') {
-      setDiscountPercent(5); setPromoApplied(true);
+      setDiscountPercent(5); setPromoApplied(true); setAppliedCode(code);
       showToast('Discount code applied!', 'success');
     } else {
       showToast('Invalid code. Try "AUTOPRO10"', 'error');
     }
   };
 
-  const handleCheckout = () => {
-    if (isAuthLoading) return;
+  const handleCheckout = async () => {
+    if (isAuthLoading || isCheckingOut) return;
     if (!currentUser) {
       showToast('Sign in to complete your order — your cart will be waiting.', 'info');
       navigate('/signin?redirect=/cart');
       return;
     }
+    if (step === 'cart') {
+      setStep('address');
+      return;
+    }
+    if (!addressId) {
+      showToast('Choose or add a delivery address first.', 'warning');
+      return;
+    }
     setIsCheckingOut(true);
-    setTimeout(() => {
-      setIsCheckingOut(false);
-      setOrderComplete(true);
+    try {
+      const order = await accountApi.placeOrder({
+        client_ref: clientRef.current,
+        address_id: addressId,
+        promo_code: promoApplied ? appliedCode : '',
+        items: cart.map(({ part, quantity }) => ({
+          part_id: part.id,
+          sku: part.sku,
+          name: part.name,
+          brand: part.brand,
+          image: part.images[0] ?? '',
+          unit_price: part.price,
+          quantity,
+        })),
+      });
+      clientRef.current = newClientRef();
+      setPlacedOrder(order);
+      setStep('cart');
       clearCart();
-      showToast('Order #AP-88421 confirmed! Dispatching with Fitment Guarantee.', 'success');
-    }, 1200);
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'We could not place your order. Please try again.', 'error');
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   /* ── Order success ────────────────────────────────────────────────── */
-  if (orderComplete) {
+  if (placedOrder) {
     return (
       <div className="max-w-lg mx-auto py-16 text-center space-y-6">
         <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
@@ -66,18 +124,18 @@ export default function CartPage() {
         </div>
         <div>
           <span className="inline-block text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 mb-3">
-            Order Placed
+            Order Received
           </span>
           <h1 className="font-display text-3xl font-bold text-[#04261D]">Thank You!</h1>
           <p className="text-slate-500 text-sm mt-2 leading-relaxed">
-            Order #AP-88421 is confirmed. Parts are verified for fitment and prepared for dispatch.
+            We&apos;ve received your order. Our team will review and confirm it, and you can follow every step under My Account. No payment has been taken yet.
           </p>
         </div>
         <div className="bg-white rounded-2xl border border-slate-200 p-5 text-sm text-left space-y-3">
           {[
-            { label: 'Order Number',     value: 'AP-88421-2026' },
-            { label: 'Est. Delivery',    value: 'Tomorrow (Tracked)' },
-            { label: 'Warranty',         value: '2-Year OE Guarantee' },
+            { label: 'Order Number', value: placedOrder.number },
+            { label: 'Status',       value: 'Received' },
+            { label: 'Total',        value: `€${placedOrder.total.toFixed(2)}` },
           ].map(row => (
             <div key={row.label} className="flex justify-between">
               <span className="text-slate-500">{row.label}</span>
@@ -85,13 +143,22 @@ export default function CartPage() {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => { setOrderComplete(false); navigate('/shop'); }}
-          className="px-7 py-3 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-semibold rounded-xl cursor-pointer transition-colors inline-flex items-center gap-2"
-        >
-          Continue Shopping <ArrowRight className="w-4 h-4" />
-        </button>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <button
+            type="button"
+            onClick={() => navigate(`/account?order=${encodeURIComponent(placedOrder.number)}`)}
+            className="px-7 py-3 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-semibold rounded-xl cursor-pointer transition-colors inline-flex items-center justify-center gap-2"
+          >
+            Track this order <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => { setPlacedOrder(null); navigate('/shop'); }}
+            className="px-7 py-3 border border-slate-200 hover:bg-slate-50 text-[#04261D] font-semibold rounded-xl cursor-pointer transition-colors"
+          >
+            Continue Shopping
+          </button>
+        </div>
       </div>
     );
   }
@@ -225,6 +292,39 @@ export default function CartPage() {
               ))}
             </div>
 
+            {step === 'address' && currentUser && (
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 space-y-4">
+                <h2 className="font-display text-lg font-bold text-[#04261D] flex items-center gap-2"><Truck className="w-5 h-5 text-[#0A4A3A]" /> Delivery address</h2>
+                {addressError && <p className="text-sm text-rose-600">{addressError}</p>}
+                {!addresses && !addressError && <p className="text-sm text-slate-400">Loading your addresses…</p>}
+                {addresses && addresses.length > 0 && (
+                  <div className="space-y-2">
+                    {addresses.map(a => (
+                      <label key={a.id} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${addressId === a.id ? 'border-[#0A4A3A] bg-mint/10' : 'border-slate-200 hover:bg-slate-50'}`}>
+                        <input type="radio" name="delivery-address" checked={addressId === a.id} onChange={() => setAddressId(a.id)} className="mt-1 accent-[#0A4A3A]" />
+                        <div className="text-sm text-slate-600 leading-relaxed">
+                          <div className="font-bold text-slate-900">{a.label || 'Address'}{a.is_default ? ' · default' : ''}</div>
+                          {formatAddressLines(a).map((line, i) => <div key={i}>{line}</div>)}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                )}
+                {addresses && !addingAddress && (
+                  <button type="button" onClick={() => setAddingAddress(true)} className="text-xs font-bold text-[#0A4A3A] hover:underline cursor-pointer">+ Use a new address</button>
+                )}
+                {addresses && addingAddress && (
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+                    <AddressForm
+                      submitLabel="Save & use this address"
+                      onSubmit={saveCheckoutAddress}
+                      onCancel={addresses.length > 0 ? () => setAddingAddress(false) : undefined}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
             <button
               type="button"
               onClick={() => navigate('/catalog')}
@@ -299,11 +399,14 @@ export default function CartPage() {
                 {isCheckingOut ? (
                   <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>Processing…</span></>
                 ) : currentUser ? (
-                  <><CreditCard className="w-4 h-4" /><span>Proceed to Checkout</span><ArrowRight className="w-4 h-4" /></>
+                  <><CreditCard className="w-4 h-4" /><span>{step === 'address' ? 'Place Order' : 'Proceed to Checkout'}</span><ArrowRight className="w-4 h-4" /></>
                 ) : (
                   <><Lock className="w-4 h-4" /><span>Sign In to Checkout</span></>
                 )}
               </button>
+              {currentUser && step === 'address' && (
+                <p className="text-[11px] text-slate-400 text-center -mt-1">We&apos;ll review your order and confirm it. No payment is taken now.</p>
+              )}
               {!currentUser && !isAuthLoading && (
                 <p className="text-[11px] text-slate-400 text-center -mt-1">You'll sign in, then come right back.</p>
               )}

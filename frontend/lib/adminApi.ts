@@ -65,6 +65,27 @@ export interface AdminPartPayload {
   [key: string]: unknown;
 }
 
+export interface AdminOrder {
+  id: string;
+  number: string;
+  status: string;
+  created_at: string;
+  total: number;
+  items: { part_id: string; sku: string; name: string; brand: string; unit_price: number; quantity: number }[];
+  address: { full_name: string; phone: string; line1: string; line2: string; city: string; region: string; postal_code: string; country: string };
+  customer: { name: string; email: string };
+  promo_code: string;
+}
+
+export interface StockDemand {
+  part_id: string;
+  part_name: string;
+  sku: string;
+  watchers: number;
+}
+
+export const ORDER_STATUS_OPTIONS = ['received', 'confirmed', 'packed', 'dispatched', 'delivered', 'cancelled'] as const;
+
 // ── Internal helpers ──────────────────────────────────────────────────────────
 
 async function adminFetch<T>(
@@ -177,4 +198,19 @@ export const adminApi = {
       `/api/admin/parts/${partId}/images?image_url=${encodeURIComponent(imageUrl)}`,
       { method: 'DELETE' },
     ),
+
+  /** Customer orders, newest first (optionally one status only) */
+  listOrders: (token: string, status = '') =>
+    adminFetch<AdminOrder[]>(token, `/api/admin/orders${status ? `?status=${encodeURIComponent(status)}` : ''}`),
+
+  /** Move an order to a new status — customers see it on their tracking timeline */
+  setOrderStatus: (token: string, orderId: string, status: string) =>
+    adminFetch<AdminOrder>(token, `/api/admin/orders/${orderId}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
+
+  /** How many customers are waiting on each out-of-stock part */
+  stockDemand: (token: string) =>
+    adminFetch<StockDemand[]>(token, '/api/admin/stock-alerts'),
 };
