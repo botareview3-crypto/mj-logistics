@@ -121,14 +121,14 @@ export default function MyAccountPage() {
             <div className="w-full p-3 rounded-xl flex items-center justify-between gap-3 opacity-60 cursor-not-allowed">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center shrink-0"><Package className="w-5 h-5" /></div>
-                <div className="text-left"><div className="text-sm font-bold text-slate-900">Order History</div><div className="text-[11px] text-slate-500">Available after sign in</div></div>
+                <div className="text-left"><div className="text-sm font-bold text-slate-900">Order History</div><div className="text-[11px] text-slate-500">Coming soon</div></div>
               </div>
             </div>
           </div>
 
           <div className="bg-slate-900 text-white rounded-2xl p-5 space-y-2 shadow-xs">
             <div className="flex items-center gap-2 text-mint"><ShieldCheck className="w-4 h-4 shrink-0" /><span className="text-xs font-bold uppercase tracking-wider">Your Data, Your Device</span></div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">Your garage and cart are currently stored on this device only, so they won&apos;t follow you to another browser until account sign-in is available.</p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">Your garage and cart are currently stored on this device only, so they won&apos;t follow you to another browser yet. Syncing them to your account is planned.</p>
           </div>
         </div>
       </div>

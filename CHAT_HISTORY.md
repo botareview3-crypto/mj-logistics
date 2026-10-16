@@ -673,3 +673,11 @@ transcript, just the gist.
 - Old accounts were lost with the expired database; users re-sign-in.
 - Render had two Blueprints on this repo (mj-rfq-backend owns the real
   services; mj-logistics created -7crs-7crs duplicates). Keep mj-rfq-backend.
+
+### 2026-10-16 (Account page copy)
+- Google sign-in confirmed working on the new Neon database. The account page
+  still said Order History was "Available after sign in" and that garage/cart
+  were device-only "until account sign-in is available". There is no order
+  system or account sync yet, so the copy now says "Coming soon" and "yet".
+- Open: sign-in page pills ("Track orders", "Saved addresses", "Stock alerts")
+  promise features that do not exist yet.
