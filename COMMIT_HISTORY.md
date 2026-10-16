@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-16** `e13ba9e` Add order system, saved addresses, stock alerts and cart/garage account sync
+- **2026-10-16** `1970194` Update commit history
 - **2026-10-16** `10b993c` Fix stale account page wording: order history coming soon
 - **2026-10-16** `019c06e` Update commit history
 - **2026-10-16** `fafd6e0` Move accounts database from expired Render Postgres to Neon
