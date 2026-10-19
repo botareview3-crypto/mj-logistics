@@ -35,7 +35,7 @@ const DIVISIONS = [
   {
     no: '05', name: 'Oil & Gas', href: '/oil-gas',
     image: '/images/homepage/industrial.webp', alt: 'Industrial plant and storage tanks',
-    text: 'Oil and gas exploration, and we are looking for investors.',
+    text: 'Oil and gas exploration in Liberia, and we are looking for investors.',
   },
 ];
 

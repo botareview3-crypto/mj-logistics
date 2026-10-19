@@ -746,3 +746,23 @@ transcript, just the gist.
   investor-facing legal wording is needed on the page - worth asking him or
   whoever advises the company, since the page now solicits investment.
 
+### 2026-10-16 (Oil & Gas: Liberia, richer page)
+- Boss answers: focus region is Liberia; still looking for investors in oil and
+  gas exploration. Left blank on purpose (boss said leave): what the money is
+  for, numbers, team/partners/track record. Investor contact stays the general
+  contact form.
+- `pages/oil-gas.tsx` rebuilt with more visuals and motion: free Unsplash
+  offshore-rig photo (hotlinked from images.unsplash.com, already allowed in
+  next.config.js; credited on the page; Unsplash License) in the hero and a
+  parallax photo band; "Focus / Region: Liberia / Looking for: Investors" fact
+  cards; an animated SVG seismic-survey diagram (CSS animation, respects
+  reduced-motion) next to a five-step "How exploration works" overview.
+  The overview is generic industry background and is labelled as such on the
+  page - it is not a claim about MJ's programme.
+- Liberia added to the home card, divisions page and contact card.
+- Caveat: only one verified free photo so far. It is hotlinked, so if Unsplash
+  ever removes it the hero image breaks - download it into `public/images/`
+  once convenient (or replace with real photos).
+- Open: what the investment is for, any figures, team/partners, legal wording
+  for an investment-seeking page, real photography.
+
