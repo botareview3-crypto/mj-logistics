@@ -23,7 +23,7 @@ const MENU_LINKS = [
   { label: 'Stationery & Office',href: '/stationery', image: '/homepage/office.webp',                  note: 'Workplace supplies' },
   { label: 'MJ Mining',          href: '/mining',     image: '/images/mining/gold.webp',               note: 'Gold & diamonds' },
   { label: 'Solar Energy',       href: '/solar',      image: '/images/site/solar-panels.webp',        note: 'Systems & equipment' },
-  { label: 'Oil & Gas',          href: '/oil-gas',    image: '/images/homepage/industrial.webp',       note: 'Supply & logistics' },
+  { label: 'Oil & Gas',          href: '/oil-gas',    image: '/images/homepage/industrial.webp',       note: 'Exploration' },
   { label: 'Services',           href: '/services',   image: '/images/site/laboratory.webp',         note: 'Laboratory & consultancy' },
   { label: 'About',              href: '/divisions',  image: '/images/homepage/industrial.webp',       note: 'How we work' },
   { label: 'Contact',            href: '/contact',    image: '/images/site/forklift.webp',             note: 'Start an enquiry' },

@@ -35,7 +35,7 @@ const DIVISIONS = [
   {
     no: '05', name: 'Oil & Gas', href: '/oil-gas',
     image: '/images/homepage/industrial.webp', alt: 'Industrial plant and storage tanks',
-    text: 'Supply, equipment and logistics support for the oil and gas sector, sourced and delivered by the same network.',
+    text: 'Exploration of oil and gas.',
   },
 ];
 

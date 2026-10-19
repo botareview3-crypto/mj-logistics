@@ -716,3 +716,20 @@ transcript, just the gist.
   confirmed, the offer cards, a "who we serve" section and an FAQ can be made
   specific.
 
+### 2026-10-16 (Oil & Gas = exploration)
+- Boss clarified the scope: "Oil and gas is exploration of oil and gas." The
+  earlier copy (supply, equipment, freight & delivery) was wrong, so
+  `pages/oil-gas.tsx` was rewritten around exploration and the "How it works" /
+  "What to include" sections added earlier today were removed (they described
+  quoting supply orders). Page is now: hero, statement, "Our focus", contact CTA.
+- Same wording fixed everywhere it appeared: home page division card
+  (`index.tsx`), `divisions.tsx`, header menu note, contact page card.
+- Copy stays neutral - no invented licences, blocks, locations, partners or
+  stats. Hero photo still reuses `industrial.webp`; the CTA no longer uses the
+  warehouse photo.
+- Open: need from management to make the page richer - which regions/basins,
+  what stage (e.g. seeking licences, partners or investors), whether the
+  division wants enquiries from partners/investors/landowners, any
+  certifications or team, and oil & gas photography. Contact form still has the
+  "Oil & gas" topic; no oilgas@ mailbox yet.
+

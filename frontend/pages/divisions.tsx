@@ -20,7 +20,7 @@ const DIVISIONS = [
   { title: 'Stationery & office supplies', href: '/stationery', image: '/homepage/office.webp' },
   { title: 'Mining inputs & support services', href: '/mining', image: '/images/mining/hero.webp' },
   { title: 'Solar energy system and equipment supply', href: '/solar', image: '/images/site/solar-panels.webp' },
-  { title: 'Oil & gas supply, equipment and logistics support', href: '/oil-gas', image: '/images/homepage/industrial.webp' },
+  { title: 'Oil & gas exploration', href: '/oil-gas', image: '/images/homepage/industrial.webp' },
   { title: 'Space logistics, laboratory equipment supply and services', href: '/services#space-logistics-laboratory', image: '/images/site/laboratory.webp' },
   { title: 'Consultancy for supply chain management and project management', href: '/services#consultancy', image: '/images/site/consultancy.webp' },
 ];
