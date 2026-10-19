@@ -9,8 +9,9 @@ import { PageHero } from '../components/fx/PageHero';
 
 /* Oil & gas division added per management feedback (2026-10-15). Scope
    confirmed by the boss (2026-10-16): "Oil and gas is exploration of oil and
-   gas." Keep copy neutral — no invented stats, licences, blocks, locations,
-   partners or claims — until management supplies more detail. The photo
+   gas", and the division is looking for investors in oil and gas exploration.
+   Keep copy neutral — no invented stats, returns, licences, blocks,
+   locations, partners or claims — until management supplies more detail. The photo
    reuses an existing site image until dedicated oil & gas photography is
    supplied (swap the `image` paths). */
 
@@ -22,15 +23,15 @@ export default function OilGasPage() {
     <div ref={pageRef} className="overflow-x-clip bg-paper">
       <Head>
         <title>Oil &amp; Gas — MJ Logistics Enterprise</title>
-        <meta name="description" content="Oil and gas exploration from MJ Logistics Enterprise." />
+        <meta name="description" content="MJ Logistics Enterprise is looking for investors in oil and gas exploration." />
       </Head>
 
       <PageHero
         eyebrow="Oil & gas"
-        title={'Exploring for *oil and gas.*'}
-        intro="MJ Logistics Enterprise is expanding into the exploration of oil and gas. Get in touch to talk to us about it."
+        title={'Invest in *oil and gas exploration.*'}
+        intro="MJ Logistics Enterprise is expanding into oil and gas exploration and is looking for investors. Get in touch to start the conversation."
         actions={<>
-          <Link href="/contact" className="btn btn-signal">Get in touch <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+          <Link href="/contact" className="btn btn-signal">Investor enquiries <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
           <button type="button" onClick={() => scrollToTarget('#focus', -80)} className="btn btn-ghost-dark">Our focus <ArrowDownRight className="h-4 w-4" /></button>
         </>}
         image="/images/homepage/industrial.webp"
@@ -43,7 +44,7 @@ export default function OilGasPage() {
           <p className="eyebrow text-sage">Oil &amp; gas</p>
           <ScrubText
             className="t-lead max-w-[34ch] font-display font-medium"
-            text="Oil and gas is our newest division. Its focus is the *exploration* *of* *oil* *and* *gas.*"
+            text="Oil and gas is our newest division. We are looking for *investors* *in* *oil* *and* *gas* *exploration.*"
           />
         </div>
       </section>
@@ -58,9 +59,9 @@ export default function OilGasPage() {
             <p className="eyebrow mb-4 text-sage">Our focus</p>
             <SplitText className="t-xl" text={'Oil and gas *exploration.*'} />
             <p className="mt-6 max-w-lg text-[16px] leading-7 text-ink/65">
-              Exploration of oil and gas is the focus of this division. It is new, and we are still building out the detail. If you would like to talk to us about oil and gas, get in touch and your enquiry will be passed to the right people.
+              Exploration of oil and gas is the focus of this division, and we are looking for investors to join us in it. The division is new and we are still building out the detail, so the best next step is a conversation. Get in touch and your enquiry will be passed to the right people.
             </p>
-            <Link href="/contact" className="btn btn-signal mt-8">Get in touch <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+            <Link href="/contact" className="btn btn-signal mt-8">Investor enquiries <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
           </div>
         </div>
       </section>
@@ -69,12 +70,12 @@ export default function OilGasPage() {
       <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
         <div className="relative overflow-hidden rounded-3xl bg-forest">
           <div className="relative grid gap-8 px-6 py-16 text-white sm:px-12 sm:py-24 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <SplitText className="t-xl" text={'Talk to us about *oil and gas.*'} />
+            <SplitText className="t-xl" text={'Interested in *investing?*'} />
             <div data-reveal className="flex flex-col gap-5 lg:items-end">
               <p className="max-w-sm text-[16px] leading-7 text-white/85 lg:text-right">
-                Send us your enquiry and we will point it to the right people.
+                Send us your enquiry and it will be passed to the right people.
               </p>
-              <Link href="/contact" className="btn btn-signal">Get in touch <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+              <Link href="/contact" className="btn btn-signal">Investor enquiries <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
             </div>
           </div>
         </div>

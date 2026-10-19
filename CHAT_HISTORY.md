@@ -733,3 +733,16 @@ transcript, just the gist.
   certifications or team, and oil & gas photography. Contact form still has the
   "Oil & gas" topic; no oilgas@ mailbox yet.
 
+### 2026-10-16 (Oil & Gas: looking for investors)
+- Boss added: the division is "looking for investors in the field of oil and
+  gas exploration". `pages/oil-gas.tsx` now leads with that ("Invest in oil and
+  gas exploration"), buttons say "Investor enquiries", closing banner is
+  "Interested in investing?". Home card, divisions page and contact card
+  updated to match.
+- Copy still neutral: no returns, figures, licences, blocks, regions or
+  partners. Enquiries still go through the main contact form (topic "Oil &
+  gas"); there is no separate investor form or mailbox.
+- Open: regions to mention (asked the boss; not yet answered) and whether any
+  investor-facing legal wording is needed on the page - worth asking him or
+  whoever advises the company, since the page now solicits investment.
+

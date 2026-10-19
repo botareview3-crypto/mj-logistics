@@ -29,7 +29,7 @@ const ROUTES = [
   { title: 'Auto parts', text: 'Prefer to browse? Every part lists its fitment and OEM references.', href: '/shop', cta: 'Shop parts' },
   { title: 'Mining', text: 'Partnership, supply or investment enquiries for MJ Mining.', href: '/mining', cta: 'MJ Mining' },
   { title: 'Solar', text: 'Solar energy systems and equipment, supplied to order.', href: '/solar', cta: 'Solar energy' },
-  { title: 'Oil & gas', text: 'Enquiries about oil and gas exploration.', href: '/oil-gas', cta: 'Oil & gas' },
+  { title: 'Oil & gas', text: 'Investor enquiries for oil and gas exploration.', href: '/oil-gas', cta: 'Oil & gas' },
   { title: 'Services', text: 'Space logistics, laboratory equipment, and supply chain or project management consultancy.', href: '/services', cta: 'Our services' },
 ];
 
