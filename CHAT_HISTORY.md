@@ -766,3 +766,11 @@ transcript, just the gist.
 - Open: what the investment is for, any figures, team/partners, legal wording
   for an investment-seeking page, real photography.
 
+### 2026-10-16 (Oil & Gas: new photos, CTA banner removed)
+- Client wanted different pictures and no "Interested in investing?" banner.
+  `pages/oil-gas.tsx`: hero now uses an oil-rig-silhouette-at-sunset photo
+  (Leo_Visions) and the parallax band a group-of-oil-rigs photo (Ben Wicks),
+  both free Unsplash License, hotlinked; credited under the band. The boat photo
+  is gone. The closing green CTA banner was removed - the page still has
+  "Investor enquiries" buttons in the hero and the Focus section.
+

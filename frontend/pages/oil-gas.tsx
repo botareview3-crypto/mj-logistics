@@ -13,11 +13,13 @@ import { PageHero } from '../components/fx/PageHero';
    Keep copy neutral — no invented stats, returns, licences, blocks, partners
    or claims — until management supplies more detail. The "how exploration
    works" section is a general industry overview and says so on the page.
-   Photo: free Unsplash photo (Unsplash License, hotlinked like the catalog
-   images — images.unsplash.com is allowed in next.config.js). Swap for real
-   photography when the company has some. */
-const PHOTO = 'https://images.unsplash.com/photo-1770099172083-724c91d9ccf6?auto=format&fit=crop&w=2000&q=70';
-const PHOTO_ALT = 'A boat sails past an offshore oil rig';
+   Photos: two free Unsplash photos (Unsplash License), hotlinked like the
+   catalog images — images.unsplash.com is allowed in next.config.js. Swap for
+   real photography when the company has some. */
+const HERO_PHOTO = 'https://images.unsplash.com/photo-1786374228080-72d31024e7b5?auto=format&fit=crop&w=2000&q=70';
+const HERO_ALT = 'An oil rig in silhouette against a warm orange sky over the ocean';
+const BAND_PHOTO = 'https://images.unsplash.com/photo-1648555394313-494797ad48fc?auto=format&fit=crop&w=2000&q=70';
+const BAND_ALT = 'A group of oil rigs in the ocean';
 
 const FACTS = [
   { icon: Target, label: 'Focus',       value: 'Oil and gas exploration' },
@@ -114,8 +116,8 @@ export default function OilGasPage() {
           <Link href="/contact" className="btn btn-signal">Investor enquiries <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
           <button type="button" onClick={() => scrollToTarget('#focus', -80)} className="btn btn-ghost-dark">Our focus <ArrowDownRight className="h-4 w-4" /></button>
         </>}
-        image={PHOTO}
-        imageAlt={PHOTO_ALT}
+        image={HERO_PHOTO}
+        imageAlt={HERO_ALT}
       />
 
       {/* ── STATEMENT ────────────────────────────────────────────────────── */}
@@ -158,14 +160,14 @@ export default function OilGasPage() {
       <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
         <div className="relative h-[52vh] min-h-[320px] overflow-hidden rounded-3xl">
           <div className="absolute -inset-y-[10%] inset-x-0" data-parallax="0.08">
-            <img src={PHOTO} alt={PHOTO_ALT} loading="lazy" className="h-full w-full object-cover" />
+            <img src={BAND_PHOTO} alt={BAND_ALT} loading="lazy" className="h-full w-full object-cover" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent" />
           <div className="relative flex h-full items-end p-6 sm:p-12">
             <SplitText className="t-xl max-w-[18ch] text-white" text={'Every discovery starts *with exploration.*'} />
           </div>
         </div>
-        <p className="px-2 pt-2 text-right text-[11px] text-ink/45">Photo: Wilson Stratton on Unsplash</p>
+        <p className="px-2 pt-2 text-right text-[11px] text-ink/45">Photos: Leo_Visions and Ben Wicks on Unsplash</p>
       </section>
 
       {/* ── HOW EXPLORATION WORKS ────────────────────────────────────────── */}
@@ -187,21 +189,6 @@ export default function OilGasPage() {
                 </li>
               ))}
             </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="bg-paper px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="relative overflow-hidden rounded-3xl bg-forest">
-          <div className="relative grid gap-8 px-6 py-16 text-white sm:px-12 sm:py-24 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <SplitText className="t-xl" text={'Interested in *investing?*'} />
-            <div data-reveal className="flex flex-col gap-5 lg:items-end">
-              <p className="max-w-sm text-[16px] leading-7 text-white/85 lg:text-right">
-                Send us your enquiry and it will be passed to the right people.
-              </p>
-              <Link href="/contact" className="btn btn-signal">Investor enquiries <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-            </div>
           </div>
         </div>
       </section>
