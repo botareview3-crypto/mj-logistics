@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-20** `94704b9` Oil & Gas: new photos, remove closing banner
+- **2026-10-19** `d1d425c` Update commit history
 - **2026-10-19** `36a1fd4` Oil & Gas: Liberia focus, photo, parallax band and animated exploration diagram
 - **2026-10-19** `7c372ad` Update commit history
 - **2026-10-19** `cfa4eaf` Oil & Gas: exploration division seeking investors
