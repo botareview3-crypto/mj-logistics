@@ -6,6 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../lib/AppContext';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Seo } from '../components/Seo';
 import { Vehicle } from '../lib/types';
 import { SPRINGS } from '../lib/springs';
 
@@ -33,6 +34,7 @@ export default function GaragePage() {
 
   return (
     <div className="space-y-8 pb-16">
+      <Seo title="My Garage" noindex />
       <Breadcrumbs items={[{ label: 'My Garage' }]} />
 
       {/* ── Header ────────────────────────────────────────────────── */}

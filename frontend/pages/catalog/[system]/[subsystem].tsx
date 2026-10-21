@@ -6,6 +6,7 @@ import { getCategoryById } from '../../../lib/data/categories';
 import { PARTS_DATABASE } from '../../../lib/data/parts';
 import { FilterState } from '../../../lib/types';
 import { Breadcrumbs } from '../../../components/Breadcrumbs';
+import { Seo } from '../../../components/Seo';
 import { FilterSidebar } from '../../../components/FilterSidebar';
 import { ProductCard } from '../../../components/ProductCard';
 import { CATEGORY_ROOTS } from '../../../lib/data/categories';
@@ -62,6 +63,7 @@ export default function SubsystemPage() {
 
   return (
     <div className="space-y-6 pb-12">
+      <Seo title={`${subsystem?.name || subsystemId} — ${system?.name || systemId}`} description={`Shop ${(subsystem?.name || subsystemId).toLowerCase()} in the MJ Logistics auto parts catalog.`} />
       <Breadcrumbs items={[{ label: root?.name || 'Catalog', path: '/catalog' }, { label: system?.name || systemId, path: `/catalog/${systemId}` }, { label: subsystem?.name || subsystemId }]} />
 
       <div className="space-y-1">

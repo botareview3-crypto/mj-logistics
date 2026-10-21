@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { useApp } from '../../../lib/AppContext';
 import { getCategoryById, CATEGORY_ROOTS } from '../../../lib/data/categories';
 import { Breadcrumbs } from '../../../components/Breadcrumbs';
+import { Seo } from '../../../components/Seo';
 import { SPRINGS } from '../../../lib/springs';
 
 const iconMap: Record<string, React.ElementType> = {
@@ -63,6 +64,7 @@ export default function SystemCategoryPage() {
 
   return (
     <div className="space-y-8 pb-16">
+      <Seo title={system.name} description={`Browse ${system.name.toLowerCase()} parts in the MJ Logistics auto parts catalog.`} />
       <Breadcrumbs items={[
         { label: root?.name || 'Catalog', path: '/catalog' },
         { label: system.name },

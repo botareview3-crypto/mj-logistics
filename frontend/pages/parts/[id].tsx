@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../../lib/AppContext';
 import { PARTS_DATABASE, SAMPLE_PART_REVIEWS } from '../../lib/data/parts';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { Seo, clip } from '../../components/Seo';
 import { VehicleFitBadge } from '../../components/VehicleFitBadge';
 import { ProductCard } from '../../components/ProductCard';
 import { SPRINGS } from '../../lib/springs';
@@ -55,6 +56,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="space-y-8 pb-16">
+      <Seo title={`${part.name} (${part.brand})`} description={clip(`${part.name} by ${part.brand}, SKU ${part.sku}. ${part.description}`)} />
       <Breadcrumbs items={[
         { label: 'Catalog', path: '/catalog' },
         { label: part.systemId.replace(/-/g, ' '), path: `/catalog/${part.systemId}` },

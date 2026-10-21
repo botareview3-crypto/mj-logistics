@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Seo } from '../components/Seo';
 
 const SECTIONS: { title: string; body: React.ReactNode }[] = [
   {
@@ -66,6 +67,7 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
 export default function TermsPage() {
   return (
     <div className="space-y-8 pb-16">
+      <Seo title="Terms of Sale" description="The terms that apply when you place an order with MJ Logistics Enterprise." />
       <Breadcrumbs items={[{ label: 'Terms of Sale' }]} />
 
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-1">

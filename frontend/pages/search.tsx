@@ -6,6 +6,7 @@ import { useApp } from '../lib/AppContext';
 import { PARTS_DATABASE } from '../lib/data/parts';
 import { FilterState } from '../lib/types';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Seo } from '../components/Seo';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { ProductCard } from '../components/ProductCard';
 import { SPRINGS } from '../lib/springs';
@@ -80,6 +81,7 @@ export default function SearchResultsPage() {
 
   return (
     <div className="space-y-6 pb-16">
+      <Seo title="Search" noindex />
       <Breadcrumbs items={[{ label: 'Search', path: '/search' }, { label: `"${query}"` }]} />
 
       {/* ── Hero search banner ────────────────────────────────────── */}

@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { useApp } from '../../lib/AppContext';
 import { CATEGORY_ROOTS } from '../../lib/data/categories';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
+import { Seo } from '../../components/Seo';
 import { SPRINGS } from '../../lib/springs';
 
 const iconMap: Record<string, React.ElementType> = {
@@ -35,6 +36,7 @@ export default function CatalogIndexPage() {
 
   return (
     <div className="space-y-10 pb-16">
+      <Seo title="Auto Parts Catalog" description="Browse the MJ Logistics auto parts catalog by system: braking, engine, suspension, electrical and more." />
       <Breadcrumbs items={[{ label: 'Catalog' }]} />
 
       {/* ── Hero banner ──────────────────────────────────────────────── */}

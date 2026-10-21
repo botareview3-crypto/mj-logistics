@@ -4,6 +4,7 @@ import { UserCircle2, Car, ShoppingCart, Package, ShieldCheck, ArrowRight, LogOu
 import { useApp } from '../lib/AppContext';
 import { POST_LOGIN_REDIRECT_KEY } from '../lib/auth';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Seo } from '../components/Seo';
 import { OrdersPanel } from '../components/account/OrdersPanel';
 import { AddressesPanel } from '../components/account/AddressesPanel';
 import { StockAlertsPanel } from '../components/account/StockAlertsPanel';
@@ -60,6 +61,7 @@ export default function MyAccountPage() {
 
   return (
     <div className="space-y-8 pb-16">
+      <Seo title="My Account" noindex />
       <Breadcrumbs items={[{ label: 'My Account' }]} />
 
       <section className="relative rounded-3xl overflow-hidden">

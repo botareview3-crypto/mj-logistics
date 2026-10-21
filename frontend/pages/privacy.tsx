@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Seo } from '../components/Seo';
 
 const SECTIONS: { title: string; body: React.ReactNode }[] = [
   {
@@ -76,6 +77,7 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
 export default function PrivacyPolicyPage() {
   return (
     <div className="space-y-8 pb-16">
+      <Seo title="Privacy Policy" description="How MJ Logistics Enterprise collects, uses and protects your personal information." />
       <Breadcrumbs items={[{ label: 'Privacy Policy' }]} />
 
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-1">

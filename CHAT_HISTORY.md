@@ -774,3 +774,27 @@ transcript, just the gist.
   is gone. The closing green CTA banner was removed - the page still has
   "Investor enquiries" buttons in the hero and the Focus section.
 
+### 2026-10-16 (Removed the self-ping)
+- Zemen asked to remove the keep-alive self-ping since the site is now on
+  Vercel. Deleted `backend/app/keepalive.py` (needs `git rm`, a zip can't
+  delete files), removed its `lifespan` import/argument from `backend/app/main.py`
+  and updated the comment in `render.yaml`. `BACKEND_URL` and `httpx` stay -
+  `routers/auth.py` still uses them for the Google/Apple callbacks.
+- Caveat: the repo only configures the FastAPI backend for Render's free tier.
+  If the backend is still there (not on Vercel), it now sleeps after ~15 min
+  idle and the first sign-in/order/admin request after that takes 30-60 s.
+  The `KEEP_ALIVE` env var, if set in the Render dashboard, can be deleted.
+
+### 2026-10-21 (Batch 2: search-engine basics, part 1)
+- New `components/Seo.tsx` (title, description, share text, optional noindex) and
+  `clip()` helper. Applied to every page that had no title/description: catalog
+  index, each system and subsystem page, every part page (title = name + brand,
+  description = name, brand, SKU and the start of the part description),
+  privacy, terms.
+- Private/transactional pages are now `noindex`: account, cart, garage, search,
+  sign-in, both admin screens. Added `public/robots.txt` with the same rules.
+- NOT done yet - needs the live domain: sitemap.xml, the `Sitemap:` line in
+  robots.txt, canonical URLs and a share image (og:image needs an absolute URL).
+- Backend (Render) is suspended until the monthly free-hours reset; the
+  self-ping was removed for MJ only. See earlier entry.
+

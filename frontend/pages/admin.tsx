@@ -425,7 +425,7 @@ export default function AdminPage() {
   if (!authed) {
     return (
       <>
-        <Head><title>Admin Login — MJ Logistics</title></Head>
+        <Head><title>Admin Login — MJ Logistics</title><meta name="robots" content="noindex, nofollow" /></Head>
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
           <form
             onSubmit={handleLogin}
@@ -459,7 +459,7 @@ export default function AdminPage() {
   // ─────────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <Head><title>Admin Console — MJ Logistics</title></Head>
+      <Head><title>Admin Console — MJ Logistics</title><meta name="robots" content="noindex, nofollow" /></Head>
       <div className="min-h-screen bg-gray-50">
 
         {/* Header */}

@@ -75,6 +75,7 @@ export default function SignInPage() {
       <Head>
         <title>Sign In — MJ Logistics</title>
         <meta name="description" content="Sign in or create an account with MJ Logistics." />
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
 
       {/* Top bar */}

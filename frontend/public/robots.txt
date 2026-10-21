@@ -1,0 +1,11 @@
+# Keep private and transactional pages out of search results.
+User-agent: *
+Disallow: /admin/
+Disallow: /account/
+Disallow: /cart/
+Disallow: /signin/
+Disallow: /search/
+Allow: /
+
+# TODO: add the sitemap line once the live domain is final, e.g.
+# Sitemap: https://YOUR-DOMAIN/sitemap.xml

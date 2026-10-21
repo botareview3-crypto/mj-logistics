@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { Seo } from '../components/Seo';
 import { VehicleFitBadge } from '../components/VehicleFitBadge';
 import { AddressForm, formatAddressLines } from '../components/account/AddressForm';
 import { accountApi, newClientRef, Order, SavedAddress, AddressInput } from '../lib/accountApi';
@@ -165,6 +166,7 @@ export default function CartPage() {
 
   return (
     <div className="space-y-8 pb-16">
+      <Seo title="Shopping Cart" noindex />
       <Breadcrumbs items={[{ label: 'Shopping Cart' }]} />
 
       {/* Page header */}
