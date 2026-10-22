@@ -813,3 +813,11 @@ transcript, just the gist.
 - Next steps for the owner: after deploying, add the site in Google Search
   Console and submit https://mj-logistics.vercel.app/sitemap.xml.
 
+### 2026-10-22 (Google Search Console verification)
+- Added the Search Console HTML-tag verification meta tag to `pages/_app.tsx`
+  (appears on every page, including the home page). Do not remove it or Google
+  will un-verify the site. After deploy: click Verify in Search Console, then
+  submit https://mj-logistics.vercel.app/sitemap.xml.
+- Packaged together with the sitemap/canonical changes (`mj-seo-sitemap` was
+  never downloaded), so this single zip is enough.
+

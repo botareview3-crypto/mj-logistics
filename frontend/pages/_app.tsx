@@ -166,6 +166,8 @@ export default function App(props: AppProps) {
   return (
     <>
       <Head>
+        {/* Proves to Google Search Console that we own the site - keep it. */}
+        <meta name="google-site-verification" content="GFcSPXL7d7GZpzoJayK_szACh3gXho7SCC_BAtEbfJ0" key="google-site-verification" />
         <link rel="canonical" href={canonical} key="canonical" />
         <meta property="og:url" content={canonical} key="og:url" />
         <meta property="og:site_name" content="MJ Logistics Enterprise" key="og:site_name" />
