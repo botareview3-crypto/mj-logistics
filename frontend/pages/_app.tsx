@@ -10,6 +10,7 @@ import { SiteFooter } from '../components/SiteFooter';
 import { VehicleSelectorModal } from '../components/VehicleSelectorModal';
 import { CheckCircle2, AlertCircle, Info, X, Wrench } from 'lucide-react';
 import { useSmoothScroll } from '../lib/useLenis';
+import { SITE_URL, SHARE_IMAGE } from '../lib/site';
 
 /* Corporate pages: full-bleed, with SiteHeader/SiteFooter.
    Legal pages share the chrome but keep a readable contained column. */
@@ -157,9 +158,20 @@ function AppLayout({ Component, pageProps }: AppProps) {
 
 /* ─── Root export ──────────────────────────────────────────────────────── */
 export default function App(props: AppProps) {
+  const router = useRouter();
+  // Canonical address of this page (no query string or #section, always with a
+  // trailing slash to match the exported site) so Google counts one URL per page.
+  const cleanPath = (router.asPath || '/').split('#')[0].split('?')[0];
+  const canonical = `${SITE_URL}${cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`}`;
   return (
     <>
       <Head>
+        <link rel="canonical" href={canonical} key="canonical" />
+        <meta property="og:url" content={canonical} key="og:url" />
+        <meta property="og:site_name" content="MJ Logistics Enterprise" key="og:site_name" />
+        <meta property="og:type" content="website" key="og:type" />
+        <meta property="og:image" content={`${SITE_URL}${SHARE_IMAGE}`} key="og:image" />
+        <meta name="twitter:card" content="summary_large_image" key="twitter:card" />
         <title>MJ Logistics Enterprise — Parts that fit. Delivered fast.</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta

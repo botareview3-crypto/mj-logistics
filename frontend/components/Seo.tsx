@@ -9,8 +9,8 @@ interface SeoProps {
 }
 
 // One place for the <title>, description, social-share text and noindex flag,
-// so every page gets them the same way. Add `og:image` here once the live
-// domain is known (it needs an absolute URL).
+// so every page gets them the same way. The canonical link and the share
+// picture are set for all pages in pages/_app.tsx.
 export function Seo({ title, description, noindex }: SeoProps) {
   const full = `${title} — MJ Logistics`;
   return (
@@ -18,10 +18,10 @@ export function Seo({ title, description, noindex }: SeoProps) {
       <title>{full}</title>
       {description && <meta name="description" content={description} />}
       {noindex && <meta name="robots" content="noindex, nofollow" />}
-      <meta property="og:site_name" content="MJ Logistics Enterprise" />
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={full} />
-      {description && <meta property="og:description" content={description} />}
+      <meta property="og:site_name" content="MJ Logistics Enterprise" key="og:site_name" />
+      <meta property="og:type" content="website" key="og:type" />
+      <meta property="og:title" content={full} key="og:title" />
+      {description && <meta property="og:description" content={description} key="og:description" />}
     </Head>
   );
 }

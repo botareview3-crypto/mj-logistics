@@ -798,3 +798,18 @@ transcript, just the gist.
 - Backend (Render) is suspended until the monthly free-hours reset; the
   self-ping was removed for MJ only. See earlier entry.
 
+### 2026-10-21 (Batch 2, part 2: sitemap, canonical links, share image)
+- Live address confirmed: https://mj-logistics.vercel.app/ (set once in
+  `frontend/lib/site.ts`; override with the NEXT_PUBLIC_SITE_URL env var if a
+  custom domain is added).
+- `_app.tsx` now adds, to every page: canonical link, og:url, og:image
+  (`/images/homepage/auto-parts.jpg`), og:site_name/type and twitter card.
+  Tags carry `key`s so `Seo.tsx` replaces rather than duplicates them.
+  The old Render copy of the site now points Google at the Vercel address.
+- `scripts/generate-sitemap.js` runs automatically after `npm run build`
+  (package.json `postbuild`), reads `out/` and writes `out/sitemap.xml`
+  (skips admin, account, cart, signin, search, 404). `robots.txt` now has the
+  Sitemap line. Tested the script against a fake export; real build not run.
+- Next steps for the owner: after deploying, add the site in Google Search
+  Console and submit https://mj-logistics.vercel.app/sitemap.xml.
+
