@@ -4,9 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from .routers import vehicles, categories, parts, admin, auth, account, admin_orders
 from .db import init_db
-from .keepalive import lifespan
 
-app = FastAPI(title="Auto Parts Catalog API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Auto Parts Catalog API", version="0.1.0")
 
 # Creates the users, orders, addresses, cart/garage and stock-alert tables on the configured database —
 # see app/db.py for how DATABASE_URL controls where that lives.

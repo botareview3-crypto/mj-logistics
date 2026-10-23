@@ -821,3 +821,13 @@ transcript, just the gist.
 - Packaged together with the sitemap/canonical changes (`mj-seo-sitemap` was
   never downloaded), so this single zip is enough.
 
+
+### 2026-10-22 (Removed the self-ping, for real this time)
+- The 2026-10-16 removal never reached GitHub: `main` still had
+  `backend/app/keepalive.py`, the `lifespan` import in `backend/app/main.py`
+  and the render.yaml comment. Removed again: `git rm backend/app/keepalive.py`,
+  dropped the import and `lifespan=lifespan` from `main.py`, updated the comment.
+  `httpx` and `BACKEND_URL` stay (used by `routers/auth.py`).
+- Caveat: the Render free backend now sleeps after ~15 min idle; the first
+  sign-in/order/admin request then takes 30-60 s. `KEEP_ALIVE` and
+  `KEEP_ALIVE_SECONDS` in the Render dashboard can be deleted.

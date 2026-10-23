@@ -1,8 +1,8 @@
 services:
   # FastAPI backend — powers /admin AND now sign-in (email/session storage
   # for Google + Apple accounts lives in Neon Postgres via DATABASE_URL, see app/db.py).
-  # Free tier: sleeps after 15 min idle (cold start ~30-60s). app/keepalive.py
-  # pings /api/health every 10 min to stop that; set KEEP_ALIVE=false to disable.
+  # Free tier: sleeps after 15 min idle (cold start ~30-60s). There is no
+  # self-ping any more; /api/health is there for an external pinger if wanted.
   - type: web
     name: mj-logistics-backend-7crs
     runtime: python
