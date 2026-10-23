@@ -2,6 +2,9 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-10-23** `dd62e30` Remove Render keep-alive self-ping
+- **2026-10-22** `35749a3` Add Search Console verification, canonical links and sitemap
+- **2026-10-22** `9b59e74` Update commit history
 - **2026-10-22** `a7add21` Update commit history
 - **2026-10-22** `0e93e92` Add canonical links, share image and auto-generated sitemap
 - **2026-10-22** `94bcd20` Update commit history
