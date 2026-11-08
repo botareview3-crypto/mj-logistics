@@ -48,6 +48,13 @@ const SYSTEM_ART: Record<string, string> = {
   'exhaust-system': '/images/categories/exhaust.webp',
 };
 
+const GLANCE = [
+  { value: `${PARTS_DATABASE.length.toLocaleString()}+`, label: 'auto parts in the catalogue' },
+  { value: '5', label: 'divisions, one accountable partner' },
+  { value: 'Fit checked', label: 'before you buy any auto part' },
+  { value: 'Door to door', label: 'sourcing, import, stock and delivery' },
+];
+
 const SERVICE_ICONS = { FlaskConical, Workflow } as const;
 
 const STEPS = [
@@ -142,16 +149,16 @@ export default function HomePage() {
               aria-hidden="true"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-ink/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/35 to-ink/15" />
         </div>
 
         <div data-hero-copy className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1440px] flex-col justify-end px-5 pb-10 pt-28 text-white sm:px-8 sm:pb-14">
-          <p data-reveal data-intro="0" className="eyebrow mb-6 flex items-center gap-3 text-white/85">
+          <p data-reveal data-intro="0" className="eyebrow mb-6 flex items-center gap-3 text-white">
             <span className="h-px w-10 bg-signal" /> MJ Logistics Enterprise
           </p>
           <SplitText as="h1" intro={0.05} className="t-hero max-w-[14ch]" text={'Parts that fit.\n*Delivered fast.*'} />
           <div className="mt-8 grid gap-6 border-t border-white/20 pt-6 sm:gap-8 sm:pt-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <p data-reveal data-intro="0.3" className="max-w-xl text-[17px] leading-7 text-white/85">
+            <p data-reveal data-intro="0.3" className="max-w-xl text-[19px] leading-8 text-white">
               Genuine auto parts with verified fitment, workplace supplies, mining, solar energy and more —
               sourced, cleared and delivered by one partner.
             </p>
@@ -163,10 +170,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── AT A GLANCE ──────────────────────────────────────────────────── */}
+      <section className="bg-forest text-white">
+        <ul className="mx-auto grid max-w-[1440px] gap-px px-5 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
+          {GLANCE.map(g => (
+            <li key={g.label} className="py-7 sm:py-9 lg:px-8 lg:first:pl-0 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-white/15">
+              <p className="font-display text-[clamp(1.75rem,2.6vw,2.4rem)] font-semibold leading-none">{g.value}</p>
+              <p className="mt-3 text-[17px] leading-7 text-white/90">{g.label}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {/* ── STATEMENT ────────────────────────────────────────────────────── */}
       <section className="bg-paper py-24 sm:py-32">
         <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[220px_1fr]">
-          <p className="eyebrow text-sage">Who we are</p>
+          <p className="eyebrow text-forest">Who we are</p>
           <div>
             <ScrubText
               className="t-lead max-w-[34ch] font-display font-medium text-ink"
@@ -175,11 +194,11 @@ export default function HomePage() {
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:max-w-4xl">
               <div data-reveal className="flex gap-4">
                 <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-forest text-white"><Check className="h-4 w-4" /></span>
-                <p className="text-[15px] leading-7 text-ink/70"><strong className="text-ink">Buy with confidence.</strong> Every auto part is listed with its fitment, specifications and OEM references.</p>
+                <p className="text-[17px] leading-7 text-ink/80"><strong className="text-ink">Buy with confidence.</strong> Every auto part is listed with its fitment, specifications and OEM references.</p>
               </div>
               <div data-reveal data-delay="0.08" className="flex gap-4">
                 <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-white"><Check className="h-4 w-4" /></span>
-                <p className="text-[15px] leading-7 text-ink/70"><strong className="text-ink">One partner, many needs.</strong> Parts, office supplies, mining, solar, oil &amp; gas and services — handled by the same accountable team.</p>
+                <p className="text-[17px] leading-7 text-ink/80"><strong className="text-ink">One partner, many needs.</strong> Parts, office supplies, mining, solar, oil &amp; gas and services — handled by the same accountable team.</p>
               </div>
             </div>
           </div>
@@ -187,11 +206,11 @@ export default function HomePage() {
       </section>
 
       {/* ── DIVISIONS ────────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
+      <section className="bg-mist py-24 sm:py-32">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="eyebrow mb-4 text-sage">Our divisions</p>
+              <p className="eyebrow mb-4 text-forest">Our divisions</p>
               <SplitText className="t-xl" text={'Five divisions. *One partner.*'} />
             </div>
             <Link href="/divisions" className="btn btn-ghost-dark self-start lg:self-auto">About MJ <ArrowRight className="btn-arrow h-4 w-4" /></Link>
@@ -203,16 +222,15 @@ export default function HomePage() {
                 href={d.href}
                 data-reveal
                 data-delay={String((i % 2) * 0.08)}
-                className="group overflow-hidden rounded-3xl border border-ink/10 bg-paper transition-shadow md:[&:last-child:nth-child(odd)]:col-span-2 duration-500 hover:shadow-[0_24px_60px_-30px_rgba(4,38,29,.35)]"
+                className="card-raised group overflow-hidden rounded-3xl border border-ink/10 bg-white md:[&:last-child:nth-child(odd)]:col-span-2"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img src={d.image} alt={d.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
-                  <span className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink">{d.no}</span>
                 </div>
                 <div className="flex items-end justify-between gap-6 p-6 sm:p-8">
                   <div>
                     <h3 className="text-[clamp(1.5rem,2.4vw,2.1rem)]">{d.name}</h3>
-                    <p className="mt-3 max-w-md text-[15px] leading-7 text-ink/65">{d.text}</p>
+                    <p className="mt-3 max-w-md text-[17px] leading-7 text-ink/80">{d.text}</p>
                   </div>
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-ink/15 transition-colors duration-300 group-hover:border-signal group-hover:bg-signal group-hover:text-white">
                     <ArrowUpRight className="h-5 w-5" />
@@ -229,7 +247,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="eyebrow mb-4 text-sage">Shop by system</p>
+              <p className="eyebrow mb-4 text-forest">Shop by system</p>
               <SplitText className="t-xl" text={'Find the part. We\'ll check the *fit.*'} />
             </div>
             <Link href="/catalog" className="btn btn-ghost-dark self-start lg:self-auto">All categories <ArrowRight className="btn-arrow h-4 w-4" /></Link>
@@ -239,14 +257,14 @@ export default function HomePage() {
               <li key={s.id} data-reveal data-delay={String((i % 3) * 0.06)}>
                 <Link
                   href={`/catalog/${s.id}`}
-                  className="group flex items-center gap-5 rounded-2xl border border-ink/10 bg-white p-4 pr-5 transition-colors duration-300 hover:border-forest"
+                  className="group flex items-center gap-5 card-raised rounded-2xl border border-ink/10 bg-white p-4 pr-5 hover:border-forest"
                 >
                   <span className="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-paper">
                     <img src={s.art} alt="" loading="lazy" className="h-16 w-16 object-contain transition-transform duration-500 group-hover:scale-110" />
                   </span>
                   <span className="flex-1">
-                    <span className="block text-lg font-semibold leading-tight text-ink">{s.name}</span>
-                    <span className="mt-1 block text-sm text-ink/55">{s.count.toLocaleString()} items</span>
+                    <span className="block text-xl font-semibold leading-tight text-ink">{s.name}</span>
+                    <span className="mt-1 block text-base text-ink/70">{s.count.toLocaleString()} items</span>
                   </span>
                   <ArrowUpRight className="h-5 w-5 text-ink/40 transition-colors group-hover:text-signal" />
                 </Link>
@@ -261,24 +279,24 @@ export default function HomePage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <div className="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
             <div>
-              <p className="eyebrow mb-4 text-sage">How it moves</p>
+              <p className="eyebrow mb-4 text-forest">How it moves</p>
               <SplitText className="t-xl" text={'From source to *site.*'} />
             </div>
-            <p data-reveal className="max-w-md text-[16px] leading-7 text-ink/65 lg:justify-self-end">
+            <p data-reveal className="max-w-md text-[18px] leading-8 text-ink/80 lg:justify-self-end">
               Sourcing, import, stock and delivery handled by one team — so you get one price,
               one timeline and one point of contact.
             </p>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
-              <article key={s.no} data-reveal data-delay={String(i * 0.06)} className="overflow-hidden rounded-3xl border border-ink/10 bg-paper">
+              <article key={s.no} data-reveal data-delay={String(i * 0.06)} className="card-raised overflow-hidden rounded-3xl border border-ink/10 bg-paper">
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img src={s.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                 </div>
                 <div className="p-6">
                   <span className="text-sm font-semibold text-signal">Step {s.no}</span>
                   <h3 className="mt-2 text-2xl">{s.title}</h3>
-                  <p className="mt-3 text-[15px] leading-7 text-ink/65">{s.text}</p>
+                  <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.text}</p>
                 </div>
               </article>
             ))}
@@ -301,11 +319,11 @@ export default function HomePage() {
       </section>
 
       {/* ── SERVICES ─────────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
+      <section className="bg-mist py-24 sm:py-32">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="eyebrow mb-4 text-sage">Also from MJ Logistics</p>
+              <p className="eyebrow mb-4 text-forest">Also from MJ Logistics</p>
               <SplitText className="t-xl" text={'More *services.*'} />
             </div>
             <Link href="/services" className="btn btn-ghost-dark self-start lg:self-auto">All services <ArrowRight className="btn-arrow h-4 w-4" /></Link>
@@ -320,7 +338,7 @@ export default function HomePage() {
                   href={`/services#${s.id}`}
                   data-reveal
                   data-delay={String(i * 0.08)}
-                  className="group grid overflow-hidden rounded-3xl border border-ink/10 bg-paper sm:grid-cols-[.9fr_1.1fr]"
+                  className="card-raised group grid overflow-hidden rounded-3xl border border-ink/10 bg-white sm:grid-cols-[.9fr_1.1fr]"
                 >
                   <div className="relative min-h-[200px] overflow-hidden">
                     <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
@@ -329,8 +347,8 @@ export default function HomePage() {
                     <Icon className="h-7 w-7 text-signal" strokeWidth={1.8} />
                     <div>
                       <h3 className="text-xl leading-snug">{s.title}</h3>
-                      <p className="mt-3 text-[15px] leading-7 text-ink/65">{s.short}</p>
-                      <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-forest group-hover:text-signal">
+                      <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.short}</p>
+                      <span className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-forest group-hover:text-signal">
                         Learn more <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -347,20 +365,20 @@ export default function HomePage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
             <div>
-              <p className="eyebrow mb-4 text-sage">Why MJ</p>
+              <p className="eyebrow mb-4 text-forest">Why MJ</p>
               <SplitText className="t-xl" text={'Built for the *next move.*'} />
             </div>
-            <p data-reveal className="max-w-lg text-[16px] leading-7 text-ink/65 lg:justify-self-end">
+            <p data-reveal className="max-w-lg text-[18px] leading-8 text-ink/80 lg:justify-self-end">
               Good service isn’t a slogan. It’s the clarity, detail and follow-through that make a
               buying decision easier — every single time.
             </p>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {PRINCIPLES.map((p, i) => (
-              <div key={p.title} data-reveal data-delay={String(i * 0.06)} className="rounded-3xl border border-ink/10 bg-white p-7">
-                <span className="text-sm font-semibold text-signal">0{i + 1}</span>
-                <h3 className="mt-6 text-xl">{p.title}</h3>
-                <p className="mt-3 text-[15px] leading-7 text-ink/65">{p.text}</p>
+              <div key={p.title} data-reveal data-delay={String(i * 0.06)} className="card-raised rounded-3xl border border-ink/10 bg-white p-7">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-forest text-white"><Check className="h-5 w-5" /></span>
+                <h3 className="mt-6 text-2xl">{p.title}</h3>
+                <p className="mt-3 text-[17px] leading-7 text-ink/80">{p.text}</p>
               </div>
             ))}
           </div>
@@ -372,7 +390,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
           <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="eyebrow mb-4 text-sage">In stock now</p>
+              <p className="eyebrow mb-4 text-forest">In stock now</p>
               <SplitText className="t-xl" text={'Ready to *ship.*'} />
             </div>
             <div className="flex items-center gap-2">
@@ -387,23 +405,23 @@ export default function HomePage() {
           className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-6 [scrollbar-width:none] sm:px-8 lg:px-[max(2rem,calc((100vw-1440px)/2+2rem))] [&::-webkit-scrollbar]:hidden"
         >
           {products.map(p => (
-            <article key={p.id} className="group relative flex w-[78vw] max-w-[320px] shrink-0 snap-start flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white sm:w-[300px]">
+            <article key={p.id} className="group relative flex w-[78vw] max-w-[320px] shrink-0 snap-start flex-col overflow-hidden card-raised rounded-3xl border border-ink/10 bg-white sm:w-[300px]">
               <Link href={`/parts/${p.id}`} className="relative block aspect-square overflow-hidden bg-paper">
                 <img src={p.images[0]} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
                 {p.originalPrice && p.originalPrice > p.price && (
-                  <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1 text-xs font-semibold text-white">
+                  <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1.5 text-sm font-semibold text-white">
                     Save €{(p.originalPrice - p.price).toFixed(0)}
                   </span>
                 )}
               </Link>
               <div className="flex flex-1 flex-col p-5">
-                <p className="eyebrow !text-[11px] text-sage">{p.brand}</p>
-                <Link href={`/parts/${p.id}`} className="mt-2 line-clamp-2 text-[15px] font-semibold leading-snug text-ink hover:text-forest">{p.name}</Link>
+                <p className="eyebrow !text-[13px] text-forest">{p.brand}</p>
+                <Link href={`/parts/${p.id}`} className="mt-2 line-clamp-2 text-[17px] font-semibold leading-snug text-ink hover:text-forest">{p.name}</Link>
                 <div className="mt-auto flex items-end justify-between pt-5">
                   <div>
                     <span className="text-2xl font-semibold text-ink">€{p.price.toFixed(2)}</span>
-                    {p.originalPrice && p.originalPrice > p.price && <span className="ml-2 text-xs text-ink/40 line-through">€{p.originalPrice.toFixed(2)}</span>}
-                    <p className="mt-1 flex items-center gap-1.5 text-xs text-forest"><span className="h-1.5 w-1.5 rounded-full bg-forest" /> In stock</p>
+                    {p.originalPrice && p.originalPrice > p.price && <span className="ml-2 text-sm text-ink/55 line-through">€{p.originalPrice.toFixed(2)}</span>}
+                    <p className="mt-1 flex items-center gap-1.5 text-sm font-medium text-forest"><span className="h-1.5 w-1.5 rounded-full bg-forest" /> In stock</p>
                   </div>
                   <button
                     type="button"
@@ -433,7 +451,7 @@ export default function HomePage() {
               <SplitText className="t-xl" accentClass="text-ink" text={'Save your vehicle. See only parts *that fit.*'} />
             </div>
             <div data-reveal className="flex flex-col gap-5 lg:items-end">
-              <p className="max-w-sm text-[16px] leading-7 text-white/90 lg:text-right">
+              <p className="max-w-sm text-[18px] leading-8 text-white lg:text-right">
                 Add your car to My Garage once and the catalogue filters to compatible parts automatically.
               </p>
               <Link href="/garage" className="btn btn-ink">Open My Garage <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>

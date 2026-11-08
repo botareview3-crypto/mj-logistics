@@ -831,3 +831,15 @@ transcript, just the gist.
 - Caveat: the Render free backend now sleeps after ~15 min idle; the first
   sign-in/order/admin request then takes 30-60 s. `KEEP_ALIVE` and
   `KEEP_ALIVE_SECONDS` in the Render dashboard can be deleted.
+
+### 2026-11-08 (Boss: "Please make the website more attractive")
+- Kept the client's earlier rules (light and simple, no new motion, only hero and
+  footer dark). Changes are all about clarity and richness for an older reader:
+  bigger, higher-contrast body text (17-19px, ink/80), larger eyebrow labels
+  (14px, less tracking), bigger buttons (3.5rem / 16px), `.card-raised` soft
+  depth on cards, a new soft emerald tint (`mist`) for alternating sections
+  (Divisions, Services), a forest "at a glance" strip under the hero
+  (catalogue count comes from `PARTS_DATABASE`, so it stays true), real icons
+  instead of fake 01-05 numbering on divisions and "Why MJ", stronger hero scrim.
+- Files: `styles/globals.css`, `pages/index.tsx`, `components/fx/PageHero.tsx`
+  (PageHero makes inner-page intros larger too). Not built or previewed here.

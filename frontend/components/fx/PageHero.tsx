@@ -33,7 +33,7 @@ export function PageHero({
           <SplitText as="h1" intro={0.05} className="t-hero max-w-[16ch] text-ink" text={title} />
           <div>
             {intro && (
-              <p data-reveal data-intro="0.25" className="max-w-xl text-[17px] leading-8 text-ink/70">{intro}</p>
+              <p data-reveal data-intro="0.25" className="max-w-xl text-[19px] leading-8 text-ink/85">{intro}</p>
             )}
             {actions && (
               <div data-reveal data-intro="0.35" className="mt-8 flex flex-wrap gap-3">{actions}</div>
