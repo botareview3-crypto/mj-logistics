@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-11-08** `15a810e` Make the site more attractive: larger text, soft section tint, at-a-glance strip, card depth
+- **2026-10-23** `db4eacd` Update commit history
 - **2026-10-23** `dd62e30` Remove Render keep-alive self-ping
 - **2026-10-22** `35749a3` Add Search Console verification, canonical links and sitemap
 - **2026-10-22** `9b59e74` Update commit history
