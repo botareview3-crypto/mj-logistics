@@ -843,3 +843,15 @@ transcript, just the gist.
   instead of fake 01-05 numbering on divisions and "Why MJ", stronger hero scrim.
 - Files: `styles/globals.css`, `pages/index.tsx`, `components/fx/PageHero.tsx`
   (PageHero makes inner-page intros larger too). Not built or previewed here.
+
+### 2026-11-08 (Cards and photos looked plain — colours kept)
+- The blue/black/white theme was tried and dropped; the emerald/orange palette
+  is unchanged. Only cards and photo treatment on the home page changed
+  (`pages/index.tsx`): division cards are now full photo cards with the title
+  and text over a dark gradient; process cards frame the photo inside the card
+  with a "Step 0N" chip on the picture; service cards frame their photo and use
+  an icon tile; "Why MJ" cards get a different icon each in a soft tile that
+  fills on hover; "shop by system" art sits on a soft tint; product photos show
+  the whole part (`object-contain`) on a soft panel instead of being cropped.
+- No new motion beyond the existing gentle hover zoom. Not built or previewed
+  locally. Includes the earlier readability changes (`globals.css`, `PageHero`).

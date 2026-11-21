@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, FlaskConical, Plus, Workflow } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, FlaskConical, Layers, MessageCircle, Plus, Search, ShieldCheck, Workflow } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { gsap } from '../lib/gsap';
 import { useScrollFx, useIsoLayoutEffect, prefersReducedMotion } from '../lib/fx';
@@ -67,6 +67,8 @@ const STEPS = [
   { no: '04', title: 'Deliver', image: '/images/site/forklift.webp',
     text: 'Delivery and fulfilment connect suppliers with the workshops, offices and sites where materials are needed.' },
 ];
+
+const PRINCIPLE_ICONS = [ShieldCheck, Search, Layers, MessageCircle];
 
 const PRINCIPLES = [
   { title: 'Genuine, traceable stock', text: 'Parts come from manufacturers and verified suppliers — no grey-market guesswork.' },
@@ -222,17 +224,16 @@ export default function HomePage() {
                 href={d.href}
                 data-reveal
                 data-delay={String((i % 2) * 0.08)}
-                className="card-raised group overflow-hidden rounded-3xl border border-ink/10 bg-white md:[&:last-child:nth-child(odd)]:col-span-2"
+                className="card-raised group relative isolate block min-h-[380px] overflow-hidden rounded-3xl md:min-h-[460px] md:[&:last-child:nth-child(odd)]:col-span-2"
               >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <img src={d.image} alt={d.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
-                </div>
-                <div className="flex items-end justify-between gap-6 p-6 sm:p-8">
+                <img src={d.image} alt={d.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/35 to-ink/0" />
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-white sm:p-8">
                   <div>
-                    <h3 className="text-[clamp(1.5rem,2.4vw,2.1rem)]">{d.name}</h3>
-                    <p className="mt-3 max-w-md text-[17px] leading-7 text-ink/80">{d.text}</p>
+                    <h3 className="text-[clamp(1.75rem,2.6vw,2.4rem)] text-white">{d.name}</h3>
+                    <p className="mt-3 max-w-md text-[17px] leading-7 text-white/90">{d.text}</p>
                   </div>
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-ink/15 transition-colors duration-300 group-hover:border-signal group-hover:bg-signal group-hover:text-white">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-ink transition-colors duration-300 group-hover:bg-signal group-hover:text-white">
                     <ArrowUpRight className="h-5 w-5" />
                   </span>
                 </div>
@@ -259,7 +260,7 @@ export default function HomePage() {
                   href={`/catalog/${s.id}`}
                   className="group flex items-center gap-5 card-raised rounded-2xl border border-ink/10 bg-white p-4 pr-5 hover:border-forest"
                 >
-                  <span className="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-paper">
+                  <span className="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-mist">
                     <img src={s.art} alt="" loading="lazy" className="h-16 w-16 object-contain transition-transform duration-500 group-hover:scale-110" />
                   </span>
                   <span className="flex-1">
@@ -289,13 +290,14 @@ export default function HomePage() {
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
-              <article key={s.no} data-reveal data-delay={String(i * 0.06)} className="card-raised overflow-hidden rounded-3xl border border-ink/10 bg-paper">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={s.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+              <article key={s.no} data-reveal data-delay={String(i * 0.06)} className="card-raised group rounded-3xl border border-ink/10 bg-paper p-3">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                  <img src={s.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/45 via-transparent to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3.5 py-1.5 text-sm font-semibold text-ink">Step {s.no}</span>
                 </div>
-                <div className="p-6">
-                  <span className="text-sm font-semibold text-signal">Step {s.no}</span>
-                  <h3 className="mt-2 text-2xl">{s.title}</h3>
+                <div className="px-3 pb-3 pt-5">
+                  <h3 className="text-2xl">{s.title}</h3>
                   <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.text}</p>
                 </div>
               </article>
@@ -338,13 +340,13 @@ export default function HomePage() {
                   href={`/services#${s.id}`}
                   data-reveal
                   data-delay={String(i * 0.08)}
-                  className="card-raised group grid overflow-hidden rounded-3xl border border-ink/10 bg-white sm:grid-cols-[.9fr_1.1fr]"
+                  className="card-raised group grid overflow-hidden rounded-3xl border border-ink/10 bg-white p-3 sm:grid-cols-[.9fr_1.1fr]"
                 >
-                  <div className="relative min-h-[200px] overflow-hidden">
+                  <div className="relative min-h-[220px] overflow-hidden rounded-2xl">
                     <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
                   </div>
-                  <div className="flex flex-col justify-between gap-6 p-6 sm:p-8">
-                    <Icon className="h-7 w-7 text-signal" strokeWidth={1.8} />
+                  <div className="flex flex-col justify-between gap-6 p-5 sm:p-7">
+                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-mist text-signal"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
                     <div>
                       <h3 className="text-xl leading-snug">{s.title}</h3>
                       <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.short}</p>
@@ -375,8 +377,8 @@ export default function HomePage() {
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {PRINCIPLES.map((p, i) => (
-              <div key={p.title} data-reveal data-delay={String(i * 0.06)} className="card-raised rounded-3xl border border-ink/10 bg-white p-7">
-                <span className="grid h-11 w-11 place-items-center rounded-full bg-forest text-white"><Check className="h-5 w-5" /></span>
+              <div key={p.title} data-reveal data-delay={String(i * 0.06)} className="card-raised group rounded-3xl border border-ink/10 bg-white p-7">
+                <span className="grid h-14 w-14 place-items-center rounded-2xl bg-mist text-forest transition-colors duration-300 group-hover:bg-forest group-hover:text-white">{React.createElement(PRINCIPLE_ICONS[i], { className: 'h-6 w-6', strokeWidth: 1.8 })}</span>
                 <h3 className="mt-6 text-2xl">{p.title}</h3>
                 <p className="mt-3 text-[17px] leading-7 text-ink/80">{p.text}</p>
               </div>
@@ -406,8 +408,8 @@ export default function HomePage() {
         >
           {products.map(p => (
             <article key={p.id} className="group relative flex w-[78vw] max-w-[320px] shrink-0 snap-start flex-col overflow-hidden card-raised rounded-3xl border border-ink/10 bg-white sm:w-[300px]">
-              <Link href={`/parts/${p.id}`} className="relative block aspect-square overflow-hidden bg-paper">
-                <img src={p.images[0]} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
+              <Link href={`/parts/${p.id}`} className="relative block aspect-square overflow-hidden bg-gradient-to-b from-paper to-mist">
+                <img src={p.images[0]} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain p-6 mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
                 {p.originalPrice && p.originalPrice > p.price && (
                   <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1.5 text-sm font-semibold text-white">
                     Save €{(p.originalPrice - p.price).toFixed(0)}
