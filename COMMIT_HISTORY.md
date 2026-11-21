@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-11-21** `b079469` Home page: photo-forward division cards, framed photos, per-card icons, uncropped product photos
+- **2026-11-08** `a9a2509` Update commit history
 - **2026-11-08** `15a810e` Make the site more attractive: larger text, soft section tint, at-a-glance strip, card depth
 - **2026-10-23** `db4eacd` Update commit history
 - **2026-10-23** `dd62e30` Remove Render keep-alive self-ping
