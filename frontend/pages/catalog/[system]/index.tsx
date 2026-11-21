@@ -24,7 +24,7 @@ const CATEGORY_PRESENTATION: Record<string, {
 }> = {
   'car-parts': {
     image: '/homepage/auto-parts-istock.jpg',
-    accent: '#0A4A3A',
+    accent: '#1F3A4D',
     eyebrow: 'Vehicle systems',
     availability: 'OE & aftermarket',
   },
@@ -43,11 +43,11 @@ export default function SystemCategoryPage() {
     return (
       <div className="text-center py-20 space-y-4">
         <Package className="w-12 h-12 mx-auto text-slate-300" />
-        <h2 className="font-display text-2xl font-bold text-[#04261D]">Category Not Found</h2>
+        <h2 className="font-display text-2xl font-bold text-[#0F2230]">Category Not Found</h2>
         <button
           type="button"
           onClick={() => navigate('/catalog')}
-          className="px-5 py-2.5 bg-[#04261D] text-white font-semibold rounded-xl cursor-pointer"
+          className="px-5 py-2.5 bg-[#0F2230] text-white font-semibold rounded-xl cursor-pointer"
         >
           Back to Catalog
         </button>
@@ -60,7 +60,7 @@ export default function SystemCategoryPage() {
   const presentation = CATEGORY_PRESENTATION[root?.id || ''] || CATEGORY_PRESENTATION['car-parts'];
   const accentHoverClass = presentation.accent === '#9b7430'
     ? 'hover:border-[#9b7430] group-hover:text-[#9b7430] group-hover:bg-[#9b7430]'
-    : 'hover:border-[#0A4A3A] group-hover:text-[#0A4A3A] group-hover:bg-[#0A4A3A]';
+    : 'hover:border-[#1F3A4D] group-hover:text-[#1F3A4D] group-hover:bg-[#1F3A4D]';
 
   return (
     <div className="space-y-8 pb-16">
@@ -71,13 +71,13 @@ export default function SystemCategoryPage() {
       ]} />
 
       {/* ── Hero banner ──────────────────────────────────────────── */}
-      <div className="relative rounded-3xl overflow-hidden bg-[#04261D]">
+      <div className="relative rounded-3xl overflow-hidden bg-[#0F2230]">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-25"
           style={{ backgroundImage: `url('${presentation.image}')` }}
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04261D] via-[#04261D]/90 to-[#04261D]/55" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F2230] via-[#0F2230]/90 to-[#0F2230]/55" />
         <div className="relative p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
           <div
             className="w-16 h-16 rounded-2xl border border-white/20 flex items-center justify-center shrink-0"
@@ -108,7 +108,7 @@ export default function SystemCategoryPage() {
 
       {/* ── Sub-assembly grid ────────────────────────────────────── */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl font-bold text-[#04261D] flex items-center gap-2">
+        <h2 className="font-display text-xl font-bold text-[#0F2230] flex items-center gap-2">
           <Package className="w-5 h-5" style={{ color: presentation.accent }} />
           Explore {system.name}
         </h2>
@@ -120,13 +120,13 @@ export default function SystemCategoryPage() {
               type="button"
               onClick={() => navigate(`/catalog/${system.id}/${sub.id}`)}
               className={`product-card bg-white rounded-2xl border border-slate-200 p-5 text-left flex flex-col gap-3 cursor-pointer group`}
-              whileHover={{ y: -3, borderColor: presentation.accent, boxShadow: '0 12px 32px rgba(4,38,29,0.10)' }}
+              whileHover={{ y: -3, borderColor: presentation.accent, boxShadow: '0 12px 32px rgba(15,34,48,0.10)' }}
               whileTap={{ scale: 0.98 }}
               transition={SPRINGS.default}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
-                  <h3 className={`font-display text-[16px] font-bold text-[#04261D] ${accentHoverClass.split(' ')[1]} transition-colors leading-snug`}>
+                  <h3 className={`font-display text-[16px] font-bold text-[#0F2230] ${accentHoverClass.split(' ')[1]} transition-colors leading-snug`}>
                     {sub.name}
                   </h3>
                   {sub.description && (
@@ -156,7 +156,7 @@ export default function SystemCategoryPage() {
         <motion.button
           type="button"
           onClick={() => navigate('/catalog')}
-          className="flex items-center gap-1 text-[13px] font-semibold text-[#0A4A3A] hover:text-[#04261D] transition-colors cursor-pointer"
+          className="flex items-center gap-1 text-[13px] font-semibold text-[#1F3A4D] hover:text-[#0F2230] transition-colors cursor-pointer"
           whileTap={{ scale: 0.97 }}
           transition={SPRINGS.micro}
         >

@@ -53,7 +53,7 @@ export function AddressesPanel() {
   return (
     <div id="addresses" className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-5 scroll-mt-28">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-display text-lg font-bold text-[#04261D] flex items-center gap-2"><MapPin className="w-5 h-5 text-[#0A4A3A]" /> Saved Addresses</h2>
+        <h2 className="font-display text-lg font-bold text-[#0F2230] flex items-center gap-2"><MapPin className="w-5 h-5 text-[#1F3A4D]" /> Saved Addresses</h2>
         {!adding && addresses && (
           <button type="button" onClick={() => { setAdding(true); setEditingId(null); }} className="px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer flex items-center gap-1.5">
             <Plus className="w-3.5 h-3.5" /> Add address
@@ -89,15 +89,15 @@ export function AddressesPanel() {
                 <div className="min-w-0 text-sm text-slate-600 leading-relaxed">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-bold text-slate-900">{a.label || 'Address'}</span>
-                    {a.is_default && <span className="text-[10px] font-bold uppercase tracking-wider text-[#0A4A3A] bg-mint/30 border border-mint px-2 py-0.5 rounded-full">Default</span>}
+                    {a.is_default && <span className="text-[10px] font-bold uppercase tracking-wider text-[#1F3A4D] bg-mint/30 border border-mint px-2 py-0.5 rounded-full">Default</span>}
                   </div>
                   {formatAddressLines(a).map((line, i) => <div key={i}>{line}</div>)}
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   {!a.is_default && (
-                    <button type="button" onClick={() => makeDefault(a)} title="Make default" aria-label="Make default" className="p-2 rounded-lg text-slate-400 hover:text-[#0A4A3A] hover:bg-slate-50 cursor-pointer"><Star className="w-4 h-4" /></button>
+                    <button type="button" onClick={() => makeDefault(a)} title="Make default" aria-label="Make default" className="p-2 rounded-lg text-slate-400 hover:text-[#1F3A4D] hover:bg-slate-50 cursor-pointer"><Star className="w-4 h-4" /></button>
                   )}
-                  <button type="button" onClick={() => { setEditingId(a.id); setAdding(false); }} title="Edit" aria-label="Edit address" className="p-2 rounded-lg text-slate-400 hover:text-[#0A4A3A] hover:bg-slate-50 cursor-pointer"><Pencil className="w-4 h-4" /></button>
+                  <button type="button" onClick={() => { setEditingId(a.id); setAdding(false); }} title="Edit" aria-label="Edit address" className="p-2 rounded-lg text-slate-400 hover:text-[#1F3A4D] hover:bg-slate-50 cursor-pointer"><Pencil className="w-4 h-4" /></button>
                   <button type="button" onClick={() => remove(a.id)} title="Delete" aria-label="Delete address" className="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 cursor-pointer"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>

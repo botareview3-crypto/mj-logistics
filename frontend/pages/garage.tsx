@@ -11,8 +11,8 @@ import { Vehicle } from '../lib/types';
 import { SPRINGS } from '../lib/springs';
 
 const QUICK_LINKS = [
-  { icon: Disc,    color: 'text-[#0A4A3A]', label: 'Brake Pads',     path: '/catalog/braking-system/brake-pads' },
-  { icon: Disc,    color: 'text-[#0A4A3A]', label: 'Brake Discs',    path: '/catalog/braking-system/brake-discs' },
+  { icon: Disc,    color: 'text-[#1F3A4D]', label: 'Brake Pads',     path: '/catalog/braking-system/brake-pads' },
+  { icon: Disc,    color: 'text-[#1F3A4D]', label: 'Brake Discs',    path: '/catalog/braking-system/brake-discs' },
   { icon: Gauge,   color: 'text-amber-600',  label: 'Oil Filters',    path: '/catalog/engine-transmission/oil-filters' },
   { icon: Flame,   color: 'text-rose-500',   label: 'Spark Plugs',    path: '/catalog/engine-transmission/spark-glow-plugs' },
   { icon: Sliders, color: 'text-purple-500', label: 'Shock Absorbers',path: '/catalog/suspension-steering/shock-absorbers' },
@@ -45,7 +45,7 @@ export default function GaragePage() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04261D]/95 via-[#04261D]/80 to-[#04261D]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F2230]/95 via-[#0F2230]/80 to-[#0F2230]/40" />
         <div className="relative px-7 py-10 sm:px-10 sm:py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/70 text-[11px] font-bold uppercase tracking-wider mb-4">
@@ -62,7 +62,7 @@ export default function GaragePage() {
           <motion.button
             type="button"
             onClick={() => openSelectorModal('vin')}
-            className="flex items-center gap-2 px-5 py-3 bg-white hover:bg-white/90 text-[#04261D] font-bold text-sm rounded-xl transition-colors cursor-pointer shrink-0 shadow-lg"
+            className="flex items-center gap-2 px-5 py-3 bg-white hover:bg-white/90 text-[#0F2230] font-bold text-sm rounded-xl transition-colors cursor-pointer shrink-0 shadow-lg"
             whileTap={{ scale: 0.97 }}
             transition={SPRINGS.micro}
           >
@@ -84,7 +84,7 @@ export default function GaragePage() {
                     ? 'border-emerald-400 ring-2 ring-emerald-50 shadow-md'
                     : 'border-slate-200'
                 }`}
-                whileHover={!isActive ? { y: -2, borderColor: '#94a3b8', boxShadow: '0 8px 24px rgba(4,38,29,0.08)' } : {}}
+                whileHover={!isActive ? { y: -2, borderColor: '#94a3b8', boxShadow: '0 8px 24px rgba(15,34,48,0.08)' } : {}}
                 transition={SPRINGS.default}
               >
                 {/* Vehicle header */}
@@ -103,20 +103,20 @@ export default function GaragePage() {
                             value={nicknameInput}
                             onChange={e => setNicknameInput(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && saveNick(vehicle.id)}
-                            className="px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0A4A3A] w-36"
+                            className="px-2 py-1.5 text-sm font-bold border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F3A4D] w-36"
                             autoFocus
                           />
                           <button
                             type="button"
                             onClick={() => saveNick(vehicle.id)}
-                            className="px-3 py-1.5 bg-[#04261D] text-white text-xs font-bold rounded-lg cursor-pointer"
+                            className="px-3 py-1.5 bg-[#0F2230] text-white text-xs font-bold rounded-lg cursor-pointer"
                           >
                             Save
                           </button>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          <h2 className="font-display text-[18px] font-bold text-[#04261D] leading-tight">
+                          <h2 className="font-display text-[18px] font-bold text-[#0F2230] leading-tight">
                             {vehicle.nickname || `${vehicle.make} ${vehicle.model}`}
                           </h2>
                           <button
@@ -162,7 +162,7 @@ export default function GaragePage() {
                   ].map(spec => (
                     <div key={spec.label}>
                       <p className="text-slate-400 font-medium mb-0.5">{spec.label}</p>
-                      <p className="font-bold text-[#04261D] truncate font-mono text-[11px]">{spec.value}</p>
+                      <p className="font-bold text-[#0F2230] truncate font-mono text-[11px]">{spec.value}</p>
                     </div>
                   ))}
                 </div>
@@ -176,7 +176,7 @@ export default function GaragePage() {
                         key={label}
                         type="button"
                         onClick={() => { setActiveVehicle(vehicle); navigate(path); }}
-                        className="flex items-center justify-between p-2.5 text-[12px] bg-slate-50 hover:bg-[#04261D] hover:text-white border border-slate-200 hover:border-[#04261D] rounded-xl text-slate-700 font-medium transition-colors cursor-pointer group"
+                        className="flex items-center justify-between p-2.5 text-[12px] bg-slate-50 hover:bg-[#0F2230] hover:text-white border border-slate-200 hover:border-[#0F2230] rounded-xl text-slate-700 font-medium transition-colors cursor-pointer group"
                         whileTap={{ scale: 0.97 }}
                         transition={SPRINGS.micro}
                       >
@@ -204,7 +204,7 @@ export default function GaragePage() {
                   <motion.button
                     type="button"
                     onClick={() => { setActiveVehicle(vehicle); navigate('/catalog'); }}
-                    className="flex items-center gap-1 text-xs font-semibold text-[#0A4A3A] hover:text-[#04261D] transition-colors cursor-pointer"
+                    className="flex items-center gap-1 text-xs font-semibold text-[#1F3A4D] hover:text-[#0F2230] transition-colors cursor-pointer"
                     whileTap={{ scale: 0.97 }}
                     transition={SPRINGS.micro}
                   >
@@ -222,13 +222,13 @@ export default function GaragePage() {
             <Car className="w-8 h-8" />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-bold text-[#04261D]">Your Garage is Empty</h2>
+            <h2 className="font-display text-2xl font-bold text-[#0F2230]">Your Garage is Empty</h2>
             <p className="text-sm text-slate-500 mt-1 leading-relaxed">Add your vehicle to get fitment-verified parts on every product page.</p>
           </div>
           <motion.button
             type="button"
             onClick={() => openSelectorModal('vin')}
-            className="inline-flex items-center gap-2 px-7 py-3 bg-[#04261D] hover:bg-[#0A4A3A] text-white font-semibold rounded-xl transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 px-7 py-3 bg-[#0F2230] hover:bg-[#1F3A4D] text-white font-semibold rounded-xl transition-colors cursor-pointer"
             whileTap={{ scale: 0.97 }}
             transition={SPRINGS.micro}
           >

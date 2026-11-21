@@ -52,7 +52,7 @@ export default function ProductDetailPage() {
 
   const productReviews = part.reviews && part.reviews.length > 0 ? part.reviews : SAMPLE_PART_REVIEWS;
 
-  const tabClass = (tab: string) => `relative py-3.5 px-6 font-bold text-xs sm:text-sm cursor-pointer shrink-0 transition-colors ${activeTab === tab ? 'text-[#0A4A3A]' : 'text-slate-600 hover:text-slate-900'}`;
+  const tabClass = (tab: string) => `relative py-3.5 px-6 font-bold text-xs sm:text-sm cursor-pointer shrink-0 transition-colors ${activeTab === tab ? 'text-[#1F3A4D]' : 'text-slate-600 hover:text-slate-900'}`;
 
   return (
     <div className="space-y-8 pb-16">
@@ -77,7 +77,7 @@ export default function ProductDetailPage() {
             {part.images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {part.images.map((img, idx) => (
-                  <button key={idx} type="button" onClick={() => setSelectedImageIndex(idx)} className={`w-16 h-16 rounded-lg border-2 p-1 bg-slate-50 shrink-0 transition-all cursor-pointer ${selectedImageIndex === idx ? 'border-[#0A4A3A] ring-2 ring-mint/40' : 'border-slate-200 hover:border-slate-400'}`}>
+                  <button key={idx} type="button" onClick={() => setSelectedImageIndex(idx)} className={`w-16 h-16 rounded-lg border-2 p-1 bg-slate-50 shrink-0 transition-all cursor-pointer ${selectedImageIndex === idx ? 'border-[#1F3A4D] ring-2 ring-mint/40' : 'border-slate-200 hover:border-slate-400'}`}>
                     <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-contain" loading="lazy" />
                   </button>
                 ))}
@@ -105,7 +105,7 @@ export default function ProductDetailPage() {
               </div>
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight leading-snug">{part.name}</h1>
               <div className="flex flex-wrap gap-2 text-xs">
-                {part.position && <span className="bg-mint/20 text-[#0A4A3A] border border-mint px-2.5 py-1 rounded-md font-semibold">Position: {part.position}</span>}
+                {part.position && <span className="bg-mint/20 text-[#1F3A4D] border border-mint px-2.5 py-1 rounded-md font-semibold">Position: {part.position}</span>}
                 {part.material && <span className="bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md font-semibold">{part.material}</span>}
                 <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md font-semibold">2-Year Warranty</span>
               </div>
@@ -137,7 +137,7 @@ export default function ProductDetailPage() {
                       <div className="text-xs font-black uppercase text-rose-800" style={{ letterSpacing: '0.08em' }}>Fitment Incompatible</div>
                       <h4 className="text-sm sm:text-base font-bold text-rose-950 mt-0.5">This part does NOT fit your active {activeVehicle.make} {activeVehicle.model}</h4>
                       <p className="text-xs text-rose-700 mt-0.5">Do not purchase for this vehicle. Check the compatibility table below or switch your vehicle.</p>
-                      <motion.button type="button" onClick={() => openSelectorModal('vin')} className="mt-2 text-xs font-bold text-[#0A4A3A] hover:underline flex items-center gap-1 cursor-pointer" whileTap={{ scale: 0.97 }} transition={SPRINGS.micro}><span>Change active vehicle</span><ArrowRight className="w-3 h-3" /></motion.button>
+                      <motion.button type="button" onClick={() => openSelectorModal('vin')} className="mt-2 text-xs font-bold text-[#1F3A4D] hover:underline flex items-center gap-1 cursor-pointer" whileTap={{ scale: 0.97 }} transition={SPRINGS.micro}><span>Change active vehicle</span><ArrowRight className="w-3 h-3" /></motion.button>
                     </div>
                   </motion.div>
                 )}
@@ -147,7 +147,7 @@ export default function ProductDetailPage() {
                       <div className="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0"><Car className="w-5 h-5" /></div>
                       <div><div className="text-xs font-bold text-slate-800">Confirm this fits your exact vehicle</div><p className="text-xs text-slate-500">Select your vehicle to verify compatibility before ordering.</p></div>
                     </div>
-                    <motion.button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#04261D] hover:bg-[#0A4A3A] text-white text-xs font-bold rounded-lg cursor-pointer shrink-0 transition-colors" whileTap={{ scale: 0.97 }} transition={SPRINGS.micro}>Check Fitment</motion.button>
+                    <motion.button type="button" onClick={() => openSelectorModal('vin')} className="px-4 py-2 bg-[#0F2230] hover:bg-[#1F3A4D] text-white text-xs font-bold rounded-lg cursor-pointer shrink-0 transition-colors" whileTap={{ scale: 0.97 }} transition={SPRINGS.micro}>Check Fitment</motion.button>
                   </div>
                 )}
               </div>
@@ -184,7 +184,7 @@ export default function ProductDetailPage() {
                   <motion.button
                     type="button"
                     onClick={handleAddToCart}
-                    className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#04261D] hover:bg-[#0A4A3A] text-white'}`}
+                    className={`flex-1 py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md ${justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0F2230] hover:bg-[#1F3A4D] text-white'}`}
                     whileTap={{ scale: 0.97 }}
                     transition={SPRINGS.micro}
                   >
@@ -212,7 +212,7 @@ export default function ProductDetailPage() {
                       type="button"
                       onClick={stockAlert.toggle}
                       disabled={stockAlert.busy}
-                      className={`w-full py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-60 ${stockAlert.watching ? 'bg-emerald-600 text-white' : 'bg-[#04261D] hover:bg-[#0A4A3A] text-white'}`}
+                      className={`w-full py-3 px-6 rounded-lg font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-60 ${stockAlert.watching ? 'bg-emerald-600 text-white' : 'bg-[#0F2230] hover:bg-[#1F3A4D] text-white'}`}
                       whileTap={{ scale: 0.97 }}
                       transition={SPRINGS.micro}
                     >
@@ -224,8 +224,8 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-600 pt-1">
-                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><Truck className="w-4 h-4 text-[#0A4A3A] shrink-0" /><span>Next-Day Tracked Delivery</span></div>
-                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><RotateCcw className="w-4 h-4 text-[#0A4A3A] shrink-0" /><span>30-Day Easy Returns</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><Truck className="w-4 h-4 text-[#1F3A4D] shrink-0" /><span>Next-Day Tracked Delivery</span></div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><RotateCcw className="w-4 h-4 text-[#1F3A4D] shrink-0" /><span>30-Day Easy Returns</span></div>
                 <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-xl border border-slate-100"><Award className="w-4 h-4 text-emerald-600 shrink-0" /><span>24-Month Full Warranty</span></div>
               </div>
             </div>
@@ -257,7 +257,7 @@ export default function ProductDetailPage() {
                 {activeTab === tab && (
                   <motion.span
                     layoutId="tab-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A4A3A]"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1F3A4D]"
                     transition={SPRINGS.snappy}
                   />
                 )}
@@ -293,7 +293,7 @@ export default function ProductDetailPage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div><h3 className="text-base font-bold text-slate-900">Full Vehicle Application Guide</h3><p className="text-xs text-slate-500">Filter by make, model, or engine code to verify fitment.</p></div>
               <div className="relative w-full sm:w-64">
-                <input type="text" value={fitmentSearch} onChange={e => setFitmentSearch(e.target.value)} placeholder="Filter vehicles or engines..." className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0A4A3A]" />
+                <input type="text" value={fitmentSearch} onChange={e => setFitmentSearch(e.target.value)} placeholder="Filter vehicles or engines..." className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1F3A4D]" />
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
               </div>
             </div>

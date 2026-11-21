@@ -71,7 +71,7 @@ export default function MyAccountPage() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04261D]/95 via-[#04261D]/80 to-[#04261D]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F2230]/95 via-[#0F2230]/80 to-[#0F2230]/40" />
         <div className="relative px-7 py-10 sm:px-10 sm:py-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/70 text-[11px] font-bold uppercase tracking-wider mb-4">
             <UserCircle2 className="w-3.5 h-3.5" /> Account & Preferences
@@ -90,7 +90,7 @@ export default function MyAccountPage() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={currentUser.avatar_url} alt="" className="w-14 h-14 rounded-full border border-slate-200" loading="lazy" />
                 ) : (
-                  <div className="w-14 h-14 rounded-full bg-mint/40 text-[#0A4A3A] flex items-center justify-center"><UserCircle2 className="w-7 h-7" /></div>
+                  <div className="w-14 h-14 rounded-full bg-mint/40 text-[#1F3A4D] flex items-center justify-center"><UserCircle2 className="w-7 h-7" /></div>
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-black text-slate-900 truncate">{currentUser.name || currentUser.email}</div>
@@ -118,24 +118,24 @@ export default function MyAccountPage() {
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block px-1 pb-2">Quick Access</span>
             <button type="button" onClick={() => navigate('/garage')} className="w-full p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between gap-3 transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-mint/20 border border-mint text-[#0A4A3A] flex items-center justify-center shrink-0"><Car className="w-5 h-5" /></div>
+                <div className="w-10 h-10 rounded-lg bg-mint/20 border border-mint text-[#1F3A4D] flex items-center justify-center shrink-0"><Car className="w-5 h-5" /></div>
                 <div className="text-left"><div className="text-sm font-bold text-slate-900">My Garage</div><div className="text-[11px] text-slate-500">{savedVehicles.length} saved vehicle{savedVehicles.length === 1 ? '' : 's'}</div></div>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#0A4A3A] transition-colors shrink-0" />
+              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#1F3A4D] transition-colors shrink-0" />
             </button>
             <button type="button" onClick={() => navigate('/cart')} className="w-full p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between gap-3 transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0"><ShoppingCart className="w-5 h-5" /></div>
                 <div className="text-left"><div className="text-sm font-bold text-slate-900">My Cart</div><div className="text-[11px] text-slate-500">{cartCount} item{cartCount === 1 ? '' : 's'} in cart</div></div>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#0A4A3A] transition-colors shrink-0" />
+              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#1F3A4D] transition-colors shrink-0" />
             </button>
             <button type="button" onClick={() => document.getElementById('orders')?.scrollIntoView({ behavior: 'smooth' })} className="w-full p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between gap-3 transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center shrink-0"><Package className="w-5 h-5" /></div>
                 <div className="text-left"><div className="text-sm font-bold text-slate-900">Order History</div><div className="text-[11px] text-slate-500">Track your orders</div></div>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#0A4A3A] transition-colors shrink-0" />
+              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-[#1F3A4D] transition-colors shrink-0" />
             </button>
           </div>
 

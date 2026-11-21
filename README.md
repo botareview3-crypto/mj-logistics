@@ -153,7 +153,7 @@ The frontend expects the API at `http://localhost:8000` unless you set `NEXT_PUB
 | `signal` | `#FF6A2B` | Signal Orange, for calls to action and highlights |
 | `paper` | `#F3F1EA` | Page background |
 
-Type: **Archivo** throughout (SIL Open Font License); the logo itself uses Archivo Expanded. The full logo kit is in [`logo/`](logo/).
+Type: **Libre Franklin** throughout (SIL Open Font License; it is also the logo typeface). Palette: Slate #1F3A4D, Sky Blue #2EC4F1, Steel #5F7E91, Mist #B8D0DE, Paper #F3F1EA. The full logo kit is in [`logo/`](logo/).
 
 ## Project notes
 

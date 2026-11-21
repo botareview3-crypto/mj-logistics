@@ -16,7 +16,7 @@ type Props = {
   id?: string;
 };
 
-export function SplitText({ text, as = 'h2', className, accentClass = 'text-signal', intro, delay, id }: Props) {
+export function SplitText({ text, as = 'h2', className, accentClass = 'text-azure', intro, delay, id }: Props) {
   const Tag = as as React.ElementType;
   const lines = text.split('\n');
   return (
@@ -44,7 +44,7 @@ export function SplitText({ text, as = 'h2', className, accentClass = 'text-sign
 }
 
 /** Paragraph whose words brighten one by one as it scrolls through view. */
-export function ScrubText({ text, as = 'p', className, accentClass = 'text-signal' }: Omit<Props, 'intro' | 'delay' | 'id'>) {
+export function ScrubText({ text, as = 'p', className, accentClass = 'text-azure' }: Omit<Props, 'intro' | 'delay' | 'id'>) {
   const Tag = as as React.ElementType;
   const words = tokenize(text);
   return (

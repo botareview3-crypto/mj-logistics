@@ -855,3 +855,18 @@ transcript, just the gist.
   the whole part (`object-contain`) on a soft panel instead of being cropped.
 - No new motion beyond the existing gentle hover zoom. Not built or previewed
   locally. Includes the earlier readability changes (`globals.css`, `PageHero`).
+
+### 2026-11-21 (Whole-site redesign: Slate Sky palette + Libre Franklin)
+- Zemen asked for a redesign of the whole site including the shop, with a new
+  palette and style. The revised logo kit is Slate / Sky Blue / Steel / Mist /
+  Libre Franklin, so the site now follows the logo instead of emerald / orange / Archivo.
+- Applied IN PLACE to the local files by `apply_slate_sky.py` (so unpushed local
+  work such as the home-page photo cards was kept): colour tokens re-valued in
+  `styles/globals.css` (names kept, see CLAUDE.md), every hardcoded old hex
+  replaced, new `azure` token for accent text on light backgrounds, buttons with
+  dark text on sky and 0.9rem corners, Bold headings, revised `LogoMark`, dark CTA
+  panels slate with sky accents, Oil & Gas illustration recoloured, and an
+  explicit type annotation in `lib/fx.ts` (build error "implicit any").
+- Kept every client rule (light and simple, no new motion) and the boss's bigger-text changes.
+- Check after building: home, a shop category, a part page, cart, sign-in; desktop + phone.
+

@@ -91,7 +91,7 @@ export const SiteFooter: React.FC = () => {
                     aria-label="Email address"
                     className="h-12 w-full rounded-full border border-paper/20 bg-white/10 pl-5 pr-14 text-sm text-paper placeholder:text-paper/50 outline-none transition focus:border-signal"
                   />
-                  <button type="submit" aria-label="Subscribe" className="absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-full bg-paper text-ink transition hover:bg-signal hover:text-white">
+                  <button type="submit" aria-label="Subscribe" className="absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-full bg-paper text-ink transition hover:bg-signal hover:text-ink">
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 </form>

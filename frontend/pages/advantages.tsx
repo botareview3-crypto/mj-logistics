@@ -38,7 +38,7 @@ export default function AdvantagesPage() {
             {PRINCIPLES.map(({ no, icon: Icon, title, text }, i) => (
               <article key={no} data-reveal data-delay={String((i % 2) * 0.08)} className="rounded-3xl border border-ink/10 bg-paper p-8 sm:p-10">
                 <div className="flex items-start justify-between">
-                  <span className="text-sm font-semibold text-signal">{no}</span>
+                  <span className="text-sm font-semibold text-azure">{no}</span>
                   <Icon className="h-7 w-7 text-forest" />
                 </div>
                 <h2 className="mt-12 text-[clamp(1.5rem,2.4vw,2.1rem)]">{title}</h2>
@@ -56,11 +56,11 @@ export default function AdvantagesPage() {
       </section>
 
       <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="rounded-3xl bg-signal px-6 py-14 text-white sm:px-12 sm:py-20">
+        <div className="rounded-3xl bg-forest px-6 py-14 text-white sm:px-12 sm:py-20">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <SplitText className="t-xl" accentClass="text-ink" text={'Ready to find *your route?*'} />
+            <SplitText className="t-xl" accentClass="text-signal" text={'Ready to find *your route?*'} />
             <div data-reveal className="flex flex-wrap gap-3 lg:justify-end">
-              <Link href="/shop" className="btn btn-ink">Explore the marketplace <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+              <Link href="/shop" className="btn btn-signal">Explore the marketplace <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
               <Link href="/contact" className="btn btn-ghost">Contact us</Link>
             </div>
           </div>

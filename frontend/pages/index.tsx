@@ -158,7 +158,7 @@ export default function HomePage() {
           <p data-reveal data-intro="0" className="eyebrow mb-6 flex items-center gap-3 text-white">
             <span className="h-px w-10 bg-signal" /> MJ Logistics Enterprise
           </p>
-          <SplitText as="h1" intro={0.05} className="t-hero max-w-[14ch]" text={'Parts that fit.\n*Delivered fast.*'} />
+          <SplitText as="h1" intro={0.05} className="t-hero max-w-[14ch]" accentClass="text-signal" text={'Parts that fit.\n*Delivered fast.*'} />
           <div className="mt-8 grid gap-6 border-t border-white/20 pt-6 sm:gap-8 sm:pt-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <p data-reveal data-intro="0.3" className="max-w-xl text-[19px] leading-8 text-white">
               Genuine auto parts with verified fitment, workplace supplies, mining, solar energy and more —
@@ -177,7 +177,7 @@ export default function HomePage() {
         <ul className="mx-auto grid max-w-[1440px] gap-px px-5 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
           {GLANCE.map(g => (
             <li key={g.label} className="py-7 sm:py-9 lg:px-8 lg:first:pl-0 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-white/15">
-              <p className="font-display text-[clamp(1.75rem,2.6vw,2.4rem)] font-semibold leading-none">{g.value}</p>
+              <p className="font-display text-[clamp(1.75rem,2.6vw,2.4rem)] font-bold leading-none text-signal">{g.value}</p>
               <p className="mt-3 text-[17px] leading-7 text-white/90">{g.label}</p>
             </li>
           ))}
@@ -199,7 +199,7 @@ export default function HomePage() {
                 <p className="text-[17px] leading-7 text-ink/80"><strong className="text-ink">Buy with confidence.</strong> Every auto part is listed with its fitment, specifications and OEM references.</p>
               </div>
               <div data-reveal data-delay="0.08" className="flex gap-4">
-                <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-white"><Check className="h-4 w-4" /></span>
+                <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-ink"><Check className="h-4 w-4" /></span>
                 <p className="text-[17px] leading-7 text-ink/80"><strong className="text-ink">One partner, many needs.</strong> Parts, office supplies, mining, solar, oil &amp; gas and services — handled by the same accountable team.</p>
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function HomePage() {
                     <h3 className="text-[clamp(1.75rem,2.6vw,2.4rem)] text-white">{d.name}</h3>
                     <p className="mt-3 max-w-md text-[17px] leading-7 text-white/90">{d.text}</p>
                   </div>
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-ink transition-colors duration-300 group-hover:bg-signal group-hover:text-white">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-ink transition-colors duration-300 group-hover:bg-signal group-hover:text-ink">
                     <ArrowUpRight className="h-5 w-5" />
                   </span>
                 </div>
@@ -267,7 +267,7 @@ export default function HomePage() {
                     <span className="block text-xl font-semibold leading-tight text-ink">{s.name}</span>
                     <span className="mt-1 block text-base text-ink/70">{s.count.toLocaleString()} items</span>
                   </span>
-                  <ArrowUpRight className="h-5 w-5 text-ink/40 transition-colors group-hover:text-signal" />
+                  <ArrowUpRight className="h-5 w-5 text-ink/40 transition-colors group-hover:text-azure" />
                 </Link>
               </li>
             ))}
@@ -346,11 +346,11 @@ export default function HomePage() {
                     <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
                   </div>
                   <div className="flex flex-col justify-between gap-6 p-5 sm:p-7">
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-mist text-signal"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
+                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-mist text-azure"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
                     <div>
                       <h3 className="text-xl leading-snug">{s.title}</h3>
                       <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.short}</p>
-                      <span className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-forest group-hover:text-signal">
+                      <span className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-forest group-hover:text-azure">
                         Learn more <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -411,7 +411,7 @@ export default function HomePage() {
               <Link href={`/parts/${p.id}`} className="relative block aspect-square overflow-hidden bg-gradient-to-b from-paper to-mist">
                 <img src={p.images[0]} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain p-6 mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
                 {p.originalPrice && p.originalPrice > p.price && (
-                  <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1.5 text-sm font-semibold text-white">
+                  <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1.5 text-sm font-semibold text-ink">
                     Save €{(p.originalPrice - p.price).toFixed(0)}
                   </span>
                 )}
@@ -429,7 +429,7 @@ export default function HomePage() {
                     type="button"
                     onClick={() => { addToCart(p); showToast(`${p.name} added to cart`, 'success'); }}
                     aria-label={`Add ${p.name} to cart`}
-                    className="grid h-11 w-11 place-items-center rounded-full bg-forest text-white transition-colors hover:bg-signal"
+                    className="grid h-11 w-11 place-items-center rounded-full bg-forest text-white transition-colors hover:bg-signal hover:text-ink"
                   >
                     <Plus className="h-5 w-5" />
                   </button>
@@ -438,7 +438,7 @@ export default function HomePage() {
             </article>
           ))}
           <Link href="/shop" className="group flex w-[60vw] max-w-[240px] shrink-0 snap-start flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-ink/25 text-center transition hover:border-signal">
-            <span className="grid h-14 w-14 place-items-center rounded-full bg-signal text-white"><ArrowUpRight className="h-6 w-6" /></span>
+            <span className="grid h-14 w-14 place-items-center rounded-full bg-signal text-ink"><ArrowUpRight className="h-6 w-6" /></span>
             <span className="text-lg font-semibold">View the full<br />catalogue</span>
           </Link>
         </div>
@@ -446,17 +446,17 @@ export default function HomePage() {
 
       {/* ── GARAGE CTA ───────────────────────────────────────────────────── */}
       <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="relative overflow-hidden rounded-3xl bg-signal px-6 py-14 text-white sm:px-12 sm:py-20">
+        <div className="relative overflow-hidden rounded-3xl bg-forest px-6 py-14 text-white sm:px-12 sm:py-20">
           <div className="relative grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
             <div>
-              <p className="eyebrow mb-4 text-white/85">Not sure what fits?</p>
-              <SplitText className="t-xl" accentClass="text-ink" text={'Save your vehicle. See only parts *that fit.*'} />
+              <p className="eyebrow mb-4 text-mint">Not sure what fits?</p>
+              <SplitText className="t-xl" accentClass="text-signal" text={'Save your vehicle. See only parts *that fit.*'} />
             </div>
             <div data-reveal className="flex flex-col gap-5 lg:items-end">
               <p className="max-w-sm text-[18px] leading-8 text-white lg:text-right">
                 Add your car to My Garage once and the catalogue filters to compatible parts automatically.
               </p>
-              <Link href="/garage" className="btn btn-ink">Open My Garage <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+              <Link href="/garage" className="btn btn-signal">Open My Garage <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
             </div>
           </div>
         </div>

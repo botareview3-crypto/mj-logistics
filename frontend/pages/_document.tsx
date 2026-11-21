@@ -9,17 +9,17 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta name="theme-color" content="#04261D" />
+        <meta name="theme-color" content="#0F2230" />
         <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/brand/favicon-32.png" sizes="32x32" type="image/png" />
         <link rel="apple-touch-icon" href="/brand/app-icon-180.png" />
 
-        {/* Archivo for all text (headings use a heavier weight). */}
+        {/* Libre Franklin (logo kit typeface) for all text; headings use Bold. */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&display=swap"
         />
         <link rel="preload" href="/images/site/hero-poster.webp" as="image" type="image/webp" />
 

@@ -49,7 +49,7 @@ export default function ServicesPage() {
                 {img && <img src={img.src} alt={img.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}
               </div>
               <div>
-                <p data-reveal className="eyebrow flex items-center gap-3 text-signal">
+                <p data-reveal className="eyebrow flex items-center gap-3 text-azure">
                   <Icon className="h-5 w-5" strokeWidth={1.8} /> Service 0{index + 1}
                 </p>
                 <SplitText className="t-lg mt-5" text={service.title} />
@@ -72,11 +72,11 @@ export default function ServicesPage() {
       })}
 
       <section className="bg-paper px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="relative overflow-hidden rounded-3xl bg-signal px-6 py-14 text-white sm:px-12 sm:py-20">
+        <div className="relative overflow-hidden rounded-3xl bg-forest px-6 py-14 text-white sm:px-12 sm:py-20">
           <div className="relative grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <SplitText className="t-xl" accentClass="text-ink" text={'Not sure which *team you need?*'} />
+            <SplitText className="t-xl" accentClass="text-signal" text={'Not sure which *team you need?*'} />
             <div data-reveal className="flex flex-wrap gap-3 lg:justify-end">
-              <Link href="/contact" className="btn btn-ink">Contact us <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+              <Link href="/contact" className="btn btn-signal">Contact us <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
             </div>
           </div>
         </div>

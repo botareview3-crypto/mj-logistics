@@ -60,14 +60,14 @@ function SurveyDiagram() {
         <rect width="600" height="420" fill="#f4f1ea" />
         <rect y="128" width="600" height="292" fill="#cfe3ea" />
         {/* seabed layers */}
-        <path d="M0 215 Q150 200 300 218 T600 208 V420 H0Z" fill="#d9e4dc" />
-        <path d="M0 270 Q160 252 320 276 T600 262 V420 H0Z" fill="#bfd0c4" />
-        <path d="M0 330 Q140 316 300 336 T600 322 V420 H0Z" fill="#9fb8a8" />
-        <path d="M0 380 Q180 368 330 386 T600 374 V420 H0Z" fill="#6f9482" />
+        <path d="M0 215 Q150 200 300 218 T600 208 V420 H0Z" fill="#dbe6ee" />
+        <path d="M0 270 Q160 252 320 276 T600 262 V420 H0Z" fill="#c3d4e0" />
+        <path d="M0 330 Q140 316 300 336 T600 322 V420 H0Z" fill="#9db7c8" />
+        <path d="M0 380 Q180 368 330 386 T600 374 V420 H0Z" fill="#6e90a6" />
         {/* possible reservoir */}
         <ellipse className="og-glow" cx="360" cy="300" rx="46" ry="15" fill="#ff6a2e" />
         {/* sound pulses */}
-        <g clipPath="url(#og-below)" fill="none" stroke="#04261D" strokeWidth="2">
+        <g clipPath="url(#og-below)" fill="none" stroke="#0F2230" strokeWidth="2">
           {[0, 1.2, 2.4].map(d => (
             <circle key={d} className="og-pulse" cx="300" cy="150" r="60" style={{ animationDelay: `${d}s` }} />
           ))}
@@ -76,15 +76,15 @@ function SurveyDiagram() {
         <g className="og-wave"><path d={WAVE_PATH} fill="#a9cbd6" opacity=".75" /></g>
         {/* ship */}
         <g className="og-bob">
-          <path d="M262 124 H338 L326 146 H274 Z" fill="#04261D" />
-          <rect x="296" y="104" width="22" height="20" fill="#0A4A3A" />
-          <rect x="302" y="94" width="8" height="10" fill="#0A4A3A" />
-          <line x1="280" y1="124" x2="280" y2="106" stroke="#04261D" strokeWidth="3" />
+          <path d="M262 124 H338 L326 146 H274 Z" fill="#0F2230" />
+          <rect x="296" y="104" width="22" height="20" fill="#1F3A4D" />
+          <rect x="302" y="94" width="8" height="10" fill="#1F3A4D" />
+          <line x1="280" y1="124" x2="280" y2="106" stroke="#0F2230" strokeWidth="3" />
         </g>
         {/* labels */}
-        <g fontFamily="inherit" fontSize="13" fill="#04261D">
+        <g fontFamily="inherit" fontSize="13" fill="#0F2230">
           <text x="24" y="42" fontWeight="600">Survey vessel</text>
-          <line x1="110" y1="38" x2="262" y2="100" stroke="#04261D" strokeOpacity=".35" />
+          <line x1="110" y1="38" x2="262" y2="100" stroke="#0F2230" strokeOpacity=".35" />
           <text x="24" y="190" fontWeight="600">Sound pulses</text>
           <text x="410" y="304" fontWeight="600">Possible reservoir</text>
           <text x="24" y="406" fill="#fff" fontWeight="600">Rock layers, mapped from the echoes</text>
@@ -145,7 +145,7 @@ export default function OilGasPage() {
           <div className="grid gap-4 self-center">
             {FACTS.map(({ icon: Icon, label, value }, i) => (
               <article key={label} data-reveal data-delay={String(i * 0.1)} className="flex items-center gap-5 rounded-3xl border border-ink/10 bg-paper p-5 sm:p-6">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-signal/10 text-signal"><Icon className="h-6 w-6" /></span>
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-signal/10 text-azure"><Icon className="h-6 w-6" /></span>
                 <div>
                   <div className="eyebrow text-sage">{label}</div>
                   <div className="font-display text-[clamp(1.3rem,2vw,1.7rem)] font-medium text-ink">{value}</div>
@@ -164,7 +164,7 @@ export default function OilGasPage() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent" />
           <div className="relative flex h-full items-end p-6 sm:p-12">
-            <SplitText className="t-xl max-w-[18ch] text-white" text={'Every discovery starts *with exploration.*'} />
+            <SplitText className="t-xl max-w-[18ch] text-white" accentClass="text-signal" text={'Every discovery starts *with exploration.*'} />
           </div>
         </div>
         <p className="px-2 pt-2 text-right text-[11px] text-ink/45">Photos: Leo_Visions and Ben Wicks on Unsplash</p>

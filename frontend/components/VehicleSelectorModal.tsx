@@ -86,7 +86,7 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
     if (!isEmbedded) closeSelectorModal();
   };
 
-  const selectClass = "w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0A4A3A] focus:outline-none font-medium cursor-pointer";
+  const selectClass = "w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#1F3A4D] focus:outline-none font-medium cursor-pointer";
   const disabledSelectClass = "w-full px-3 py-2 bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-300 rounded-lg text-sm";
 
   return (
@@ -103,7 +103,7 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
               py-3 px-6 text-xs sm:text-sm font-bold uppercase flex-1 flex items-center justify-center gap-2 cursor-pointer
               transition-colors duration-150
               ${activeTab === tab
-                ? 'border-b-2 border-[#0A4A3A] text-[#0A4A3A]'
+                ? 'border-b-2 border-[#1F3A4D] text-[#1F3A4D]'
                 : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'}
             `}
             whileTap={{ scale: 0.97 }}
@@ -111,8 +111,8 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
             style={{ letterSpacing: '0.04em' }}
           >
             {tab === 'vin'
-              ? <><Search className="w-4 h-4 text-[#0A4A3A]" />By Registration / VIN</>
-              : <><Car className="w-4 h-4 text-[#0A4A3A]" />By Make &amp; Model</>
+              ? <><Search className="w-4 h-4 text-[#1F3A4D]" />By Registration / VIN</>
+              : <><Car className="w-4 h-4 text-[#1F3A4D]" />By Make &amp; Model</>
             }
           </motion.button>
         ))}
@@ -150,14 +150,14 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
                         onChange={e => { setVinInput(e.target.value.toUpperCase()); setDecodeError(null); }}
                         onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleDecode(); } }}
                         placeholder="e.g. WF18 XKV or WVWZZZAUZHP..."
-                        className="w-full pl-12 pr-4 py-2.5 sm:py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-mono text-sm uppercase focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0A4A3A] font-semibold"
+                        className="w-full pl-12 pr-4 py-2.5 sm:py-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-mono text-sm uppercase focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1F3A4D] font-semibold"
                       />
                     </div>
                     <motion.button
                       type="button"
                       disabled={isDecoding || !vinInput.trim()}
                       onClick={() => handleDecode()}
-                      className="px-6 py-2.5 sm:py-3 bg-[#0A4A3A] hover:bg-[#0A4A3A] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer shrink-0 transition-colors"
+                      className="px-6 py-2.5 sm:py-3 bg-[#1F3A4D] hover:bg-[#1F3A4D] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer shrink-0 transition-colors"
                       whileTap={{ scale: 0.97 }}
                       transition={SPRINGS.micro}
                     >
@@ -184,7 +184,7 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
                         key={sample.code}
                         type="button"
                         onClick={() => { setVinInput(sample.vehicle.regNumber || sample.code); handleDecode(sample.vehicle.regNumber || sample.code); }}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs bg-slate-100 hover:bg-mint/20 hover:text-[#0A4A3A] hover:border-mint text-slate-700 font-mono rounded-md border border-slate-200 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs bg-slate-100 hover:bg-mint/20 hover:text-[#1F3A4D] hover:border-mint text-slate-700 font-mono rounded-md border border-slate-200 transition-colors cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                         transition={SPRINGS.micro}
                       >
@@ -225,7 +225,7 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
                   <motion.button
                     type="button"
                     onClick={handleConfirmCandidate}
-                    className="flex-1 py-2.5 px-4 bg-[#0A4A3A] hover:bg-[#0A4A3A] text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                    className="flex-1 py-2.5 px-4 bg-[#1F3A4D] hover:bg-[#1F3A4D] text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-colors"
                     whileTap={{ scale: 0.97 }}
                     transition={SPRINGS.micro}
                   >
@@ -298,7 +298,7 @@ export const VehicleSelectorWidget: React.FC<{ isEmbedded?: boolean; className?:
                 type="button"
                 disabled={!currentEngineObj}
                 onClick={handleConfirmCascading}
-                className="px-6 py-2.5 bg-[#0A4A3A] hover:bg-[#0A4A3A] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm rounded-lg flex items-center gap-2 cursor-pointer shrink-0 transition-colors"
+                className="px-6 py-2.5 bg-[#1F3A4D] hover:bg-[#1F3A4D] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm rounded-lg flex items-center gap-2 cursor-pointer shrink-0 transition-colors"
                 whileTap={{ scale: 0.97 }}
                 transition={SPRINGS.micro}
               >
@@ -370,7 +370,7 @@ export const VehicleSelectorModal: React.FC = () => {
           transition={SPRINGS.snappy}
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
           style={{
-            background: 'rgba(4, 38, 29, 0.55)',
+            background: 'rgba(15,34,48, 0.55)',
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)',
           }}
@@ -393,7 +393,7 @@ export const VehicleSelectorModal: React.FC = () => {
             {/* Modal header */}
             <div className="px-5 py-4 bg-slate-900 text-white flex items-center justify-between rounded-t-2xl">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#0A4A3A] flex items-center justify-center text-white">
+                <div className="w-8 h-8 rounded-lg bg-[#1F3A4D] flex items-center justify-center text-white">
                   <Car className="w-5 h-5" />
                 </div>
                 <div>

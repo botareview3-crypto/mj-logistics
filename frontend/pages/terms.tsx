@@ -55,7 +55,7 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     body: (
       <p>
         Questions about these terms? Email{' '}
-        <a href="mailto:info@mjlogisticsenterprise.com" className="text-[#0A4A3A] font-semibold hover:underline">
+        <a href="mailto:info@mjlogisticsenterprise.com" className="text-[#1F3A4D] font-semibold hover:underline">
           info@mjlogisticsenterprise.com
         </a>
         .
@@ -71,7 +71,7 @@ export default function TermsPage() {
       <Breadcrumbs items={[{ label: 'Terms of Sale' }]} />
 
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-1">
-        <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-mint/40 text-[#0A4A3A] text-xs font-bold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-mint/40 text-[#1F3A4D] text-xs font-bold uppercase tracking-wider">
           <FileText className="w-3.5 h-3.5" /><span>Legal</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Terms of Sale</h1>

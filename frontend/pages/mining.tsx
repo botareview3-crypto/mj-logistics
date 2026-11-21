@@ -49,7 +49,7 @@ export default function MiningPage() {
         title={'Wealth in the *earth.*'}
         intro="MJ Mining is building a more deliberate path into gold and diamond opportunity — grounded in local knowledge, responsible practice, and relationships that outlast a single project."
         actions={<>
-          <button type="button" onClick={() => scrollToTarget('#story', -80)} className="btn btn-signal">Our point of view <ArrowDownRight className="h-4 w-4" /></button>
+          <button type="button" onClick={() => scrollToTarget('#story', -80)} className="btn btn-signal text-ink">Our point of view <ArrowDownRight className="h-4 w-4" /></button>
           <button type="button" onClick={() => scrollToTarget('#contact', -80)} className="btn btn-ghost-dark">Start a conversation</button>
         </>}
         image="/images/mining/hero.webp"
@@ -68,9 +68,9 @@ export default function MiningPage() {
             <div className="mt-14 grid gap-5 sm:grid-cols-3">
               {PRINCIPLES.map((p, i) => (
                 <div key={p.no} data-reveal data-delay={String(i * 0.06)} className="rounded-3xl border border-ink/10 bg-paper p-7">
-                  <span className="text-sm font-semibold text-signal">{p.no}</span>
+                  <span className="text-sm font-semibold text-azure">{p.no}</span>
                   <h3 className="mt-4 text-xl">{p.title}</h3>
-                  <p className="mt-3 text-[15px] leading-7 text-ink/65">{p.text}</p>
+                  <p className="mt-3 text-lg leading-7 text-ink/65">{p.text}</p>
                 </div>
               ))}
             </div>
@@ -86,7 +86,7 @@ export default function MiningPage() {
               <p className="eyebrow mb-4 text-sage">Our focus</p>
               <SplitText className="t-xl" text={'Gold and diamonds. *One clear standard.*'} />
             </div>
-            <p data-reveal className="max-w-md text-[16px] leading-7 text-ink/65 lg:justify-self-end">
+            <p data-reveal className="max-w-md text-lg leading-7 text-ink/65 lg:justify-self-end">
               We look for strong potential, responsible development, and relationships built to last.
             </p>
           </div>
@@ -97,9 +97,9 @@ export default function MiningPage() {
                   <img src={f.image} alt={f.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                 </div>
                 <div className="p-6 sm:p-8">
-                  <p className="eyebrow text-signal">{f.label}</p>
+                  <p className="eyebrow text-azure">{f.label}</p>
                   <SplitText as="h3" className="t-lg mt-4" text={f.title} />
-                  <p className="mt-4 max-w-md text-[16px] leading-7 text-ink/65">{f.text}</p>
+                  <p className="mt-4 max-w-md text-lg leading-7 text-ink/65">{f.text}</p>
                 </div>
               </article>
             ))}
@@ -117,10 +117,10 @@ export default function MiningPage() {
           <div className="border-t border-ink/10">
             {APPROACH.map(({ no, title, text, icon: Icon }, i) => (
               <article key={no} data-reveal data-delay={String(i * 0.06)} className="grid gap-5 border-b border-ink/10 py-8 sm:grid-cols-[64px_1fr_auto] sm:items-start">
-                <span className="text-sm font-semibold text-signal">{no}</span>
+                <span className="text-sm font-semibold text-azure">{no}</span>
                 <div>
                   <h3 className="text-2xl">{title}</h3>
-                  <p className="mt-3 max-w-xl text-[15px] leading-7 text-ink/65">{text}</p>
+                  <p className="mt-3 max-w-xl text-lg leading-7 text-ink/65">{text}</p>
                 </div>
                 <span className="hidden h-12 w-12 place-items-center rounded-full bg-paper text-forest sm:grid">
                   <Icon className="h-5 w-5" />
@@ -132,26 +132,26 @@ export default function MiningPage() {
       </section>
 
       {/* ── CONTACT ──────────────────────────────────────────────────────── */}
-      <section id="contact" className="scroll-mt-24 bg-paper py-24 sm:py-32">
+      <section id="contact" className="scroll-mt-24 bg-forest py-24 sm:py-32">
         <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
           <div>
-            <p className="eyebrow mb-4 text-sage">Start a conversation</p>
+            <p className="eyebrow mb-4 text-mint">Start a conversation</p>
             <SplitText className="t-xl" text={'The next chapter starts with a *good question.*'} />
-            <p data-reveal className="mt-6 max-w-xl text-[16px] leading-7 text-ink/65">
+            <p data-reveal className="mt-6 max-w-xl text-lg leading-7 text-mint">
               Tell us what you are exploring. For partnerships, supply discussions, or investment
               enquiries, our team is ready to listen.
             </p>
           </div>
-          <div data-reveal className="rounded-3xl border border-ink/10 bg-white p-6 sm:p-8">
-            <a href="mailto:mining@mjlogisticsenterprise.com" className="group flex items-center justify-between border-b border-ink/10 pb-5 text-[15px] font-semibold">
-              <span className="flex items-center gap-3"><Mail className="h-5 w-5 text-signal" /> mining@mjlogisticsenterprise.com</span>
-              <ArrowUpRight className="h-5 w-5 text-ink/40 group-hover:text-signal" />
+          <div data-reveal className="rounded-3xl border border-ink/10 bg-forest text-mint p-6 sm:p-8">
+            <a href="mailto:mining@mjlogisticsenterprise.com" className="group flex items-center justify-between border-b border-ink/10 pb-5 text-lg font-semibold">
+              <span className="flex items-center gap-3"><Mail className="h-5 w-5 text-azure" /> mining@mjlogisticsenterprise.com</span>
+              <ArrowUpRight className="h-5 w-5 text-ink/40 group-hover:text-azure" />
             </a>
-            <div className="flex items-center gap-3 py-5 text-[15px]">
-              <MapPin className="h-5 w-5 text-signal" /> Monrovia, Liberia
+            <div className="flex items-center gap-3 py-5 text-lg">
+              <MapPin className="h-5 w-5 text-azure" /> Monrovia, Liberia
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="mailto:mining@mjlogisticsenterprise.com" className="btn btn-signal">Email the mining team <ArrowUpRight className="btn-arrow h-4 w-4" /></a>
+              <a href="mailto:mining@mjlogisticsenterprise.com" className="btn btn-signal text-ink">Email the mining team <ArrowUpRight className="btn-arrow h-4 w-4" /></a>
               <Link href="/" className="btn btn-ghost-dark">MJ Logistics home</Link>
             </div>
           </div>

@@ -2,20 +2,22 @@
 
 /* ─── Design tokens ─────────────────────────────────────────────────────── */
 @theme {
-  /* Logo kit: Deep Emerald #0A4A3A · Signal Orange #FF6A2B · Sage #4F7268 · Paper #F3F1EA */
-  --color-ink:     #04261D;   /* deepest emerald — dark sections, text */
-  --color-forest:  #0A4A3A;   /* Deep Emerald — primary brand */
-  --color-moss:    #136650;   /* hover / lighter emerald */
-  --color-sage:    #4F7268;
-  --color-mint:    #A9CFC2;   /* reversed-logo tint, accents on dark */
-  --color-signal:  #FF6A2B;   /* Signal Orange — CTAs, highlights */
-  --color-ember:   #E5531A;   /* pressed / hover orange */
+  /* Logo kit "Slate Sky": forest = Slate, signal = Sky Blue (fills, accents on dark),
+     azure = deeper sky for TEXT/ICONS on light backgrounds (Sky Blue alone is 2:1 on paper). */
+  --color-ink:     #0F2230;   /* deepest slate — dark sections, text */
+  --color-forest:  #1F3A4D;   /* Slate — primary brand */
+  --color-moss:    #2D5068;   /* hover / lighter slate */
+  --color-sage:    #4F6D80;
+  --color-mint:    #B8D0DE;   /* reversed-logo tint, accents on dark */
+  --color-signal:  #2EC4F1;   /* Sky Blue — CTAs, highlights */
+  --color-ember:   #14A8D8;   /* pressed / hover sky */
   --color-paper:   #F3F1EA;
   --color-bone:    #E4E0D3;   /* hairlines on paper */
-  --color-mist:    #E4EEE9;   /* soft emerald tint for alternating light sections */
+  --color-mist:    #E4EDF3;   /* soft slate tint for alternating light sections */
+  --color-azure: #0A7EA6;
 
-  --font-display: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-sans:    'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Libre Franklin', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans:    'Libre Franklin', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -23,11 +25,11 @@
 @layer base {
   :root {
     /* Legacy aliases still referenced by shop components */
-    --mj-navy:   #04261D;
-    --mj-blue:   #0A4A3A;
-    --mj-sky:    #FF6A2B;
-    --mj-accent: #FF6A2B;
-    --mj-glass-shadow: 0 8px 32px rgba(4, 38, 29, 0.14);
+    --mj-navy:   #0F2230;
+    --mj-blue:   #1F3A4D;
+    --mj-sky:    #2EC4F1;
+    --mj-accent: #2EC4F1;
+    --mj-glass-shadow: 0 8px 32px rgba(15, 34, 48, 0.14);
   }
 
   * { box-sizing: border-box; }
@@ -47,15 +49,15 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.08;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
   }
   h3, h4, h5, h6 { line-height: 1.2; letter-spacing: -0.015em; }
 
   .font-display { font-family: var(--font-display) !important; }
 
-  ::selection { background: var(--color-signal); color: #fff; }
+  ::selection { background: var(--color-signal); color: var(--color-ink); }
 }
 
 /* ─── Type scale helpers ────────────────────────────────────────────────── */
@@ -65,7 +67,7 @@
 .t-lead   { font-size: clamp(1.25rem, 2vw, 1.85rem);  line-height: 1.35; letter-spacing: -0.015em; }
 .eyebrow  {
   font-family: var(--font-sans);
-  font-size: 14px; font-weight: 600;
+  font-size: 14px; font-weight: 700;
   letter-spacing: .14em; text-transform: uppercase;
 }
 
@@ -90,8 +92,8 @@ html.fx [data-clip]:not([data-shown])               { clip-path: inset(100% 0 0 
 @layer components {
   .btn {
     position: relative; display: inline-flex; align-items: center; gap: .65rem;
-    height: 3.5rem; padding: 0 1.9rem; border-radius: 999px;
-    font-family: var(--font-sans); font-size: 16px; font-weight: 600; letter-spacing: -.005em;
+    height: 3.5rem; padding: 0 1.9rem; border-radius: 0.9rem;
+    font-family: var(--font-sans); font-size: 16px; font-weight: 700; letter-spacing: -.005em;
     overflow: hidden; isolation: isolate; cursor: pointer; white-space: nowrap;
     transition: color .45s var(--ease-out-expo), background-color .3s, border-color .3s;
   }
@@ -100,14 +102,16 @@ html.fx [data-clip]:not([data-shown])               { clip-path: inset(100% 0 0 
     transform: translateY(101%); transition: transform .55s var(--ease-out-expo);
   }
   .btn:hover::before { transform: translateY(0); }
-  .btn-signal        { background: var(--color-signal); color: #fff; }
+  .btn-signal        { background: var(--color-signal); color: var(--color-ink); }
   .btn-signal::before{ background: var(--color-ink); }
-  .btn-ink           { background: var(--color-ink); color: #fff; }
+  .btn-signal:hover  { color: #fff; }
+  .btn-ink           { background: var(--color-forest); color: #fff; }
   .btn-ink::before   { background: var(--color-signal); }
+  .btn-ink:hover     { color: var(--color-ink); }
   .btn-ghost         { border: 1px solid currentColor; color: inherit; }
   .btn-ghost::before { background: #fff; }
   .btn-ghost:hover   { color: var(--color-ink); border-color: #fff; }
-  .btn-ghost-dark          { border: 1px solid rgba(4,38,29,.25); color: var(--color-ink); }
+  .btn-ghost-dark          { border: 1px solid rgba(15,34,48,.25); color: var(--color-ink); }
   .btn-ghost-dark::before  { background: var(--color-ink); }
   .btn-ghost-dark:hover    { color: #fff; border-color: var(--color-ink); }
   .btn .btn-arrow    { transition: transform .45s var(--ease-out-expo); }
@@ -116,10 +120,10 @@ html.fx [data-clip]:not([data-shown])               { clip-path: inset(100% 0 0 
 
 /* Soft raised card: gives white/paper cards a little depth on light sections */
 .card-raised {
-  box-shadow: 0 1px 2px rgba(4,38,29,.06), 0 18px 40px -22px rgba(4,38,29,.28);
+  box-shadow: 0 1px 2px rgba(15,34,48,.06), 0 18px 40px -22px rgba(15,34,48,.28);
   transition: box-shadow .35s ease, transform .35s ease;
 }
-.card-raised:hover { box-shadow: 0 1px 2px rgba(4,38,29,.08), 0 26px 50px -22px rgba(4,38,29,.38); }
+.card-raised:hover { box-shadow: 0 1px 2px rgba(15,34,48,.08), 0 26px 50px -22px rgba(15,34,48,.38); }
 
 /* Underline link that draws in on hover */
 .link-draw { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease-out-expo); }
@@ -134,7 +138,7 @@ html.fx [data-clip]:not([data-shown])               { clip-path: inset(100% 0 0 
   box-shadow: var(--mj-glass-shadow), inset 0 1px 0 rgba(255,255,255,0.45);
 }
 .glass-dark {
-  background: rgba(4, 38, 29, 0.78);
+  background: rgba(15, 34, 48, 0.78);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(255,255,255,0.10);
@@ -145,7 +149,7 @@ html.fx [data-clip]:not([data-shown])               { clip-path: inset(100% 0 0 
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid rgba(255,255,255,0.45);
-  box-shadow: 0 20px 60px rgba(4,38,29,0.16), inset 0 1px 0 rgba(255,255,255,0.55);
+  box-shadow: 0 20px 60px rgba(15,34,48,0.16), inset 0 1px 0 rgba(255,255,255,0.55);
 }
 
 /* ─── Scrollbar ─────────────────────────────────────────────────────────── */
@@ -198,7 +202,7 @@ img { image-rendering: auto; }
   -webkit-backface-visibility: hidden;
 }
 .product-card { transition: box-shadow 0.22s ease; }
-.product-card:hover { box-shadow: 0 16px 40px rgba(4,38,29,0.12); }
+.product-card:hover { box-shadow: 0 16px 40px rgba(15,34,48,0.12); }
 
 .below-fold { content-visibility: auto; contain-intrinsic-size: 0 600px; }
 
@@ -230,15 +234,15 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (prefers-reduced-transparency: reduce) {
   .glass         { background: rgba(243, 241, 234, 0.97); backdrop-filter: none; -webkit-backdrop-filter: none; }
-  .glass-dark    { background: rgba(4, 38, 29, 0.97);    backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .glass-dark    { background: rgba(15, 34, 48, 0.97);    backdrop-filter: none; -webkit-backdrop-filter: none; }
   .glass-dropdown{ background: rgb(250, 249, 245);        backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
 @media (prefers-contrast: more) {
   .glass, .glass-dark, .glass-dropdown { backdrop-filter: none; -webkit-backdrop-filter: none; border-width: 2px; }
-  .glass         { background: #f3f1ea; border-color: #04261D; }
-  .glass-dark    { background: #04261D; border-color: #ffffff; }
-  .glass-dropdown{ background: #ffffff; border-color: #04261D; }
-  .product-card  { border-width: 2px !important; border-color: #04261D !important; }
+  .glass         { background: #f3f1ea; border-color: #0F2230; }
+  .glass-dark    { background: #0F2230; border-color: #ffffff; }
+  .glass-dropdown{ background: #ffffff; border-color: #0F2230; }
+  .product-card  { border-width: 2px !important; border-color: #0F2230 !important; }
   :focus-visible { outline-width: 3px; outline-offset: 4px; }
 }

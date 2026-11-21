@@ -93,7 +93,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
     return (
       <div className="min-h-screen bg-paper flex items-center justify-center px-6">
         <div className="max-w-md bg-white rounded-3xl border border-bone shadow-lg p-10 text-center">
-          <Wrench className="mx-auto w-10 h-10 text-signal" />
+          <Wrench className="mx-auto w-10 h-10 text-azure" />
           <h1 className="font-display mt-5 text-2xl font-bold text-ink">
             We&apos;re updating the catalogue
           </h1>
@@ -106,7 +106,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
   }
 
   const announcementBar = siteSettings.announcement ? (
-    <div className="relative z-[130] bg-signal px-4 py-2 text-center text-xs font-semibold text-white">
+    <div className="relative z-[130] bg-signal px-4 py-2 text-center text-xs font-semibold text-ink">
       {siteSettings.announcement}
     </div>
   ) : null;

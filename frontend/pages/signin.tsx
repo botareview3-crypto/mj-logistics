@@ -87,7 +87,7 @@ export default function SignInPage() {
           aria-label="Back to home"
         >
           <span className="font-display text-[10px] uppercase tracking-[0.25em] text-slate-400">Back to</span>
-          <span className="font-display text-[20px] font-bold text-[#04261D]">MJ Logistics</span>
+          <span className="font-display text-[20px] font-bold text-[#0F2230]">MJ Logistics</span>
         </button>
       </div>
 
@@ -97,7 +97,7 @@ export default function SignInPage() {
 
           {/* Heading */}
           <div className="text-center">
-            <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#04261D]">
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#0F2230]">
               {mode === 'signin' ? 'Welcome back' : 'Create account'}
             </h1>
             <p className="text-slate-500 text-sm mt-2">
@@ -118,7 +118,7 @@ export default function SignInPage() {
                   onClick={() => { setMode(m); setEmailError(''); }}
                   className={`flex-1 py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
                     mode === m
-                      ? 'text-[#04261D] border-b-2 border-[#04261D] font-bold'
+                      ? 'text-[#0F2230] border-b-2 border-[#0F2230] font-bold'
                       : 'text-slate-400 hover:text-slate-600'
                   }`}
                 >
@@ -135,7 +135,7 @@ export default function SignInPage() {
                   onClick={() => { setMethod('oauth'); setEmailError(''); }}
                   className={`flex-1 py-2 text-[13px] font-semibold transition-colors cursor-pointer ${
                     method === 'oauth'
-                      ? 'bg-[#04261D] text-white'
+                      ? 'bg-[#0F2230] text-white'
                       : 'bg-white text-slate-500 hover:bg-slate-50'
                   }`}
                 >
@@ -146,7 +146,7 @@ export default function SignInPage() {
                   onClick={() => { setMethod('email'); setEmailError(''); }}
                   className={`flex-1 py-2 text-[13px] font-semibold transition-colors cursor-pointer ${
                     method === 'email'
-                      ? 'bg-[#04261D] text-white'
+                      ? 'bg-[#0F2230] text-white'
                       : 'bg-white text-slate-500 hover:bg-slate-50'
                   }`}
                 >
@@ -160,14 +160,14 @@ export default function SignInPage() {
                   <button
                     type="button"
                     onClick={() => startOAuth('google')}
-                    className="w-full h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold text-[#04261D] flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                    className="w-full h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-sm font-semibold text-[#0F2230] flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
                   >
                     <GoogleIcon /> Continue with Google
                   </button>
                   <button
                     type="button"
                     onClick={() => startOAuth('apple')}
-                    className="w-full h-11 rounded-xl bg-[#04261D] hover:bg-[#0A4A3A] text-sm font-semibold text-white flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+                    className="w-full h-11 rounded-xl bg-[#0F2230] hover:bg-[#1F3A4D] text-sm font-semibold text-white flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
                   >
                     <AppleIcon /> Continue with Apple
                   </button>
@@ -180,7 +180,7 @@ export default function SignInPage() {
                 /* ── Email / password form ── */
                 <form onSubmit={handleEmailSubmit} className="space-y-3" noValidate>
                   <div>
-                    <label htmlFor="signin-email" className="block text-[12px] font-semibold text-[#04261D] mb-1">
+                    <label htmlFor="signin-email" className="block text-[12px] font-semibold text-[#0F2230] mb-1">
                       Email address
                     </label>
                     <div className="relative">
@@ -192,13 +192,13 @@ export default function SignInPage() {
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                         placeholder="you@example.com"
-                        className="w-full h-11 pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-sm text-[#04261D] placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#0A4A3A]/30 focus:border-[#0A4A3A] transition"
+                        className="w-full h-11 pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-sm text-[#0F2230] placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#1F3A4D]/30 focus:border-[#1F3A4D] transition"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="signin-password" className="block text-[12px] font-semibold text-[#04261D] mb-1">
+                    <label htmlFor="signin-password" className="block text-[12px] font-semibold text-[#0F2230] mb-1">
                       Password
                     </label>
                     <div className="relative">
@@ -209,7 +209,7 @@ export default function SignInPage() {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                         placeholder={mode === 'create' ? 'Min. 8 characters' : '••••••••'}
-                        className="w-full h-11 pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-[#04261D] placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#0A4A3A]/30 focus:border-[#0A4A3A] transition"
+                        className="w-full h-11 pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-[#0F2230] placeholder-slate-400 outline-none focus:ring-2 focus:ring-[#1F3A4D]/30 focus:border-[#1F3A4D] transition"
                       />
                       <button
                         type="button"
@@ -228,14 +228,14 @@ export default function SignInPage() {
 
                   <button
                     type="submit"
-                    className="w-full h-11 rounded-xl bg-[#04261D] hover:bg-[#0A4A3A] text-white text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer mt-1"
+                    className="w-full h-11 rounded-xl bg-[#0F2230] hover:bg-[#1F3A4D] text-white text-sm font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer mt-1"
                   >
                     {mode === 'signin' ? <><LogIn className="w-4 h-4" /> Sign in with Email</> : <><UserPlus className="w-4 h-4" /> Create Account</>}
                   </button>
 
                   {mode === 'signin' && (
                     <div className="text-center">
-                      <button type="button" className="text-[12px] text-[#0A4A3A] hover:underline cursor-pointer">
+                      <button type="button" className="text-[12px] text-[#1F3A4D] hover:underline cursor-pointer">
                         Forgot your password?
                       </button>
                     </div>
@@ -263,7 +263,7 @@ export default function SignInPage() {
               { icon: Bell,    label: 'Stock alerts' },
             ].map(({ icon: Icon, label }) => (
               <div key={label} className="flex flex-col items-center gap-1.5 text-center">
-                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 text-[#0A4A3A] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 text-[#1F3A4D] flex items-center justify-center">
                   <Icon className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] text-slate-400 leading-tight">{label}</span>

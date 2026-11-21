@@ -152,12 +152,19 @@ CHAT_HISTORY.md is the log.
   (catalog, cart, garage, parts, search…) keeps the search/vehicle-selector
   `<Header>` but now also uses `<SiteFooter>`. Pages must NOT render their own
   header/footer. A new corporate page = add its path to `MARKETING_PATHS`.
-- Brand system (Oct 2026 redesign, from `logo/MJ-Logistics-Logo`): colours
-  are Tailwind tokens in `styles/globals.css` `@theme` — `ink` #04261D,
-  `forest` #0A4A3A, `moss`, `sage` #4F7268, `mint` #A9CFC2, `signal`
-  #FF6A2B, `paper` #F3F1EA, `bone`. Type is Archivo (Google Fonts) for
-  everything — headings at weight 600. The old Chopin Trial font was removed
-  (trial licence). Logo files used by the site live in `public/brand/`.
+- Brand system (Nov 2026 redesign, "Slate Sky" from the revised `logo/MJ-Logistics-Logo`
+  kit): colours are Tailwind tokens in `styles/globals.css` `@theme`. Token names
+  were kept from the earlier emerald palette so pages follow automatically, but
+  the values are now: `ink` #0F2230, `forest` #1F3A4D (Slate, primary), `moss`
+  #2D5068, `sage` #4F6D80 (Steel, darkened for small text), `mint` #B8D0DE
+  (Mist), `signal` #2EC4F1 (Sky Blue), `ember` #14A8D8, `azure` #0A7EA6 (new),
+  `paper` #F3F1EA, `bone`, `mist` #E4EDF3. **Contrast rule:** Sky Blue is only
+  2:1 on paper/white, so `signal` is for fills (buttons, dots, bars - with
+  `text-ink` on top, never white) and for text on DARK sections; text and icons
+  on LIGHT sections use `text-azure`. `SplitText`/`ScrubText` accent defaults to
+  `text-azure`, so pass `accentClass="text-signal"` inside dark sections.
+  Type is Libre Franklin (Google Fonts, the logo kit typeface) for everything -
+  headings Bold (700). Logo files used by the site live in `public/brand/`.
 - Client feedback (2026-10-08): keep it light and simple. Sections are
   paper/white; only the home hero (video) and the footer (forest) are dark.
   Inner pages use the shared `<PageHero>` (light hero + photo). Do NOT bring

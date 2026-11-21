@@ -128,7 +128,7 @@ export default function ContactPage() {
                   <h3 className="text-2xl">{r.title}</h3>
                   <p className="mt-3 text-[15px] leading-7 text-ink/65">{r.text}</p>
                 </div>
-                <span className="mt-6 flex items-center justify-between font-semibold text-forest group-hover:text-signal">
+                <span className="mt-6 flex items-center justify-between font-semibold text-forest group-hover:text-azure">
                   {r.cta} <ArrowUpRight className="h-5 w-5" />
                 </span>
               </Link>

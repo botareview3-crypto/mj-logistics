@@ -109,7 +109,7 @@ export const Header: React.FC = () => {
             <motion.button
               type="button"
               onClick={() => setCatalogOpen(p => !p)}
-              className="flex items-center gap-1.5 px-4 h-10 rounded-xl border border-slate-200/70 bg-white/60 text-sm font-semibold text-[#04261D] hover:border-[#04261D]/40 hover:bg-white/80 transition-colors cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-4 h-10 rounded-xl border border-slate-200/70 bg-white/60 text-sm font-semibold text-[#0F2230] hover:border-[#0F2230]/40 hover:bg-white/80 transition-colors cursor-pointer whitespace-nowrap"
               whileTap={{ scale: 0.97 }}
               transition={SPRINGS.micro}
               aria-expanded={catalogOpen}
@@ -143,19 +143,19 @@ export const Header: React.FC = () => {
                       key={item.href}
                       type="button"
                       onClick={() => { navigate(item.href); setCatalogOpen(false); }}
-                      className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50/80 hover:text-[#04261D] transition-colors cursor-pointer flex items-center justify-between group"
+                      className="w-full text-left px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50/80 hover:text-[#0F2230] transition-colors cursor-pointer flex items-center justify-between group"
                       whileTap={{ scale: 0.98 }}
                       transition={SPRINGS.micro}
                     >
                       {item.label}
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#04261D] transition-colors" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#0F2230] transition-colors" />
                     </motion.button>
                   ))}
                   <div className="border-t border-slate-100 mt-1 pt-1">
                     <motion.button
                       type="button"
                       onClick={() => { navigate('/catalog'); setCatalogOpen(false); }}
-                      className="w-full text-left px-4 py-2 text-[13px] font-bold text-[#04261D] hover:bg-slate-50/80 transition-colors cursor-pointer"
+                      className="w-full text-left px-4 py-2 text-[13px] font-bold text-[#0F2230] hover:bg-slate-50/80 transition-colors cursor-pointer"
                       whileTap={{ scale: 0.98 }}
                       transition={SPRINGS.micro}
                     >
@@ -174,12 +174,12 @@ export const Header: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search parts, brands, OEM numbers…"
-              className="w-full h-10 pl-4 pr-12 text-sm bg-white/70 border border-slate-200/60 rounded-xl focus:outline-none focus:border-[#04261D]/50 focus:bg-white/90 transition-colors"
+              className="w-full h-10 pl-4 pr-12 text-sm bg-white/70 border border-slate-200/60 rounded-xl focus:outline-none focus:border-[#0F2230]/50 focus:bg-white/90 transition-colors"
               aria-label="Search parts"
             />
             <motion.button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-[#04261D] hover:bg-[#0A4A3A] text-white rounded-full flex items-center justify-center cursor-pointer shrink-0"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-[#0F2230] hover:bg-[#1F3A4D] text-white rounded-full flex items-center justify-center cursor-pointer shrink-0"
               aria-label="Submit search"
               whileTap={{ scale: 0.88 }}
               transition={SPRINGS.micro}
@@ -201,8 +201,8 @@ export const Header: React.FC = () => {
                 flex items-center gap-2 px-4 h-10 rounded-xl border text-sm font-medium cursor-pointer whitespace-nowrap
                 transition-colors duration-150
                 ${activeVehicle
-                  ? 'bg-[#04261D] text-white border-[#04261D] hover:bg-[#0A4A3A]'
-                  : 'bg-white/60 text-slate-600 border-slate-200/60 hover:border-[#04261D]/40'}
+                  ? 'bg-[#0F2230] text-white border-[#0F2230] hover:bg-[#1F3A4D]'
+                  : 'bg-white/60 text-slate-600 border-slate-200/60 hover:border-[#0F2230]/40'}
               `}
               whileTap={{ scale: 0.97 }}
               transition={SPRINGS.micro}
@@ -234,7 +234,7 @@ export const Header: React.FC = () => {
                 >
                   <div className="px-4 py-2 border-b border-slate-100">
                     <p className="text-[11px] text-slate-400 uppercase font-semibold" style={{ letterSpacing: '0.08em' }}>Active vehicle</p>
-                    <p className="text-sm font-semibold text-[#04261D] mt-0.5">{activeVehicle.make} {activeVehicle.model}</p>
+                    <p className="text-sm font-semibold text-[#0F2230] mt-0.5">{activeVehicle.make} {activeVehicle.model}</p>
                     {activeVehicle.year && <p className="text-[12px] text-slate-500">{activeVehicle.year}</p>}
                   </div>
                   {[
@@ -261,7 +261,7 @@ export const Header: React.FC = () => {
           <motion.button
             type="button"
             onClick={() => navigate(currentUser ? '/account' : '/signin')}
-            className="hidden md:flex items-center gap-1.5 px-3 h-10 rounded-xl border border-slate-200/60 bg-white/60 text-sm font-medium text-slate-600 hover:border-[#04261D]/40 hover:text-[#04261D] transition-colors cursor-pointer shrink-0"
+            className="hidden md:flex items-center gap-1.5 px-3 h-10 rounded-xl border border-slate-200/60 bg-white/60 text-sm font-medium text-slate-600 hover:border-[#0F2230]/40 hover:text-[#0F2230] transition-colors cursor-pointer shrink-0"
             whileTap={{ scale: 0.97 }}
             transition={SPRINGS.micro}
           >
@@ -273,7 +273,7 @@ export const Header: React.FC = () => {
           <motion.button
             type="button"
             onClick={() => navigate('/cart')}
-            className="relative p-2.5 rounded-xl bg-white/60 border border-slate-200/60 text-slate-600 hover:bg-[#04261D] hover:text-white hover:border-[#04261D] transition-colors cursor-pointer shrink-0"
+            className="relative p-2.5 rounded-xl bg-white/60 border border-slate-200/60 text-slate-600 hover:bg-[#0F2230] hover:text-white hover:border-[#0F2230] transition-colors cursor-pointer shrink-0"
             aria-label={`Cart (${cartCount} items)`}
             whileTap={{ scale: 0.90 }}
             transition={SPRINGS.micro}
@@ -287,7 +287,7 @@ export const Header: React.FC = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
                   transition={SPRINGS.momentum}
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-[#FF6A2B] text-white text-[9px] font-bold flex items-center justify-center rounded-full"
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-signal text-ink text-[9px] font-bold flex items-center justify-center rounded-full"
                 >
                   {cartCount > 9 ? '9+' : cartCount}
                 </motion.span>
@@ -371,7 +371,7 @@ export const Header: React.FC = () => {
                 <motion.button
                   type="button"
                   onClick={() => { navigate('/cart'); setMobileOpen(false); }}
-                  className="flex-1 px-4 py-2.5 bg-[#04261D] text-white text-sm font-semibold rounded-xl cursor-pointer"
+                  className="flex-1 px-4 py-2.5 bg-[#0F2230] text-white text-sm font-semibold rounded-xl cursor-pointer"
                   whileTap={{ scale: 0.97 }}
                   transition={SPRINGS.micro}
                 >

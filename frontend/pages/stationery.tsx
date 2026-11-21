@@ -82,7 +82,7 @@ export default function StationeryPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {STATIONERY_CATEGORIES.map(({ id, icon: Icon, title, desc, items }, i) => (
               <article key={id} id={id} data-reveal data-delay={String((i % 3) * 0.06)} className="scroll-mt-28 flex flex-col rounded-3xl border border-ink/10 bg-paper p-7">
-                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-signal">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-azure">
                   <Icon className="h-6 w-6" strokeWidth={1.8} />
                 </span>
                 <h3 className="mt-6 text-2xl">{title}</h3>
@@ -92,7 +92,7 @@ export default function StationeryPage() {
                     <li key={item} className="rounded-full border border-ink/10 bg-white px-3 py-1 text-xs text-ink/75">{item}</li>
                   ))}
                 </ul>
-                <Link href="/contact" className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-forest hover:text-signal">
+                <Link href="/contact" className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-forest hover:text-azure">
                   Enquire <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </article>
@@ -107,7 +107,7 @@ export default function StationeryPage() {
           <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
             <div>
               <p className="eyebrow mb-4 text-mint">Bulk & business orders</p>
-              <SplitText className="t-xl" text={'Need to stock an office? *We’ve got you covered.*'} />
+              <SplitText className="t-xl" accentClass="text-signal" text={'Need to stock an office? *We’ve got you covered.*'} />
             </div>
             <div data-reveal className="flex flex-col gap-5 lg:items-end">
               <p className="max-w-sm text-[16px] leading-7 text-white/80 lg:text-right">

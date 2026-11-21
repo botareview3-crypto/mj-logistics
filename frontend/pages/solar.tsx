@@ -71,10 +71,10 @@ export default function SolarPage() {
                   <img src={image} alt={alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                 </div>
                 <div className="p-6 sm:p-8">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-signal"><Icon className="h-6 w-6" /></span>
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-azure"><Icon className="h-6 w-6" /></span>
                   <h2 className="mt-6 text-[clamp(1.5rem,2.4vw,2.1rem)]">{title}</h2>
                   <p className="mt-3 max-w-md text-[16px] leading-7 text-ink/65">{text}</p>
-                  <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-forest hover:text-signal">
+                  <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-forest hover:text-azure">
                     Request a quote <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </div>

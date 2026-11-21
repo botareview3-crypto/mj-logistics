@@ -134,7 +134,7 @@ export const SiteHeader: React.FC = () => {
         <div
           className={`mx-auto flex items-center justify-between transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
             solid
-              ? 'h-16 max-w-[1320px] rounded-full border border-ink/5 bg-paper/85 px-3 pl-5 shadow-[0_10px_40px_-12px_rgba(4,38,29,.25)] backdrop-blur-xl'
+              ? 'h-16 max-w-[1320px] rounded-full border border-ink/5 bg-paper/85 px-3 pl-5 shadow-[0_10px_40px_-12px_rgba(15,34,48,.25)] backdrop-blur-xl'
               : 'h-20 max-w-[1440px] px-5 sm:px-8'
           }`}
         >
@@ -182,7 +182,7 @@ export const SiteHeader: React.FC = () => {
             <Link href="/cart" className={iconBtn} aria-label={`Cart (${cartCount} items)`}>
               <ShoppingBag className="h-[18px] w-[18px]" />
               {cartCount > 0 && (
-                <span className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-signal px-1 text-[10px] font-bold text-white">
+                <span className="absolute right-1 top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-signal px-1 text-[10px] font-bold text-ink">
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
@@ -239,8 +239,8 @@ export const SiteHeader: React.FC = () => {
                   >
                     <span className="w-7 shrink-0 text-xs font-semibold tabular-nums text-sage">0{i + 1}</span>
                     <span
-                      className={`font-display text-[clamp(1.6rem,3.6vw,3rem)] font-semibold leading-none tracking-[-.03em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-signal ${
-                        isActive(link.href) ? 'text-signal' : ''
+                      className={`font-display text-[clamp(1.6rem,3.6vw,3rem)] font-semibold leading-none tracking-[-.03em] transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-3 group-hover:text-azure ${
+                        isActive(link.href) ? 'text-azure' : ''
                       }`}
                     >
                       {link.label}
@@ -277,18 +277,18 @@ export const SiteHeader: React.FC = () => {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Brake pads, oil filter, OEM number…"
-                className="h-14 w-full rounded-full border border-ink/15 bg-white pl-6 pr-16 text-[15px] text-ink placeholder:text-ink/40 outline-none transition focus:border-signal"
+                className="h-14 w-full rounded-full border border-ink/15 bg-white pl-6 pr-16 text-[15px] text-ink placeholder:text-ink/40 outline-none transition focus:border-azure"
               />
-              <button type="submit" aria-label="Search" className="absolute bottom-1.5 right-1.5 grid h-11 w-11 place-items-center rounded-full bg-signal text-white">
+              <button type="submit" aria-label="Search" className="absolute bottom-1.5 right-1.5 grid h-11 w-11 place-items-center rounded-full bg-signal text-ink">
                 <Search className="h-4 w-4" />
               </button>
             </form>
 
             <div data-menu-fade className="grid grid-cols-2 gap-3 text-sm">
-              <Link href={currentUser ? '/account' : '/signin'} onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-ink/15 bg-white px-4 py-3.5 transition hover:border-signal hover:text-signal">
+              <Link href={currentUser ? '/account' : '/signin'} onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-ink/15 bg-white px-4 py-3.5 transition hover:border-signal hover:text-azure">
                 <User className="h-4 w-4" /> {currentUser ? 'My account' : 'Sign in'}
               </Link>
-              <Link href="/cart" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-ink/15 bg-white px-4 py-3.5 transition hover:border-signal hover:text-signal">
+              <Link href="/cart" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-2xl border border-ink/15 bg-white px-4 py-3.5 transition hover:border-signal hover:text-azure">
                 <ShoppingBag className="h-4 w-4" /> Cart{cartCount > 0 ? ` (${cartCount})` : ''}
               </Link>
             </div>

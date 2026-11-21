@@ -30,7 +30,7 @@ export function StockAlertsPanel() {
 
   return (
     <div id="stock-alerts" className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-5 scroll-mt-28">
-      <h2 className="font-display text-lg font-bold text-[#04261D] flex items-center gap-2"><Bell className="w-5 h-5 text-[#0A4A3A]" /> Stock Alerts</h2>
+      <h2 className="font-display text-lg font-bold text-[#0F2230] flex items-center gap-2"><Bell className="w-5 h-5 text-[#1F3A4D]" /> Stock Alerts</h2>
 
       {loadError && <p className="text-sm text-rose-600">{loadError}</p>}
       {!alerts && !loadError && <p className="text-sm text-slate-400">Loading…</p>}
@@ -45,7 +45,7 @@ export function StockAlertsPanel() {
           return (
             <div key={a.id} className="rounded-xl border border-slate-200 p-3 flex items-center gap-3">
               <div className="min-w-0 flex-1">
-                <button type="button" onClick={() => navigate(`/parts/${a.part_id}`)} className="text-sm font-semibold text-[#04261D] hover:text-[#0A4A3A] text-left cursor-pointer leading-snug">{a.part_name || part?.name || a.part_id}</button>
+                <button type="button" onClick={() => navigate(`/parts/${a.part_id}`)} className="text-sm font-semibold text-[#0F2230] hover:text-[#1F3A4D] text-left cursor-pointer leading-snug">{a.part_name || part?.name || a.part_id}</button>
                 {a.sku && <div className="text-[11px] font-mono text-slate-400">SKU {a.sku}</div>}
               </div>
               <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border shrink-0 ${back ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>

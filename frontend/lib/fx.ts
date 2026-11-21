@@ -131,7 +131,7 @@ export function useScrollFx(scope: RefObject<HTMLElement>, deps: unknown[] = [])
         rest.forEach(el => { if (!el.hasAttribute('data-shown')) observer?.observe(el); });
 
         // Parallax drift (transform only — never affects visibility).
-        gsap.utils.toArray<HTMLElement>('[data-parallax]', root).forEach(el => {
+        gsap.utils.toArray<HTMLElement>('[data-parallax]', root).forEach((el: HTMLElement) => {
           const amount = parseFloat(el.dataset.parallax || '0.08') * 100;
           gsap.fromTo(el, { yPercent: -amount }, {
             yPercent: amount, ease: 'none',
@@ -140,7 +140,7 @@ export function useScrollFx(scope: RefObject<HTMLElement>, deps: unknown[] = [])
         });
 
         // Words brighten as the paragraph scrolls through view.
-        gsap.utils.toArray<HTMLElement>('[data-scrub]', root).forEach(el => {
+        gsap.utils.toArray<HTMLElement>('[data-scrub]', root).forEach((el: HTMLElement) => {
           gsap.fromTo(el.querySelectorAll('.scrub-word'), { opacity: 0.18 }, {
             opacity: 1, ease: 'none', stagger: 0.1,
             scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 55%', scrub: 0.5 },

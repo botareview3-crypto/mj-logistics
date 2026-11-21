@@ -69,7 +69,7 @@ export default function DivisionsPage() {
                   <span className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink">0{i + 1}</span>
                 </div>
                 <div className="p-7">
-                  <Icon className="h-6 w-6 text-signal" strokeWidth={1.8} />
+                  <Icon className="h-6 w-6 text-azure" strokeWidth={1.8} />
                   <h3 className="mt-5 text-2xl">{title}</h3>
                   <p className="mt-3 text-[15px] leading-7 text-ink/65">{text}</p>
                 </div>
@@ -98,7 +98,7 @@ export default function DivisionsPage() {
                   <img src={d.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                 </span>
                 <span className="flex-1 text-[16px] font-semibold leading-snug">{d.title}</span>
-                <ArrowUpRight className="h-5 w-5 shrink-0 text-ink/40 transition-colors group-hover:text-signal" />
+                <ArrowUpRight className="h-5 w-5 shrink-0 text-ink/40 transition-colors group-hover:text-azure" />
               </Link>
             ))}
           </div>

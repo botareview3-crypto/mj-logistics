@@ -7,7 +7,7 @@ export const EMPTY_ADDRESS: AddressInput = {
 };
 
 const inputCls =
-  'w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0A4A3A] focus:bg-white transition-all';
+  'w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F3A4D] focus:bg-white transition-all';
 
 interface Props {
   initial?: AddressInput;
@@ -61,12 +61,12 @@ export function AddressForm({ initial = EMPTY_ADDRESS, submitLabel, onSubmit, on
         <input className={inputCls} placeholder="Label, e.g. Home or Workshop" value={form.label} onChange={set('label')} maxLength={60} />
       </div>
       <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
-        <input type="checkbox" checked={form.is_default} onChange={e => setForm(prev => ({ ...prev, is_default: e.target.checked }))} className="accent-[#0A4A3A]" />
+        <input type="checkbox" checked={form.is_default} onChange={e => setForm(prev => ({ ...prev, is_default: e.target.checked }))} className="accent-[#1F3A4D]" />
         Use as my default address
       </label>
       {error && <p className="text-xs font-semibold text-rose-600">{error}</p>}
       <div className="flex items-center gap-3 pt-1">
-        <button type="submit" disabled={saving} className="px-5 py-2.5 bg-[#04261D] hover:bg-[#0A4A3A] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors disabled:opacity-60">
+        <button type="submit" disabled={saving} className="px-5 py-2.5 bg-[#0F2230] hover:bg-[#1F3A4D] text-white text-xs font-bold rounded-xl cursor-pointer transition-colors disabled:opacity-60">
           {saving ? 'Saving…' : submitLabel}
         </button>
         {onCancel && (
