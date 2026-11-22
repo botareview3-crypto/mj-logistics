@@ -3,8 +3,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ArrowUpRight, Box, ClipboardList, Truck } from 'lucide-react';
 import { useScrollFx } from '../lib/fx';
-import { SplitText, ScrubText } from '../components/fx/SplitText';
+import { ScrubText } from '../components/fx/SplitText';
 import { PageHero } from '../components/fx/PageHero';
+import { Wrap, SectionHead } from '../components/ui';
 
 const HOW_WE_WORK = [
   { title: 'Sourcing', icon: ClipboardList, image: '/images/homepage/industrial.webp',
@@ -45,64 +46,53 @@ export default function DivisionsPage() {
         imageAlt="Warehouse racking stocked with palletised goods"
       />
 
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[220px_1fr]">
-          <p className="eyebrow text-sage">What we do</p>
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">01 / What we do</p></div>
           <ScrubText
-            className="t-lead max-w-[34ch] font-display font-medium"
+            className="t-lead mt-8 max-w-[34ch] font-display font-semibold"
             text="We support everyday operating needs and specialist requirements — so the right part, supply or material arrives *where* *it’s* *needed,* without the run-around."
           />
-        </div>
+        </Wrap>
       </section>
 
-      <section className="bg-white pb-24 sm:pb-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12">
-            <p className="eyebrow mb-4 text-sage">How we work</p>
-            <SplitText className="t-xl" text={'One operation, *three steps.*'} />
-          </div>
-          <div className="grid gap-5 md:grid-cols-3">
+      <section className="bg-ink py-20 text-white sm:py-28">
+        <Wrap>
+          <SectionHead no="02" label="How we work" dark title={'One operation, *three steps.*'} />
+          <div className="grid border-t border-white/30 md:grid-cols-3">
             {HOW_WE_WORK.map(({ title, text, icon: Icon, image }, i) => (
-              <article key={title} data-reveal data-delay={String(i * 0.08)} className="overflow-hidden rounded-3xl border border-ink/10 bg-paper">
+              <article key={title} data-reveal data-delay={String(i * 0.08)} className="border-b border-white/30 py-8 md:border-b-0 md:pr-8 md:[&:not(:first-child)]:border-l md:[&:not(:first-child)]:pl-8">
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-                  <span className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink">0{i + 1}</span>
+                  <span className="absolute left-0 top-0 bg-signal px-3 py-1.5 tag text-ink">0{i + 1}</span>
                 </div>
-                <div className="p-7">
-                  <Icon className="h-6 w-6 text-azure" strokeWidth={1.8} />
-                  <h3 className="mt-5 text-2xl">{title}</h3>
-                  <p className="mt-3 text-[15px] leading-7 text-ink/65">{text}</p>
-                </div>
+                <Icon className="mt-6 h-6 w-6 text-signal" strokeWidth={1.8} />
+                <h3 className="mt-4 text-[28px] text-white">{title}</h3>
+                <p className="mt-3 text-[17px] leading-7 text-white/85">{text}</p>
               </article>
             ))}
           </div>
-        </div>
+        </Wrap>
       </section>
 
-      <section className="bg-paper py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12">
-            <p className="eyebrow mb-4 text-sage">What we handle</p>
-            <SplitText className="t-xl" text={'Supply that keeps business *moving.*'} />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="bg-paper py-20 sm:py-28">
+        <Wrap>
+          <SectionHead no="03" label="What we handle" title={'Supply that keeps business *moving.*'} />
+          <ul className="border-t border-ink">
             {DIVISIONS.map((d, i) => (
-              <Link
-                key={d.href}
-                href={d.href}
-                data-reveal
-                data-delay={String((i % 3) * 0.06)}
-                className="group flex items-center gap-4 rounded-2xl border border-ink/10 bg-white p-3 pr-5 transition-colors hover:border-forest"
-              >
-                <span className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl">
-                  <img src={d.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-                </span>
-                <span className="flex-1 text-[16px] font-semibold leading-snug">{d.title}</span>
-                <ArrowUpRight className="h-5 w-5 shrink-0 text-ink/40 transition-colors group-hover:text-azure" />
-              </Link>
+              <li key={d.href} data-reveal className="border-b border-ink">
+                <Link href={d.href} className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 py-5 transition-colors hover:bg-signal sm:gap-8 sm:px-3">
+                  <span className="tag w-8 text-ink/55 group-hover:text-ink">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="font-display text-[clamp(1.25rem,2.2vw,1.9rem)] font-bold leading-tight tracking-tight">{d.title}</span>
+                  <span className="flex items-center gap-4">
+                    <img src={d.image} alt="" loading="lazy" className="hidden h-14 w-24 object-cover sm:block" />
+                    <ArrowUpRight className="h-6 w-6" />
+                  </span>
+                </Link>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </Wrap>
       </section>
     </div>
   );

@@ -14,12 +14,12 @@ export default function Document() {
         <link rel="icon" href="/brand/favicon-32.png" sizes="32x32" type="image/png" />
         <link rel="apple-touch-icon" href="/brand/app-icon-180.png" />
 
-        {/* Libre Franklin (logo kit typeface) for all text; headings use Bold. */}
+        {/* Bricolage Grotesque (display), Hanken Grotesk (text), IBM Plex Mono (labels). */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
         />
         <link rel="preload" href="/images/site/hero-poster.webp" as="image" type="image/webp" />
 

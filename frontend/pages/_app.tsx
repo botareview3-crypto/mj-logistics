@@ -119,7 +119,7 @@ function AppLayout({ Component, pageProps }: AppProps) {
         {announcementBar}
         <SiteHeader />
         {legal ? (
-          <main className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-32 sm:px-8">
+          <main className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-16 sm:px-8">
             <Component {...pageProps} />
           </main>
         ) : (

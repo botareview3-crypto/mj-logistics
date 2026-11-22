@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, FlaskConical, Layers, MessageCircle, Plus, Search, ShieldCheck, Workflow } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, FlaskConical, Layers, MessageCircle, Plus, Search, ShieldCheck, Workflow } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { gsap } from '../lib/gsap';
 import { useScrollFx, useIsoLayoutEffect, prefersReducedMotion } from '../lib/fx';
@@ -9,6 +9,7 @@ import { CATEGORY_ROOTS } from '../lib/data/categories';
 import { PARTS_DATABASE } from '../lib/data/parts';
 import { SERVICES } from '../lib/data/services';
 import { SplitText, ScrubText } from '../components/fx/SplitText';
+import { Wrap, SectionHead, CtaBand } from '../components/ui';
 
 /* ─── Content ───────────────────────────────────────────────────────────── */
 const DIVISIONS = [
@@ -82,7 +83,7 @@ export default function HomePage() {
   const { addToCart, showToast } = useApp();
   const pageRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
 
   useScrollFx(pageRef);
 
@@ -96,7 +97,7 @@ export default function HomePage() {
     })), []);
 
   const products = useMemo(
-    () => PARTS_DATABASE.filter(p => p.images?.[0]?.startsWith('/images/parts') && p.inStock).slice(0, 10),
+    () => PARTS_DATABASE.filter(p => p.images?.[0]?.startsWith('/images/parts') && p.inStock).slice(0, 8),
     [],
   );
 
@@ -108,29 +109,20 @@ export default function HomePage() {
     v.play().catch(() => {});
   }, []);
 
-  /* Hero scroll effect: as you scroll down, the footage drifts down and zooms
-     (parallax), the frame eases into a rounded card and the copy rises away.
-     Purely scroll-linked (scrubbed) — scrolling back up fully restores it, and
-     nothing here can hide content: the copy never fades below 25%. */
+  /* Hero scroll effect (scrubbed, fully reversible): the footage drifts down
+     and zooms inside its frame while the headline block rises away. The copy
+     never fades below 35%, so nothing can end up hidden. */
   useIsoLayoutEffect(() => {
     const root = pageRef.current;
     if (!root || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
       const scrub = { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: 0.4 };
       gsap.timeline({ scrollTrigger: scrub })
-        .fromTo('[data-hero-media]', { yPercent: 0, scale: 1 }, { yPercent: 22, scale: 1.1, ease: 'none' }, 0)
-        .fromTo('[data-hero-frame]',
-          { clipPath: 'inset(0% 0% 0% 0% round 0px)' },
-          { clipPath: 'inset(3% 2.5% 0% 2.5% round 28px)', ease: 'none' }, 0)
-        .fromTo('[data-hero-copy]', { yPercent: 0, opacity: 1 }, { yPercent: -16, opacity: 0.25, ease: 'none' }, 0);
+        .fromTo('[data-hero-media]', { yPercent: 0, scale: 1 }, { yPercent: 18, scale: 1.14, ease: 'none' }, 0)
+        .fromTo('[data-hero-copy]', { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0.35, ease: 'none' }, 0);
     }, root);
     return () => ctx.revert();
   }, []);
-
-  const scrollRail = (dir: number) => {
-    const rail = railRef.current;
-    if (rail) rail.scrollBy({ left: dir * rail.clientWidth * 0.8, behavior: 'smooth' });
-  };
 
   return (
     <div ref={pageRef} className="overflow-x-clip bg-paper">
@@ -139,328 +131,282 @@ export default function HomePage() {
         <meta name="description" content="Genuine auto parts with verified fitment, workplace supplies, mining, solar energy, oil & gas and more — sourced, cleared and delivered by MJ Logistics Enterprise." />
       </Head>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section data-hero="dark" className="relative min-h-[100svh] overflow-hidden bg-paper">
-        <div data-hero-frame className="absolute inset-0 overflow-hidden bg-forest will-change-[clip-path]">
-          <div data-hero-media className="absolute inset-0 will-change-transform">
-            <video
-              ref={videoRef}
-              poster="/images/site/hero-poster.webp"
-              muted loop playsInline autoPlay preload="none"
-              className="h-full w-full object-cover"
-              aria-hidden="true"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/35 to-ink/15" />
-        </div>
-
-        <div data-hero-copy className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1440px] flex-col justify-end px-5 pb-10 pt-28 text-white sm:px-8 sm:pb-14">
-          <p data-reveal data-intro="0" className="eyebrow mb-6 flex items-center gap-3 text-white">
-            <span className="h-px w-10 bg-signal" /> MJ Logistics Enterprise
-          </p>
-          <SplitText as="h1" intro={0.05} className="t-hero max-w-[14ch]" accentClass="text-signal" text={'Parts that fit.\n*Delivered fast.*'} />
-          <div className="mt-8 grid gap-6 border-t border-white/20 pt-6 sm:gap-8 sm:pt-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <p data-reveal data-intro="0.3" className="max-w-xl text-[19px] leading-8 text-white">
+      {/* ── 00 HERO: headline left, footage in a tall frame right ───────── */}
+      <section data-hero className="border-b border-ink">
+        <Wrap className="grid gap-10 pb-10 pt-8 sm:pt-10 lg:grid-cols-12 lg:gap-14 lg:pb-0">
+          <div data-hero-copy className="flex flex-col lg:col-span-7 lg:pb-16">
+            <div className="flex items-center justify-between border-t border-ink pt-4">
+              <p data-reveal data-intro="0" className="tag tag-dot">MJ Logistics Enterprise</p>
+              <p className="tag hidden text-ink/60 sm:block">Source / Import / Stock / Deliver</p>
+            </div>
+            <SplitText as="h1" intro={0.05} className="t-hero mt-10 lg:mt-16" text={'Parts that fit.\n*Delivered fast.*'} />
+            <p data-reveal data-intro="0.3" className="mt-8 max-w-xl text-[19px] leading-8 text-ink/85">
               Genuine auto parts with verified fitment, workplace supplies, mining, solar energy and more —
               sourced, cleared and delivered by one partner.
             </p>
-            <div data-reveal data-intro="0.4" className="flex flex-wrap items-center gap-3">
+            <div data-reveal data-intro="0.4" className="mt-9 flex flex-wrap items-center gap-3">
               <Link href="/shop" className="btn btn-signal">Shop auto parts <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-              <Link href="/contact" className="btn btn-ghost">Request a quote</Link>
+              <Link href="/contact" className="btn btn-ghost-dark">Request a quote</Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ── AT A GLANCE ──────────────────────────────────────────────────── */}
-      <section className="bg-forest text-white">
-        <ul className="mx-auto grid max-w-[1440px] gap-px px-5 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
-          {GLANCE.map(g => (
-            <li key={g.label} className="py-7 sm:py-9 lg:px-8 lg:first:pl-0 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:border-white/15">
-              <p className="font-display text-[clamp(1.75rem,2.6vw,2.4rem)] font-bold leading-none text-signal">{g.value}</p>
-              <p className="mt-3 text-[17px] leading-7 text-white/90">{g.label}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* ── STATEMENT ────────────────────────────────────────────────────── */}
-      <section className="bg-paper py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[220px_1fr]">
-          <p className="eyebrow text-forest">Who we are</p>
-          <div>
-            <ScrubText
-              className="t-lead max-w-[34ch] font-display font-medium text-ink"
-              text="MJ Logistics Enterprise sources, imports and delivers the parts, supplies and materials that keep *businesses* *moving* — from a single brake pad to a full container."
-            />
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:max-w-4xl">
-              <div data-reveal className="flex gap-4">
-                <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-forest text-white"><Check className="h-4 w-4" /></span>
-                <p className="text-[17px] leading-7 text-ink/80"><strong className="text-ink">Buy with confidence.</strong> Every auto part is listed with its fitment, specifications and OEM references.</p>
+          <div className="lg:col-span-5">
+            <div className="relative h-[420px] overflow-hidden bg-ink sm:h-[520px] lg:h-full lg:min-h-[640px]">
+              <div data-hero-media className="absolute inset-0 will-change-transform">
+                <video
+                  ref={videoRef}
+                  poster="/images/site/hero-poster.webp"
+                  muted loop playsInline autoPlay preload="none"
+                  className="h-full w-full object-cover"
+                  aria-hidden="true"
+                />
               </div>
-              <div data-reveal data-delay="0.08" className="flex gap-4">
-                <span className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-ink"><Check className="h-4 w-4" /></span>
-                <p className="text-[17px] leading-7 text-ink/80"><strong className="text-ink">One partner, many needs.</strong> Parts, office supplies, mining, solar, oil &amp; gas and services — handled by the same accountable team.</p>
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-signal px-4 py-2.5 text-ink">
+                <span className="tag">Port to workshop</span>
+                <span className="tag">Monrovia</span>
               </div>
             </div>
           </div>
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── DIVISIONS ────────────────────────────────────────────────────── */}
-      <section className="bg-mist py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="eyebrow mb-4 text-forest">Our divisions</p>
-              <SplitText className="t-xl" text={'Five divisions. *One partner.*'} />
-            </div>
-            <Link href="/divisions" className="btn btn-ghost-dark self-start lg:self-auto">About MJ <ArrowRight className="btn-arrow h-4 w-4" /></Link>
-          </div>
-          <div className="grid gap-5 md:grid-cols-2">
-            {DIVISIONS.map((d, i) => (
-              <Link
-                key={d.no}
-                href={d.href}
-                data-reveal
-                data-delay={String((i % 2) * 0.08)}
-                className="card-raised group relative isolate block min-h-[380px] overflow-hidden rounded-3xl md:min-h-[460px] md:[&:last-child:nth-child(odd)]:col-span-2"
-              >
-                <img src={d.image} alt={d.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/35 to-ink/0" />
-                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-white sm:p-8">
-                  <div>
-                    <h3 className="text-[clamp(1.75rem,2.6vw,2.4rem)] text-white">{d.name}</h3>
-                    <p className="mt-3 max-w-md text-[17px] leading-7 text-white/90">{d.text}</p>
-                  </div>
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-ink transition-colors duration-300 group-hover:bg-signal group-hover:text-ink">
-                    <ArrowUpRight className="h-5 w-5" />
-                  </span>
-                </div>
-              </Link>
+      {/* ── AT A GLANCE: four ruled cells ───────────────────────────────── */}
+      <section className="border-b border-ink bg-white">
+        <Wrap>
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-4">
+            {GLANCE.map((g, i) => (
+              <li key={g.label} className={`py-8 sm:px-6 sm:py-10 ${i > 0 ? 'border-t border-ink/20 sm:border-t-0 lg:border-l' : ''} ${i === 1 ? 'sm:border-l' : ''} ${i === 2 ? 'sm:border-t sm:border-ink/20 lg:border-t-0' : ''} ${i === 3 ? 'sm:border-l sm:border-t sm:border-ink/20 lg:border-t-0' : ''} ${i === 0 ? 'lg:pl-0' : ''}`}>
+                <p className="tag text-ink/55">{String(i + 1).padStart(2, '0')}</p>
+                <p className="mt-3 font-display text-[clamp(1.9rem,2.8vw,2.6rem)] font-bold leading-none tracking-tight">{g.value}</p>
+                <p className="mt-3 text-[17px] leading-7 text-ink/80">{g.label}</p>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </Wrap>
       </section>
 
-      {/* ── SHOP BY SYSTEM ───────────────────────────────────────────────── */}
-      <section className="bg-paper py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="eyebrow mb-4 text-forest">Shop by system</p>
-              <SplitText className="t-xl" text={'Find the part. We\'ll check the *fit.*'} />
+      {/* ── 01 WHO WE ARE ───────────────────────────────────────────────── */}
+      <section className="bg-paper py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">01 / Who we are</p></div>
+          <ScrubText
+            className="t-lead mt-8 max-w-[30ch] font-display font-semibold sm:max-w-[36ch]"
+            text="MJ Logistics Enterprise sources, imports and delivers the parts, supplies and materials that keep *businesses* *moving* — from a single brake pad to a full container."
+          />
+          <dl className="mt-14 grid gap-px bg-ink/20 sm:grid-cols-2">
+            <div data-reveal className="bg-paper py-6 sm:pr-10">
+              <dt className="font-display text-2xl font-bold tracking-tight">Buy with confidence.</dt>
+              <dd className="mt-2 text-[17px] leading-7 text-ink/80">Every auto part is listed with its fitment, specifications and OEM references.</dd>
             </div>
-            <Link href="/catalog" className="btn btn-ghost-dark self-start lg:self-auto">All categories <ArrowRight className="btn-arrow h-4 w-4" /></Link>
+            <div data-reveal data-delay="0.08" className="bg-paper py-6 sm:pl-10">
+              <dt className="font-display text-2xl font-bold tracking-tight">One partner, many needs.</dt>
+              <dd className="mt-2 text-[17px] leading-7 text-ink/80">Parts, office supplies, mining, solar, oil &amp; gas and services — handled by the same accountable team.</dd>
+            </div>
+          </dl>
+        </Wrap>
+      </section>
+
+      {/* ── 02 DIVISIONS: an index list with a sticky picture ───────────── */}
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <SectionHead no="02" label="Divisions" title={'Five divisions. *One partner.*'} href="/divisions" cta="About MJ" />
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+            <ul className="border-t border-ink lg:col-span-7">
+              {DIVISIONS.map((d, i) => (
+                <li key={d.no} className="border-b border-ink">
+                  <Link
+                    href={d.href}
+                    onMouseEnter={() => setActive(i)}
+                    onFocus={() => setActive(i)}
+                    className="group grid grid-cols-[auto_1fr_auto] items-start gap-x-5 py-7 sm:gap-x-8"
+                  >
+                    <span className="tag pt-3 text-ink/55">{d.no}</span>
+                    <span>
+                      <span className={`block font-display text-[clamp(1.8rem,3.2vw,2.8rem)] font-bold leading-none tracking-tight transition-colors ${active === i ? 'text-azure' : 'text-ink'}`}>{d.name}</span>
+                      <span className="mt-3 block max-w-lg text-[17px] leading-7 text-ink/80">{d.text}</span>
+                      <img src={d.image} alt={d.alt} loading="lazy" className="mt-5 aspect-[16/9] w-full object-cover lg:hidden" />
+                    </span>
+                    <ArrowUpRight className={`mt-2 h-7 w-7 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 ${active === i ? 'text-azure' : 'text-ink'}`} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="relative hidden lg:col-span-5 lg:block">
+              <div className="sticky top-28 aspect-[4/5] overflow-hidden bg-mist">
+                {DIVISIONS.map((d, i) => (
+                  <img
+                    key={d.no}
+                    src={d.image}
+                    alt={i === active ? d.alt : ''}
+                    loading="lazy"
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${active === i ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                ))}
+                <span className="absolute bottom-0 left-0 bg-signal px-3 py-1.5 tag text-ink">{DIVISIONS[active].no} / {DIVISIONS[active].name}</span>
+              </div>
+            </div>
           </div>
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        </Wrap>
+      </section>
+
+      {/* ── 03 SHOP BY SYSTEM: joined tiles ─────────────────────────────── */}
+      <section className="bg-paper py-20 sm:py-28">
+        <Wrap>
+          <SectionHead no="03" label="Shop by system" title={'Find the part. We\'ll check the *fit.*'} href="/catalog" cta="All categories" />
+          <ul className="grid border-l border-t border-ink sm:grid-cols-2 lg:grid-cols-3">
             {systems.map((s, i) => (
-              <li key={s.id} data-reveal data-delay={String((i % 3) * 0.06)}>
-                <Link
-                  href={`/catalog/${s.id}`}
-                  className="group flex items-center gap-5 card-raised rounded-2xl border border-ink/10 bg-white p-4 pr-5 hover:border-forest"
-                >
-                  <span className="grid h-20 w-20 shrink-0 place-items-center rounded-xl bg-mist">
-                    <img src={s.art} alt="" loading="lazy" className="h-16 w-16 object-contain transition-transform duration-500 group-hover:scale-110" />
+              <li key={s.id} className="border-b border-r border-ink">
+                <Link href={`/catalog/${s.id}`} className="group flex h-full items-center gap-5 bg-paper p-5 transition-colors hover:bg-signal sm:p-7">
+                  <span className="grid h-24 w-24 shrink-0 place-items-center bg-white">
+                    <img src={s.art} alt="" loading="lazy" className="h-[4.5rem] w-[4.5rem] object-contain transition-transform duration-500 group-hover:scale-110" />
                   </span>
                   <span className="flex-1">
-                    <span className="block text-xl font-semibold leading-tight text-ink">{s.name}</span>
-                    <span className="mt-1 block text-base text-ink/70">{s.count.toLocaleString()} items</span>
+                    <span className="tag block text-ink/55 group-hover:text-ink">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="mt-1 block font-display text-[22px] font-bold leading-tight tracking-tight">{s.name}</span>
+                    <span className="mt-1 block text-[16px] text-ink/75 group-hover:text-ink">{s.count.toLocaleString()} items</span>
                   </span>
-                  <ArrowUpRight className="h-5 w-5 text-ink/40 transition-colors group-hover:text-azure" />
+                  <ArrowUpRight className="h-6 w-6 shrink-0" />
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── PROCESS ──────────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
-            <div>
-              <p className="eyebrow mb-4 text-forest">How it moves</p>
-              <SplitText className="t-xl" text={'From source to *site.*'} />
-            </div>
-            <p data-reveal className="max-w-md text-[18px] leading-8 text-ink/80 lg:justify-self-end">
-              Sourcing, import, stock and delivery handled by one team — so you get one price,
-              one timeline and one point of contact.
-            </p>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {/* ── 04 PROCESS: dark ruled columns + wide photo ─────────────────── */}
+      <section className="bg-ink text-white">
+        <Wrap className="py-20 sm:py-28">
+          <SectionHead
+            no="04" label="How it moves" dark
+            title={'From source to *site.*'}
+            intro="Sourcing, import, stock and delivery handled by one team — so you get one price, one timeline and one point of contact."
+          />
+          <ol className="grid border-t border-white/30 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
-              <article key={s.no} data-reveal data-delay={String(i * 0.06)} className="card-raised group rounded-3xl border border-ink/10 bg-paper p-3">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                  <img src={s.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/45 via-transparent to-transparent" />
-                  <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3.5 py-1.5 text-sm font-semibold text-ink">Step {s.no}</span>
-                </div>
-                <div className="px-3 pb-3 pt-5">
-                  <h3 className="text-2xl">{s.title}</h3>
-                  <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.text}</p>
-                </div>
-              </article>
+              <li key={s.no} data-reveal data-delay={String(i * 0.06)} className="border-b border-white/30 py-8 sm:pr-8 lg:border-b-0 lg:[&:not(:first-child)]:border-l lg:[&:not(:first-child)]:pl-8">
+                <p className="font-display text-[4.5rem] font-bold leading-none tracking-tighter text-signal">{s.no}</p>
+                <h3 className="mt-6 text-[28px] text-white">{s.title}</h3>
+                <p className="mt-3 text-[17px] leading-7 text-white/85">{s.text}</p>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── IMAGE BAND ───────────────────────────────────────────────────── */}
-      <section className="bg-white px-3 sm:px-4">
-        <div className="relative h-[70vh] min-h-[420px] overflow-hidden rounded-3xl">
+          </ol>
+        </Wrap>
+        <div className="relative h-[56vh] min-h-[360px] overflow-hidden">
           <div className="absolute -inset-y-[8%] inset-x-0" data-parallax="0.05">
             <img src="/homepage/hero-bg.webp" alt="Container ship at sea seen from above" loading="lazy" className="h-full w-full object-cover" />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-6 p-6 text-white sm:flex-row sm:items-end sm:justify-between sm:p-12">
-            <h2 data-reveal className="t-lg max-w-2xl">From the port to your workshop floor — one partner the whole way.</h2>
-            <Link href="/contact" className="btn btn-signal shrink-0 self-start sm:self-auto">Plan a shipment <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-          </div>
+          <div className="absolute inset-0 bg-ink/35" />
+          <Wrap className="relative flex h-full items-end pb-10 sm:pb-14">
+            <div className="flex w-full flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <h2 data-reveal className="t-lg max-w-2xl">From the port to your workshop floor — one partner the whole way.</h2>
+              <Link href="/contact" className="btn btn-signal shrink-0 self-start sm:self-auto">Plan a shipment <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+            </div>
+          </Wrap>
         </div>
       </section>
 
-      {/* ── SERVICES ─────────────────────────────────────────────────────── */}
-      <section className="bg-mist py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="eyebrow mb-4 text-forest">Also from MJ Logistics</p>
-              <SplitText className="t-xl" text={'More *services.*'} />
-            </div>
-            <Link href="/services" className="btn btn-ghost-dark self-start lg:self-auto">All services <ArrowRight className="btn-arrow h-4 w-4" /></Link>
-          </div>
-          <div className="grid gap-5 md:grid-cols-2">
+      {/* ── 05 SERVICES: two big panels ────────────────────────────────── */}
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <SectionHead no="05" label="Also from MJ" title={'More *services.*'} href="/services" cta="All services" />
+          <div className="grid gap-6 md:grid-cols-2">
             {SERVICES.map((s, i) => {
               const Icon = SERVICE_ICONS[s.icon];
               const image = s.id === 'consultancy' ? '/images/site/consultancy.webp' : '/images/site/laboratory.webp';
               return (
-                <Link
-                  key={s.id}
-                  href={`/services#${s.id}`}
-                  data-reveal
-                  data-delay={String(i * 0.08)}
-                  className="card-raised group grid overflow-hidden rounded-3xl border border-ink/10 bg-white p-3 sm:grid-cols-[.9fr_1.1fr]"
-                >
-                  <div className="relative min-h-[220px] overflow-hidden rounded-2xl">
-                    <img src={image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
+                <Link key={s.id} href={`/services#${s.id}`} data-reveal data-delay={String(i * 0.08)} className="group block border border-ink bg-paper transition-colors hover:bg-mist">
+                  <div className="relative aspect-[16/9] overflow-hidden border-b border-ink">
+                    <img src={image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <span className="absolute left-0 top-0 grid h-12 w-12 place-items-center bg-signal text-ink"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
                   </div>
-                  <div className="flex flex-col justify-between gap-6 p-5 sm:p-7">
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-mist text-azure"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
-                    <div>
-                      <h3 className="text-xl leading-snug">{s.title}</h3>
-                      <p className="mt-3 text-[17px] leading-7 text-ink/80">{s.short}</p>
-                      <span className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-forest group-hover:text-azure">
-                        Learn more <ArrowRight className="h-4 w-4" />
-                      </span>
-                    </div>
+                  <div className="p-6 sm:p-8">
+                    <p className="tag text-ink/55">Service 0{i + 1}</p>
+                    <h3 className="mt-3 text-[clamp(1.5rem,2.2vw,2rem)]">{s.title}</h3>
+                    <p className="mt-3 max-w-lg text-[17px] leading-7 text-ink/80">{s.short}</p>
+                    <span className="link-arrow mt-6">Learn more <ArrowRight className="h-4 w-4" /></span>
                   </div>
                 </Link>
               );
             })}
           </div>
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── WHY MJ ───────────────────────────────────────────────────────── */}
-      <section className="bg-paper py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
-            <div>
-              <p className="eyebrow mb-4 text-forest">Why MJ</p>
+      {/* ── 06 WHY MJ: sticky title, ruled list ────────────────────────── */}
+      <section className="bg-paper py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">06 / Why MJ</p></div>
+          <div className="mt-8 grid gap-12 lg:grid-cols-12">
+            <div className="lg:sticky lg:top-28 lg:col-span-5 lg:self-start">
               <SplitText className="t-xl" text={'Built for the *next move.*'} />
-            </div>
-            <p data-reveal className="max-w-lg text-[18px] leading-8 text-ink/80 lg:justify-self-end">
-              Good service isn’t a slogan. It’s the clarity, detail and follow-through that make a
-              buying decision easier — every single time.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {PRINCIPLES.map((p, i) => (
-              <div key={p.title} data-reveal data-delay={String(i * 0.06)} className="card-raised group rounded-3xl border border-ink/10 bg-white p-7">
-                <span className="grid h-14 w-14 place-items-center rounded-2xl bg-mist text-forest transition-colors duration-300 group-hover:bg-forest group-hover:text-white">{React.createElement(PRINCIPLE_ICONS[i], { className: 'h-6 w-6', strokeWidth: 1.8 })}</span>
-                <h3 className="mt-6 text-2xl">{p.title}</h3>
-                <p className="mt-3 text-[17px] leading-7 text-ink/80">{p.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── BEST SELLERS ─────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="eyebrow mb-4 text-forest">In stock now</p>
-              <SplitText className="t-xl" text={'Ready to *ship.*'} />
-            </div>
-            <div className="flex items-center gap-2">
-              <button type="button" onClick={() => scrollRail(-1)} aria-label="Previous products" className="grid h-12 w-12 place-items-center rounded-full border border-ink/20 transition hover:bg-ink hover:text-paper"><ArrowLeft className="h-4 w-4" /></button>
-              <button type="button" onClick={() => scrollRail(1)} aria-label="Next products" className="grid h-12 w-12 place-items-center rounded-full border border-ink/20 transition hover:bg-ink hover:text-paper"><ArrowRight className="h-4 w-4" /></button>
-              <Link href="/shop" className="btn btn-ink ml-2 hidden sm:inline-flex">Shop all <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-            </div>
-          </div>
-        </div>
-        <div
-          ref={railRef}
-          className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-6 [scrollbar-width:none] sm:px-8 lg:px-[max(2rem,calc((100vw-1440px)/2+2rem))] [&::-webkit-scrollbar]:hidden"
-        >
-          {products.map(p => (
-            <article key={p.id} className="group relative flex w-[78vw] max-w-[320px] shrink-0 snap-start flex-col overflow-hidden card-raised rounded-3xl border border-ink/10 bg-white sm:w-[300px]">
-              <Link href={`/parts/${p.id}`} className="relative block aspect-square overflow-hidden bg-gradient-to-b from-paper to-mist">
-                <img src={p.images[0]} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain p-6 mix-blend-multiply transition-transform duration-700 group-hover:scale-105" />
-                {p.originalPrice && p.originalPrice > p.price && (
-                  <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1.5 text-sm font-semibold text-ink">
-                    Save €{(p.originalPrice - p.price).toFixed(0)}
-                  </span>
-                )}
-              </Link>
-              <div className="flex flex-1 flex-col p-5">
-                <p className="eyebrow !text-[13px] text-forest">{p.brand}</p>
-                <Link href={`/parts/${p.id}`} className="mt-2 line-clamp-2 text-[17px] font-semibold leading-snug text-ink hover:text-forest">{p.name}</Link>
-                <div className="mt-auto flex items-end justify-between pt-5">
-                  <div>
-                    <span className="text-2xl font-semibold text-ink">€{p.price.toFixed(2)}</span>
-                    {p.originalPrice && p.originalPrice > p.price && <span className="ml-2 text-sm text-ink/55 line-through">€{p.originalPrice.toFixed(2)}</span>}
-                    <p className="mt-1 flex items-center gap-1.5 text-sm font-medium text-forest"><span className="h-1.5 w-1.5 rounded-full bg-forest" /> In stock</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => { addToCart(p); showToast(`${p.name} added to cart`, 'success'); }}
-                    aria-label={`Add ${p.name} to cart`}
-                    className="grid h-11 w-11 place-items-center rounded-full bg-forest text-white transition-colors hover:bg-signal hover:text-ink"
-                  >
-                    <Plus className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-            </article>
-          ))}
-          <Link href="/shop" className="group flex w-[60vw] max-w-[240px] shrink-0 snap-start flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-ink/25 text-center transition hover:border-signal">
-            <span className="grid h-14 w-14 place-items-center rounded-full bg-signal text-ink"><ArrowUpRight className="h-6 w-6" /></span>
-            <span className="text-lg font-semibold">View the full<br />catalogue</span>
-          </Link>
-        </div>
-      </section>
-
-      {/* ── GARAGE CTA ───────────────────────────────────────────────────── */}
-      <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="relative overflow-hidden rounded-3xl bg-forest px-6 py-14 text-white sm:px-12 sm:py-20">
-          <div className="relative grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <div>
-              <p className="eyebrow mb-4 text-mint">Not sure what fits?</p>
-              <SplitText className="t-xl" accentClass="text-signal" text={'Save your vehicle. See only parts *that fit.*'} />
-            </div>
-            <div data-reveal className="flex flex-col gap-5 lg:items-end">
-              <p className="max-w-sm text-[18px] leading-8 text-white lg:text-right">
-                Add your car to My Garage once and the catalogue filters to compatible parts automatically.
+              <p data-reveal className="t-body mt-6 max-w-md text-ink/80">
+                Good service isn’t a slogan. It’s the clarity, detail and follow-through that make a buying decision easier — every single time.
               </p>
-              <Link href="/garage" className="btn btn-signal">Open My Garage <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
             </div>
+            <ul className="border-t border-ink lg:col-span-7">
+              {PRINCIPLES.map((p, i) => {
+                const Icon = PRINCIPLE_ICONS[i];
+                return (
+                  <li key={p.title} data-reveal className="grid grid-cols-[auto_1fr_auto] items-start gap-5 border-b border-ink py-8 sm:gap-8">
+                    <span className="tag pt-2 text-ink/55">{String(i + 1).padStart(2, '0')}</span>
+                    <div>
+                      <h3 className="text-[clamp(1.5rem,2.2vw,2rem)]">{p.title}</h3>
+                      <p className="mt-3 max-w-lg text-[17px] leading-7 text-ink/80">{p.text}</p>
+                    </div>
+                    <span className="grid h-12 w-12 place-items-center bg-signal text-ink"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-        </div>
+        </Wrap>
       </section>
+
+      {/* ── 07 IN STOCK: plain 4-column grid ───────────────────────────── */}
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <SectionHead no="07" label="In stock now" title={'Ready to *ship.*'} href="/shop" cta="Shop all" />
+          <ul className="grid border-l border-t border-ink sm:grid-cols-2 lg:grid-cols-4">
+            {products.map(p => (
+              <li key={p.id} className="group flex flex-col border-b border-r border-ink bg-white">
+                <Link href={`/parts/${p.id}`} className="relative block aspect-square overflow-hidden bg-mist">
+                  <img src={p.images[0]} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain p-8 mix-blend-multiply transition-transform duration-500 group-hover:scale-105" />
+                  {p.originalPrice && p.originalPrice > p.price && (
+                    <span className="absolute left-0 top-0 bg-signal px-3 py-1.5 tag text-ink">Save €{(p.originalPrice - p.price).toFixed(0)}</span>
+                  )}
+                </Link>
+                <div className="flex flex-1 flex-col p-5">
+                  <p className="tag text-ink/60">{p.brand}</p>
+                  <Link href={`/parts/${p.id}`} className="mt-2 line-clamp-2 text-[18px] font-semibold leading-snug hover:text-azure">{p.name}</Link>
+                  <div className="mt-auto flex items-end justify-between pt-6">
+                    <div>
+                      <span className="font-display text-[26px] font-bold tracking-tight">€{p.price.toFixed(2)}</span>
+                      {p.originalPrice && p.originalPrice > p.price && <span className="ml-2 text-[15px] text-ink/55 line-through">€{p.originalPrice.toFixed(2)}</span>}
+                      <p className="tag mt-1 text-azure">In stock</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { addToCart(p); showToast(`${p.name} added to cart`, 'success'); }}
+                      aria-label={`Add ${p.name} to cart`}
+                      className="grid h-12 w-12 place-items-center bg-ink text-white transition-colors hover:bg-signal hover:text-ink"
+                    >
+                      <Plus className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Wrap>
+      </section>
+
+      {/* ── GARAGE CTA ──────────────────────────────────────────────────── */}
+      <CtaBand
+        title={'Save your vehicle. See only parts *that fit.*'}
+        text="Add your car to My Garage once and the catalogue filters to compatible parts automatically."
+        primary={{ label: 'Open My Garage', href: '/garage' }}
+        secondary={{ label: 'Browse the catalogue', href: '/catalog' }}
+      />
     </div>
   );
 }

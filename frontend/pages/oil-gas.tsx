@@ -6,6 +6,7 @@ import { useScrollFx } from '../lib/fx';
 import { scrollToTarget } from '../lib/useLenis';
 import { SplitText, ScrubText } from '../components/fx/SplitText';
 import { PageHero } from '../components/fx/PageHero';
+import { Wrap } from '../components/ui';
 
 /* Oil & gas division added per management feedback (2026-10-15).
    Confirmed by the boss (2026-10-16): the division is oil and gas
@@ -41,7 +42,7 @@ const WAVE_PATH = 'M-80 128 ' + Array.from({ length: 18 }, (_, i) => (i === 0 ? 
 
 function SurveyDiagram() {
   return (
-    <div data-reveal className="overflow-hidden rounded-3xl border border-ink/10 bg-white">
+    <div data-reveal className="overflow-hidden border border-ink bg-white">
       <style>{`
         .og-wave{animation:og-wave 6s linear infinite}
         .og-bob{animation:og-bob 3.2s ease-in-out infinite}
@@ -90,7 +91,7 @@ function SurveyDiagram() {
           <text x="24" y="406" fill="#fff" fontWeight="600">Rock layers, mapped from the echoes</text>
         </g>
       </svg>
-      <p className="border-t border-ink/10 px-5 py-3 text-[12px] leading-5 text-ink/55">
+      <p className="border-t border-ink px-5 py-3 text-[13px] leading-5 text-ink/70">
         Simplified illustration of a seismic survey. A general industry overview, not a description of any specific project.
       </p>
     </div>
@@ -120,77 +121,69 @@ export default function OilGasPage() {
         imageAlt={HERO_ALT}
       />
 
-      {/* ── STATEMENT ────────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[220px_1fr]">
-          <p className="eyebrow text-sage">Oil &amp; gas</p>
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">01 / Oil &amp; gas</p></div>
           <ScrubText
-            className="t-lead max-w-[34ch] font-display font-medium"
+            className="t-lead mt-8 max-w-[34ch] font-display font-semibold"
             text="Oil and gas is our newest division. We are looking for *investors* *in* *oil* *and* *gas* *exploration* *in* *Liberia.*"
           />
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── FOCUS ────────────────────────────────────────────────────────── */}
-      <section id="focus" className="scroll-mt-24 bg-white pb-24 sm:pb-32">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1fr] lg:gap-16">
-          <div>
-            <p className="eyebrow mb-4 text-sage">Our focus</p>
-            <SplitText className="t-xl" text={'Exploration, *in Liberia.*'} />
-            <p className="mt-6 max-w-lg text-[16px] leading-7 text-ink/65">
+      <section id="focus" className="scroll-mt-24 bg-paper py-20 sm:py-28">
+        <Wrap className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-6">
+            <div className="border-t border-ink py-4"><p className="tag tag-dot">02 / Our focus</p></div>
+            <SplitText className="t-xl mt-6" text={'Exploration, *in Liberia.*'} />
+            <p className="mt-6 max-w-lg text-[18px] leading-8 text-ink/80">
               Exploration of oil and gas is the focus of this division, and Liberia is the region we are focused on. We are looking for investors to join us. The division is new and we are still building out the detail, so the best next step is a conversation.
             </p>
             <Link href="/contact" className="btn btn-signal mt-8">Investor enquiries <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
           </div>
-          <div className="grid gap-4 self-center">
+          <dl className="self-end border-t border-ink lg:col-span-6">
             {FACTS.map(({ icon: Icon, label, value }, i) => (
-              <article key={label} data-reveal data-delay={String(i * 0.1)} className="flex items-center gap-5 rounded-3xl border border-ink/10 bg-paper p-5 sm:p-6">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-signal/10 text-azure"><Icon className="h-6 w-6" /></span>
-                <div>
-                  <div className="eyebrow text-sage">{label}</div>
-                  <div className="font-display text-[clamp(1.3rem,2vw,1.7rem)] font-medium text-ink">{value}</div>
-                </div>
-              </article>
+              <div key={label} data-reveal data-delay={String(i * 0.1)} className="grid grid-cols-[auto_1fr_auto] items-center gap-5 border-b border-ink py-6">
+                <span className="tag w-24 text-ink/60">{label}</span>
+                <dd className="font-display text-[clamp(1.5rem,2.6vw,2.2rem)] font-bold leading-tight tracking-tight">{value}</dd>
+                <span className="grid h-12 w-12 place-items-center bg-signal text-ink"><Icon className="h-6 w-6" /></span>
+              </div>
             ))}
-          </div>
-        </div>
+          </dl>
+        </Wrap>
       </section>
 
-      {/* ── PHOTO BAND ───────────────────────────────────────────────────── */}
-      <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="relative h-[52vh] min-h-[320px] overflow-hidden rounded-3xl">
-          <div className="absolute -inset-y-[10%] inset-x-0" data-parallax="0.08">
-            <img src={BAND_PHOTO} alt={BAND_ALT} loading="lazy" className="h-full w-full object-cover" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent" />
-          <div className="relative flex h-full items-end p-6 sm:p-12">
-            <SplitText className="t-xl max-w-[18ch] text-white" accentClass="text-signal" text={'Every discovery starts *with exploration.*'} />
-          </div>
+      <section className="relative h-[56vh] min-h-[340px] overflow-hidden border-y border-ink">
+        <div className="absolute -inset-y-[10%] inset-x-0" data-parallax="0.08">
+          <img src={BAND_PHOTO} alt={BAND_ALT} loading="lazy" className="h-full w-full object-cover" />
         </div>
-        <p className="px-2 pt-2 text-right text-[11px] text-ink/45">Photos: Leo_Visions and Ben Wicks on Unsplash</p>
+        <div className="absolute inset-0 bg-ink/45" />
+        <Wrap className="relative flex h-full items-end pb-10 sm:pb-14">
+          <SplitText className="t-xl max-w-[18ch] text-white" accentClass="text-signal" text={'Every discovery starts *with exploration.*'} />
+        </Wrap>
+        <p className="absolute bottom-2 right-3 tag text-white/70">Photos: Leo_Visions and Ben Wicks on Unsplash</p>
       </section>
 
-      {/* ── HOW EXPLORATION WORKS ────────────────────────────────────────── */}
-      <section id="how" className="scroll-mt-24 bg-paper py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:gap-16">
-          <SurveyDiagram />
-          <div>
-            <p className="eyebrow mb-4 text-sage">How exploration works</p>
-            <SplitText className="t-xl" text={'From data *to discovery.*'} />
-            <p className="mt-4 max-w-lg text-[14px] leading-6 text-ink/55">A general overview of how oil and gas exploration is carried out in the industry.</p>
-            <ol className="mt-8 space-y-5">
+      <section id="how" className="scroll-mt-24 bg-white py-20 sm:py-28">
+        <Wrap className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-6 lg:sticky lg:top-28"><SurveyDiagram /></div>
+          <div className="lg:col-span-6">
+            <div className="border-t border-ink py-4"><p className="tag tag-dot">03 / How exploration works</p></div>
+            <SplitText className="t-xl mt-6" text={'From data *to discovery.*'} />
+            <p className="mt-4 max-w-lg text-[16px] leading-6 text-ink/70">A general overview of how oil and gas exploration is carried out in the industry.</p>
+            <ol className="mt-8 border-t border-ink">
               {STAGES.map((s, i) => (
-                <li key={s.title} data-reveal data-delay={String(i * 0.08)} className="flex gap-4">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-forest font-display text-sm font-semibold text-white">{i + 1}</span>
+                <li key={s.title} data-reveal data-delay={String(i * 0.06)} className="grid grid-cols-[auto_1fr] gap-5 border-b border-ink/30 py-5">
+                  <span className="font-display text-[2rem] font-bold leading-none text-signal">{String(i + 1).padStart(2, '0')}</span>
                   <div>
-                    <h3 className="text-[clamp(1.1rem,1.5vw,1.3rem)]">{s.title}</h3>
-                    <p className="mt-1 max-w-md text-[15px] leading-6 text-ink/65">{s.text}</p>
+                    <h3 className="text-[22px]">{s.title}</h3>
+                    <p className="mt-1 max-w-md text-[17px] leading-7 text-ink/80">{s.text}</p>
                   </div>
                 </li>
               ))}
             </ol>
           </div>
-        </div>
+        </Wrap>
       </section>
     </div>
   );

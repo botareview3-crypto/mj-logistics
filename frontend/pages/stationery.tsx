@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowDownRight, ArrowUpRight, Briefcase, FileText, FolderOpen, Monitor, PenLine, Printer } from 'lucide-react';
 import { useScrollFx } from '../lib/fx';
 import { scrollToTarget } from '../lib/useLenis';
-import { SplitText } from '../components/fx/SplitText';
+import { Wrap, SectionHead, CtaBand } from '../components/ui';
 import { PageHero } from '../components/fx/PageHero';
 
 /* ─── Category data ──────────────────────────────────────────────────────── */
@@ -54,7 +54,7 @@ export default function StationeryPage() {
       </Head>
 
       <PageHero
-        eyebrow="A division of MJ Logistics Enterprise"
+        eyebrow="Stationery & Office"
         title={'Everything for your *workspace.*'}
         intro="From a single pen to a full office fit-out — MJ Logistics supplies genuine stationery and office essentials with reliable delivery and competitive pricing."
         actions={<>
@@ -65,60 +65,38 @@ export default function StationeryPage() {
         imageAlt="Notebook, pen, calculator and office supplies laid out on a desk"
       />
 
-      {/* ── RANGE ────────────────────────────────────────────────────────── */}
-      <section id="categories" className="scroll-mt-24 bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12 grid gap-6 lg:grid-cols-2 lg:items-end">
-            <div>
-              <p className="eyebrow mb-4 text-sage">What we supply</p>
-              <SplitText className="t-xl" text={'Our stationery *range.*'} />
-            </div>
-            <p data-reveal className="max-w-md text-[16px] leading-7 text-ink/65 lg:justify-self-end">
-              Sourced from trusted suppliers, our range covers everything from everyday writing instruments
-              to bulk office consumables.
-            </p>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <section id="categories" className="scroll-mt-24 bg-white py-20 sm:py-28">
+        <Wrap>
+          <SectionHead
+            no="01" label="The range" title={'Our stationery *range.*'}
+            intro="Sourced from trusted suppliers, our range covers everything from everyday writing instruments to bulk office consumables."
+          />
+          <div className="grid border-l border-t border-ink sm:grid-cols-2 lg:grid-cols-3">
             {STATIONERY_CATEGORIES.map(({ id, icon: Icon, title, desc, items }, i) => (
-              <article key={id} id={id} data-reveal data-delay={String((i % 3) * 0.06)} className="scroll-mt-28 flex flex-col rounded-3xl border border-ink/10 bg-paper p-7">
-                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-azure">
-                  <Icon className="h-6 w-6" strokeWidth={1.8} />
-                </span>
-                <h3 className="mt-6 text-2xl">{title}</h3>
-                <p className="mt-3 text-[15px] leading-7 text-ink/65">{desc}</p>
-                <ul className="mt-5 flex flex-wrap gap-2">
+              <article key={id} id={id} data-reveal data-delay={String((i % 3) * 0.06)} className="scroll-mt-28 flex flex-col border-b border-r border-ink bg-white p-6 sm:p-8">
+                <div className="flex items-center justify-between">
+                  <span className="tag text-ink/55">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="grid h-12 w-12 place-items-center bg-signal text-ink"><Icon className="h-6 w-6" strokeWidth={1.8} /></span>
+                </div>
+                <h3 className="mt-8 text-[28px]">{title}</h3>
+                <p className="mt-3 text-[17px] leading-7 text-ink/80">{desc}</p>
+                <ul className="mt-5 border-t border-ink/25">
                   {items.map(item => (
-                    <li key={item} className="rounded-full border border-ink/10 bg-white px-3 py-1 text-xs text-ink/75">{item}</li>
+                    <li key={item} className="border-b border-ink/15 py-2 text-[16px] text-ink/85">{item}</li>
                   ))}
                 </ul>
-                <Link href="/contact" className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-forest hover:text-azure">
-                  Enquire <ArrowUpRight className="h-4 w-4" />
-                </Link>
+                <Link href="/contact" className="link-arrow mt-auto self-start pt-6">Enquire <ArrowUpRight className="h-4 w-4" /></Link>
               </article>
             ))}
           </div>
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── BULK ORDERS ──────────────────────────────────────────────────── */}
-      <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="rounded-3xl bg-forest px-6 py-14 text-white sm:px-12 sm:py-20">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <div>
-              <p className="eyebrow mb-4 text-mint">Bulk & business orders</p>
-              <SplitText className="t-xl" accentClass="text-signal" text={'Need to stock an office? *We’ve got you covered.*'} />
-            </div>
-            <div data-reveal className="flex flex-col gap-5 lg:items-end">
-              <p className="max-w-sm text-[16px] leading-7 text-white/80 lg:text-right">
-                MJ Logistics handles bulk stationery orders for businesses, schools, and institutions — with a
-                single point of contact.
-              </p>
-              <Link href="/contact" className="btn btn-signal">Contact our team <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title={'Need to stock an office? *We’ve got you covered.*'}
+        text="MJ Logistics handles bulk stationery orders for businesses, schools, and institutions — with a single point of contact."
+        primary={{ label: 'Contact our team', href: '/contact' }}
+      />
     </div>
   );
 }

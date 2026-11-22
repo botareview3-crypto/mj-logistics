@@ -1,19 +1,14 @@
 import React from 'react';
 import { SplitText } from './SplitText';
+import { Wrap } from '../ui';
 
 /**
- * Shared light hero for inner pages: eyebrow, headline, intro and actions on
- * paper, with an optional wide photo underneath. Headline words marked with
- * *asterisks* are highlighted in signal orange (see SplitText).
+ * Inner-page hero ("Manifest" design): a mono label bar, a huge headline and
+ * intro on the left, a tall square-edged photo on the right. Words in
+ * *asterisks* get the accent colour. Props are unchanged from the old hero.
  */
 export function PageHero({
-  eyebrow,
-  title,
-  intro,
-  actions,
-  image,
-  imageAlt = '',
-  children,
+  eyebrow, title, intro, actions, image, imageAlt = '', children,
 }: {
   eyebrow: string;
   title: string;
@@ -24,31 +19,31 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="bg-paper pb-14 pt-32 sm:pb-20 sm:pt-40">
-      <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-        <p data-reveal data-intro="0" className="eyebrow mb-6 flex items-center gap-3 text-sage">
-          <span className="h-px w-10 bg-signal" /> {eyebrow}
-        </p>
-        <div className="grid gap-8 lg:grid-cols-[1.25fr_.75fr] lg:items-end">
-          <SplitText as="h1" intro={0.05} className="t-hero max-w-[16ch] text-ink" text={title} />
-          <div>
-            {intro && (
-              <p data-reveal data-intro="0.25" className="max-w-xl text-[19px] leading-8 text-ink/85">{intro}</p>
-            )}
-            {actions && (
-              <div data-reveal data-intro="0.35" className="mt-8 flex flex-wrap gap-3">{actions}</div>
-            )}
-          </div>
+    <section className="border-b border-ink bg-paper">
+      <Wrap className="pb-14 pt-8 sm:pb-20 sm:pt-10">
+        <div className="flex items-center justify-between border-t border-ink pt-4">
+          <p data-reveal data-intro="0" className="tag tag-dot">{eyebrow}</p>
+          <p className="tag hidden text-ink/60 sm:block">MJ Logistics Enterprise</p>
         </div>
-        {children}
-        {image && (
-          <div data-clip data-intro="0.2" className="relative mt-12 h-[44vh] min-h-[280px] overflow-hidden rounded-3xl sm:mt-16 sm:h-[56vh]">
-            <div className="absolute -inset-y-[8%] inset-x-0" data-parallax="0.05">
-              <img src={image} alt={imageAlt} className="h-full w-full object-cover" />
-            </div>
+        <div className={`mt-10 grid gap-10 lg:gap-14 ${image ? 'lg:grid-cols-12' : ''}`}>
+          <div className={image ? 'lg:col-span-7' : 'max-w-5xl'}>
+            <SplitText as="h1" intro={0.05} className="t-hero" text={title} />
+            {intro && <p data-reveal data-intro="0.25" className="t-body mt-8 max-w-xl text-ink/80 sm:text-[19px]">{intro}</p>}
+            {actions && <div data-reveal data-intro="0.35" className="mt-9 flex flex-wrap items-center gap-3">{actions}</div>}
+            {children}
           </div>
-        )}
-      </div>
+          {image && (
+            <figure className="lg:col-span-5">
+              <div data-clip data-intro="0.15" className="relative aspect-[4/5] overflow-hidden bg-mist lg:aspect-[4/5]">
+                <div data-parallax="0.05" className="absolute -inset-y-[6%] inset-x-0">
+                  <img src={image} alt={imageAlt} className="h-full w-full object-cover" />
+                </div>
+                <span className="absolute bottom-0 left-0 bg-signal px-3 py-1.5 tag text-ink">{eyebrow}</span>
+              </div>
+            </figure>
+          )}
+        </div>
+      </Wrap>
     </section>
   );
 }

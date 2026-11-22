@@ -5,6 +5,7 @@ import { ArrowUpRight, Check } from 'lucide-react';
 import { useScrollFx } from '../lib/fx';
 import { SplitText } from '../components/fx/SplitText';
 import { PageHero } from '../components/fx/PageHero';
+import { Wrap } from '../components/ui';
 
 const ENQUIRY_OPTIONS = [
   'Request a quote',
@@ -33,7 +34,7 @@ const ROUTES = [
   { title: 'Services', text: 'Space logistics, laboratory equipment, and supply chain or project management consultancy.', href: '/services', cta: 'Our services' },
 ];
 
-const inputClass = 'mt-2 h-12 w-full rounded-xl border border-ink/15 bg-white px-4 text-[16px] text-ink outline-none transition focus:border-forest focus:ring-2 focus:ring-forest/15';
+const inputClass = 'mt-2 h-12 w-full border border-ink/40 bg-white px-4 text-[17px] text-ink outline-none transition focus:border-ink focus:ring-2 focus:ring-signal';
 
 export default function ContactPage() {
   const pageRef = useRef<HTMLDivElement>(null);
@@ -59,23 +60,22 @@ export default function ContactPage() {
         intro="Send us your question or enquiry — a part you can’t find, a bulk order, or a wider supply requirement. Tell us what you need and we’ll point it to the right team."
       />
 
-      {/* ── FORM ─────────────────────────────────────────────────────────── */}
-      <section className="bg-paper pb-24">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[.7fr_1.3fr]">
-          <div data-reveal className="rounded-3xl border border-ink/10 bg-white p-7 text-[15px] leading-7 text-ink/65 lg:self-start">
-            <p className="eyebrow mb-3 text-sage">Get in touch</p>
-            Contact details and response information will be added when the official details are available.
-          </div>
+      <section className="bg-white py-16 sm:py-24">
+        <Wrap className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+          <aside data-reveal className="border border-ink bg-paper p-6 lg:col-span-4 lg:self-start">
+            <p className="tag tag-dot mb-4">Get in touch</p>
+            <p className="text-[17px] leading-7 text-ink/80">Contact details and response information will be added when the official details are available.</p>
+          </aside>
 
-          <form data-reveal onSubmit={handleSubmit} className="rounded-3xl border border-ink/10 bg-white p-6 sm:p-10">
+          <form data-reveal onSubmit={handleSubmit} className="border border-ink bg-white p-6 sm:p-10 lg:col-span-8">
             <fieldset>
-              <legend className="eyebrow mb-4 text-sage">What can we help with?</legend>
+              <legend className="tag tag-dot mb-4">What can we help with?</legend>
               <div className="flex flex-wrap gap-2">
                 {ENQUIRY_OPTIONS.map(option => (
                   <label
                     key={option}
-                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                      topic === option ? 'border-forest bg-forest text-white' : 'border-ink/15 hover:border-forest'
+                    className={`cursor-pointer border px-4 py-2.5 text-[15px] font-semibold transition-colors ${
+                      topic === option ? 'border-ink bg-ink text-white' : 'border-ink/40 hover:border-ink hover:bg-signal'
                     }`}
                   >
                     <input type="radio" name="enquiryType" value={option} checked={topic === option} onChange={() => setTopic(option)} className="sr-only" />
@@ -88,12 +88,12 @@ export default function ContactPage() {
             <div className="mt-8 grid gap-5 sm:grid-cols-2">
               {FIELDS.map(([name, label, type, required]) => (
                 <label key={name} className="block">
-                  <span className="text-sm font-semibold">{label}{required ? ' *' : ''}</span>
+                  <span className="text-[16px] font-bold">{label}{required ? ' *' : ''}</span>
                   <input name={name} type={type} required={required} className={inputClass} />
                 </label>
               ))}
               <label className="block sm:col-span-2">
-                <span className="text-sm font-semibold">Message *</span>
+                <span className="text-[16px] font-bold">Message *</span>
                 <textarea name="message" required rows={5} className={`${inputClass} h-auto resize-y py-3`} />
               </label>
             </div>
@@ -102,39 +102,37 @@ export default function ContactPage() {
               <button type="submit" className="btn btn-signal">
                 {submitted ? <>Received <Check className="h-4 w-4" /></> : <>Send enquiry <ArrowUpRight className="btn-arrow h-4 w-4" /></>}
               </button>
-              <p className="max-w-xs text-xs leading-5 text-ink/50">
+              <p className="max-w-xs text-[14px] leading-5 text-ink/65">
                 {submitted ? 'This form is ready for connection to the official contact channel.' : 'The submission connection will be added when the official contact details are available.'}
               </p>
             </div>
           </form>
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── ROUTES ───────────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <p className="eyebrow mb-4 text-sage">Or go straight there</p>
-          <SplitText className="t-xl mb-12" text={'Know what you *need already?*'} />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <section className="bg-paper py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">Or go straight there</p></div>
+          <SplitText className="t-xl mb-12 mt-6" text={'Know what you *need already?*'} />
+          <div className="grid border-l border-t border-ink sm:grid-cols-2 lg:grid-cols-5">
             {ROUTES.map((r, i) => (
               <Link
                 key={r.href}
                 href={r.href}
                 data-reveal
                 data-delay={String(i * 0.06)}
-                className="group flex min-h-[220px] flex-col justify-between rounded-3xl border border-ink/10 bg-paper p-7 transition-colors hover:border-forest"
+                className="group flex min-h-[240px] flex-col justify-between border-b border-r border-ink bg-paper p-6 transition-colors hover:bg-signal"
               >
                 <div>
-                  <h3 className="text-2xl">{r.title}</h3>
-                  <p className="mt-3 text-[15px] leading-7 text-ink/65">{r.text}</p>
+                  <p className="tag text-ink/55 group-hover:text-ink">{String(i + 1).padStart(2, '0')}</p>
+                  <h3 className="mt-4 text-[26px]">{r.title}</h3>
+                  <p className="mt-3 text-[16px] leading-7 text-ink/80">{r.text}</p>
                 </div>
-                <span className="mt-6 flex items-center justify-between font-semibold text-forest group-hover:text-azure">
-                  {r.cta} <ArrowUpRight className="h-5 w-5" />
-                </span>
+                <span className="mt-6 flex items-center justify-between font-bold">{r.cta} <ArrowUpRight className="h-5 w-5" /></span>
               </Link>
             ))}
           </div>
-        </div>
+        </Wrap>
       </section>
     </div>
   );

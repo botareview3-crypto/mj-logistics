@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { ArrowDownRight, ArrowUpRight, PackageCheck, Sun } from 'lucide-react';
 import { useScrollFx } from '../lib/fx';
 import { scrollToTarget } from '../lib/useLenis';
-import { SplitText, ScrubText } from '../components/fx/SplitText';
+import { ScrubText } from '../components/fx/SplitText';
+import { Wrap, SectionHead, CtaBand } from '../components/ui';
 import { PageHero } from '../components/fx/PageHero';
 
 /* Wording agreed with management (2026-09-29): solar is a supply line, not a
@@ -46,60 +47,44 @@ export default function SolarPage() {
         imageAlt="Rows of solar panels in a field under a cloudy sky"
       />
 
-      {/* ── STATEMENT ────────────────────────────────────────────────────── */}
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 sm:px-8 lg:grid-cols-[220px_1fr]">
-          <p className="eyebrow text-sage">Solar energy supply</p>
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">01 / Solar energy supply</p></div>
           <ScrubText
-            className="t-lead max-w-[34ch] font-display font-medium"
+            className="t-lead mt-8 max-w-[34ch] font-display font-semibold"
             text="Solar is one of our supply lines. Tell us what you need, and we *source* *it* *for* *you* — through the same network that moves every MJ Logistics order."
           />
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── SUPPLY ───────────────────────────────────────────────────────── */}
-      <section id="supply" className="scroll-mt-24 bg-white pb-24 sm:pb-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="mb-12">
-            <p className="eyebrow mb-4 text-sage">What we supply</p>
-            <SplitText className="t-xl" text={'Systems and *equipment.*'} />
-          </div>
-          <div className="grid gap-5 md:grid-cols-2">
+      <section id="supply" className="scroll-mt-24 bg-paper py-20 sm:py-28">
+        <Wrap>
+          <SectionHead no="02" label="What we supply" title={'Systems and *equipment.*'} />
+          <div className="grid border-l border-t border-ink md:grid-cols-2">
             {SUPPLY.map(({ id, icon: Icon, title, text, image, alt }, i) => (
-              <article key={id} id={id} data-reveal data-delay={String(i * 0.08)} className="scroll-mt-28 overflow-hidden rounded-3xl border border-ink/10 bg-paper">
-                <div className="relative aspect-[16/10] overflow-hidden">
+              <article key={id} id={id} data-reveal data-delay={String(i * 0.08)} className="scroll-mt-28 border-b border-r border-ink bg-white">
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-ink">
                   <img src={image} alt={alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                  <span className="absolute left-0 top-0 grid h-12 w-12 place-items-center bg-signal text-ink"><Icon className="h-6 w-6" /></span>
                 </div>
                 <div className="p-6 sm:p-8">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-signal/10 text-azure"><Icon className="h-6 w-6" /></span>
-                  <h2 className="mt-6 text-[clamp(1.5rem,2.4vw,2.1rem)]">{title}</h2>
-                  <p className="mt-3 max-w-md text-[16px] leading-7 text-ink/65">{text}</p>
-                  <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-forest hover:text-azure">
-                    Request a quote <ArrowUpRight className="h-4 w-4" />
-                  </Link>
+                  <p className="tag text-ink/55">Supply 0{i + 1}</p>
+                  <h2 className="mt-3 text-[clamp(1.7rem,2.6vw,2.3rem)]">{title}</h2>
+                  <p className="mt-3 max-w-md text-[18px] leading-7 text-ink/80">{text}</p>
+                  <Link href="/contact" className="link-arrow mt-6">Request a quote <ArrowUpRight className="h-4 w-4" /></Link>
                 </div>
               </article>
             ))}
           </div>
-        </div>
+        </Wrap>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="relative overflow-hidden rounded-3xl">
-          <img src="/images/site/solar-install.webp" alt="Technician installing solar panels" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest/90 via-forest/70 to-forest/20" />
-          <div className="relative grid gap-8 px-6 py-16 text-white sm:px-12 sm:py-24 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <SplitText className="t-xl" text={'Tell us what *you need.*'} />
-            <div data-reveal className="flex flex-col gap-5 lg:items-end">
-              <p className="max-w-sm text-[16px] leading-7 text-white/85 lg:text-right">
-                Share your solar requirement and we will point your enquiry to the right people.
-              </p>
-              <Link href="/contact" className="btn btn-signal">Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title={'Tell us what *you need.*'}
+        text="Share your solar requirement and we will point your enquiry to the right people."
+        primary={{ label: 'Request a quote', href: '/contact' }}
+        image="/images/site/solar-install.webp"
+      />
     </div>
   );
 }

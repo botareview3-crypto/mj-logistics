@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, CheckCircle2, Mail, MapPin } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../lib/AppContext';
 import { scrollToTarget } from '../lib/useLenis';
 import { LogoLockup } from './fx/Logo';
@@ -43,56 +43,38 @@ export const SiteFooter: React.FC = () => {
   };
 
   return (
-    <footer className="bg-forest text-paper">
-      {/* ── Closing CTA ─────────────────────────────────────────────────── */}
-      <div className="mx-auto max-w-[1440px] px-5 pt-20 sm:px-8">
-        <div className="flex flex-col gap-8 border-b border-paper/15 pb-14 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <p className="eyebrow mb-4 text-mint">Have something to move?</p>
-            <h2 className="t-xl">
-              Tell us what you need. <span className="text-signal">We&apos;ll handle the rest.</span>
-            </h2>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/contact" className="btn btn-signal">
-              Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" />
-            </Link>
-            <Link href="/shop" className="btn btn-ghost">Shop auto parts</Link>
+    <footer className="bg-ink text-paper">
+      {/* Closing band: flat sky block */}
+      <div className="bg-signal text-ink">
+        <div className="mx-auto grid max-w-[1360px] gap-8 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-12 lg:items-end">
+          <h2 className="t-xl lg:col-span-8">Tell us what you need. We&apos;ll handle the rest.</h2>
+          <div className="flex flex-wrap gap-3 lg:col-span-4 lg:justify-end">
+            <Link href="/contact" className="btn bg-ink text-white hover:bg-white hover:text-ink">Request a quote <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
+            <Link href="/shop" className="btn btn-ghost-dark">Shop auto parts</Link>
           </div>
         </div>
+      </div>
 
-        {/* ── Links grid ────────────────────────────────────────────────── */}
-        <div className="grid gap-12 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div className="max-w-sm space-y-6">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
+        <div className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-12">
+          <div className="space-y-6 lg:col-span-4">
             <LogoLockup variant="reversed" className="h-9 w-auto" />
-            <p className="text-[15px] leading-7 text-paper/75">
-              One partner for genuine auto parts, workplace supplies, mining, solar energy, oil & gas and more —
-              sourced, cleared and delivered by MJ Logistics Enterprise.
+            <p className="max-w-sm text-[16px] leading-7 text-paper/80">
+              One partner for genuine auto parts, workplace supplies, mining, solar energy, oil &amp; gas and more.
             </p>
-            <ul className="space-y-2.5 text-sm text-paper/75">
-              <li className="flex items-center gap-2.5"><MapPin className="h-4 w-4 text-signal" /> Monrovia, Liberia</li>
-              <li className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 text-signal" />
-                <a href="mailto:info@mjlogisticsenterprise.com" className="link-draw">info@mjlogisticsenterprise.com</a>
-              </li>
-            </ul>
             <div>
-              <p className="eyebrow mb-3 text-mint">Stay updated</p>
+              <p className="tag mb-3 text-mint">Stay updated</p>
               {subscribed ? (
-                <p className="flex items-center gap-2 text-sm text-mint"><CheckCircle2 className="h-4 w-4" /> Subscribed! Thank you.</p>
+                <p className="flex items-center gap-2 text-[16px] text-mint"><CheckCircle2 className="h-4 w-4" /> Subscribed! Thank you.</p>
               ) : (
-                <form onSubmit={handleSubscribe} className="relative">
+                <form onSubmit={handleSubscribe} className="flex">
                   <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    required
-                    aria-label="Email address"
-                    className="h-12 w-full rounded-full border border-paper/20 bg-white/10 pl-5 pr-14 text-sm text-paper placeholder:text-paper/50 outline-none transition focus:border-signal"
+                    type="email" value={email} onChange={e => setEmail(e.target.value)} required
+                    placeholder="your@email.com" aria-label="Email address"
+                    className="h-12 min-w-0 flex-1 border border-paper/30 bg-transparent px-4 text-[16px] text-paper outline-none placeholder:text-paper/50 focus:border-signal"
                   />
-                  <button type="submit" aria-label="Subscribe" className="absolute right-1 top-1 grid h-10 w-10 place-items-center rounded-full bg-paper text-ink transition hover:bg-signal hover:text-ink">
-                    <ArrowRight className="h-4 w-4" />
+                  <button type="submit" aria-label="Subscribe" className="grid h-12 w-12 place-items-center bg-signal text-ink hover:bg-white">
+                    <ArrowRight className="h-5 w-5" />
                   </button>
                 </form>
               )}
@@ -100,28 +82,31 @@ export const SiteFooter: React.FC = () => {
           </div>
 
           {Object.entries(FOOTER_LINKS).map(([heading, links]) => (
-            <div key={heading}>
-              <h3 className="eyebrow mb-5 text-mint">{heading}</h3>
+            <div key={heading} className="lg:col-span-2">
+              <h3 className="tag mb-5 border-b border-paper/25 pb-3 text-mint">{heading}</h3>
               <ul className="space-y-3">
                 {links.map(link => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-[15px] text-paper/80 transition-colors hover:text-signal">
-                      {link.label}
-                    </Link>
+                    <Link href={link.href} className="text-[16px] text-paper/85 transition-colors hover:text-signal">{link.label}</Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+
+          <div className="lg:col-span-2">
+            <h3 className="tag mb-5 border-b border-paper/25 pb-3 text-mint">Reach us</h3>
+            <p className="text-[16px] leading-7 text-paper/85">Monrovia, Liberia</p>
+            <a href="mailto:info@mjlogisticsenterprise.com" className="link-draw mt-2 block break-words text-[16px] text-paper/85">info@mjlogisticsenterprise.com</a>
+          </div>
         </div>
       </div>
 
-      {/* ── Bottom bar ─────────────────────────────────────────────────── */}
-      <div className="border-t border-paper/15">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-3 px-5 py-6 text-xs text-paper/60 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <div className="border-t border-paper/20">
+        <div className="mx-auto flex max-w-[1360px] flex-col gap-3 px-5 py-6 text-[14px] text-paper/70 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <span>© {new Date().getFullYear()} MJ Logistics Enterprise. All rights reserved.</span>
-          <button type="button" onClick={() => scrollToTarget(0)} className="inline-flex items-center gap-2 self-start hover:text-paper sm:self-auto">
-            Back to top <ArrowUpRight className="h-3.5 w-3.5 -rotate-45" />
+          <button type="button" onClick={() => scrollToTarget(0)} className="tag inline-flex items-center gap-2 self-start hover:text-signal sm:self-auto">
+            Back to top <ArrowUpRight className="h-4 w-4 -rotate-45" />
           </button>
         </div>
       </div>

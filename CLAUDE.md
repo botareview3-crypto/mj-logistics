@@ -152,19 +152,19 @@ CHAT_HISTORY.md is the log.
   (catalog, cart, garage, parts, search…) keeps the search/vehicle-selector
   `<Header>` but now also uses `<SiteFooter>`. Pages must NOT render their own
   header/footer. A new corporate page = add its path to `MARKETING_PATHS`.
-- Brand system (Nov 2026 redesign, "Slate Sky" from the revised `logo/MJ-Logistics-Logo`
-  kit): colours are Tailwind tokens in `styles/globals.css` `@theme`. Token names
-  were kept from the earlier emerald palette so pages follow automatically, but
-  the values are now: `ink` #0F2230, `forest` #1F3A4D (Slate, primary), `moss`
-  #2D5068, `sage` #4F6D80 (Steel, darkened for small text), `mint` #B8D0DE
-  (Mist), `signal` #2EC4F1 (Sky Blue), `ember` #14A8D8, `azure` #0A7EA6 (new),
-  `paper` #F3F1EA, `bone`, `mist` #E4EDF3. **Contrast rule:** Sky Blue is only
-  2:1 on paper/white, so `signal` is for fills (buttons, dots, bars - with
-  `text-ink` on top, never white) and for text on DARK sections; text and icons
-  on LIGHT sections use `text-azure`. `SplitText`/`ScrubText` accent defaults to
-  `text-azure`, so pass `accentClass="text-signal"` inside dark sections.
-  Type is Libre Franklin (Google Fonts, the logo kit typeface) for everything -
-  headings Bold (700). Logo files used by the site live in `public/brand/`.
+- Design system (Nov 2026 full redesign, "Manifest"): the site is styled like a cargo
+  manifest - square-edged panels divided by 1px ink hairlines, mono index labels
+  (`.tag`, `.tag-dot`, "01 / DIVISIONS"), huge Bricolage Grotesque headlines, flat slate
+  blocks with a sky-blue accent bar, NO pills / big rounded cards / pill header / full-screen
+  menu. Fonts: Bricolage Grotesque (display), Hanken Grotesk (text, 17px base), IBM Plex Mono
+  (labels). Shared blocks live in `components/ui.tsx` (`Wrap`, `IndexBar`, `SectionHead`,
+  `CtaBand`, `Statement`); `components/fx/PageHero.tsx` is the split hero (headline left, tall
+  photo right). `SiteHeader` = slate info strip + sticky paper bar + plain drop-down panels;
+  `SiteFooter` = sky closing band + ink link grid. Colour tokens (names kept from older
+  palettes): `ink` #0F2230, `forest` #1F3A4D (Slate), `signal` #2EC4F1 (Sky Blue), `azure`
+  #0A7EA6, `paper` #F3F1EA, `mist` #E4EDF3. **Contrast rule:** Sky Blue is 2:1 on paper, so
+  `signal` is for fills (with `text-ink` on top) and text on DARK sections; text/icons on
+  LIGHT sections use `text-azure`. Logo files live in `public/brand/` (unchanged).
 - Client feedback (2026-10-08): keep it light and simple. Sections are
   paper/white; only the home hero (video) and the footer (forest) are dark.
   Inner pages use the shared `<PageHero>` (light hero + photo). Do NOT bring

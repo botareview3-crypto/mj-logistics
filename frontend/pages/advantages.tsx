@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
-import { ArrowUpRight, Compass, ShieldCheck, Truck, Users } from 'lucide-react';
+import { Compass, ShieldCheck, Truck, Users } from 'lucide-react';
 import { useScrollFx } from '../lib/fx';
-import { SplitText, ScrubText } from '../components/fx/SplitText';
+import { ScrubText } from '../components/fx/SplitText';
 import { PageHero } from '../components/fx/PageHero';
+import { Wrap, CtaBand } from '../components/ui';
 
 const PRINCIPLES = [
   { no: '01', icon: Compass,     title: 'Clear direction',    text: 'Start with a vehicle, a category, or a business requirement and see the next step.' },
@@ -32,40 +32,33 @@ export default function AdvantagesPage() {
         imageAlt="Warehouse worker checking stocked parts bins"
       />
 
-      <section className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="grid gap-5 sm:grid-cols-2">
-            {PRINCIPLES.map(({ no, icon: Icon, title, text }, i) => (
-              <article key={no} data-reveal data-delay={String((i % 2) * 0.08)} className="rounded-3xl border border-ink/10 bg-paper p-8 sm:p-10">
-                <div className="flex items-start justify-between">
-                  <span className="text-sm font-semibold text-azure">{no}</span>
-                  <Icon className="h-7 w-7 text-forest" />
-                </div>
-                <h2 className="mt-12 text-[clamp(1.5rem,2.4vw,2.1rem)]">{title}</h2>
-                <p className="mt-3 max-w-md text-[15px] leading-7 text-ink/65">{text}</p>
-              </article>
+      <section className="bg-white py-20 sm:py-28">
+        <Wrap>
+          <div className="border-t border-ink py-4"><p className="tag tag-dot">01 / Four principles</p></div>
+          <ol className="mt-4">
+            {PRINCIPLES.map(({ no, icon: Icon, title, text }) => (
+              <li key={no} data-reveal className="grid items-center gap-4 border-b border-ink py-8 sm:grid-cols-12 sm:gap-8 sm:py-10">
+                <span className="font-display text-[4rem] font-bold leading-none tracking-tighter text-signal sm:col-span-2">{no}</span>
+                <h2 className="text-[clamp(1.8rem,3vw,2.6rem)] sm:col-span-4">{title}</h2>
+                <p className="text-[18px] leading-8 text-ink/80 sm:col-span-5">{text}</p>
+                <Icon className="hidden h-8 w-8 text-forest sm:col-span-1 sm:block sm:justify-self-end" />
+              </li>
             ))}
-          </div>
-          <div className="mx-auto mt-24 max-w-4xl text-center">
+          </ol>
+          <div className="mt-20 max-w-4xl">
             <ScrubText
-              className="t-lead font-display font-medium"
+              className="t-lead font-display font-semibold"
               text="Every decision we make is about one thing: getting you the *right* *thing,* at the right time, *without* *the* *run-around.*"
             />
           </div>
-        </div>
+        </Wrap>
       </section>
 
-      <section className="bg-white px-3 pb-3 sm:px-4 sm:pb-4">
-        <div className="rounded-3xl bg-forest px-6 py-14 text-white sm:px-12 sm:py-20">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
-            <SplitText className="t-xl" accentClass="text-signal" text={'Ready to find *your route?*'} />
-            <div data-reveal className="flex flex-wrap gap-3 lg:justify-end">
-              <Link href="/shop" className="btn btn-signal">Explore the marketplace <ArrowUpRight className="btn-arrow h-4 w-4" /></Link>
-              <Link href="/contact" className="btn btn-ghost">Contact us</Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        title={'Ready to find *your route?*'}
+        primary={{ label: 'Explore the marketplace', href: '/shop' }}
+        secondary={{ label: 'Contact us', href: '/contact' }}
+      />
     </div>
   );
 }

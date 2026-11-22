@@ -870,3 +870,12 @@ transcript, just the gist.
 - Kept every client rule (light and simple, no new motion) and the boss's bigger-text changes.
 - Check after building: home, a shop category, a part page, cart, sign-in; desktop + phone.
 
+## 2026-11-22 - Full "Manifest" redesign
+Zemen said the Slate Sky recolour was not enough and wanted the site redesigned from scratch.
+Rebuilt the design system and layouts: new fonts (Bricolage Grotesque / Hanken Grotesk / IBM Plex
+Mono), square hairline "cargo manifest" look, new header (info strip + sticky bar + drop-downs), footer,
+split PageHero, shared `components/ui.tsx`, new home page (split hero with footage, ruled stats,
+index-list divisions with sticky picture, joined system tiles, dark process columns, ruled why-list,
+4-column stock grid) and all corporate pages (mining, solar, oil-gas, services, advantages, divisions,
+stationery, contact). Shop product cards squared off; deeper shop pages restyle comes next.
+

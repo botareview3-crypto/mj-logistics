@@ -28,13 +28,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
   if (viewMode === 'list') {
     return (
       <motion.div
-        className="product-card bg-white rounded-2xl border border-slate-200 p-4 flex flex-col sm:flex-row items-center gap-4 group cursor-pointer"
+        className="product-card bg-white rounded-none border border-slate-200 p-4 flex flex-col sm:flex-row items-center gap-4 group cursor-pointer"
         whileHover={{ borderColor: '#1F3A4D' }}
         transition={SPRINGS.snappy}
         onClick={goToDetail}
       >
         {/* Image */}
-        <div className="relative w-full sm:w-[100px] h-[90px] bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden p-2">
+        <div className="relative w-full sm:w-[100px] h-[90px] bg-slate-50 rounded-none border border-slate-100 flex items-center justify-center shrink-0 overflow-hidden p-2">
           <img
             src={part.images[0]}
             alt={part.name}
@@ -42,7 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
             loading="lazy"
           />
           {part.isBestSeller && (
-            <span className="absolute top-2 left-2 bg-signal text-ink font-bold text-[9px] uppercase px-1.5 py-0.5 rounded-full">
+            <span className="absolute top-2 left-2 bg-signal text-ink font-bold text-[9px] uppercase px-1.5 py-0.5 rounded-none">
               Top Seller
             </span>
           )}
@@ -54,13 +54,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
           <button
             type="button"
             onClick={e => { e.stopPropagation(); goToDetail(); }}
-            className="font-display text-[15px] font-semibold text-[#0F2230] hover:text-[#1F3A4D] transition-colors leading-snug line-clamp-1 text-left cursor-pointer"
+            className="font-display text-[17px] font-bold text-[#0F2230] hover:text-[#1F3A4D] transition-colors leading-snug line-clamp-1 text-left cursor-pointer"
           >
             {part.name}
           </button>
           <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
-            <span className="font-mono bg-slate-100 px-2 py-0.5 rounded-md">SKU: {part.sku}</span>
-            {part.position && <span className="bg-mint/20 text-[#1F3A4D] px-2 py-0.5 rounded-md">{part.position}</span>}
+            <span className="font-mono bg-slate-100 px-2 py-0.5 rounded-none">SKU: {part.sku}</span>
+            {part.position && <span className="bg-mint/20 text-[#1F3A4D] px-2 py-0.5 rounded-none">{part.position}</span>}
             <div className="flex items-center gap-1 text-[#F5A524]">
               <Star className="w-3 h-3 fill-[#F5A524]" />
               <span className="font-semibold text-slate-700">{part.rating}</span>
@@ -78,12 +78,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
               {part.originalPrice && <span className="text-xs text-slate-400 line-through">€{part.originalPrice.toFixed(2)}</span>}
             </div>
             <p className="text-[11px] text-emerald-600 font-semibold flex items-center sm:justify-end gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> In Stock
+              <span className="w-1.5 h-1.5 rounded-none bg-emerald-500 inline-block" /> In Stock
             </p>
           </div>
           <motion.button
             onClick={e => { e.stopPropagation(); handleAddToCart(e); }}
-            className={`w-full py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`w-full py-2 px-3 rounded-none font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
               justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0F2230] hover:bg-[#1F3A4D] text-white'
             }`}
             whileTap={{ scale: 0.97 }}
@@ -113,7 +113,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
   /* ── Grid mode ──────────────────────────────────────────────────────── */
   return (
     <motion.div
-      className="product-card bg-white rounded-2xl border border-slate-200 flex flex-col group overflow-hidden cursor-pointer"
+      className="product-card bg-white rounded-none border border-slate-200 flex flex-col group overflow-hidden cursor-pointer"
       whileHover={{ y: -3, borderColor: '#1F3A4D', boxShadow: '0 16px 40px rgba(15,34,48,0.12)' }}
       whileTap={{ scale: 0.99 }}
       transition={SPRINGS.default}
@@ -129,17 +129,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
         />
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
           {part.isBestSeller && (
-            <span className="bg-signal text-ink font-bold text-[9px] uppercase px-2 py-0.5 rounded-full" style={{ letterSpacing: '0.06em' }}>
+            <span className="bg-signal text-ink font-bold text-[9px] uppercase px-2 py-0.5 rounded-none" style={{ letterSpacing: '0.06em' }}>
               Best Seller
             </span>
           )}
           {part.originalPrice && (
-            <span className="bg-rose-500 text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded-full" style={{ letterSpacing: '0.06em' }}>
+            <span className="bg-rose-500 text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded-none" style={{ letterSpacing: '0.06em' }}>
               Save €{(part.originalPrice - part.price).toFixed(0)}
             </span>
           )}
         </div>
-        <span className="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-lg border border-slate-200 text-[11px] font-bold text-[#0F2230]">
+        <span className="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-none border border-slate-200 text-[11px] font-bold text-[#0F2230]">
           {part.brand}
         </span>
       </div>
@@ -157,12 +157,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
           <button
             type="button"
             onClick={e => { e.stopPropagation(); goToDetail(); }}
-            className="font-display text-[14px] font-semibold text-[#0F2230] group-hover:text-[#1F3A4D] transition-colors line-clamp-2 leading-snug text-left cursor-pointer"
+            className="font-display text-[16px] font-bold text-[#0F2230] group-hover:text-[#1F3A4D] transition-colors line-clamp-2 leading-snug text-left cursor-pointer"
           >
             {part.name}
           </button>
           {part.position && (
-            <span className="inline-block mt-1 text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md font-medium">
+            <span className="inline-block mt-1 text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-none font-medium">
               {part.position}
             </span>
           )}
@@ -179,7 +179,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
                 {part.originalPrice && <span className="text-[11px] text-slate-400 line-through">€{part.originalPrice.toFixed(2)}</span>}
               </div>
               <p className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                <span className="w-1.5 h-1.5 rounded-none bg-emerald-500 inline-block" />
                 In Stock · {part.deliveryDays}–{part.deliveryDays + 1} days
               </p>
             </div>
@@ -191,7 +191,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ part, viewMode = 'grid
 
           <motion.button
             onClick={e => { e.stopPropagation(); handleAddToCart(e); }}
-            className={`w-full py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
+            className={`w-full py-2 px-3 rounded-none font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
               justAdded ? 'bg-emerald-600 text-white' : 'bg-[#0F2230] hover:bg-[#1F3A4D] text-white'
             }`}
             whileTap={{ scale: 0.97 }}
