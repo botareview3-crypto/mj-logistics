@@ -2,6 +2,8 @@
 
 Auto-generated from `git log` by `scripts\update-commit-history.ps1`. Do not hand-edit - re-run the script instead.
 
+- **2026-11-22** `694bb55` Full redesign: Manifest design system, new header/footer/hero, home and corporate pages
+- **2026-11-21** `f1a2628` Update commit history
 - **2026-11-21** `30a29d6` Redesign site with Slate Sky palette and Libre Franklin type
 - **2026-11-21** `63c1638` Update commit history
 - **2026-11-21** `3ce74b3` Home page: photo-forward division cards, framed photos, per-card icons, uncropped product photos
